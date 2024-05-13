@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import AssociateDetail from "../../core/domain/entities/associate-detail";
-import Address from "../../core/domain/entities/address";
-import Gender from "../../core/domain/enums/gender";
-import CommandHandlerMediator from "../../core/application/mediators/command-handler-mediator";
+import AssociateDetail from "../../../core/domain/entities/associate-detail";
+import Address from "../../../core/domain/entities/address";
+import Gender from "../../../core/domain/enums/gender";
+import CommandHandlerMediator from "../../../core/application/mediators/command-handler-mediator";
 import { AssociatePageContext } from "./associate-page";
-import CommandResponse from "../../core/abstractions/interfaces/command-response";
+import CommandResponse from "../../../core/abstractions/interfaces/command-response";
 
 export default function CreateAssociate() {
     const command = useContext(AssociatePageContext) as CommandHandlerMediator;

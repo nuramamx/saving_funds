@@ -5,23 +5,30 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-  Route
+  RouterProvider
 } from "react-router-dom";
+import AssociatePage from './pages/associate-management/associate-page/associate-page';
+import AssociateManagementPage from './pages/associate-management/associate-management';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<App />}>
-      <Route path='/dashboard'></Route>
-      <Route path='/associate-management'></Route>
-    </Route>
-  )
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "associate",
+        element: <AssociateManagementPage />,
+        children: [
+          { path: "page", element: <AssociatePage /> }
+        ]
+      },
+    ],
+  },
+]);
 
 root.render(
   <React.StrictMode>
