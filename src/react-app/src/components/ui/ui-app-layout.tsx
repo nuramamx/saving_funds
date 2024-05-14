@@ -1,20 +1,24 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import UIAppSidebar, { SidebarMenu } from './ui-app-sidebar';
+import UIAppSidebar, { SidebarParentMenu, SidebarChildMenu } from './ui-app-sidebar';
 
-const menuItems: SidebarMenu[] = [
-    { route: "/associate", name: "Socios", location: "/associate", children: [
-        { route: "/associate/page", name: "Gestión de Socios", location: undefined, children: undefined },
+const menuItems: SidebarParentMenu[] = [
+    { name: "Reportes", location: "/", children: [
+        { route: "/report/1", name: "Reporte de X" },
+        { route: "/report/2", name: "Reporte de Y" },
     ] },
-    { route: "/borrow", name: "Préstamos", location: "/associate", children: [
-        { route: "/borrow/page", name: "Gestión de Préstamos", location: undefined, children: undefined },
-        { route: "/borrow/page", name: "Préstamos Autorizados", location: undefined, children: undefined },
-        { route: "/borrow/page", name: "Estado de Préstamos", location: undefined, children: undefined },
-        { route: "/borrow/page", name: "Socios Deudores", location: undefined, children: undefined },
-        { route: "/borrow/page", name: "Ver Pagos", location: undefined, children: undefined }
+    { name: "Socios", location: "/associate", children: [
+        { route: "/associate/page", name: "Gestión de Socios" },
     ] },
-    { route: "/withdrawal", name: "Retiros", location: "/associate", children: [
-        { route: "/withdrawal/page", name: "Gestión de Retiros", location: undefined, children: undefined },
-        { route: "/withdrawal/page", name: "Ver Retiros", location: undefined, children: undefined }
+    { name: "Préstamos", location: "/associate", children: [
+        { route: "/borrow/page", name: "Gestión de Préstamos" },
+        { route: "/borrow/page", name: "Préstamos Autorizados" },
+        { route: "/borrow/page", name: "Estado de Préstamos" },
+        { route: "/borrow/page", name: "Socios Deudores" },
+        { route: "/borrow/page", name: "Ver Pagos" }
+    ] },
+    { name: "Retiros", location: "/associate", children: [
+        { route: "/withdrawal/page", name: "Gestión de Retiros" },
+        { route: "/withdrawal/page", name: "Ver Retiros" }
     ] },
 ];
 
@@ -30,13 +34,13 @@ export default function UIAppLayout() {
 
     return (
         <>
-        <div className="columns">
-            <div className="column is-one-fifth">
-                <UIAppSidebar location={basePage(location)} items={menuItems} />
-            </div>
-            <div className="column box">
-                <Outlet></Outlet>
-            </div>
+        <div className="column is-3">
+            <UIAppSidebar location={basePage(location)} items={menuItems} />
+        </div>
+        <div className="column is-9">
+            <section className="section box" style={{minHeight: '80vh'}}>
+            <Outlet></Outlet>
+            </section>
         </div>
         </>
     );
