@@ -1,10 +1,10 @@
 {
   "name": "setepid-savingfunds",
-  "version": "0.1.0",
+  "version": "1.0",
   "private": true,
   "dependencies": {
-    "bulma": "^1.0.0",
-    "iconoir-react": "^7.7.0",
+    "bulma": "~1.0.0",
+    "iconoir-react": "~7.7.0",
     "react": "~18.3.1",
     "react-dom": "~18.3.1",
     "react-router-dom": "~6.23.1",

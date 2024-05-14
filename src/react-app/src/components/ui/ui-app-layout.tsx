@@ -2,6 +2,10 @@ import { Outlet, useLocation } from 'react-router-dom';
 import UIAppSidebar, { SidebarParentMenu, SidebarChildMenu } from './ui-app-sidebar';
 
 const menuItems: SidebarParentMenu[] = [
+    { name: "Gráficas", location: "/", children: [
+        { route: "/graph/1", name: "Gráfica de X" },
+        { route: "/graph/2", name: "Gráfica de Y" },
+    ] },
     { name: "Reportes", location: "/", children: [
         { route: "/report/1", name: "Reporte de X" },
         { route: "/report/2", name: "Reporte de Y" },
