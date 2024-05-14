@@ -20,6 +20,9 @@ const menuItems: SidebarParentMenu[] = [
         { route: "/withdrawal/page", name: "Gestión de Retiros" },
         { route: "/withdrawal/page", name: "Ver Retiros" }
     ] },
+    { name: "General", location: "/myaccount", children: [
+        { route: "/myaccount/page", name: "Mis Datos" }
+    ] },
 ];
 
 export default function UIAppLayout() {
