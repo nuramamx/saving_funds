@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["es6", "dom"],
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "paths": {
+        "@core/*": ["../core-lib/dist/*"]
+      },
+    },
+    "include": ["src/**/*"]
+}

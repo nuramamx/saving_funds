@@ -1,0 +1,13 @@
+{
+  "name": "setepid-savingfunds",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+
+  },
+  "devDependencies": {
+    "typescript": "~5.4.5"
+  }
+}
