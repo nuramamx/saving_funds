@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import CommandHandlerMediator from "../../../core/application/mediators/command-handler-mediator";
 import CreateAssociate from "./create-associate";
+import CommandHandlerMediator from "../../../core/application/mediators/command-handler-mediator";
 
 export const AssociatePageContext = createContext({});
 

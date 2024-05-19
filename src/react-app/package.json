@@ -5,13 +5,16 @@
   "dependencies": {
     "bulma": "~1.0.0",
     "iconoir-react": "~7.7.0",
+    "jotai": "^2.8.0",
     "react": "~18.3.1",
     "react-dom": "~18.3.1",
     "react-router-dom": "~6.23.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "~2.1.4"
+    "web-vitals": "~2.1.4",
+    "zustand": "^4.5.2"
   },
   "scripts": {
+    "electron": "electron .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -39,6 +42,7 @@
     "@testing-library/jest-dom": "~5.17.0",
     "@testing-library/react": "~13.4.0",
     "@testing-library/user-event": "~13.5.0",
+    "@types/electron": "~1.6.10",
     "@types/jest": "~27.5.2",
     "@types/node": "~16.18.97",
     "@types/react": "~18.3.2",

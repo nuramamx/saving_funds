@@ -1,47 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
-  createBrowserRouter,
   RouterProvider
 } from "react-router-dom";
-import AssociatePage from './pages/associate-management/associate-page/associate-page';
-import AssociateManagementPage from './pages/associate-management/associate-management';
-import MyAccountPage from './pages/myaccount-management/myaccount-page/myaccount-page';
-import MyAccountManagementPage from './pages/myaccount-management/myaccount-management';
+import { Routes } from './routes';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "associate",
-        element: <AssociateManagementPage />,
-        children: [
-          { path: "page", element: <AssociatePage /> }
-        ]
-      },
-      {
-        path: "myaccount",
-        element: <MyAccountManagementPage />,
-        children: [
-          { path: "page", element: <MyAccountPage /> }
-        ]
-      },
-    ],
-  },
-]);
-
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+      <RouterProvider router={Routes} />
   </React.StrictMode>
 );
 
