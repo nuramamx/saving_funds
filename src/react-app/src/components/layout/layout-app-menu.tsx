@@ -1,9 +1,9 @@
 import { Community, AppleWallet, Settings, ReportColumns, UserCircle } from 'iconoir-react';
-import React, { useEffect, useLayoutEffect } from 'react';
-import { Link, LinkProps, useMatch, useResolvedPath } from 'react-router-dom';
+import React, { memo, useLayoutEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useLayoutStore } from '../../core/states/layout-states';
 
-export function UIAppMenu() {
+const LayoutAppMenu = memo(() => {
     const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
 
     useLayoutEffect(() => {
@@ -59,6 +59,6 @@ export function UIAppMenu() {
             </div>
         </div>
     );
-}
+});
 
-export default UIAppMenu;
+export default LayoutAppMenu;

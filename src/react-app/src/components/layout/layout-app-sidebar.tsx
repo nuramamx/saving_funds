@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLayoutStore } from "../../core/states/layout-states";
-import { useEffect } from "react";
+import { memo } from "react";
 
 interface SidebarParentMenu {
   key: string;
@@ -15,12 +15,12 @@ interface SidebarChildMenu {
   route: string;
 }
 
-interface UIAppSidebarProps {
+interface LayoutAppSidebarProps {
   location: string;
   items: SidebarParentMenu[];
 };
 
-export default function UIAppSidebar(props: UIAppSidebarProps) {
+const LayoutAppSidebar = memo((props: LayoutAppSidebarProps) => {
   const { selectedSidebarMenu, setSelectedSidebarMenu } = useLayoutStore();
 
   return (
@@ -44,6 +44,7 @@ export default function UIAppSidebar(props: UIAppSidebarProps) {
       ])}
     </aside>
   );
-}
+});
 
+export default LayoutAppSidebar;
 export type { SidebarParentMenu, SidebarChildMenu };

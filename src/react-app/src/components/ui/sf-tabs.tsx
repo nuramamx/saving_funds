@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { ReactNode, useState } from "react";
 
 interface SFTabsOptions {
@@ -12,7 +12,7 @@ interface SFTabsProps {
     children: ReactNode
 }
 
-export function SFTabs({ options, children }: SFTabsProps) {
+export const SFTabs = memo(({ options, children }: SFTabsProps) => {
     const [selectedTab, setSelectedTab] = useState<string>(options[0].id);
 
     return (
@@ -33,6 +33,6 @@ export function SFTabs({ options, children }: SFTabsProps) {
         </div>
         </>
     );
-}
+});
 
 export type { SFTabsProps, SFTabsOptions }

@@ -1,8 +1,8 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import { db } from "./core/persistence/instance";
 import AssociateInfo from "@core/domain/interfaces/associate-info";
+// import { db } from "@core/persistence/instance"
 
-db.sequelize.sync({ alter: true });
+// db.sequelize.sync({ alter: true });
 
 // function save() {
 //     Associate.create({

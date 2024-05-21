@@ -1,6 +1,7 @@
-import { UIAppMenu } from "./ui-app-menu";
+import { memo } from "react";
+import LayoutAppMenu from "./layout-app-menu";
 
-export function UIAppHeader() {
+const LayoutAppHeader = memo(() => {
     return (
         <header>
             <nav className="navbar is-fixed-top" role="navigation" aria-label="main navigation">
@@ -10,8 +11,10 @@ export function UIAppHeader() {
                         <strong>S.E.T.E.P.I.D. | Sistema de Fondo de Ahorro</strong>
                     </div>
                 </div>
-                <UIAppMenu />
+                <LayoutAppMenu />
             </nav>
         </header>
     );
-}
+});
+
+export default LayoutAppHeader;

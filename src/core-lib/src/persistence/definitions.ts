@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
 import { db } from "./instance";
-import NameInfo from '@core/domain/interfaces/name-info';
 
-const Associate = db.sequelize.define(
+const AssociateDb = db.sequelize.define(
     'associate',
     {
         associate_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
@@ -18,7 +17,7 @@ const Associate = db.sequelize.define(
     { schema: 'catalog', tableName: 'associate' }
 );
 
-const Workplace = db.sequelize.define(
+const WorkplaceDb = db.sequelize.define(
     'workplace',
     {
         workplace_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
@@ -30,7 +29,7 @@ const Workplace = db.sequelize.define(
     { schema: 'catalog', tableName: 'workplace' }
 );
 
-const AssociateDetail = db.sequelize.define(
+const AssociateDetailDb = db.sequelize.define(
     'associate_detail',
     {
         associate_detail_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
@@ -46,14 +45,38 @@ const AssociateDetail = db.sequelize.define(
     { schema: 'catalog', tableName: 'associate_detail' }
 )
 
-Associate.hasOne(Workplace, { foreignKey: 'associate_id',  as: 'workplace' });
-Associate.hasOne(AssociateDetail, { foreignKey: 'associate_id', as: 'associate_detail'});
+const StateDb = db.sequelize.define(
+    'state',
+    {
+        state_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
+        key: { type: DataTypes.CHAR(3), allowNull: false, unique: true },
+        name: { type: DataTypes.STRING(50), allowNull: false }
+    },
+    { schema: 'catalog', tableName: 'state' }
+)
 
-Workplace.belongsTo(Associate, { foreignKey: 'associate_id' });
-AssociateDetail.belongsTo(Associate, { foreignKey: 'associate_id' });
+const CityDb = db.sequelize.define(
+    'city',
+    {
+        city_id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
+        state_id: { type: DataTypes.INTEGER, allowNull: false },
+        name: { type: DataTypes.STRING(50), allowNull: false }
+    },
+    { schema: 'catalog', tableName: 'city' }
+)
+
+AssociateDb.hasOne(WorkplaceDb, { foreignKey: 'associate_id',  as: 'workplace' });
+AssociateDb.hasOne(AssociateDetailDb, { foreignKey: 'associate_id', as: 'associate_detail'});
+StateDb.hasMany(CityDb, { foreignKey: 'state_id', as: 'state' });
+
+WorkplaceDb.belongsTo(AssociateDb, { foreignKey: 'associate_id' });
+AssociateDetailDb.belongsTo(AssociateDb, { foreignKey: 'associate_id' });
+CityDb.belongsTo(StateDb, { foreignKey: 'state_id' });
 
 export { 
-    Associate,
-    Workplace,
-    AssociateDetail
+    AssociateDb,
+    WorkplaceDb,
+    AssociateDetailDb,
+    StateDb,
+    CityDb
 }

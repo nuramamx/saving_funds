@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { SidebarParentMenu } from "./components/ui/ui-app-sidebar";
+import { SidebarParentMenu } from "./components/layout/layout-app-sidebar";
 import App from "./App";
 import AssociateManagementPage from "./pages/associate-management/associate-management";
 import AssociatePage from "./pages/associate-management/associate-page/associate-page";

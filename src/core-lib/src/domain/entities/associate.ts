@@ -7,9 +7,9 @@ import NameInfo from "../interfaces/name-info";
 import { Gender } from "../types/gender";
 
 export default class Associate {
-    private detail: AssociateDetail = null!;
-    private address: Address = null!;
-    private workplace: Workplace = null!;
+    private detail: AssociateDetail = undefined!;
+    private address: Address = undefined!;
+    private workplace: Workplace = undefined!;
     private beneficiaries: Beneficiary[] = [];
 
     constructor(
