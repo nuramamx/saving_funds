@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AssociatePageContext } from "./associate-page";
 import { SFTabs, SFTabsOptions } from "../../../components/ui/sf-tabs";
 import SFTextInput from "../../../components/form/sf-text-input";
@@ -14,10 +14,16 @@ import AddressInfo from "../../../core/domain/interfaces/address-info";
 import WorkplaceInfo from "../../../core/domain/interfaces/workplace-info";
 import BeneficiaryInfo from "../../../core/domain/interfaces/beneficiary-info";
 import Associate from "../../../core/domain/entities/associate";
+import Address from "../../../core/domain/entities/address";
+import AssociateDetail from "../../../core/domain/entities/associate-detail";
+import Workplace from "../../../core/domain/entities/workplace";
+import SFTextDisplayInput from "../../../components/form/sf-text-display-input";
+import useNotificationStore from "../../../core/infrastructure/stores/notification-store";
 
 const ipcRenderer = IpcRenderer();
 
 export default function CreateAssociate() {
+  const { pushNotification } = useNotificationStore();
   const command = useContext(AssociatePageContext) as CommandHandlerMediator;
   const [commandResult, setCommandResult] = useState<CommandResponse>({ successful: false } as CommandResponse);
 
@@ -54,13 +60,23 @@ export default function CreateAssociate() {
     { name: '', percentage: 0 },
     { name: '', percentage: 0 }
   ]);
-  
+  const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
   const tabsOptions: SFTabsOptions[] = [
     { id: 'associate', name: "Socio" },
     { id: 'address', name: "Localización" },
     { id: 'workplace', name: "Centro de Trabajo" },
     { id: 'beneficiary', name: "Beneficiarios" }
   ];
+
+  useEffect(() => {
+    const beneficiaryTotalPercentage = beneficiaryInfo
+      .map(item => parseInt(item.percentage.toString()))
+      .reduce((sum, percentage) => sum + percentage, 0);
+
+      console.log(`Hola => ${beneficiaryTotalPercentage}`);
+
+      setBeneficiaryTotalPercentage(beneficiaryTotalPercentage);
+  }, [beneficiaryInfo])
 
   const handleBeneficiaryNameChange = (index: number, name: string) => {
     setBeneficiaryInfo((prevState: BeneficiaryInfo[]) => {
@@ -79,7 +95,24 @@ export default function CreateAssociate() {
   };
 
   const executeCommand = () => {
-    const associate = new Associate(fullnameInfo, generalInfo.rfc, generalInfo.gender);
+    try {
+      const associate = new Associate(fullnameInfo, generalInfo.rfc, generalInfo.gender)
+        .updateAddress(new Address(addressInfo))
+        .updateDetail(new AssociateDetail(
+          detailInfo.dependency_key,
+          detailInfo.agreement,
+          detailInfo.category,
+          detailInfo.salary,
+          detailInfo.social_contribution,
+          detailInfo.fortnightly_contribution,
+          detailInfo.request_date
+        ))
+        .updateWorkplace(new Workplace(workplaceInfo.key, workplaceInfo.name, workplaceInfo.phone))
+        .addBeneficiaries(beneficiaryInfo);
+
+    } catch (error: any) {
+      pushNotification({ message: error.message, type: "danger" });
+    }
   };
 
   return (
@@ -190,14 +223,14 @@ export default function CreateAssociate() {
           <div className="column">
             {beneficiaryInfo.map((beneficiary, index) => (
               <SFPercentageInput key={index} id={`beneficiary_percentage_${index + 1}`} name="Porcentaje"
-              min={0} max={100}
-              value={beneficiaryInfo[index].percentage}
-              onChange={(value) => handleBeneficiaryPercentageChange(index, value)} />
+                min={0} max={100}
+                value={beneficiaryInfo[index].percentage}
+                onChange={(value) => handleBeneficiaryPercentageChange(index, value)} />
             ))}
-            <SFTextInput id="beneficiary_percentage_summarized" name="Total Cubierto"
-              readonly={true}
-              value={""}
-              onChange={(value) => console.log(value)} />
+              <SFTextDisplayInput key="beneficiary_percentage_summarized" id="beneficiary_percentage_summarized" name="Total Cubierto"
+                display="%"
+                readonly={true}
+                value={beneficiaryTotalPercentage.toString()} />
           </div>
         </div>
       </div>

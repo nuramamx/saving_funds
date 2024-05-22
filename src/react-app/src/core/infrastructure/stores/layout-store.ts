@@ -25,5 +25,5 @@ const useLayoutStore = create(persist<LayoutStore>(
   }
 ));
 
-export { useLayoutStore };
 export type { LayoutStore };
+export default useLayoutStore;

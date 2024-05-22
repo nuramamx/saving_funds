@@ -3,6 +3,7 @@ import Beneficiary from "./beneficiary";
 import AssociateDetail from "./associate-detail";
 import Workplace from "./workplace";
 import NameInfo from "../interfaces/name-info";
+import DomainException from "../exceptions/domain-exception";
 
 export default class Associate {
     private detail: AssociateDetail = undefined!;
@@ -39,6 +40,13 @@ export default class Associate {
     }
 
     addBeneficiaries(beneficiaries: Beneficiary[]): void {
+        const totalPercentage = beneficiaries
+            .map(item => item.percentage)
+            .reduce((sum, percentage) => sum + percentage, 0);
+
+        if (totalPercentage > 100)
+            throw new Error("El porcentaje total es superior al 100%");
+
         this.beneficiaries.push(...beneficiaries);
     }
 }

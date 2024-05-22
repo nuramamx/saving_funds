@@ -16,10 +16,19 @@ type SFNumberInputInfo = {
 type SFRangeInputInfo = {
     id: string;
     name: string;
-    min: number;
-    max: number;
+    min?: number;
+    max?: number;
     value: number;
+    readonly?: boolean;
     onChange: (event: any) => void;
 }
 
-export type { SFTextInputInfo, SFNumberInputInfo, SFRangeInputInfo }
+type SFTextDisplayInfo = {
+    id: string;
+    name: string;
+    value: string;
+    readonly?: boolean;
+    display: string
+}
+
+export type { SFTextInputInfo, SFNumberInputInfo, SFRangeInputInfo, SFTextDisplayInfo }

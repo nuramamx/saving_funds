@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useLayoutStore } from "../../core/states/layout-states";
 import { memo } from "react";
+import useLayoutStore from "../../core/infrastructure/stores/layout-store";
 
 interface SidebarParentMenu {
   key: string;

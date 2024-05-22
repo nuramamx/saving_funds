@@ -1,5 +1,5 @@
 import { SFNumberInputInfo } from "./interfaces/sf-input-info";
-import useFormattedNumber from "../../core/hooks/use-formatted-number";
+import useFormattedNumber from "../../core/infrastructure/hooks/use-formatted-number";
 import { useEffect } from "react";
 
 export default function SFMoneyInput({ id, name, value, onChange }: SFNumberInputInfo) {
