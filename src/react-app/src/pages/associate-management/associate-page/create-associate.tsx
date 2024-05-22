@@ -1,15 +1,19 @@
 import { useContext, useState } from "react";
 import { AssociatePageContext } from "./associate-page";
+import { SFTabs, SFTabsOptions } from "../../../components/ui/sf-tabs";
+import SFTextInput from "../../../components/form/sf-text-input";
+import SFMoneyInput from "../../../components/form/sf-money-input";
+import SFSelectInput from "../../../components/form/sf-select-input";
+import SFPercentageInput from "../../../components/form/sf-percentage-input";
+import IpcRenderer from "../../../util/ip-renderer";
 import CommandHandlerMediator from "../../../core/application/mediators/command-handler-mediator";
 import CommandResponse from "../../../core/abstractions/interfaces/command-response";
-import { SFTabs, SFTabsOptions } from "../../../components/ui/sf-tabs";
-import SFFlatInput from "../../../components/form/sf-flat-input";
-import SFMoneyInput from "../../../components/form/sf-money-input";
-import NameInfo from "@core/domain/interfaces/name-info";
-import AssociateDetailInfo from "@core/domain/interfaces/associate-detail-info";
-import IpcRenderer from "../../../util/ip-renderer";
-import SFSelectInput from "../../../components/form/sf-select-input";
-import AddressInfo from "@core/domain/interfaces/address-info";
+import NameInfo from "../../../core/domain/interfaces/name-info";
+import AssociateDetailInfo from "../../../core/domain/interfaces/associate-detail-info";
+import AddressInfo from "../../../core/domain/interfaces/address-info";
+import WorkplaceInfo from "../../../core/domain/interfaces/workplace-info";
+import BeneficiaryInfo from "../../../core/domain/interfaces/beneficiary-info";
+import Associate from "../../../core/domain/entities/associate";
 
 const ipcRenderer = IpcRenderer();
 
@@ -38,6 +42,18 @@ export default function CreateAssociate() {
     mobile: '',
     email: ''
   });
+  const [workplaceInfo, setWorkplaceInfo] = useState<WorkplaceInfo>({
+    key: '',
+    name: '',
+    phone: ''
+  });
+  const [beneficiaryInfo, setBeneficiaryInfo] = useState<BeneficiaryInfo[]>([
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 }
+  ]);
   
   const tabsOptions: SFTabsOptions[] = [
     { id: 'associate', name: "Socio" },
@@ -46,8 +62,24 @@ export default function CreateAssociate() {
     { id: 'beneficiary', name: "Beneficiarios" }
   ];
 
+  const handleBeneficiaryNameChange = (index: number, name: string) => {
+    setBeneficiaryInfo((prevState: BeneficiaryInfo[]) => {
+      const newState = [...prevState];
+      newState[index] = { ...newState[index], name: name };
+      return newState;
+    });
+  };
+
+  const handleBeneficiaryPercentageChange = (index: number, percentage: number) => {
+    setBeneficiaryInfo((prevState: BeneficiaryInfo[]) => {
+      const newState = [...prevState];
+      newState[index] = { ...newState[index], percentage: percentage };
+      return newState;
+    });
+  };
+
   const executeCommand = () => {
-    console.log(detailInfo.salary);
+    const associate = new Associate(fullnameInfo, generalInfo.rfc, generalInfo.gender);
   };
 
   return (
@@ -56,43 +88,43 @@ export default function CreateAssociate() {
       <div id="associate">
         <div className="columns">
           <div className="column">
-            <SFFlatInput id="firstname" name="Nombre"
+            <SFTextInput id="associate_firstname" name="Nombre"
               value={fullnameInfo.firstname}
               onChange={(e) => setFullnameInfo({ ...fullnameInfo, firstname: e.target.value })} />
-            <SFFlatInput id="middlename" name="Segundo Nombre"
+            <SFTextInput id="associate_middlename" name="Segundo Nombre"
               value={fullnameInfo.middlename}
               onChange={(e) => setFullnameInfo({ ...fullnameInfo, middlename: e.target.value })} />
-            <SFFlatInput id="paternal_lastname" name="Apellido Paterno"
+            <SFTextInput id="associate_paternal_lastname" name="Apellido Paterno"
               value={fullnameInfo.paternal_lastname}
               onChange={(e) => setFullnameInfo({ ...fullnameInfo, paternal_lastname: e.target.value })} />
-            <SFFlatInput id="maternal_lastname" name="Apellido Materno"
+            <SFTextInput id="associate_maternal_lastname" name="Apellido Materno"
               value={fullnameInfo.maternal_lastname}
               onChange={(e) => setFullnameInfo({ ...fullnameInfo, maternal_lastname: e.target.value })} />
-            <SFFlatInput id="rfc" name="R.F.C."
+            <SFTextInput id="associate_rfc" name="R.F.C."
               value={generalInfo.rfc}
               onChange={(e) => setGeneralInfo({ ...generalInfo, rfc: e.target.value })} />
-            <SFSelectInput id="gender" name="Sexo"
+            <SFSelectInput id="associate_gender" name="Sexo"
               value={generalInfo.gender}
               options={([ { key: 'M', value: 'Masculino'}, { key: 'F', value: 'Femenino' }])}
               onChange={(e) => setGeneralInfo({ ...generalInfo, gender: e.target.value })} />
           </div>
           <div className="column">
-            <SFFlatInput id="dependency_key" name="Clave de Dependencia"
+            <SFTextInput id="associate_dependency_key" name="Clave de Dependencia"
               value={detailInfo.dependency_key}
               onChange={(e) => setDetailInfo({ ...detailInfo, dependency_key: e.target.value })} />
-            <SFFlatInput id="agreement" name="Convenio"
+            <SFTextInput id="associate_agreement" name="Convenio"
               value={detailInfo.agreement}
               onChange={(e) => setDetailInfo({ ...detailInfo, agreement: e.target.value })} />
-            <SFFlatInput id="category" name="Categoría"
+            <SFTextInput id="associate_category" name="Categoría"
               value={detailInfo.category}
               onChange={(e) => setDetailInfo({ ...detailInfo, category: e.target.value })} />
-            <SFMoneyInput id="salary" name="Sueldo / Pensión"
+            <SFMoneyInput id="associate_salary" name="Sueldo / Pensión"
               value={detailInfo.salary}
               onChange={(value) => setDetailInfo({ ...detailInfo, salary: value })} />
-            <SFMoneyInput id="social_contribution" name="Aportación Social"
+            <SFMoneyInput id="associate_social_contribution" name="Aportación Social"
               value={detailInfo.social_contribution}
               onChange={(value) => setDetailInfo({ ...detailInfo, social_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Aportación Quincenal"
+            <SFMoneyInput id="associate_fortnighly_contribution" name="Aportación Quincenal"
               value={detailInfo.fortnightly_contribution}
               onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
           </div>
@@ -101,30 +133,30 @@ export default function CreateAssociate() {
       <div id="address">
         <div className="columns">
           <div className="column">
-            <SFFlatInput id="street" name="Calle y N&uacute;mero"
+            <SFTextInput id="address_street" name="Calle y N&uacute;mero"
               value={addressInfo.street}
               onChange={(e) => setAddressInfo({ ...addressInfo, street: e.target.value })} />
-            <SFFlatInput id="settlement" name="Colonia"
+            <SFTextInput id="address_settlement" name="Colonia"
               value={addressInfo.settlement}
               onChange={(e) => setAddressInfo({ ...addressInfo, settlement: e.target.value })} />
-            <SFFlatInput id="town" name="Localidad"
+            <SFTextInput id="address_town" name="Localidad"
               value={addressInfo.town}
               onChange={(e) => setAddressInfo({ ...addressInfo, town: e.target.value })} />
-            <SFFlatInput id="dependency_key" name="C&oacute;digo Postal"
+            <SFTextInput id="address_dependency_key" name="C&oacute;digo Postal"
               value={addressInfo.postal_code}
               onChange={(e) => setAddressInfo({ ...addressInfo, postal_code: e.target.value })} />
           </div>
           <div className="column">
-            <SFFlatInput id="agreement" name="Ciudad"
+            <SFTextInput id="address_city_id" name="Ciudad"
               value={addressInfo.city_id.toString()}
               onChange={(e) => setAddressInfo({ ...addressInfo, city_id: e.target.value })} />
-            <SFFlatInput id="category" name="Tel&eacute;fono"
+            <SFTextInput id="address_phone" name="Tel&eacute;fono"
               value={addressInfo.phone}
               onChange={(e) => setAddressInfo({ ...addressInfo, phone: e.target.value })} />
-            <SFFlatInput id="category" name="Celular"
+            <SFTextInput id="address_mobile" name="Celular"
               value={addressInfo.mobile}
               onChange={(e) => setAddressInfo({ ...addressInfo, mobile: e.target.value })} />
-            <SFFlatInput id="category" name="Email"
+            <SFTextInput id="address_email" name="Email"
               value={addressInfo.email}
               onChange={(e) => setAddressInfo({ ...addressInfo, email: e.target.value })} />
           </div>
@@ -133,15 +165,15 @@ export default function CreateAssociate() {
       <div id="workplace">
         <div className="columns">
           <div className="column">
-            <SFFlatInput id="street" name="Clave de Centro de Trabajo"
-              value={fullnameInfo.firstname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo,  firstname: e.target.value })} />
-            <SFFlatInput id="settlement" name="Centro de Trabajo / Instituci&oacute;n"
-              value={fullnameInfo.middlename}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, middlename: e.target.value })} />
-            <SFFlatInput id="town" name="Tel&eacute;fono"
-              value={fullnameInfo.paternal_lastname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, paternal_lastname: e.target.value })} />
+            <SFTextInput id="workplace_key" name="Clave de Centro de Trabajo"
+              value={workplaceInfo.key}
+              onChange={(e) => setWorkplaceInfo({ ...workplaceInfo,  key: e.target.value })} />
+            <SFTextInput id="workplace_name" name="Centro de Trabajo / Instituci&oacute;n"
+              value={workplaceInfo.name}
+              onChange={(e) => setWorkplaceInfo({ ...workplaceInfo, name: e.target.value })} />
+            <SFTextInput id="workplace_phone" name="Tel&eacute;fono"
+              value={workplaceInfo.phone}
+              onChange={(e) => setWorkplaceInfo({ ...workplaceInfo, phone: e.target.value })} />
           </div>
           <div className="column"></div>
         </div>
@@ -149,41 +181,23 @@ export default function CreateAssociate() {
       <div id="beneficiary">
         <div className="columns">
           <div className="column is-four-fifths">
-            <SFFlatInput id="street" name="Beneficiario 1"
-              value={fullnameInfo.firstname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo,  firstname: e.target.value })} />
-            <SFFlatInput id="settlement" name="Beneficiario 2"
-              value={fullnameInfo.middlename}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, middlename: e.target.value })} />
-            <SFFlatInput id="town" name="Beneficiario 3"
-              value={fullnameInfo.paternal_lastname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, paternal_lastname: e.target.value })} />
-            <SFFlatInput id="town" name="Beneficiario 4"
-              value={fullnameInfo.paternal_lastname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, paternal_lastname: e.target.value })} />
-            <SFFlatInput id="town" name="Beneficiario 5"
-              value={fullnameInfo.paternal_lastname}
-              onChange={(e) => setFullnameInfo({ ...fullnameInfo, paternal_lastname: e.target.value })} />
+              {beneficiaryInfo.map((beneficiary, index) => (
+                <SFTextInput key={index} id={`beneficiary_${index+1}`} name={`Beneficiario ${index+1}`}
+                  value={beneficiaryInfo[index].name}
+                  onChange={(e) => handleBeneficiaryNameChange(index, e.target.value)} />
+              ))}
           </div>
           <div className="column">
-            <SFMoneyInput id="fortnighly_contribution" name="Porcentaje"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Porcentaje"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Porcentaje"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Porcentaje"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Porcentaje"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
-            <SFMoneyInput id="fortnighly_contribution" name="Total Cubierto"
-              value={detailInfo.fortnightly_contribution}
-              onChange={(value) => setDetailInfo({ ...detailInfo, fortnightly_contribution: value })} />
+            {beneficiaryInfo.map((beneficiary, index) => (
+              <SFPercentageInput key={index} id={`beneficiary_percentage_${index + 1}`} name="Porcentaje"
+              min={0} max={100}
+              value={beneficiaryInfo[index].percentage}
+              onChange={(value) => handleBeneficiaryPercentageChange(index, value)} />
+            ))}
+            <SFTextInput id="beneficiary_percentage_summarized" name="Total Cubierto"
+              readonly={true}
+              value={""}
+              onChange={(value) => console.log(value)} />
           </div>
         </div>
       </div>

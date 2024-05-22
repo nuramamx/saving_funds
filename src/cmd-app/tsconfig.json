@@ -12,6 +12,6 @@
   "include": [
     "src/**/*",
     "src/database/data/state.json",
-    "../core-lib/src/*"
+    "../react-app/src/core/*"
   ]
 }

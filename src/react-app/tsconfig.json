@@ -18,10 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
-    "jsx": "preserve",
-    "paths": {
-      "@core/*": ["../core-lib/dist/*"]
-    },
+    "jsx": "preserve"
   },
   "include": [
     "src"

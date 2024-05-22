@@ -1,15 +1,25 @@
-interface SFTextInputInfo {
+type SFTextInputInfo = {
     id: string;
     name: string;
     value: string;
+    readonly?: boolean;
     onChange: (event: any) => void;
 }
 
-interface SFNumberInputInfo {
+type SFNumberInputInfo = {
     id: string;
     name: string;
     value: number;
     onChange: (event: any) => void;
 }
 
-export type { SFTextInputInfo, SFNumberInputInfo }
+type SFRangeInputInfo = {
+    id: string;
+    name: string;
+    min: number;
+    max: number;
+    value: number;
+    onChange: (event: any) => void;
+}
+
+export type { SFTextInputInfo, SFNumberInputInfo, SFRangeInputInfo }

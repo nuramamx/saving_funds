@@ -2,9 +2,7 @@ import Address from "./address";
 import Beneficiary from "./beneficiary";
 import AssociateDetail from "./associate-detail";
 import Workplace from "./workplace";
-import AssociateInfo from "../interfaces/associate-info";
 import NameInfo from "../interfaces/name-info";
-import { Gender } from "../types/gender";
 
 export default class Associate {
     private detail: AssociateDetail = undefined!;
@@ -15,7 +13,7 @@ export default class Associate {
     constructor(
         readonly name: NameInfo,
         readonly rfc: string,
-        readonly gender: Gender
+        readonly gender: string
     ) {}
 
     updateDetail(detail: AssociateDetail): Associate {

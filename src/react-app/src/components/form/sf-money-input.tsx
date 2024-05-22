@@ -23,7 +23,7 @@ export default function SFMoneyInput({ id, name, value, onChange }: SFNumberInpu
   
     return (
       <div className="field">
-        <label className="label">{name}</label>
+        <label htmlFor={id} className="label">{name}</label>
         <div className="field has-addons">
           <span className="control">
             <label className="button is-static">

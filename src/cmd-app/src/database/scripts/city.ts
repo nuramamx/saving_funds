@@ -1,5 +1,5 @@
-import { CityDb } from "../../../../core-lib/src/persistence/definitions";
-import data from '../data/city.json';
+import { CityDb } from "../../../../react-app/src/core/persistence/definitions";
+import data from "../data/city.json";
 
 export default function LoadCities(): Promise<void> {
     return new Promise((resolve) => {
