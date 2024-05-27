@@ -1,5 +1,5 @@
-import { memo, useCallback } from "react";
-import useNotificationStore from "../../core/infrastructure/stores/notification-store";
+import { memo } from "react";
+import useNotificationStore from "../../core/stores/notification-store";
 
 type NotificationProps = {
   id: string;
@@ -10,13 +10,9 @@ type NotificationProps = {
 const NotificationElement = memo(({id, message, type}: NotificationProps) => {
   const { removeNotification } = useNotificationStore();
 
-  const handleCloseClick = useCallback((id: string) => {
-    removeNotification(id);
-  }, [id]);
-
   return (
     <div style={{maxWidth: "150vh"}} className={`notification is-${type} is-light`}>
-      <button className="delete" onClick={() => handleCloseClick(id)}></button>
+      <button className="delete" onClick={() => removeNotification(id)}></button>
       <strong>Atenci&oacute;n</strong>
       <p>{message}</p>
     </div>

@@ -1,7 +1,8 @@
 import NotificationElement from './components/elements/notification-element';
 import LayoutAppContent from './components/layout/layout-app-content';
 import LayoutAppHeader from './components/layout/layout-app-header';
-import useNotificationStore from './core/infrastructure/stores/notification-store';
+import useNotificationStore from './core/stores/notification-store';
+import ValidationModalElement from './components/elements/validation-modal-element';
 import './styles/notification.css'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
     <div className="columns" style={{marginTop: '30px'}}>
         <LayoutAppContent />
     </div>
+    <ValidationModalElement />
     </>
   );
 }

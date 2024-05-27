@@ -1,31 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import { AssociatePageContext } from "./associate-page";
+import { useCallback, useEffect, useState } from "react";
 import { SFTabs, SFTabsOptions } from "../../../components/ui/sf-tabs";
 import SFTextInput from "../../../components/form/sf-text-input";
 import SFMoneyInput from "../../../components/form/sf-money-input";
 import SFSelectInput from "../../../components/form/sf-select-input";
 import SFPercentageInput from "../../../components/form/sf-percentage-input";
-import IpcRenderer from "../../../util/ip-renderer";
-import CommandHandlerMediator from "../../../core/application/mediators/command-handler-mediator";
-import CommandResponse from "../../../core/abstractions/interfaces/command-response";
-import NameInfo from "../../../core/domain/interfaces/name-info";
-import AssociateDetailInfo from "../../../core/domain/interfaces/associate-detail-info";
-import AddressInfo from "../../../core/domain/interfaces/address-info";
-import WorkplaceInfo from "../../../core/domain/interfaces/workplace-info";
-import BeneficiaryInfo from "../../../core/domain/interfaces/beneficiary-info";
-import Associate from "../../../core/domain/entities/associate";
-import Address from "../../../core/domain/entities/address";
-import AssociateDetail from "../../../core/domain/entities/associate-detail";
-import Workplace from "../../../core/domain/entities/workplace";
+import NameInfo from "../../../core/interfaces/name-info";
+import AssociateDetailInfo from "../../../core/interfaces/associate-detail-info";
+import AddressInfo from "../../../core/interfaces/address-info";
+import WorkplaceInfo from "../../../core/interfaces/workplace-info";
+import BeneficiaryInfo from "../../../core/interfaces/beneficiary-info";
 import SFTextDisplayInput from "../../../components/form/sf-text-display-input";
-import useNotificationStore from "../../../core/infrastructure/stores/notification-store";
-
-const ipcRenderer = IpcRenderer();
+import useNotificationStore from "../../../core/stores/notification-store";
+import useAssociateStore from "../../../core/stores/associate-draft-store";
+import CreateAssociateCommand from "../../../core/interfaces/commands/create-associate-command";
+import CommandResponseInfo from "../../../core/interfaces/command-response-info";
+import useValidationModalStore from "../../../core/stores/validation-modal-store";
+import SFSelectCity from "../../../components/dynamic-elements/sf-select-city";
 
 export default function CreateAssociate() {
   const { pushNotification } = useNotificationStore();
-  const command = useContext(AssociatePageContext) as CommandHandlerMediator;
-  const [commandResult, setCommandResult] = useState<CommandResponse>({ successful: false } as CommandResponse);
+  const { pushAssociateDraft } = useAssociateStore();
+  const { setValidationModal } = useValidationModalStore();
 
   const [generalInfo, setGeneralInfo] = useState<({rfc: string, gender: string})>({ rfc: '', gender: 'M' });
   const [fullnameInfo, setFullnameInfo] = useState<NameInfo>({ firstname: '', middlename: '', paternal_lastname: '', maternal_lastname: '' });
@@ -73,8 +68,6 @@ export default function CreateAssociate() {
       .map(item => parseInt(item.percentage.toString()))
       .reduce((sum, percentage) => sum + percentage, 0);
 
-      console.log(`Hola => ${beneficiaryTotalPercentage}`);
-
       setBeneficiaryTotalPercentage(beneficiaryTotalPercentage);
   }, [beneficiaryInfo])
 
@@ -94,22 +87,47 @@ export default function CreateAssociate() {
     });
   };
 
-  const executeCommand = () => {
-    try {
-      const associate = new Associate(fullnameInfo, generalInfo.rfc, generalInfo.gender)
-        .updateAddress(new Address(addressInfo))
-        .updateDetail(new AssociateDetail(
-          detailInfo.dependency_key,
-          detailInfo.agreement,
-          detailInfo.category,
-          detailInfo.salary,
-          detailInfo.social_contribution,
-          detailInfo.fortnightly_contribution,
-          detailInfo.request_date
-        ))
-        .updateWorkplace(new Workplace(workplaceInfo.key, workplaceInfo.name, workplaceInfo.phone))
-        .addBeneficiaries(beneficiaryInfo);
+  const generateCommandData = (): CreateAssociateCommand => {
+    const data: CreateAssociateCommand = { 
+      name: fullnameInfo,
+      rfc: generalInfo.rfc,
+      gender: generalInfo.gender,
+      address: addressInfo,
+      detail: detailInfo,
+      workplace: workplaceInfo,
+      beneficiaries: beneficiaryInfo
+    };
 
+    return data;
+  };
+
+  const draft = () => {
+    pushAssociateDraft(generateCommandData());
+    pushNotification({ message: "Borrador guardado correctamente.", type: 'info' });
+  };
+
+  const save = async () => {
+    try {
+      const data = generateCommandData();
+      const response = await fetch('http://localhost:8081/associate/create', {
+        method: 'POST',
+        body: JSON.stringify(data)
+      });
+
+      console.log(response);
+      console.log(JSON.stringify(data));
+
+      if (!response.ok) {
+        const error = await response.json() as CommandResponseInfo;
+
+        return setValidationModal({
+          message: error.message,
+          show: true,
+          errors: error.errors
+        });
+      }
+
+      pushNotification({ message: "Socio creado con éxito.", type: "success" });
     } catch (error: any) {
       pushNotification({ message: error.message, type: "danger" });
     }
@@ -180,9 +198,10 @@ export default function CreateAssociate() {
               onChange={(e) => setAddressInfo({ ...addressInfo, postal_code: e.target.value })} />
           </div>
           <div className="column">
-            <SFTextInput id="address_city_id" name="Ciudad"
+            {/* <SFTextInput id="address_city_id" name="Ciudad"
               value={addressInfo.city_id.toString()}
-              onChange={(e) => setAddressInfo({ ...addressInfo, city_id: e.target.value })} />
+              onChange={(e) => setAddressInfo({ ...addressInfo, city_id: e.target.value })} /> */}
+              <SFSelectCity />
             <SFTextInput id="address_phone" name="Tel&eacute;fono"
               value={addressInfo.phone}
               onChange={(e) => setAddressInfo({ ...addressInfo, phone: e.target.value })} />
@@ -235,9 +254,19 @@ export default function CreateAssociate() {
         </div>
       </div>
     </SFTabs>
-    <button className="button is-primary" onClick={() => executeCommand()}>
-      Guardar
-    </button>
+    <nav className="level">
+      <div className="level-left"></div>
+      <div className="level-right">
+        <div className="level-item">
+          <button className="button is-light" onClick={() => draft()}>
+            Borrador
+          </button>
+        </div>
+        <div className="level-item">
+        <button className="button is-primary" onClick={() => save()}>Guardar</button>
+        </div>
+      </div>
+    </nav>
     </>
   );
 }

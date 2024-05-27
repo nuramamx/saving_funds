@@ -1,5 +1,5 @@
 import { SFRangeInputInfo } from "./interfaces/sf-input-info";
-import useFormattedNumber from "../../core/infrastructure/hooks/use-formatted-number";
+import useFormattedNumber from "../../core/hooks/use-formatted-number";
 import { useCallback, useEffect } from "react";
 
 export default function SFPercentageInput({ id, name, min = 0, max = 100, value, readonly = false, onChange }: SFRangeInputInfo) {

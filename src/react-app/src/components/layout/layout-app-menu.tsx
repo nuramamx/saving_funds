@@ -1,7 +1,7 @@
 import { Community, AppleWallet, Settings, ReportColumns, UserCircle } from 'iconoir-react';
 import React, { memo, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
-import useLayoutStore from '../../core/infrastructure/stores/layout-store';
+import useLayoutStore from '../../core/stores/layout-store';
 
 const LayoutAppMenu = memo(() => {
     const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
