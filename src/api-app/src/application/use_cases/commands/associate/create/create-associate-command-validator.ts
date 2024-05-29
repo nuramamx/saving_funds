@@ -6,7 +6,7 @@ import BeneficiaryInfo from "../../../../../domain/interfaces/beneficiary-info";
 
 export default class CreateAssociateCommandValidator implements CommandValidator<CreateAssociateCommand> {
   readonly notPassed: CommandValidation[] = [];
-  readonly baseValidation = v8n().not.undefined().not.null().not.empty();
+  readonly baseValidation = v8n().not.empty();
 
   constructor(readonly command: CreateAssociateCommand) {}
 
@@ -20,7 +20,7 @@ export default class CreateAssociateCommandValidator implements CommandValidator
   }
 
   validateAssociate(): void {
-    if (!this.baseValidation.string().test(this.command.rfc))
+    if (!this.baseValidation.string().minLength(10).maxLength(13).test(this.command.rfc))
       this.notPassed.push({ message: 'Se requiere de R.F.C.' });
 
     if (!this.baseValidation.string().minLength(5).maxLength(25).test(this.command.name.firstname))
@@ -32,7 +32,7 @@ export default class CreateAssociateCommandValidator implements CommandValidator
     if (!this.baseValidation.string().minLength(5).maxLength(25).test(this.command.name.maternal_lastname))
       this.notPassed.push({ message: 'Se requiere del apellido materno.' });
 
-    if (!this.baseValidation.string().includes('M' || 'F').test(this.command.gender))
+    if (!this.baseValidation.string().test(this.command.gender))
       this.notPassed.push({ message: 'Se requiere del sexo.' });
 
     if (!this.baseValidation.string().test(this.command.detail.dependency_key))
@@ -67,7 +67,7 @@ export default class CreateAssociateCommandValidator implements CommandValidator
     if (!this.baseValidation.string().test(this.command.address.postal_code))
       this.notPassed.push({ message: 'Se requiere del código postal.' });
 
-    if (!this.baseValidation.string().test(this.command.address.city_id))
+    if (!this.baseValidation.numeric().equal(0).test(this.command.address.city_id))
       this.notPassed.push({ message: 'Se requiere de la ciudad.' });
 
     if (!this.baseValidation.string().test(this.command.address.phone))

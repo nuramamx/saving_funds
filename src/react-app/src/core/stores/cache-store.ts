@@ -1,17 +1,30 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { produce } from 'immer';
 import CityInfo from '../interfaces/city-info';
 import StateInfo from '../interfaces/state-info';
 
-type CacheStore = {
-    states: CityInfo[];
-    cities: StateInfo[];
+interface CacheStore {
+  states: StateInfo[];
+  cities: CityInfo[];
+  setStates: (states: StateInfo[]) => void
+  setCities: (cities: CityInfo[]) => void
 };
 
 const useCacheStore = create(persist<CacheStore>(
   (set) => ({
     states: [],
-    cities: []
+    cities: [],
+    setStates: (states: StateInfo[]) => set(
+      produce((state: CacheStore) => {
+        state.states = states;
+      })
+    ),
+    setCities: (cities: CityInfo[]) => set(
+      produce((state: CacheStore) => {
+        state.cities = cities;
+      })
+    )
   }),
   {
     name: 'cache-store',

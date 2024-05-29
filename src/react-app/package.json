@@ -5,10 +5,13 @@
   "dependencies": {
     "bulma": "~1.0.0",
     "iconoir-react": "~7.7.0",
+    "immer": "~10.1.1",
+    "jotai": "~2.8.2",
+    "jotai-immer": "~0.4.0",
     "react": "~18.3.1",
     "react-dom": "~18.3.1",
     "react-router-dom": "~6.23.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "~5.0.1",
     "uuid": "~9.0.1",
     "web-vitals": "~2.1.4",
     "zustand": "~4.5.2"

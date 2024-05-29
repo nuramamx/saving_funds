@@ -1,5 +1,3 @@
 export default class State {
-    constructor(readonly name: string) {
-        this.name = name;
-    }
+    constructor(readonly id: number, readonly name: string) {}
 }

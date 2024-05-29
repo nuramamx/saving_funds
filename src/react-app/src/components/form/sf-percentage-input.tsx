@@ -11,9 +11,7 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
   }, []);
 
   useEffect(() => {
-    if (hasChanged) {
-      onChange(percentage);
-    }
+    if (hasChanged) onChange(percentage);
   }, [hasChanged, onChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { db } from "./instance";
 import CityDb from "./models/city-db";
+import StateDb from "./models/state-db";
 
 const AssociateDb = db.sequelize.define(
     'associate',
@@ -44,16 +45,6 @@ const AssociateDetailDb = db.sequelize.define(
         requestDate: { type: DataTypes.DATE, allowNull: false, field: "request_date" }
     },
     { schema: 'catalog', tableName: 'associate_detail' }
-)
-
-const StateDb = db.sequelize.define(
-    'state',
-    {
-        id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
-        key: { type: DataTypes.CHAR(3), allowNull: false, unique: true },
-        name: { type: DataTypes.STRING(50), allowNull: false }
-    },
-    { schema: 'catalog', tableName: 'state' }
 )
 
 AssociateDb.hasOne(WorkplaceDb, { foreignKey: 'associate_id',  as: 'workplace' });

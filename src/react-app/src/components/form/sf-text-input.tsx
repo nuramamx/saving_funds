@@ -8,7 +8,7 @@ export default function SFTextInput({ id, name, value, readonly = false, onChang
         <input id={id} className="input" type="text" placeholder={name}
           readOnly={readonly}
           value={value}
-          onChange={(e) => onChange(e)} />
+          onChange={(e) => onChange(e.target.value)} />
       </div>
     </div>
   );

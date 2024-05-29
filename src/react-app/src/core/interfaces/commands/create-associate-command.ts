@@ -1,16 +1,5 @@
-import AddressInfo from "../address-info";
-import AssociateDetailInfo from "../associate-detail-info";
-import BeneficiaryInfo from "../beneficiary-info";
-import NameInfo from "../name-info";
-import WorkplaceInfo from "../workplace-info";
+import AssociateInfo from "../associate-info";
 
-export default interface CreateAssociateCommand {
-    commandId?: string;
-    name: NameInfo;
-    rfc: string;
-    gender: string;
-    detail: AssociateDetailInfo;
-    address: AddressInfo;
-    workplace: WorkplaceInfo;
-    beneficiaries: BeneficiaryInfo[];
+export default interface CreateAssociateCommand extends AssociateInfo {
+  commandId?: string;
 }

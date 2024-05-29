@@ -3,14 +3,15 @@ type SFTextInputInfo = {
     name: string;
     value: string;
     readonly?: boolean;
-    onChange: (event: any) => void;
+    onChange: (value: string) => void;
 }
 
 type SFNumberInputInfo = {
     id: string;
     name: string;
     value: number;
-    onChange: (event: any) => void;
+    readonly?: boolean;
+    onChange: (value: number) => void;
 }
 
 type SFRangeInputInfo = {
@@ -20,7 +21,7 @@ type SFRangeInputInfo = {
     max?: number;
     value: number;
     readonly?: boolean;
-    onChange: (event: any) => void;
+    onChange: (value: any) => void;
 }
 
 type SFTextDisplayInfo = {

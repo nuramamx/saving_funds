@@ -8,7 +8,7 @@ export default function SFMoneyInput({ id, name, value, onChange }: SFNumberInpu
 
     useEffect(() => {
       if (hasChanged) {
-        onChange(currency);
+        onChange(parseFloat(currency));
       }
     }, [hasChanged, onChange]);
 
