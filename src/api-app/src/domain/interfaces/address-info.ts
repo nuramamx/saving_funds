@@ -1,9 +1,9 @@
 export default interface AddressInfo {
-    city_id: number;
+    cityId: number;
     street: string;
     settlement: string;
     town: string;
-    postal_code: string;
+    postalCode: string;
     phone: string;
     mobile: string;
     email: string;

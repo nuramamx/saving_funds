@@ -35,10 +35,10 @@ export default class CreateAssociateCommandValidator implements CommandValidator
     if (!this.baseValidation.string().test(this.command.gender))
       this.notPassed.push({ message: 'Se requiere del sexo.' });
 
-    if (!this.baseValidation.string().test(this.command.detail.dependency_key))
+    if (!this.baseValidation.string().test(this.command.detail.dependencyKey))
       this.notPassed.push({ message: 'Se requiere de la clave de dependencia.' });
 
-    if (!this.baseValidation.string().test(this.command.detail.agreement))
+    if (!this.baseValidation.string().test(this.command.detail.agreementId))
       this.notPassed.push({ message: 'Se requiere del convenio.' });
 
     if (!this.baseValidation.string().test(this.command.detail.category))
@@ -47,10 +47,10 @@ export default class CreateAssociateCommandValidator implements CommandValidator
     if (!this.baseValidation.number(false).test(this.command.detail.salary))
       this.notPassed.push({ message: 'Se requiere del salario.' });
 
-    if (!this.baseValidation.number(false).test(this.command.detail.social_contribution))
+    if (!this.baseValidation.number(false).test(this.command.detail.socialContribution))
       this.notPassed.push({ message: 'Se requiere de la aporte social.' });
 
-    if (!this.baseValidation.number(false).test(this.command.detail.fortnightly_contribution))
+    if (!this.baseValidation.number(false).test(this.command.detail.fortnightlyContribution))
       this.notPassed.push({ message: 'Se requiere del aporte quincenal.' });
   }
 
@@ -64,10 +64,10 @@ export default class CreateAssociateCommandValidator implements CommandValidator
     if (!this.baseValidation.string().test(this.command.address.town))
       this.notPassed.push({ message: 'Se requiere de la localidad.' });
 
-    if (!this.baseValidation.string().test(this.command.address.postal_code))
+    if (!this.baseValidation.string().test(this.command.address.postalCode))
       this.notPassed.push({ message: 'Se requiere del código postal.' });
 
-    if (!this.baseValidation.numeric().equal(0).test(this.command.address.city_id))
+    if (!this.baseValidation.numeric().equal(0).test(this.command.address.cityId))
       this.notPassed.push({ message: 'Se requiere de la ciudad.' });
 
     if (!this.baseValidation.string().test(this.command.address.phone))

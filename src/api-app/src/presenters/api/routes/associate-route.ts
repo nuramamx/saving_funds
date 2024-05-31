@@ -4,16 +4,7 @@ import CommandHandlerMediator from "../../../application/mediators/command-handl
 
 async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/associate', async (request, reply) => {
-    const x: CreateAssociateCommand = {
-      rfc: '',
-      name: { firstname: '', middlename: '', paternal_lastname: '', maternal_lastname: '' },
-      gender: '',
-      detail: { salary: 0, social_contribution: 0, agreement: '', dependency_key: '', fortnightly_contribution: 0, category: '', request_date: new Date() },
-      address: { street: '', settlement: '', town: '', postal_code: '', city_id: 0, phone: '', mobile: '', email: '' },
-      workplace: { key: '', name: '', phone: '' },
-      beneficiaries: []
-    };
-    return JSON.stringify(x);
+    
   });
 
   fastify.post<{ Body: string }>('/associate/create', async (request, reply) => {

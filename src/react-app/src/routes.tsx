@@ -47,16 +47,19 @@ const SidebarRoutes: SidebarParentMenu[] = [
     ] },
     { key: "associates", name: "Socios", location: "/associate", children: [
         { key: "associate-create", route: "/associate/page/create", name: "Inscribir Socio" },
-        { key: "associate-page", route: "/associate/page", name: "Gestión de Socios" },
+        { key: "associate-list", route: "/associate/list", name: "Gestión de Socios" },
         { key: "associate-bulk", route: "/associate/bulk", name: "Carga Masiva" }
     ] },
-    // { name: "Préstamos", location: "/associate", children: [
-    //     { route: "/borrow/page", name: "Gestión de Préstamos" },
-    //     { route: "/borrow/page", name: "Préstamos Autorizados" },
-    //     { route: "/borrow/page", name: "Estado de Préstamos" },
-    //     { route: "/borrow/page", name: "Socios Deudores" },
-    //     { route: "/borrow/page", name: "Ver Pagos" }
-    // ] },
+    { key: "borrowing", name: "Préstamos", location: "/associate", children: [
+        { key: "borrow-create", route: "/borrow/create", name: "Inscribir Préstamo" },
+        { key: "borrow-list", route: "/borrow/list", name: "Gestión de Préstamos" },
+        { key: "borrow-history", route: "/borrow/history", name: "Historial de Préstamos" },
+        { key: "borrow-associate-debtors", route: "/borrow/page", name: "Socios Deudores" }
+    ] },
+    { key: "payments", name: "Pagos", location: "/associate", children: [
+      { key: "payment-register", route: "/payment/create", name: "Registrar Pago" },
+      { key: "payment-list", route: "/payment", name: "Gestión de Pagos" }
+  ] },
     // { name: "Retiros", location: "/associate", children: [
     //     { route: "/withdrawal/page", name: "Gestión de Retiros" },
     //     { route: "/withdrawal/page", name: "Ver Retiros" }

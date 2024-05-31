@@ -4,6 +4,7 @@ import AssociateRoute from "./routes/associate-route";
 import { customLogger } from "./logger/custom-logger";
 import CityRoute from "./routes/city-route";
 import StateRoute from "./routes/state-route";
+import AgreementRoute from "./routes/agreement-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -32,6 +33,7 @@ fastify.register(cors, {
   }
 });
 
+fastify.register(AgreementRoute);
 fastify.register(StateRoute);
 fastify.register(CityRoute);
 fastify.register(AssociateRoute);

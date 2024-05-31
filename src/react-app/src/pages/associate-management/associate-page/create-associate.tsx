@@ -11,10 +11,9 @@ import CommandResponseInfo from "../../../core/interfaces/command-response-info"
 import useValidationModalStore from "../../../core/stores/validation-modal-store";
 import SFSelectCity from "../../../components/dynamic-elements/sf-select-city";
 import SFSelectState from "../../../components/dynamic-elements/sf-select-state";
-import { useAtom } from "jotai";
-import stateAtom from "../../../core/atoms/state-atom";
 import useAssociateDraftStore from "../../../core/stores/associate-draft-store";
 import AppConstants from "../../../core/constants/app-constants";
+import SFSelectAgreement from "../../../components/dynamic-elements/sf-select-agreement";
 
 export default function CreateAssociate() {
   const { pushNotification } = useNotificationStore();
@@ -111,9 +110,9 @@ export default function CreateAssociate() {
             <SFTextInput id="associate_dependency_key" name="Clave de Dependencia"
               value={associate.detail.dependencyKey}
               onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, dependencyKey: value.toUpperCase() }})} />
-            <SFTextInput id="associate_agreement" name="Convenio"
-              value={associate.detail.agreement}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, agreement: value.toUpperCase() }})} />
+            <SFSelectAgreement id="associate_agreement" name="Convenio"
+              value={associate.detail.agreementId}
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, agreementId: value }})} />
             <SFTextInput id="associate_category" name="Categoría"
               value={associate.detail.category}
               onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, category: value.toUpperCase() }})} />

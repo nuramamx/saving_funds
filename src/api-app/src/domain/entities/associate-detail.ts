@@ -4,13 +4,13 @@ export default class AssociateDetail implements AssociateDetailInfo {
     private picture: string = null!;
 
     constructor(
-        readonly dependency_key: string,
-        readonly agreement: string,
+        readonly agreementId: number,
+        readonly dependencyKey: string,
         readonly category: string,
         readonly salary: number,
-        readonly social_contribution: number,
-        readonly fortnightly_contribution: number,
-        readonly request_date: Date
+        readonly socialContribution: number,
+        readonly fortnightlyContribution: number,
+        readonly requestDate: Date
     ) {}
 
     definePicture(picture: string): AssociateDetail {

@@ -3,11 +3,11 @@ import AddressParams from "../interfaces/params/address-params";
 import City from "./city";
 
 export default class Address implements AddressInfo {
-    readonly city_id
+    readonly cityId
     readonly street: string;
     readonly settlement: string;
     readonly town: string;
-    readonly postal_code: string;
+    readonly postalCode: string;
     readonly phone: string;
     readonly mobile: string;
     readonly email: string;
@@ -15,11 +15,11 @@ export default class Address implements AddressInfo {
     private city: City = undefined!;
 
     constructor(params: AddressParams) {
-        this.city_id = params.city_id;
+        this.cityId = params.cityId;
         this.street = params.street;
         this.settlement = params.settlement;
         this.town = params.town;
-        this.postal_code = params.postal_code;
+        this.postalCode = params.postalCode;
         this.phone = params.phone;
         this.mobile = params.mobile;
         this.email = params.email;

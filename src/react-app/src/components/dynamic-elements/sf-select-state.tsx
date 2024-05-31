@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react"
+import { memo, useEffect } from "react"
 import CommandResponseInfo from "../../core/interfaces/command-response-info";
 import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
 import StateInfo from "../../core/interfaces/state-info";

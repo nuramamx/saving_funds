@@ -13,8 +13,8 @@ const associateInitialState: CreateAssociateCommand = {
   rfc: "",
   gender: "",
   detail: {
+    agreementId: 0,
     dependencyKey: "",
-    agreement: "",
     category: "",
     salary: 0,
     socialContribution: 0,

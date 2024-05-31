@@ -1,33 +1,29 @@
 import { memo, useEffect } from "react"
-import CityInfo from "../../core/interfaces/city-info";
-import CommandResponseInfo from "../../core/interfaces/command-response-info";
 import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
+import CommandResponseInfo from "../../core/interfaces/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
+import AgreementInfo from "../../core/interfaces/agreement-info";
 
-interface SFSelectCityProps extends SFNumberInputInfo {
-  stateId: number;
-}
-
-const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityProps) => {
-  const { cities, setCities } = useCacheStore();
+const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
+  const { agreements, setAgreements } = useCacheStore();
 
   useEffect(() => {
-    const fetchCities = async () => {
-      const result = await fetch(AppConstants.apiCity, {
+    const fetchAgreements = async () => {
+      const result = await fetch(AppConstants.apiAgreements, {
         method: 'GET'
       });
 
       const response = await result.json() as CommandResponseInfo;
-      const cities = JSON.parse(response.data!) as CityInfo[];
+      const agreements = JSON.parse(response.data!) as AgreementInfo[];
 
-      setCities(cities);
+      setAgreements(agreements);
 
-      console.log("Cities loaded...");
+      console.log("Agreements loaded...");
     };
 
-    if (cities.length <= 0) fetchCities();
-  }, []);
+    if (agreements.length <= 0) fetchAgreements();
+  }, [agreements.length, setAgreements]);
 
   return (
     <div className="field">
@@ -35,7 +31,7 @@ const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityP
       <div className="select" style={{display: "grid"}}>
       <select id={id} value={value} onChange={(e) => onChange(parseInt(e.target.value))}>
         <option value={0}>---</option>
-        {cities.filter((city: CityInfo) => city.stateId == stateId).map((option: CityInfo) => [
+        {agreements.map((option: AgreementInfo) => [
           <option key={option.id} value={option.id}>{option.name}</option>
         ])}
         </select>
@@ -44,4 +40,4 @@ const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityP
   )
 });
 
-export default SFSelectCity;
+export default SFSelectAgreement;

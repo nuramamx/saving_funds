@@ -1,6 +1,6 @@
 export default interface AssociateDetailInfo {
+    agreementId: number;
     dependencyKey: string;
-    agreement: string;
     category: string;
     salary: number;
     socialContribution: number;

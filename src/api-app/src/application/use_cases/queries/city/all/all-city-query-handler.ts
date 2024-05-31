@@ -1,7 +1,6 @@
 import CommandHandler from "../../../../../abstractions/interfaces/command-handler";
 import CommandResponse from "../../../../../abstractions/interfaces/command-response";
 import QueryCityRepository from "../../../../../persistence/repositories/read/query-city-repository";
-import CommandHandlerMediator from "../../../../mediators/command-handler-mediator";
 
 class AllCityQueryHandler implements CommandHandler<void, CommandResponse> {
   execute = async (): Promise<CommandResponse> => {
