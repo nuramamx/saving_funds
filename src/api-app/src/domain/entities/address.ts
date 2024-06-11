@@ -1,5 +1,4 @@
 import AddressInfo from "../interfaces/address-info";
-import AddressParams from "../interfaces/params/address-params";
 import City from "./city";
 
 export default class Address implements AddressInfo {
@@ -14,7 +13,7 @@ export default class Address implements AddressInfo {
 
     private city: City = undefined!;
 
-    constructor(params: AddressParams) {
+    constructor(params: AddressInfo) {
         this.cityId = params.cityId;
         this.street = params.street;
         this.settlement = params.settlement;

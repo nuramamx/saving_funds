@@ -17,8 +17,8 @@ class AddressDb extends Model {
 AddressDb.init(
   {
     id: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, autoIncrement: true },
-    associateId: { type: DataTypes.INTEGER, allowNull: false, unique: true, field: "associate_id" },
-    cityId: { type: DataTypes.INTEGER, allowNull: false, unique: true, field: "city_id" },
+    associateId: { type: DataTypes.INTEGER, unique: true, field: "associate_id" },
+    cityId: { type: DataTypes.INTEGER, allowNull: false, field: "city_id" },
     street: { type: DataTypes.STRING, allowNull: false },
     settlement: { type: DataTypes.STRING, allowNull: false },
     town: { type: DataTypes.STRING, allowNull: false },
@@ -27,7 +27,7 @@ AddressDb.init(
     mobile: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false }
   },
-  { sequelize: db.sequelize, schema: "catalog", tableName: "address" }
+  { sequelize: db.sequelize, schema: "catalog", tableName: "address", modelName: "address" }
 );
 
 export default AddressDb;

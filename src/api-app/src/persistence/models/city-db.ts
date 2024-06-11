@@ -1,5 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { db } from "../instance";
+import AddressDb from "./address-db";
+import StateDb from "./state-db";
 
 class CityDb extends Model {
   public id!: number;
@@ -14,6 +16,6 @@ CityDb.init(
       name: { type: DataTypes.STRING(50), allowNull: false }
   },
   { sequelize: db.sequelize, schema: 'catalog', tableName: 'city' }
-)
+);
 
 export default CityDb;

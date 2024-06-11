@@ -1,9 +1,11 @@
-import NotificationElement from './components/elements/notification-element';
-import LayoutAppContent from './components/layout/layout-app-content';
-import LayoutAppHeader from './components/layout/layout-app-header';
-import useNotificationStore from './core/stores/notification-store';
-import ValidationModalElement from './components/elements/validation-modal-element';
-import './styles/notification.css'
+import NotificationElement from "./components/elements/notification-element";
+import LayoutAppContent from "./components/layout/layout-app-content";
+import LayoutAppHeader from "./components/layout/layout-app-header";
+import useNotificationStore from "./core/stores/notification-store";
+import ValidationModal from "./components/modals/validation-modal";
+import "./styles/aside.css";
+import "./styles/notification.css";
+import "./styles/navbar.css";
 
 function App() {
   const { notifications } = useNotificationStore();
@@ -11,7 +13,7 @@ function App() {
   return (
     <>
     <LayoutAppHeader />
-    <div className='notification-container'>
+    <div className="notification-container">
       {notifications.map((notification) => (
         <NotificationElement
           key={notification.id}
@@ -20,10 +22,10 @@ function App() {
           type={notification.type} />
       ))}
     </div>
-    <div className="columns" style={{marginTop: '30px'}}>
+    <div className="columns" style={{marginTop: "30px"}}>
         <LayoutAppContent />
     </div>
-    <ValidationModalElement />
+    <ValidationModal />
     </>
   );
 }

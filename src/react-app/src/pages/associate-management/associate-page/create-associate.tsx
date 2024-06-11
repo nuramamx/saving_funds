@@ -37,18 +37,6 @@ export default function CreateAssociate() {
     { id: 'beneficiary', name: "Beneficiarios" }
   ];
 
-  useEffect(() => {
-    const beneficiaryTotalPercentage = associate.beneficiaries
-      .map(item => parseInt(item.percentage.toString()))
-      .reduce((sum, percentage) => sum + percentage, 0);
-
-      setBeneficiaryTotalPercentage(beneficiaryTotalPercentage);
-  }, [associate.beneficiaries])
-
-  const clear = () => {
-    clearAssociate();
-  };
-
   const draft = () => {
     pushAssociateDraft(associate);
     pushNotification({ message: "Borrador guardado correctamente.", type: 'info' });
@@ -79,6 +67,14 @@ export default function CreateAssociate() {
       pushNotification({ message: error.message, type: "danger" });
     }
   };
+
+  useEffect(() => {
+    const beneficiaryTotalPercentage = associate.beneficiaries
+      .map(item => parseInt(item.percentage.toString()))
+      .reduce((sum, percentage) => sum + percentage, 0);
+
+      setBeneficiaryTotalPercentage(beneficiaryTotalPercentage);
+  }, [associate.beneficiaries])
 
   return (
     <>
@@ -186,7 +182,7 @@ export default function CreateAssociate() {
             {associate.beneficiaries.map((beneficiary, index) => (
               <SFTextInput key={index} id={`beneficiary_${index+1}`} name={`Beneficiario ${index+1}`}
                 value={beneficiary.name}
-                onChange={(value) => updateBeneficiaryName(index, value)} />
+                onChange={(value) => updateBeneficiaryName(index, value.toUpperCase())} />
             ))}
           </div>
           <div className="column">
@@ -204,20 +200,22 @@ export default function CreateAssociate() {
         </div>
       </div>
     </SFTabs>
-    <nav className="level">
-      <div className="level-left"></div>
-      <div className="level-right">
-        <div className="level-item">
-          <button className="button is-light" onClick={() => clearAssociate()}>Limpiar</button>
+    <div className="mt-auto">
+      <nav className="level">
+        <div className="level-left"></div>
+        <div className="level-right">
+          <div className="level-item">
+            <button className="button is-light" onClick={() => clearAssociate()}>Limpiar</button>
+          </div>
+          <div className="level-item">
+            <button className="button is-light" onClick={() => draft()}>Borrador</button>
+          </div>
+          <div className="level-item">
+          <button className="button is-primary" onClick={() => save()}>Guardar</button>
+          </div>
         </div>
-        <div className="level-item">
-          <button className="button is-light" onClick={() => draft()}>Borrador</button>
-        </div>
-        <div className="level-item">
-        <button className="button is-primary" onClick={() => save()}>Guardar</button>
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
     </>
   );
 }

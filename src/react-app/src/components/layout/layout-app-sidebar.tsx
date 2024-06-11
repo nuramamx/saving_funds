@@ -24,7 +24,7 @@ const LayoutAppSidebar = memo((props: LayoutAppSidebarProps) => {
   const { selectedSidebarMenu, setSelectedSidebarMenu } = useLayoutStore();
 
   return (
-    <aside style={{minHeight: '80vh'}} className="menu box">
+    <aside style={{minHeight: '80vh'}} className="menu aside-menu">
       {props.items.filter((x) => x.location === props.location).map((item: SidebarParentMenu) => [
         <span key={item.key}>
           <p className="menu-label">{item.name}</p>

@@ -18,8 +18,6 @@ const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo
       const agreements = JSON.parse(response.data!) as AgreementInfo[];
 
       setAgreements(agreements);
-
-      console.log("Agreements loaded...");
     };
 
     if (agreements.length <= 0) fetchAgreements();
@@ -29,7 +27,7 @@ const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-      <select id={id} value={value} onChange={(e) => onChange(parseInt(e.target.value))}>
+      <select id={id} value={value} onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined }>
         <option value={0}>---</option>
         {agreements.map((option: AgreementInfo) => [
           <option key={option.id} value={option.id}>{option.name}</option>

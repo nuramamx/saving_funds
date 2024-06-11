@@ -1,31 +1,48 @@
+import { useCallback, useEffect, useState } from "react";
 import { SFRangeInputInfo } from "./interfaces/sf-input-info";
-import useFormattedNumber from "../../core/hooks/use-formatted-number";
-import { useCallback, useEffect } from "react";
 
 export default function SFPercentageInput({ id, name, min = 0, max = 100, value, readonly = false, onChange }: SFRangeInputInfo) {
-  const [percentage, setPercentage] = useFormattedNumber(value.toString());
-  const hasChanged = percentage !== value.toString();
+  const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleBackspaceKeypres = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace") setPercentage('0');
+    if (e.key === "Backspace") setInputValue('0');
   }, []);
 
-  useEffect(() => {
-    if (hasChanged) onChange(percentage);
-  }, [hasChanged, onChange]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = parseInt(e.target.value);
-    
-    if (value < min || value > max)
-      value = 100;
-    
-    setPercentage(value.toString());
+    if (isValidCurrency(newValue)) {
+      setInputValue(newValue);
+      
+      if (onChange) onChange(parseFloat(newValue));
+    }
   };
 
   const handleClick = () => {
-    setPercentage('0');
-  }
+    if (!readonly) setInputValue("");
+  };
+
+  const handleBlur = () => {
+    const parsedValue = parseFloat(inputValue || "0");
+    const formattedValue = parsedValue.toString();
+    setInputValue(formattedValue);
+
+    if (onChange) onChange(parsedValue);
+  };
+
+  const isValidCurrency = (input: string): boolean => {
+    if (input === "" || input === undefined || input === null) {
+      setInputValue("");
+      return false;
+    }
+
+    const isNumber = /^-?\d*\.?\d{0,2}$/.test(input);
+    return isNumber;
+  };
+
+  useEffect(() => {
+    setInputValue(value.toString());
+  }, [value]);
 
   return (
     <div className="field">
@@ -36,11 +53,12 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
             %
           </label>
         </span>
-        <div className="control">
-          <input id={id} className="input" type="text" placeholder={name}
+        <div className="control is-expanded">
+          <input id={id} className="input has-text-right" type="text" placeholder={name}
             readOnly={readonly}
-            value={percentage}
+            value={inputValue}
             onClick={handleClick}
+            onBlur={handleBlur}
             onKeyDown={handleBackspaceKeypres}
             onChange={(e) => handleChange(e)} />
         </div>

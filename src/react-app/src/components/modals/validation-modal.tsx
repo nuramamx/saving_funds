@@ -1,7 +1,7 @@
 import { memo } from "react";
 import useValidationModalStore from "../../core/stores/validation-modal-store";
 
-const ValidationModalElement = memo(() => {
+const ValidationModal = memo(() => {
   const { validation, closeValidationModal } = useValidationModalStore();
 
   const handleCloseClick = () => {
@@ -39,4 +39,4 @@ const ValidationModalElement = memo(() => {
   );
 });
 
-export default ValidationModalElement;
+export default ValidationModal;
