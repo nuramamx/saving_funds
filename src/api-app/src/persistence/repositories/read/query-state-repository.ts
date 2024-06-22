@@ -1,12 +1,21 @@
+import { db } from "../../instance";
+import { QueryTypes } from "sequelize";
+import { ViewName } from "../../names/view-name";
 import State from "../../../domain/entities/state";
-import { StateDb } from "../../definitions";
 import QueryRepositoryInfo from "../../interfaces/query-repository-info";
+import StateModel from "../../models/state-model";
 
 export default class QueryStateRepository implements QueryRepositoryInfo<State> {
    all = async (): Promise<State[]> => {
-    const data = await StateDb.findAll();
-    const result = data.map((state: StateDb) => new State(state.id, state.name));
+    const [results]: any = await db.sequelize.query(
+      ViewName.STATE_ALL,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    const data = results.map((row: StateModel) => new State(row.id, row.name));
     
-    return result;
+    return [];
   }
 }

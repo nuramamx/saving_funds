@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SFTextInput from "../form/sf-text-input";
 
 const SearchAssociateModal = ({ show, onClose }: { show: boolean, onClose: any }) => {
@@ -38,11 +38,8 @@ const SearchAssociateModal = ({ show, onClose }: { show: boolean, onClose: any }
             </tbody>
           </table>
         </section>
-        {/* <footer className="modal-card-foot">
-          <div className="buttons">
-            <button className="button is-success" onClick={onClose}>Aceptar</button>
-          </div>
-        </footer> */}
+        <footer className="modal-card-foot">
+        </footer>
       </div>
     </div>
   );

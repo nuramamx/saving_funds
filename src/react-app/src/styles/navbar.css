@@ -1,3 +1,11 @@
 .navbar {
   box-shadow: 0px -5px 15px 0px #888888;
 }
+
+.navbar-item .is-selected {
+  background-color: hsl(313.41deg 82.49% 57.45%);
+}
+
+.menu-list .is-active {
+  background-color: hsl(313.41deg 82.49% 57.45%);
+}
