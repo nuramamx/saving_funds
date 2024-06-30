@@ -1,110 +1,98 @@
-CREATE OR REPLACE FUNCTION catalog.address_create(
-  IN associate_id integer,
-  IN city_id integer,
-  IN street VARCHAR(50),
-  IN settlement VARCHAR(50),
-  IN town VARCHAR(50),
-  IN postal_code VARCHAR(6),
-  IN phone VARCHAR(10),
-  IN mobile VARCHAR(10),
-  IN email VARCHAR(50),
-  OUT success BOOLEAN,
-  OUT message TEXT
+--drop function catalog.address_create;
+create or replace function catalog.address_create(
+  in associate_id integer,
+  in city_id integer,
+  in street varchar(50),
+  in settlement varchar(50),
+  in town varchar(50),
+  in postal_code varchar(6),
+  in phone varchar(10),
+  in mobile varchar(10),
+  in email varchar(50),
+  out inserted_id integer,
+  out success boolean,
+  out message text
 )
-RETURNS RECORD AS $$
-DECLARE
-BEGIN
-  success := FALSE;
+returns RECORD as $$
+declare
+begin
+  success := false;
   message := 'Operación no inciada.';
 
-  IF street IS NULL OR street = '' THEN
-    success := FALSE;
+  if street is null or street = '' then
     message := 'La calle es requerida.';
-    RETURN;
-  ELSEIF settlement IS NULL OR settlement = '' THEN
-    success := FALSE;
+    return;
+  elseif settlement is null or settlement = '' then
     message := 'La colonia es requerida.';
-    RETURN;
-  ELSEIF town IS NULL OR town = '' THEN
-    success := FALSE;
+    return;
+  elseif town is null or town = '' then
     message := 'La localidad es requerida.';
-    RETURN;
-  ELSEIF postal_code IS NULL OR postal_code = '' THEN
-    success := FALSE;
+    return;
+  elseif postal_code is null or postal_code = '' then
     message := 'El código postal es requerido.';
-    RETURN;
-  ELSEIF NOT validate_postal_code(postal_code) THEN
-    success := FALSE;
-    message := 'El código postal no es válido.'
-    RETURN;
-  ELSEIF phone IS NULL OR phone = '' THEN
-    success := FALSE;
+    return;
+  elseif not validate_postal_code(postal_code) then
+    message := 'El código postal no es válido.';
+    return;
+  elseif phone is null or phone = '' then
     message := 'El teléfono es requerido.';
-    RETURN;
-  ELSEIF NOT validate_phone(phone) THEN
-    success := FALSE;
+    return;
+  elseif not validate_phone(phone) then
     message := 'El teléfono no es válido.';
-    RETURN;
-  ELSEIF mobile IS NULL OR mobile = '' THEN
-    success := FALSE;
+    return;
+  elseif mobile is null or mobile = '' then
     message := 'El celular es requerido.';
-    RETURN;
-  ELSEIF email IS NULL OR email = '' THEN
-    success := FALSE;
+    return;
+  elseif email is null or email = '' then
     message := 'El email es requerido.';
-    RETURN;
-  ELSEIF NOT validate_email(email) THEN
-    success := FALSE;
+    return;
+  elseif not validate_email(email) then
     message := 'El email no es válido.';
-    RETURN;
-  ELSEIF associate_id = 0 THEN
-    success := FALSE;
+    return;
+  elseif associate_id = 0 then
     message := 'El socio ligado a la localización no es válido.';
-    RETURN;
-  ELSEIF city_id = 0 THEN
-    success := FALSE;
+    return;
+  elseif city_id = 0 then
     message := 'La ciudad ligada a la localización no es válida.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  IF NOT EXISTS(
-    SELECT 1 FROM catalog.associate WHERE A.id = associate_create.associate_id
-  ) THEN
-    success := FALSE;
+  if not exists(
+    select 1 from catalog.associate as A where A.id = address_create.associate_id for update skip locked
+  ) then
     message := 'El asociado no existe en el sistema.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  IF NOT EXISTS(
-    SELECT 1 FROM catalog.city WHERE A.id = associate_create.city_id
-  ) THEN
-    success := FALSE;
+  if not exists(
+    select 1 from administration.city as C where C.id = address_create.city_id
+  ) then
     message := 'La ciudad no existe en el sistema.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  BEGIN
-    INSERT INTO catalog.address
-    (associate_id, city_id, street, settlement, town, postal_code, phone, mobile, email)
-    VALUES (
-      associate_id
-      ,city_id
-      ,UPPER(street)
-      ,UPPER(settlement)
-      ,UPPER(town)
-      ,UPPER(postal_code)
-      ,UPPER(phone)
-      ,UPPER(mobile)
-      ,UPPER(email)
-   );
+  begin
+    insert into catalog.address
+      (associate_id, city_id, street, settlement, town, postal_code, phone, mobile, email)
+    values (
+      address_create.associate_id
+      ,address_create.city_id
+      ,upper(street)
+      ,upper(settlement)
+      ,upper(town)
+      ,upper(postal_code)
+      ,upper(phone)
+      ,upper(mobile)
+      ,upper(email)
+    )
+    returning id into inserted_id;
 
-    success := TRUE;
+    success := true;
     message := 'Se realizó la transacción satisfactoriamente.';
-  EXCEPTION
-    WHEN OTHERS THEN
-      success := FALSE;
+  exception
+    when others then
+      success := false;
       message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
-  END;
-  
-END;
-$$ LANGUAGE plpgsql;
+  end;
+end;
+$$ language plpgsql;

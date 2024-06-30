@@ -5,6 +5,7 @@ type ValidationModalItem = {
   title?: string;
   message: string;
   show: boolean;
+  data?: any;
   errors: string[];
 };
 

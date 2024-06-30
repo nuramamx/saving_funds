@@ -1,7 +1,7 @@
+import { customLogger } from "./logger/custom-logger";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import AssociateRoute from "./routes/associate-route";
-import { customLogger } from "./logger/custom-logger";
 import CityRoute from "./routes/city-route";
 import StateRoute from "./routes/state-route";
 import AgreementRoute from "./routes/agreement-route";

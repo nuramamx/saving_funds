@@ -19,15 +19,22 @@ const ValidationModal = memo(() => {
         <section className="modal-card-body">
         {validation.message}
 
-        <div className="content">
-        {validation.errors.length > 0 && (
-          <ul >
-            {validation.errors.map((error, index) => (
-              <li key={`error-${index}`}>{error}</li>
-            ))}
-          </ul>
-        )}
-        </div>
+          <div className="content">
+            {validation.errors !== null && validation.errors !== undefined && validation.errors.length > 0 && (
+              <ul>
+                {validation.errors.map((error, index) => (
+                  <li key={`error-${index}`}>{error}</li>
+                ))}
+              </ul>
+            )}
+            <br />
+            {validation.data !== null && validation.data !== undefined && (
+              <div className="block is-size-7">
+                Verifique la siguiente informaci&oacute;n de ser necesario y/o env&iacute;ela al desarrollador:<br />
+                <span className="has-text-danger">{JSON.stringify(validation.data)}</span>
+              </div>
+            )}
+          </div>
         </section>
         <footer className="modal-card-foot">
           <div className="buttons">

@@ -1,4 +1,3 @@
-import { AddressDb, AssociateDb, AssociateDetailDb, WorkplaceDb } from "../../../../../persistence/definitions";
 import CommandHandler from "../../../../../abstractions/interfaces/command-handler";
 import CommandResponse from "../../../../../abstractions/interfaces/command-response";
 import Address from "../../../../../domain/entities/address";
@@ -11,6 +10,7 @@ import BeneficiaryInfo from "../../../../../domain/interfaces/beneficiary-info";
 import NameInfo from "../../../../../domain/interfaces/name-info";
 import WorkplaceInfo from "../../../../../domain/interfaces/workplace-info";
 import ErrorCodes from "../../../../../domain/types/error-codes";
+import SaveAssociateRepository from "../../../../../persistence/repositories/write/save-associate-repository";
 import CreateAssociateCommandValidator from "./create-associate-command-validator";
 
 interface CreateAssociateCommand {
@@ -27,6 +27,7 @@ interface CreateAssociateCommand {
 class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCommand, CommandResponse> {
   execute = async(data: CreateAssociateCommand): Promise<CommandResponse> => {
     const validation = new CreateAssociateCommandValidator(data).validate();
+    const associateRepository = new SaveAssociateRepository();
 
     if (validation.length > 0) {
       return {
@@ -40,31 +41,25 @@ class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCom
 
     try {
       const associate = new Associate(data.name, data.rfc, data.gender)
-      .updateDetail(new AssociateDetail(data.detail))
-      .updateAddress(new Address(data.address))
-      .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
-      .addBeneficiaries(data.beneficiaries);
+        .updateDetail(new AssociateDetail(data.detail))
+        .updateAddress(new Address(data.address))
+        .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
+        .addBeneficiaries(data.beneficiaries);
 
-      await AssociateDb.create(
-        { ...associate },
-        { include: [
-            { model: AssociateDetailDb, as: "detail" },
-            { model: AddressDb, as: "address" },
-            { model: WorkplaceDb, as: "workplace" }
-          ]
-        }
-      );
+      console.log(`${JSON.stringify(associate)}`);
+
+      const result = await associateRepository.save(associate);
+
+      return { successful: true, message: "Socio fue creado con éxito.", data: JSON.stringify(result), type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,
-        code: err.include("DOMAIN") ? ErrorCodes.API_CMD_HANDLER_DOMAIN : ErrorCodes.API_CMD_HANDLER_DATABASE,
+        // code: err.include("DOMAIN") ? ErrorCodes.API_CMD_HANDLER_DOMAIN : ErrorCodes.API_CMD_HANDLER_DATABASE,
         message: "Socio no pudo ser creado. Ocurrió falla al guardar en la base de datos.",
-        data: err,
+        data: err.message,
         type: "danger"
       } as CommandResponse;
     }
-
-    return { successful: true, message: "Socio fue creado con éxito.", type: 'success' } as CommandResponse;
   }
 }
 

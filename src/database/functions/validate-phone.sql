@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION validate_phone(phone TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
-  IF phone ~ '^\d{6}$' THEN
+  IF phone ~ '^\d{10}$' THEN
     RETURN TRUE;
   ELSE
     RETURN FALSE;

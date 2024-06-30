@@ -4,8 +4,8 @@ import QueryAgreementRepository from "../../../../../persistence/repositories/re
 
 class AllAgreementQueryHandler implements CommandHandler<void, CommandResponse> {
   execute = async (): Promise<CommandResponse> => {
-    const queryRepository = new QueryAgreementRepository();
-    const list = await queryRepository.all();
+    const agreementRepository = new QueryAgreementRepository();
+    const list = await agreementRepository.all();
 
     return { successful: true, message: "Convenios generados correctamente.", data: JSON.stringify(list), type: "success" } as CommandResponse;
   }

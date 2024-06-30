@@ -1,101 +1,103 @@
-CREATE OR REPLACE FUNCTION catalog.beneficiary_create(
-  IN associate_id INT,
-  IN beneficiaries JSONB,
-  OUT success BOOLEAN,
-  OUT message TEXT
+--drop function catalog.beneficiary_create;
+create or replace function catalog.beneficiary_create(
+  in associate_id int,
+  in beneficiaries jsonb,
+  out inserted_id integer,
+  out success boolean,
+  out message text
 )
-RETURNS RECORD AS $$
-DECLARE
-  total_percentage_temp INT;
-  total_percentage_actual INT;
-  is_total_percentage_reached BOOLEAN := FALSE;
-BEGIN
-  success := FALSE;
+returns RECORD as $$
+declare
+  total_percentage_temp integer;
+  total_percentage_actual integer;
+  is_total_percentage_reached boolean := false;
+begin
+  success := false;
   message := 'Operación no iniciada.';
 
-  DROP TABLE IF EXISTS temp_beneficiaries;
-  CREATE TEMPORARY TABLE temp_beneficiaries (
-    name VARCHAR(50) NOT NULL,
-    percentage INT NOT NULL
+  drop table if exists temp_beneficiaries;
+  create temporary table temp_beneficiaries (
+    name varchar(50) not null,
+    percentage smallint not null
   );
 
-  INSERT INTO temp_beneficiaries (name, percentage)
-  SELECT 
+  insert into temp_beneficiaries (name, percentage)
+  select 
     element ->> 'name' AS name
-    ,(element ->> 'percentage')::INT AS percentage
-  FROM LATERAL jsonb_array_elements(beneficiaries) AS element;
+    ,(element ->> 'percentage')::int as percentage
+  from lateral jsonb_array_elements(beneficiaries) as element;
 
-  SELECT SUM(B.percentage) INTO total_percentage_actual FROM catalog.beneficiary AS B WHERE B.associate_id = beneficiary_create.associate_id;
-  SELECT COALESCE(SUM(percentage),0) INTO total_percentage_temp FROM temp_beneficiaries;
+  select sum(B.percentage) into total_percentage_actual from catalog.beneficiary as B where B.associate_id = beneficiary_create.associate_id;
+  select coalesce(SUM(percentage),0) into total_percentage_temp from temp_beneficiaries;
 
   -- Activate a flag when the percentage reached 100% in both places
-  IF ((total_percentage_actual + total_percentage_temp)) = 100 THEN
-    is_total_percentage_reached := TRUE;
-  END IF;
+  if ((total_percentage_actual + total_percentage_temp)) = 100 then
+    is_total_percentage_reached := true;
+  end if;
 
   -- Check if the list have only 5 beneficiaries.
-  IF 5 < (
-    SELECT COUNT(1) FROM temp_beneficiaries
-  ) THEN
+  if 5 < (
+    select count(1) from temp_beneficiaries
+  ) then
     message := 'Solo se permiten hasta 5 beneficiarios.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
   -- Check if exists 100% of assigned beneficiaries.
-  IF EXISTS(
-    SELECT 1 FROM catalog.beneficiary AS B WHERE B.associate_id = beneficiary_create.associate_id HAVING SUM(B.percentage) = 100
+  if exists(
+    select 1 from catalog.beneficiary as B where B.associate_id = beneficiary_create.associate_id having sum(B.percentage) = 100
   ) THEN
     message := 'El socio ya cuenta con beneficiarios asignados al 100%.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
   -- Check if the sum of existent beneficiaries and new beneficiaries is not over of 100%
-  IF ((total_percentage_actual + total_percentage_temp) > 100) THEN
+  if ((total_percentage_actual + total_percentage_temp) > 100) then
     message := 'Ya se ha alcanzado el límite de porcentaje de los beneficiarios, disminuya o elimine alguno.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
   -- Check if the sum of existent beneficiaries and new beneficiaries is not minor of 100%
-  IF ((total_percentage_actual + total_percentage_temp) < 100) THEN
+  if ((total_percentage_actual + total_percentage_temp) < 100) THEN
     message := 'No se ha alcanzado el límite de porcentaje de los beneficiarios, aumente alguno.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
   -- Check if name is not null or empty.
-  IF EXISTS(
-    SELECT 1 FROM temp_beneficiaries WHERE name = '' OR name = NULL
-  ) THEN
+  if exists(
+    select 1 from temp_beneficiaries where name = '' or name = null
+  ) then
     message := 'El nombre de alguno de los beneficiarios está vacío o es núlo.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
   -- Check if percentage is not over 100%.
-  IF (total_percentage_temp > 100 AND is_total_percentage_reached = FALSE) THEN
+  if (total_percentage_temp > 100 and is_total_percentage_reached = FALSE) then
     message := 'El porcentaje total de los beneficiarios es superior al 100%.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
    -- Check if percentage is not minor of 100%.
-  IF (total_percentage_temp < 100 AND is_total_percentage_reached = FALSE) THEN
+  if (total_percentage_temp < 100 and is_total_percentage_reached = FALSE) then
     message := 'El porcentaje total de los beneficiarios es inferior al 100%.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  BEGIN
-    INSERT INTO catalog.beneficiary (associate_id, name, percentage)
-    SELECT beneficiary_create.associate_id
+  begin
+    insert into catalog.beneficiary (associate_id, name, percentage)
+    select beneficiary_create.associate_id
       ,name
       ,percentage
-    FROM temp_beneficiaries
-    WHERE percentage <> 0
-    OR (name is null or name = '');
+    from temp_beneficiaries
+    where percentage <> 0
+    or (name is null or name = '');
 
-    success := TRUE;
+    success := true;
     message := 'Se registraron los beneficiarios correctamente.';
-  EXCEPTION
-    WHEN OTHERS THEN
-      success := FALSE;
+  exception
+    when others then
+      success := false;
       message := 'Ocurrió un error al realizar la operación' || SQLERRM;
-  END;
-END;
-$$ LANGUAGE plpgsql;
+  end;
+end;
+$$ language plpgsql;

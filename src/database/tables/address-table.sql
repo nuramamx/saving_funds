@@ -1,23 +1,23 @@
-DROP TABLE IF EXISTS catalog.address;
+drop table if exists catalog.address;
 
-CREATE TABLE IF NOT EXISTS catalog.address
+create table if not exists catalog.address
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  associate_id INT NOT NULL,
-  city_id INT NOT NULL,
-  street VARCHAR(50) NOT NULL,
-  settlement VARCHAR(50) NOT NULL,
-  town VARCHAR(50) NOT NULL,
-  postal_code VARCHAR(6) NOT NULL CONSTRAINT postal_code_validate CHECK (LENGTH(postal_code) <> 10 AND LENGTH(postal_code) <> 13),
-  phone VARCHAR(10) NOT NULL CONSTRAINT phone_validate CHECK (validate_phone(phone)),
-  mobile VARCHAR(10) NOT NULL CONSTRAINT mobile_validate CHECK (validate_phone(mobile)),
-  email VARCHAR(10) NOT NULL CONSTRAINT email_validate CHECK (validate_email(email)),
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT address_pkey PRIMARY KEY (id),
-  CONSTRAINT address_associate_id_key UNIQUE (associate_id),
-  CONSTRAINT address_associate_id_fkey FOREIGN KEY (associate_id)
-    REFERENCES catalog.associate (id),
-  CONSTRAINT address_city_id_fkey FOREIGN KEY (city_id)
-    REFERENCES catalog.city (id)
+  id integer generated always as identity,
+  associate_id integer not null,
+  city_id integer not null,
+  street varchar(50) not null,
+  settlement varchar(50) not null,
+  town varchar(50) not null,
+  postal_code varchar(6) not null constraint postal_code_validate check (postal_code ~ '^\d{5}$'),
+  phone varchar(10) not null constraint phone_validate check (phone ~ '^\d{10}$'),
+  mobile varchar(10) not null constraint mobile_validate check (mobile ~ '^\d{10}$'),
+  email varchar(100) not null constraint email_validate check (email ~ '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'),
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint address_pkey primary key (id),
+  constraint address_associate_id_key unique (associate_id),
+  constraint address_associate_id_fkey foreign key (associate_id)
+    references catalog.associate (id),
+  constraint address_city_id_fkey foreign key (city_id)
+    references administration.city (id)
 );

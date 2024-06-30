@@ -4,8 +4,8 @@ import QueryStateRepository from "../../../../../persistence/repositories/read/q
 
 class AllStateQueryHandler implements CommandHandler<void, CommandResponse> {
   execute = async (): Promise<CommandResponse> => {
-    const queryRepository = new QueryStateRepository();
-    const list = await queryRepository.all();
+    const stateRepository = new QueryStateRepository();
+    const list = await stateRepository.all();
 
     return { successful: true, message: "Estados generadas correctamente.", data: JSON.stringify(list), type: 'success' } as CommandResponse;
   }

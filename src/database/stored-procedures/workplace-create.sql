@@ -1,63 +1,59 @@
-CREATE OR REPLACE FUNCTION catalog.workplace_create(
-  IN associate_id integer,
-  IN key VARCHAR(5),
-  IN name VARCHAR(50),
-  IN phone VARCHAR(10),
-  OUT success BOOLEAN,
-  OUT message TEXT
+--drop function catalog.workplace_create;
+create or replace function catalog.workplace_create(
+  in associate_id integer,
+  in key varchar(5),
+  in name varchar(50),
+  in phone varchar(10),
+  out inserted_id integer,
+  out success boolean,
+  out message text
 )
-RETURNS RECORD AS $$
-DECLARE
-BEGIN
-  success := FALSE;
+returns RECORD as $$
+declare
+begin
+  success := false;
   message := 'Operación no inciada.';
 
-  IF key IS NULL OR key = '' THEN
-    success := FALSE;
+  if key is null or key = '' then
     message := 'La clave del centro de trabajo es requerida.';
-    RETURN;
-  ELSEIF name IS NULL OR name = '' THEN
-    success := FALSE;
+    return;
+  elseif name is null or name = '' then
     message := 'El nombre del centro de trabajo es requerido.';
-    RETURN;
-  ELSEIF phone IS NULL OR phone = '' THEN
-    success := FALSE;
+    return;
+  elseif phone is null or phone = '' then
     message := 'El teléfono del centro de trabajo es requerido.';
-    RETURN;
-  ELSEIF NOT validate_phone(phone) THEN
-    success := FALSE;
+    return;
+  elseif not validate_phone(phone) then
     message := 'El teléfono no es válido.';
-    RETURN;
-  ELSEIF associate_id = 0 THEN
-    success := FALSE;
+    return;
+  elseif associate_id = 0 then
     message := 'El asociado ligado al centro de trabajo no es válido.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  IF NOT EXISTS(
-    SELECT 1 FROM catalog.associate A WHERE A.id = associate_create.associate_id
-  ) THEN
-    success := FALSE;
+  if not exists(
+    select 1 from catalog.associate as A where A.id = workplace_create.associate_id for update skip locked
+  ) then
     message := 'El asociado no existe en el sistema.';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  BEGIN
-    INSERT INTO catalog.workplace (associate_id, key, name, phone)
-    VALUES (
-      associate_id
-      ,UPPER(key)
-      ,UPPER(name)
-      ,UPPER(phone)
-    );
+  begin
+    insert into catalog.workplace (associate_id, key, name, phone)
+    values (
+      workplace_create.associate_id
+      ,upper(key)
+      ,upper(name)
+      ,upper(phone)
+    )
+    returning id into inserted_id;
 
-    success := TRUE;
+    success := true;
     message := 'Se realizó la transacción satisfactoriamente.';
-  EXCEPTION
-    WHEN OTHERS THEN
-      success := FALSE;
+  exception
+    when others then
+      success := false;
       message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
-  END;
-  
-END;
-$$ LANGUAGE plpgsql;
+  end;
+end;
+$$ language plpgsql;

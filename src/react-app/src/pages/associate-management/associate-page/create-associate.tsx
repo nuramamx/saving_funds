@@ -49,16 +49,16 @@ export default function CreateAssociate() {
         body: JSON.stringify(associate)
       });
 
-      console.log(response);
-      console.log(JSON.stringify(associate));
-
       if (!response.ok) {
         const error = await response.json() as CommandResponseInfo;
+
+        console.log(error);
 
         return setValidationModal({
           message: error.message,
           show: true,
-          errors: error.errors
+          errors: error.errors,
+          data: error.data
         });
       }
 
@@ -99,7 +99,7 @@ export default function CreateAssociate() {
               onChange={(value) => setAssociate({ ...associate, rfc: value.toUpperCase() })} />
             <SFSelectInput id="associate_gender" name="Sexo"
               value={associate.gender}
-              options={([ { key: 'M', value: 'Masculino'}, { key: 'F', value: 'Femenino' }])}
+              options={([ { key: '-', value: '---'}, { key: 'M', value: 'MASCULINO'}, { key: 'F', value: 'FEMENINO' }])}
               onChange={(value) => setAssociate({ ...associate, gender: value.toUpperCase() })} />
           </div>
           <div className="column">
@@ -136,7 +136,7 @@ export default function CreateAssociate() {
             <SFTextInput id="address_town" name="Localidad"
               value={associate.address.town}
               onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, town: value.toUpperCase() }})} />
-            <SFTextInput id="address_dependency_key" name="C&oacute;digo Postal"
+            <SFTextInput id="address_postal_code" name="C&oacute;digo Postal"
               value={associate.address.postalCode}
               onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, postalCode: value.toUpperCase() }})} />
             <SFSelectState id="address_state_id" name="Estado"

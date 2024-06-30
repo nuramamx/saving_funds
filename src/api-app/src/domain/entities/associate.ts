@@ -23,16 +23,28 @@ export default class Associate implements AssociateInfo {
     return this;
   }
 
+  getDetail(): AssociateDetail {
+    return this.detail;
+  }
+
   updateAddress(address: Address): Associate {
     this.address = address;
 
     return this;
   }
 
+  getAddress(): Address {
+    return this.address;
+  }
+
   updateWorkplace(workplace: Workplace): Associate {
     this.workplace = workplace;
 
     return this;
+  }
+
+  getWorkplace(): Workplace {
+    return this.workplace;
   }
 
   addBeneficiaries(beneficiaries: Beneficiary[]): Associate {
@@ -46,5 +58,9 @@ export default class Associate implements AssociateInfo {
     this.beneficiaries = [] = beneficiaries.filter((x) => x.percentage > 0);
 
     return this;
+  }
+
+  getBeneficiaries(): Beneficiary[] {
+    return this.beneficiaries;
   }
 }

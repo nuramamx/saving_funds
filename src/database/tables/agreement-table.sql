@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS catalog.agreement;
+drop table if exists administration.agreement;
 
-CREATE TABLE IF NOT EXISTS catalog.agreement
+create table if not exists administration.agreement
 (
-    id INT GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50) NOT NULL,
-    created_at TIME WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIME WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT agreement_pkey PRIMARY KEY (id)
+    id INT generated always as identity,
+    name VARCHAR(50) not null,
+    created_at time with time zone not null default current_timestamp,
+    updated_at time with time zone not null default current_timestamp,
+    constraint agreement_pkey primary key (id)
 );

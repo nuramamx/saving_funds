@@ -4,8 +4,8 @@ import QueryCityRepository from "../../../../../persistence/repositories/read/qu
 
 class AllCityQueryHandler implements CommandHandler<void, CommandResponse> {
   execute = async (): Promise<CommandResponse> => {
-    const queryRepository = new QueryCityRepository();
-    const list = await queryRepository.all();
+    const cityRepository = new QueryCityRepository();
+    const list = await cityRepository.all();
 
     return { successful: true, message: "Ciudades generadas correctamente.", data: JSON.stringify(list), type: 'success' } as CommandResponse;
   }

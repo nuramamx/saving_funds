@@ -4,7 +4,7 @@ export default interface CommandResponse {
     readonly successful: boolean;
     readonly code?: ErrorCodes;
     readonly message: string;
-    readonly data?: string;
+    readonly data?: string | any;
     readonly type: 'success' | 'danger' | 'warning' | 'info';
     readonly errors: string[];
 }

@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS administration.city
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT city_pkey PRIMARY KEY (id),
   CONSTRAINT city_state_id_fkey FOREIGN KEY (state_id)
-    REFERENCES catalog.state (id)
+    REFERENCES administration.state (id)
 );
