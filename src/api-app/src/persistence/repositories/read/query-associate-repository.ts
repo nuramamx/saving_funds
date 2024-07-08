@@ -1,17 +1,22 @@
-import { QueryTypes } from "sequelize";
-import { db } from "../../instance";
-import Associate from "../../../domain/entities/associate";
-import QueryRepositoryInfo from "../../interfaces/query-repository-info";
+import { db } from '../../instance';
+import { QueryTypes } from 'sequelize';
+import { ProcedureName } from '../../names/procedure-name';
+import SearchAssociateInfo from '../../../domain/interfaces/procedures/search-associate-info';
 
-export default class QueryAssociateRepository implements QueryRepositoryInfo<Associate> {
-  byName = async (data: string): Promise<any> => {
-    const result = await db.sequelize.query<Object>(
-      "CALL search_associate_by_name (:fullname)",
-      {
-        replacements: { fullname: data },
-        type: QueryTypes.SELECT
-      });
+export default class QueryAssociateRepository {
+  byIdOrName = async (associate_id: number, name: string): Promise<SearchAssociateInfo[]> => {
+    try {
+      const result = await db.sequelize.query<SearchAssociateInfo>(
+        ProcedureName.ASSOCIATE_SEARCH_BY_ID_OR_NAME,
+        {
+          replacements: { associate_id, name },
+          type: QueryTypes.SELECT
+        }
+      );
 
       return result;
+    } catch (err: any) {
+      throw new Error(`[E-200]: ${err}`);
+    }
   }
 }

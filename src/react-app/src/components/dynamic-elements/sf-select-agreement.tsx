@@ -10,7 +10,7 @@ const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo
 
   useEffect(() => {
     const fetchAgreements = async () => {
-      const result = await fetch(AppConstants.apiAgreements, {
+      const result = await fetch(AppConstants.apiAgreement, {
         method: 'GET'
       });
 

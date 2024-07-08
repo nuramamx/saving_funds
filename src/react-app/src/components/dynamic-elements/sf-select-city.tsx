@@ -22,8 +22,6 @@ const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityP
       const cities = JSON.parse(response.data!) as CityInfo[];
 
       setCities(cities);
-
-      console.log("Cities loaded...");
     };
 
     if (cities.length <= 0) fetchCities();

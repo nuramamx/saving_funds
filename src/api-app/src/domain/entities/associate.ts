@@ -1,9 +1,9 @@
-import Address from "./address";
-import Beneficiary from "./beneficiary";
-import AssociateDetail from "./associate-detail";
-import Workplace from "./workplace";
-import NameInfo from "../interfaces/name-info";
-import AssociateInfo from "../interfaces/associate-info";
+import Address from './address';
+import Beneficiary from './beneficiary';
+import AssociateDetail from './associate-detail';
+import Workplace from './workplace';
+import NameInfo from '../interfaces/name-info';
+import AssociateInfo from '../interfaces/associate-info';
 
 export default class Associate implements AssociateInfo {
   private detail: AssociateDetail = undefined!;
@@ -53,7 +53,7 @@ export default class Associate implements AssociateInfo {
       .reduce((sum, percentage) => sum + percentage, 0);
 
     if (totalPercentage > 100)
-      throw new Error("DOMAIN: El porcentaje total es superior al 100%");
+      throw new Error('DOMAIN: El porcentaje total es superior al 100%');
 
     this.beneficiaries = [] = beneficiaries.filter((x) => x.percentage > 0);
 

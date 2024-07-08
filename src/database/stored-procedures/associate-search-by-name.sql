@@ -1,36 +1,41 @@
-CREATE OR REPLACE FUNCTION catalog.associate_search_by_name(
-  IN fullname VARCHAR(100)
+--drop function catalog.associate_search_by_id_or_name;
+create or replace function catalog.associate_search_by_id_or_name(
+  in associate_id integer,
+  in name text
 )
-RETURNS TABLE (
+returns table (
   id integer,
-  firstname TEXT,
-  paternal_lastname TEXT,
-  maternal_lastname TEXT,
-  full_address TEXT,
-  agreement_name VARCHAR(50)
-) AS $$
-DECLARE
-BEGIN
-  RETURN QUERY
-  SELECT
+  fullname text,
+  address text,
+  agreement_name varchar(50)
+) as $$
+declare
+begin
+  if associate_id = 0 and name = '' then
+    return;
+  end if;
+  
+  return query
+  select
     A.id
-    ,REPLACE(A.name->>'firstname', '"', '') AS firstname
-    ,REPLACE(A.name->>'paternal_lastname', '"', '') AS paternal_lastname
-    ,REPLACE(A.name->>'maternal_lastname', '"', '') AS maternal_lastname
-    ,(ADDR.street || ', ' || ADDR.settlement || ', ' || ADDR.postal_code || ', ' || CI.name) AS full_address
+    ,replace(A.name->>'firstname', '"', '') || ' ' ||
+      replace(A.name->>'paternal_lastname', '"', '') || ' ' ||
+      replace(A.name->>'maternal_lastname', '"', '') as fullname
+    ,(ADDR.street || ', ' || ADDR.settlement || ', C.P. ' || ADDR.postal_code || ', ' || CI.name) as address
     ,AG.name AS agreement_name
-  FROM catalog.associate A
-  JOIN catalog.associate_detail AD
-    ON AD.associate_id = A.id
-  JOIN catalog.address ADDR
-    ON ADDR.associate_id = A.id
-  JOIN catalog.agreement AG
-    ON AG.id = AD.agreement_id
-  JOIN catalog.city CI
-    ON CI.id = ADDR.city_id
-  WHERE 
-    (A.name->>'firstname') || ' ' ||
-    (A.name->>'paternalLastname') || ' ' ||
-    (A.name->>'maternalLastname') LIKE '%' || UPPER(fullname) || '%';
-END;
-$$ LANGUAGE plpgsql;
+  from catalog.associate A
+  join catalog.associate_detail AD
+    on AD.associate_id = A.id
+  join catalog.address ADDR
+    on ADDR.associate_id = A.id
+  join administration.agreement AG
+    on AG.id = AD.agreement_id
+  join administration.city CI
+    on CI.id = ADDR.city_id
+  where 1=1
+  and (associate_search_by_id_or_name.associate_id = 0 or associate_search_by_id_or_name.associate_id = A.id)
+  and (associate_search_by_id_or_name.name = '' or (A.name->>'firstname') || ' ' ||
+    (A.name->>'paternal_lastname')  || ' ' ||
+    (A.name->>'maternal_lastname') like '%' || upper(associate_search_by_id_or_name.name) || '%');
+end;
+$$ language plpgsql;

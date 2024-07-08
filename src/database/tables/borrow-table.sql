@@ -1,18 +1,20 @@
-DROP TABLE IF EXISTS process.borrow;
+drop table if exists process.borrow cascade;
 
-CREATE TABLE IF NOT EXISTS process.borrow
+create table if not exists process.borrow
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  associate_id INT NOT NULL,
-  requested_amount DECIMAL(20,6) NOT NULL,
-  period SMALLINT NOT NULL,
-  annual_rate DECIMAL(20,6) NOT NULL,
-  is_fortnightly BOOLEAN NOT NULL,
-  is_cleared BOOLEAN NOT NULL DEFAULT FALSE, 
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT borrow_pkey PRIMARY KEY (id),
-  CONSTRAINT borrow_associate_id_key UNIQUE (associate_id),
-  CONSTRAINT borrow_associate_id_fkey FOREIGN KEY (associate_id)
-      REFERENCES catalog.associate (id)
+  id integer generated always as identity,
+  associate_id integer not null,
+  parent_borrow_id integer null,
+  requested_amount numeric(20,6) not null,
+  period smallint not null,
+  annual_rate numeric(20,6) not null,
+  is_fortnightly boolean not null,
+  is_settled boolean not null default false, 
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint borrow_pkey primary key (id),
+  constraint borrow_associate_id_fkey foreign key (associate_id)
+    references catalog.associate (id),
+  constraint borrow_parent_borrow_id_fkey foreign key (parent_borrow_id)
+    references process.borrow (id)
 );

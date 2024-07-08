@@ -41,7 +41,7 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
   };
 
   useEffect(() => {
-    setInputValue(value.toString());
+    setInputValue(Number(value).toFixed(2).toString());
   }, [value]);
 
   return (

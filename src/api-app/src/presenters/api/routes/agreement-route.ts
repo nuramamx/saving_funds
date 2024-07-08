@@ -1,10 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import CommandHandlerMediator from "../../../application/mediators/command-handler-mediator";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function AgreementRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
-  fastify.get("/agreement", async (request, reply) => {
+  fastify.get('/agreement', async (request, reply) => {
     const command = new CommandHandlerMediator();
-    const result = await command.execute("AllAgreementQuery");
+    const result = await command.execute('AllAgreementQuery');
 
     if (!result.successful) reply.statusCode = 400; 
 

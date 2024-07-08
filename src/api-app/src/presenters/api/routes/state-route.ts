@@ -1,5 +1,5 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import CommandHandlerMediator from "../../../application/mediators/command-handler-mediator";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function StateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/state', async (request, reply) => {

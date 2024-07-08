@@ -5,6 +5,8 @@ import AssociateRoute from "./routes/associate-route";
 import CityRoute from "./routes/city-route";
 import StateRoute from "./routes/state-route";
 import AgreementRoute from "./routes/agreement-route";
+import AnnualRateRoute from "./routes/annual-rate-route";
+import BorrowRoute from "./routes/borrow-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -21,8 +23,6 @@ fastify.register(cors, {
 
     const hostname = new URL(url).hostname;
 
-    console.log(`TEST => ${hostname}`);
-
     if (hostname !== "localhost") {
       cb(new Error(`${hostname} => Not allowed`), false);
       return;
@@ -34,9 +34,11 @@ fastify.register(cors, {
 });
 
 fastify.register(AgreementRoute);
+fastify.register(AnnualRateRoute);
 fastify.register(StateRoute);
 fastify.register(CityRoute);
 fastify.register(AssociateRoute);
+fastify.register(BorrowRoute);
 
 fastify.get('/', async (request, reply) => {
   reply.send({ hello: 'world' });

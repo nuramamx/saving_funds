@@ -1,16 +1,16 @@
 
-import { db } from "../../instance";
-import { QueryTypes } from "sequelize";
-import { ProcedureName } from "../../names/procedure-name";
-import SaveRepositoryInfo from "../../interfaces/save-repository-info";
-import Associate from "../../../domain/entities/associate";
-import AssociateDetail from "../../../domain/entities/associate-detail";
-import Address from "../../../domain/entities/address";
-import Workplace from "../../../domain/entities/workplace";
-import Beneficiary from "../../../domain/entities/beneficiary";
-import ProcedureResponseModel from "../../models/stored-procedures/procedure-response-model";
+import { db } from '../../instance';
+import { QueryTypes } from 'sequelize';
+import { ProcedureName } from '../../names/procedure-name';
+import SaveRepositoryInfo from '../../interfaces/save-repository-info';
+import Associate from '../../../domain/entities/associate';
+import AssociateDetail from '../../../domain/entities/associate-detail';
+import Address from '../../../domain/entities/address';
+import Workplace from '../../../domain/entities/workplace';
+import Beneficiary from '../../../domain/entities/beneficiary';
+import ProcedureResponseModel from '../../models/stored-procedures/procedure-response-model';
 
-export default class SaveAssociateRepository implements SaveRepositoryInfo<boolean> {
+export default class SaveAssociateRepository implements SaveRepositoryInfo<Associate, boolean> {
   save = async (data: Associate): Promise<boolean> => {
     const transaction = await db.sequelize.transaction();
     const listBeneficiariesSaveResult: ProcedureResponseModel[] = [];

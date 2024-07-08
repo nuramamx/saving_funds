@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS config.annual_rate;
+drop table if exists administration.annual_rate;
 
-CREATE TABLE IF NOT EXISTS config.annual_rate
+create table if not exists administration.annual_rate
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  rate DECIMAL(20,6) NOT NULL,
-  period SMALLINT NOT NULL CONSTRAINT validate_period CHECK (period IN (1, 2, 3)),
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id integer generated always as identity,
+  rate decimal(20,6) not null,
+  period smallint not null constraint validate_period check (period in (1, 2, 3)),
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp
 );

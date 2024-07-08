@@ -17,8 +17,6 @@ import SFSelectAgreement from "../../../components/dynamic-elements/sf-select-ag
 
 export default function CreateAssociate() {
   const { pushNotification } = useNotificationStore();
-  const { pushAssociateDraft } = useAssociateDraftStore();
-  const { setValidationModal } = useValidationModalStore();
   const {
     associate,
     stateId,
@@ -28,7 +26,8 @@ export default function CreateAssociate() {
     updateBeneficiaryPercentage,
     clearAssociate
   } = useAssociateStore()
-
+  const { pushAssociateDraft } = useAssociateDraftStore();
+  const { setValidationModal } = useValidationModalStore();
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
   const tabsOptions: SFTabsOptions[] = [
     { id: 'associate', name: "Socio" },

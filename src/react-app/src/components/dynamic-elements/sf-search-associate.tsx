@@ -1,10 +1,25 @@
-import { useState } from "react";
-import { Erase, InfoCircle, Search } from "iconoir-react";
-import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
-import SearchAssociateModal from "../modals/search-associate-modal";
+import { useState } from 'react';
+import { Erase, InfoCircle, Search } from 'iconoir-react';
+import { SFNumberInputInfo } from '../form/interfaces/sf-input-info';
+import SearchAssociateModal from '../modals/search-associate-modal';
+import SearchAssociateProcedureInfo from '../../core/interfaces/procedures/search-associate-procedure-info';
 
 const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInfo) => {
   const [showModal, setShowModal] = useState(false);
+  const [selectedAssociate, setSelectedAssociate] = useState<SearchAssociateProcedureInfo>();
+
+  const handleSelectedAssociate = (value: SearchAssociateProcedureInfo) => {
+    setSelectedAssociate(value);
+
+    if (onChange)
+      onChange(value.id);
+  };
+
+  const handleEraseAssociate = () => {
+    setSelectedAssociate({} as SearchAssociateProcedureInfo);
+    if (onChange)
+      onChange(0);
+  };
 
   return (
     <>
@@ -12,11 +27,12 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
       <label htmlFor={id} className="label">{name}</label>
       <div className="control">
         <input id={id} className="input" type="text" placeholder={name}
+          value={selectedAssociate?.fullname ?? ''}
           readOnly={readonly} />
       </div>
     </div>
     <nav className="pagination" role="navigation" aria-label="pagination">
-      <button className="pagination-previous"><Erase /></button>
+      <button className="pagination-previous"><Erase onClick={handleEraseAssociate} /></button>
       <button className="pagination-next" onClick={() => setShowModal(true)}><Search /></button>
       <ul className="pagination-list">
         <li>
@@ -24,7 +40,10 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
         </li>
       </ul>
     </nav>
-    <SearchAssociateModal show={showModal} onClose={() => setShowModal(false)} />
+    <SearchAssociateModal
+      show={showModal}
+      onSelectedAssociate={(value) => handleSelectedAssociate(value)}
+      onClose={() => setShowModal(false)} />
     </>
   )
 };

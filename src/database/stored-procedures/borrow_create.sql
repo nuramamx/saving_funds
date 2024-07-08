@@ -1,64 +1,88 @@
-CREATE OR REPLACE FUNCTION process.borrow_create(
-  IN associate_id INT,
-  IN requested_amount DECIMAL(20,6),
-  IN period SMALLINT,
-  IN is_fortnightly BOOLEAN,
-  OUT success BOOLEAN,
-  OUT message TEXT
+--drop procedure process.borrow_create;
+create or replace procedure process.borrow_create(
+  in associate_id integer,
+  in requested_amount numeric(20,6),
+  in period integer,
+  in is_fortnightly boolean,
+  out inserted_id integer,
+  out success boolean,
+  out message text
 )
-RETURNS RECORD AS $$
-DECLARE
-  annual_rate DECIMAL(20,6);
-  borrow_requested_year SMALLINT;
-BEGIN
-  success := FALSE;
+as $$
+declare
+  annual_rate numeric(20,6);
+  borrow process.borrow_spec;
+begin
+  inserted_id := null;
+  success := false;
   message := 'Operación no iniciada.';
 
-  IF associate_id = 0 THEN
+  if associate_id = 0 then
     message := 'El socio ligado al préstamo no es válido.';
-    RETURN;
-  ELSEIF requested_amount <= 0 THEN
+    return;
+  elseif requested_amount <= 0 then
     message := 'El monto solicitado no puede ser de 0.';
-    RETURN;
-  ELSEIF period NOT IN (1,2,3) THEN
+    return;
+  elseif period not in (1,2,3) then
     message := 'El periodo no está en el rango requerido (1, 2, 3).';
-    RETURN;
-  END IF;
+    return;
+  end if;
 
-  -- Extract the year from requested borrow.
-  SELECT EXTRACT(YEAR FROM requested_date) INTO borrow_requested_year;
-
-  -- Check if associate has a not cleared borrow.
-  IF NOT EXISTS(
-    SELECT 1 FROM operation.borrow
-    WHERE associate_id = associate_id
-    AND borrow_requested_year IN (EXTRACT(YEAR FROM requested_date))
-    AND is_cleared = FALSE
-  ) THEN
+  -- Check if associate has a not settled borrow.
+  if exists (
+    select 1 from process.borrow B
+    where B.associate_id = borrow_create.associate_id
+    and B.is_settled = false
+    for update skip locked
+  ) then
     message := 'El socio tiene un préstamo no liquidado.';
-  END IF;
+    return;
+  end if;
 
   -- Get the annual rate based on period.
-  SELECT AR.rate INTO annual_rate
-  FROM config.annual_rates AR
-  WHERE AR.period = period;
+  select AR.rate into annual_rate
+  from administration.annual_rate AR
+  where AR.period = borrow_create.period;
 
-  BEGIN
-    INSERT INTO operation.borrow (associate_id, requested_amount, period, annual_rate, is_fortnightly)
-    VALUES (
-      associate_id,
+  begin
+    insert into process.borrow (associate_id, requested_amount, period, annual_rate, is_fortnightly)
+    values (
+      borrow_create.associate_id,
       requested_amount,
-      period,
+      borrow_create.period,
       annual_rate,
       is_fortnightly
+    )
+    returning id into inserted_id;
+
+    -- Get borrow calculations
+    borrow := process.calculate_borrow(requested_amount, annual_rate, period, is_fortnightly);
+
+    -- Create detail
+    insert into process.borrow_detail (
+      borrow_id
+      ,number_payments
+      ,interests
+      ,total_due
+      ,guarantee_fund
+      ,payment
+      ,amount_delivered
+    ) values (
+      inserted_id
+      ,borrow.number_payments
+      ,borrow.interests
+      ,borrow.total_due
+      ,borrow.guarantee_fund
+      ,borrow.payment
+      ,requested_amount
     );
 
-    success := TRUE;
+    success := true;
     message := 'El préstamo se ha registrado con éxito.';
-  EXCEPTION
-    WHEN OTHERS THEN
-      success := FALSE;
+  exception
+    when others then
+      success := false;
       message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
-  END;
-END;
-$$ LANGUAGE plpgsql;
+  end;
+end;
+$$ language plpgsql;

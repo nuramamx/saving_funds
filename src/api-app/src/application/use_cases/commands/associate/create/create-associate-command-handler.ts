@@ -1,17 +1,17 @@
-import CommandHandler from "../../../../../abstractions/interfaces/command-handler";
-import CommandResponse from "../../../../../abstractions/interfaces/command-response";
-import Address from "../../../../../domain/entities/address";
-import Associate from "../../../../../domain/entities/associate";
-import AssociateDetail from "../../../../../domain/entities/associate-detail";
-import Workplace from "../../../../../domain/entities/workplace";
-import AddressInfo from "../../../../../domain/interfaces/address-info";
-import AssociateDetailInfo from "../../../../../domain/interfaces/associate-detail-info";
-import BeneficiaryInfo from "../../../../../domain/interfaces/beneficiary-info";
-import NameInfo from "../../../../../domain/interfaces/name-info";
-import WorkplaceInfo from "../../../../../domain/interfaces/workplace-info";
-import ErrorCodes from "../../../../../domain/types/error-codes";
-import SaveAssociateRepository from "../../../../../persistence/repositories/write/save-associate-repository";
-import CreateAssociateCommandValidator from "./create-associate-command-validator";
+import CommandHandler from '../../../../../abstractions/interfaces/command-handler';
+import CommandResponse from '../../../../../abstractions/interfaces/command-response';
+import Address from '../../../../../domain/entities/address';
+import Associate from '../../../../../domain/entities/associate';
+import AssociateDetail from '../../../../../domain/entities/associate-detail';
+import Workplace from '../../../../../domain/entities/workplace';
+import AddressInfo from '../../../../../domain/interfaces/address-info';
+import AssociateDetailInfo from '../../../../../domain/interfaces/associate-detail-info';
+import BeneficiaryInfo from '../../../../../domain/interfaces/beneficiary-info';
+import NameInfo from '../../../../../domain/interfaces/name-info';
+import WorkplaceInfo from '../../../../../domain/interfaces/workplace-info';
+import ErrorCodes from '../../../../../domain/types/error-codes';
+import SaveAssociateRepository from '../../../../../persistence/repositories/write/save-associate-repository';
+import CreateAssociateCommandValidator from './create-associate-command-validator';
 
 interface CreateAssociateCommand {
   commandId?: string;
@@ -46,18 +46,16 @@ class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCom
         .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
         .addBeneficiaries(data.beneficiaries);
 
-      console.log(`${JSON.stringify(associate)}`);
-
       const result = await associateRepository.save(associate);
 
-      return { successful: true, message: "Socio fue creado con éxito.", data: JSON.stringify(result), type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Socio fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,
-        // code: err.include("DOMAIN") ? ErrorCodes.API_CMD_HANDLER_DOMAIN : ErrorCodes.API_CMD_HANDLER_DATABASE,
-        message: "Socio no pudo ser creado. Ocurrió falla al guardar en la base de datos.",
+        // code: err.include('DOMAIN') ? ErrorCodes.API_CMD_HANDLER_DOMAIN : ErrorCodes.API_CMD_HANDLER_DATABASE,
+        message: 'Socio no pudo ser creado. Ocurrió falla al guardar en la base de datos.',
         data: err.message,
-        type: "danger"
+        type: 'danger'
       } as CommandResponse;
     }
   }

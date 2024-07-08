@@ -1,5 +1,5 @@
 export default interface WorkplaceInfo {
-    key: string;
-    name: string;
-    phone: string;
+  key: string;
+  name: string;
+  phone: string;
 }

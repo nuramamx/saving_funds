@@ -4,7 +4,7 @@ import { SFTextInputInfo } from "./interfaces/sf-input-info";
 export default function SFTextInput({ id, name, value, readonly = false, onEnter, onChange }: SFTextInputInfo) {
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && onEnter) onEnter();
-  }, []);
+  }, [onChange]);
 
   return (
     <div className="field">
