@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS catalog.associate_detail;
+DROP TABLE IF EXISTS catalog.associate_detail cascade;
 
 CREATE TABLE IF NOT EXISTS catalog.associate_detail
 (
@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS catalog.associate_detail
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT associate_detail_pkey PRIMARY KEY (id),
     CONSTRAINT associate_detail_associate_id_key UNIQUE (associate_id),
-    CONSTRAINT associate_detail_agreement_id_key UNIQUE (agreement_id),
     CONSTRAINT associate_detail_associate_id_fkey FOREIGN KEY (associate_id)
-        REFERENCES catalog.associate (id)
+        REFERENCES catalog.associate (id),
+    CONSTRAINT associate_detail_agreement_id_fkey FOREIGN KEY (agreement_id)
+        REFERENCES administration.agreement (id)
 );

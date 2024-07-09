@@ -1,7 +1,7 @@
 import CommandHandler from '../../../../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../../../../abstractions/interfaces/command-response';
 import Borrow from '../../../../../domain/entities/borrow';
-import SaveBorrowRepository from '../../../../../persistence/repositories/write/save-borrow-repository';
+import BorrowSaveRepository from '../../../../../persistence/repositories/save/borrow-save-repository';
 
 interface CreateBorrowCommand {
   associateId: number;
@@ -14,7 +14,7 @@ interface CreateBorrowCommand {
 
 class CreateBorrowCommandHandler implements CommandHandler<CreateBorrowCommand, CommandResponse> {
   execute = async (data: CreateBorrowCommand): Promise<CommandResponse> => {
-    const borrowSaveRepository = new SaveBorrowRepository();
+    const borrowSaveRepository = new BorrowSaveRepository();
 
     try {
       const borrow = new Borrow(

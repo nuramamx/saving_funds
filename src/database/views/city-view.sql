@@ -4,4 +4,4 @@ create or replace view administration.city_view as
     ,C.name
     ,S.name as state_name
   from administration.city C
-  join administration.state S on C.state_id = S.id
+  join administration.state S on C.state_id = S.id;

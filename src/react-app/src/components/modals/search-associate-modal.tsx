@@ -3,21 +3,22 @@ import SFTextInput from '../form/sf-text-input';
 import AppConstants from '../../core/constants/app-constants';
 import CommandResponseInfo from '../../core/interfaces/command-response-info';
 import useNotificationStore from '../../core/stores/notification-store';
-import SearchAssociateByIdOrNameQuery from '../../core/interfaces/queries/search-associate-by-id-or-name-query';
+import SearchAssociateByIdOrNameQuery from '../../core/interfaces/parameters/search-associate-by-id-or-name-param';
 import CheckAndAssign from '../../core/util/check-and-assign';
-import SearchAssociateInfo from '../../core/interfaces/procedures/search-associate-procedure-info';
+import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
+import camelcaseKeys from 'camelcase-keys';
 
-type searchAssociateModalParams = {
+type SearchAssociateModalParams = {
   show: boolean;
-  onSelectedAssociate: (associate: SearchAssociateInfo) => void;
+  onSelectedAssociate: (associate: SearchAssociateSpec) => void;
   onClose: () => any;
 };
 
-const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: searchAssociateModalParams) => {
+const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAssociateModalParams) => {
   const { pushNotification } = useNotificationStore();
   const [showModal, setShowModal] = useState(show);
   const [associateInfo, setAssociateInfo] = useState('');
-  const [associateList, setAssociateList] = useState<SearchAssociateInfo[]>([]);
+  const [associateList, setAssociateList] = useState<SearchAssociateSpec[]>([]);
 
   const handleSearchAssociateEnter = async () => {
     try {
@@ -35,13 +36,13 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: searchAsso
 
       const commandResponse = await response.json() as CommandResponseInfo;
 
-      setAssociateList(commandResponse.data);
+      setAssociateList(camelcaseKeys(commandResponse.data));
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }
   };
 
-  const handleAssociateSelected = (associate: SearchAssociateInfo) => {
+  const handleAssociateSelected = (associate: SearchAssociateSpec) => {
     if (onSelectedAssociate) {
       onSelectedAssociate(associate);
       onClose();
@@ -49,6 +50,10 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: searchAsso
   };
 
   useEffect(() => {
+    if (!show) {
+      setAssociateInfo('');
+      setAssociateList([]);
+    }
     setShowModal(show);
   }, [show, associateInfo, onSelectedAssociate]);
 
@@ -57,7 +62,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: searchAsso
       <div className="modal-background"></div>
       <div className="modal-card" style={{width: '60%'}}>
         <header className="modal-card-head">
-          <p className="modal-card-title">Busqueda de Socio</p>
+          <p className="modal-card-title">B&uacute;squeda de Socio</p>
           <button className="delete" aria-label="close" onClick={onClose}></button>
         </header>
         <section className="modal-card-body">
@@ -75,12 +80,12 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: searchAsso
               </tr>
             </thead>
             <tbody>
-              {associateList.map((associate: SearchAssociateInfo) => (
-                <tr style={{ cursor: 'pointer' }} key={associate.id} onClick={() => handleAssociateSelected(associate)}>
+              {associateList.map((associate: SearchAssociateSpec) => (
+                <tr key={associate.id} style={{ cursor: 'pointer' }} onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
                   <td>{associate.fullname}</td>
                   <td>{associate.address}</td>
-                  <td>{associate.agreement_name}</td>
+                  <td>{associate.agreementName}</td>
                 </tr>
               ))}
             </tbody>

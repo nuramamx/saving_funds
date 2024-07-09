@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Erase, InfoCircle, Search } from 'iconoir-react';
 import { SFNumberInputInfo } from '../form/interfaces/sf-input-info';
 import SearchAssociateModal from '../modals/search-associate-modal';
-import SearchAssociateProcedureInfo from '../../core/interfaces/procedures/search-associate-procedure-info';
+import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
 
 const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInfo) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedAssociate, setSelectedAssociate] = useState<SearchAssociateProcedureInfo>();
+  const [selectedAssociate, setSelectedAssociate] = useState<SearchAssociateSpec>();
 
-  const handleSelectedAssociate = (value: SearchAssociateProcedureInfo) => {
+  const handleSelectedAssociate = (value: SearchAssociateSpec) => {
     setSelectedAssociate(value);
 
     if (onChange)
@@ -16,7 +16,7 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
   };
 
   const handleEraseAssociate = () => {
-    setSelectedAssociate({} as SearchAssociateProcedureInfo);
+    setSelectedAssociate({} as SearchAssociateSpec);
     if (onChange)
       onChange(0);
   };
@@ -26,8 +26,8 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="control">
-        <input id={id} className="input" type="text" placeholder={name}
-          value={selectedAssociate?.fullname ?? ''}
+        <input id={id} className="input" type="text" placeholder={name} style={{fontSize: '13px'}}
+          value={`${selectedAssociate?.id ?? ''}|${selectedAssociate?.fullname ?? ''}`}
           readOnly={readonly} />
       </div>
     </div>

@@ -7,7 +7,7 @@
     "lib": ["es6", "dom"],
     "outDir": "./dist",
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": [
     "src/**/*"

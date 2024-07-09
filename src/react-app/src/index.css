@@ -16,6 +16,10 @@ body {
   padding-bottom: 40px; /* Height of your footer */
 }
 
+body > iframe {
+  display: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

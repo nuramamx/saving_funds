@@ -6,6 +6,7 @@ enum ViewName {
   CITY_ALL = 'select * from administration.city_view;',
   ANNUAL_RATE_ALL = 'select * from administration.annual_rate_view;',
   // Catalog
+  ASSOCIATE_LIST = 'select * from catalog.list_associate_view;',
 
   // Process
 

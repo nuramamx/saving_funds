@@ -1,5 +1,6 @@
 import { memo, useEffect } from "react"
 import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
+import { objectToCamel } from "ts-case-convert";
 import CityInfo from "../../core/interfaces/city-info";
 import CommandResponseInfo from "../../core/interfaces/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
@@ -19,7 +20,7 @@ const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityP
       });
 
       const response = await result.json() as CommandResponseInfo;
-      const cities = JSON.parse(response.data!) as CityInfo[];
+      const cities = objectToCamel(JSON.parse(response.data)) as CityInfo[];
 
       setCities(cities);
     };

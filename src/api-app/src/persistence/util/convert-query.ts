@@ -1,4 +1,4 @@
-import ProcedureResponseModel from "../models/stored-procedures/procedure-response-model";
+import ProcedureResponseModel from "../interfaces/procedure-response-info";
 
 const ConvertQuery = {
   get(data: ProcedureResponseModel[]): ProcedureResponseModel {

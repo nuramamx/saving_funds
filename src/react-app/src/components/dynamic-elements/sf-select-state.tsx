@@ -18,8 +18,6 @@ const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) =>
       const states = JSON.parse(response.data!) as StateInfo[];
 
       setStates(states);
-
-      console.log("States loaded...");
     };
 
     if (states.length <= 0) fetchStates();

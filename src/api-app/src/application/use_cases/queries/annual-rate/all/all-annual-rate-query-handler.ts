@@ -1,10 +1,10 @@
 import CommandHandler from '../../../../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../../../../abstractions/interfaces/command-response';
-import QueryAnnualRateRepository from '../../../../../persistence/repositories/read/query-annual-rate-repository';
+import AnnualRateQueryRepository from '../../../../../persistence/repositories/query/annual-rate-query-repository';
 
 export default class AllAnnualRateQueryHandler implements CommandHandler<void, CommandResponse> {
   execute = async (): Promise<CommandResponse> => {
-    const annualRateRepository = new QueryAnnualRateRepository();
+    const annualRateRepository = new AnnualRateQueryRepository();
     const list = await annualRateRepository.all();
 
     return {

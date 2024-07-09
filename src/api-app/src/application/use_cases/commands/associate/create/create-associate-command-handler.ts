@@ -10,7 +10,7 @@ import BeneficiaryInfo from '../../../../../domain/interfaces/beneficiary-info';
 import NameInfo from '../../../../../domain/interfaces/name-info';
 import WorkplaceInfo from '../../../../../domain/interfaces/workplace-info';
 import ErrorCodes from '../../../../../domain/types/error-codes';
-import SaveAssociateRepository from '../../../../../persistence/repositories/write/save-associate-repository';
+import AssociateSaveRepository from '../../../../../persistence/repositories/save/associate-save-repository';
 import CreateAssociateCommandValidator from './create-associate-command-validator';
 
 interface CreateAssociateCommand {
@@ -27,7 +27,7 @@ interface CreateAssociateCommand {
 class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCommand, CommandResponse> {
   execute = async(data: CreateAssociateCommand): Promise<CommandResponse> => {
     const validation = new CreateAssociateCommandValidator(data).validate();
-    const associateRepository = new SaveAssociateRepository();
+    const associateRepository = new AssociateSaveRepository();
 
     if (validation.length > 0) {
       return {
