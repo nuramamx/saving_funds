@@ -1,7 +1,7 @@
---drop procedure process.borrow_create;
-create or replace procedure process.borrow_create(
+--drop function process.borrow_create;
+create or replace function process.borrow_create(
   in associate_id integer,
-  in requested_amount numeric(20,6),
+  in requested_amount numeric,
   in period integer,
   in is_fortnightly boolean,
   out inserted_id integer,

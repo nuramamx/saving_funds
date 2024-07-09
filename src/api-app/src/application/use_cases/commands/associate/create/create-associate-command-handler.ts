@@ -45,15 +45,13 @@ class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCom
         .updateAddress(new Address(data.address))
         .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
         .addBeneficiaries(data.beneficiaries);
-
       const result = await associateRepository.save(associate);
 
-      return { successful: true, message: 'Socio fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Préstamo fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,
-        // code: err.include('DOMAIN') ? ErrorCodes.API_CMD_HANDLER_DOMAIN : ErrorCodes.API_CMD_HANDLER_DATABASE,
-        message: 'Socio no pudo ser creado. Ocurrió falla al guardar en la base de datos.',
+        message: 'Préstamo no pudo ser creado.',
         data: err.message,
         type: 'danger'
       } as CommandResponse;

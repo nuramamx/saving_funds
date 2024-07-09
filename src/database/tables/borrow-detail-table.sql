@@ -1,4 +1,4 @@
-drop table if exists process.borrow_detail;
+drop table if exists process.borrow_detail cascade;
 
 create table if not exists process.borrow_detail
 (

@@ -9,8 +9,8 @@ export default class Borrow implements BorrowInfo {
     readonly requestedAmount: number,
     readonly period: number,
     readonly annualRate: number,
-    readonly isFortnightly: number,
-    readonly isSettled: number) {}
+    readonly isFortnightly: boolean,
+    readonly isSettled: boolean) {}
 
   updateDetail(detail: BorrowDetail): Borrow {
     this.detail = detail;

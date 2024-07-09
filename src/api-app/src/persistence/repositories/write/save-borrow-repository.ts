@@ -1,6 +1,6 @@
 import { db } from '../../instance';
 import { ProcedureName } from '../../names/procedure-name';
-import { DataTypes, QueryTypes } from 'sequelize';
+import { QueryTypes } from 'sequelize';
 import Borrow from '../../../domain/entities/borrow';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
 import ProcedureResponseModel from '../../models/stored-procedures/procedure-response-model';
@@ -13,13 +13,9 @@ export default class SaveBorrowRepository implements SaveRepositoryInfo<Borrow, 
       const [saveBorrowResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.BORROW_CREATE, {
         replacements: {
           associate_id: data.associateId,
-          requested_amount: data.requestedAmount,
+          requested_amount: data.requestedAmount.toFixed(6),
           period: data.period,
-          annual_rate: data.annualRate,
-          is_fortnightly: data.isFortnightly,
-          inserted_id: { type: DataTypes.INTEGER, dir: 'OUT '},
-          success: { type: DataTypes.BOOLEAN, dir: 'OUT '},
-          message: { type: DataTypes.TEXT, dir: 'OUT '}
+          is_fortnightly: data.isFortnightly
         },
         type: QueryTypes.SELECT
       });
@@ -32,6 +28,7 @@ export default class SaveBorrowRepository implements SaveRepositoryInfo<Borrow, 
       return true;
     } catch (err: any) {
       await transaction.rollback();
+      console.error(`[NUFLIN] db-error: ${err}`);
 
       if (err.parent !== null && err.parent !== undefined
         && err.parent.where !== null && err.parent.where !== undefined)

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 import { CreateBorrowCommand } from '../../../application/use_cases/commands/borrow/create/create-borrow-command-handler';
+import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function BorrowRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.post<{ Body: string }>('/borrow/create', async (request, reply) => {

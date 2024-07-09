@@ -3,6 +3,6 @@ export default interface BorrowInfo {
   requestedAmount: number;
   period: number;
   annualRate: number;
-  isFortnightly: number;
-  isSettled: number;
+  isFortnightly: boolean;
+  isSettled: boolean;
 }

@@ -30,8 +30,8 @@ const ValidationModal = memo(() => {
             <br />
             {validation.data !== null && validation.data !== undefined && (
               <div className="block is-size-7">
-                Verifique la siguiente informaci&oacute;n de ser necesario y/o env&iacute;ela al desarrollador:<br />
-                <span className="has-text-danger">{JSON.stringify(validation.data)}</span>
+                Las siguientes reglas no se cumplieron, si tiene dudas contacte al desarrollador:<br />
+                <span className="has-text-danger">{JSON.stringify(validation.data).replaceAll('"', '')}</span>
               </div>
             )}
           </div>
