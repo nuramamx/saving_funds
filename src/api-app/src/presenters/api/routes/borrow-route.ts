@@ -3,10 +3,18 @@ import { CreateBorrowCommand } from '../../../application/use_cases/commands/bor
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function BorrowRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
+  fastify.get('/borrow/list', async (request, reply) => {
+    const command = new CommandHandlerMediator();
+    const result = await command.execute('ListBorrowQuery');
+
+    if (!result.successful) reply.statusCode = 400;
+
+    return result;
+  });
+
   fastify.post<{ Body: string }>('/borrow/create', async (request, reply) => {
     const data: CreateBorrowCommand = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
-    
     const result = await command.execute('CreateBorrowCommand', data);
 
     if (!result.successful) reply.statusCode = 400;

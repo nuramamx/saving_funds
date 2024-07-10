@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
 import ListAssociateSpec from '../../../core/interfaces/specs/list/list-associate-spec';
-import camelcaseKeys from 'camelcase-keys';
 import { BinMinusIn, Edit, Erase, JournalPage } from 'iconoir-react';
 import { objectToCamel } from 'ts-case-convert';
+import TypeFormat from '../../../core/util/type-format';
 
 export default function ListAssociate() {
   const [associates, setAssociates] = useState<ListAssociateSpec[]>([]);
@@ -41,7 +41,8 @@ export default function ListAssociate() {
             </tr>
           </thead>
           <tbody>
-            {associates.map((associate: ListAssociateSpec) => (
+            {associates !== undefined && associates?.length > 0 ? (
+              associates.map((associate: ListAssociateSpec) => (
               <tr key={associate.id}>
                 <td>{associate.id}</td>
                 <td>{associate.fullname}</td>
@@ -49,14 +50,18 @@ export default function ListAssociate() {
                 <td>{associate.dependencyKey}</td>
                 <td>{associate.category}</td>
                 <td>{associate.agreementName}</td>
-                <td>${Number(associate.salary).toFixed(2)}</td>
+                <td>{TypeFormat.toCurrency(associate.salary)}</td>
                 <td>
                   <button><Edit /></button>&nbsp;&nbsp;
                   <button><JournalPage /></button>&nbsp;&nbsp;
                   <button><BinMinusIn /></button>
                 </td>
               </tr>
-            ))}
+            ))) : (
+              <tr>
+                <td colSpan={8} style={{textAlign: 'center'}}>No hay socios disponibles</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

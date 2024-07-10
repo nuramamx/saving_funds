@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import { SFTabs, SFTabsOptions } from "../../../components/ui/sf-tabs";
-import SFTextInput from "../../../components/form/sf-text-input";
-import SFMoneyInput from "../../../components/form/sf-money-input";
-import SFSelectInput from "../../../components/form/sf-select-input";
-import SFPercentageInput from "../../../components/form/sf-percentage-input";
-import SFTextDisplayInput from "../../../components/form/sf-text-display-input";
-import useNotificationStore from "../../../core/stores/notification-store";
-import useAssociateStore from "../../../core/stores/associate-store";
-import CommandResponseInfo from "../../../core/interfaces/command-response-info";
-import useValidationModalStore from "../../../core/stores/validation-modal-store";
-import SFSelectCity from "../../../components/dynamic-elements/sf-select-city";
-import SFSelectState from "../../../components/dynamic-elements/sf-select-state";
-import useAssociateDraftStore from "../../../core/stores/associate-draft-store";
-import AppConstants from "../../../core/constants/app-constants";
-import SFSelectAgreement from "../../../components/dynamic-elements/sf-select-agreement";
+import { useEffect, useState } from 'react';
+import { SFTabs, SFTabsOptions } from '../../../components/ui/sf-tabs';
+import { useNavigate } from 'react-router-dom';
+import SFTextInput from '../../../components/form/sf-text-input';
+import SFMoneyInput from '../../../components/form/sf-money-input';
+import SFSelectInput from '../../../components/form/sf-select-input';
+import SFPercentageInput from '../../../components/form/sf-percentage-input';
+import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
+import useNotificationStore from '../../../core/stores/notification-store';
+import useAssociateStore from '../../../core/stores/associate-store';
+import CommandResponseInfo from '../../../core/interfaces/command-response-info';
+import useValidationModalStore from '../../../core/stores/validation-modal-store';
+import SFSelectCity from '../../../components/dynamic-elements/sf-select-city';
+import SFSelectState from '../../../components/dynamic-elements/sf-select-state';
+import useAssociateDraftStore from '../../../core/stores/associate-draft-store';
+import AppConstants from '../../../core/constants/app-constants';
+import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-agreement';
 
 export default function CreateAssociate() {
-  const { pushNotification } = useNotificationStore();
   const {
     associate,
     stateId,
@@ -25,20 +25,22 @@ export default function CreateAssociate() {
     updateBeneficiaryName,
     updateBeneficiaryPercentage,
     clearAssociate
-  } = useAssociateStore()
+  } = useAssociateStore();
+  const navigate = useNavigate();
+  const { pushNotification } = useNotificationStore();
   const { pushAssociateDraft } = useAssociateDraftStore();
   const { setValidationModal } = useValidationModalStore();
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
   const tabsOptions: SFTabsOptions[] = [
-    { id: 'associate', name: "Socio" },
-    { id: 'address', name: "Localización" },
-    { id: 'workplace', name: "Centro de Trabajo" },
-    { id: 'beneficiary', name: "Beneficiarios" }
+    { id: 'associate', name: 'Socio' },
+    { id: 'address', name: 'Localización' },
+    { id: 'workplace', name: 'Centro de Trabajo' },
+    { id: 'beneficiary', name: 'Beneficiarios' }
   ];
 
   const draft = () => {
     pushAssociateDraft(associate);
-    pushNotification({ message: "Borrador guardado correctamente.", type: 'info' });
+    pushNotification({ message: 'Borrador guardado correctamente.', type: 'info' });
   };
 
   const save = async () => {
@@ -61,9 +63,10 @@ export default function CreateAssociate() {
         });
       }
 
-      pushNotification({ message: "Socio creado con éxito.", type: "success" });
+      pushNotification({ message: 'Socio creado con éxito.', type: 'success' });
+      navigate('/associate/list');
     } catch (error: any) {
-      pushNotification({ message: error.message, type: "danger" });
+      pushNotification({ message: error.message, type: 'danger' });
     }
   };
 

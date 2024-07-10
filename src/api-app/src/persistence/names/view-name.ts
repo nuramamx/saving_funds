@@ -7,6 +7,7 @@ enum ViewName {
   ANNUAL_RATE_ALL = 'select * from administration.annual_rate_view;',
   // Catalog
   ASSOCIATE_LIST = 'select * from catalog.list_associate_view;',
+  BORROW_LIST = 'select * from process.list_borrow_view;'
 
   // Process
 

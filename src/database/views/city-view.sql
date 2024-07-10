@@ -1,7 +1,7 @@
 create or replace view administration.city_view as
-  select C.id
-    ,C.state_id
-    ,C.name
-    ,S.name as state_name
-  from administration.city C
-  join administration.state S on C.state_id = S.id;
+  select c.id
+    ,c.state_id
+    ,c.name
+    ,s.name as state_name
+  from administration.city c
+  join administration.state s on c.state_id = s.id;

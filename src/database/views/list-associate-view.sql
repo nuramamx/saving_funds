@@ -1,9 +1,7 @@
 drop view if exists "catalog".list_associate_view;
 create or replace view "catalog".list_associate_view as
   select a.id
-    ,replace(a."name"->>'firstname', '"', '') || ' ' ||
-      replace(a."name"->>'paternal_lastname', '"', '') || ' ' ||
-      replace(a."name"->>'maternal_lastname', '"', '') as fullname
+    ,deconstruct_name(a."name") as fullname
     ,a.rfc
     ,(addr.street || ', ' || addr.settlement || ', C.P. ' || addr.postal_code || ', ' || c."name") as address
     ,ad.dependency_key

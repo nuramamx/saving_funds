@@ -8,6 +8,7 @@ import AllAgreementQueryHandler from '../use_cases/queries/agreement/all/all-agr
 import AllAnnualRateQueryHandler from '../use_cases/queries/annual-rate/all/all-annual-rate-query-handler';
 import CreateBorrowCommandHandler, { CreateBorrowCommand } from '../use_cases/commands/borrow/create/create-borrow-command-handler';
 import ListAssociateQueryHandler from '../use_cases/queries/associate/list/list-associate-query-handler';
+import ListBorrowQueryHandler from '../use_cases/queries/borrow/list/list-borrow-query-handler';
 
 type CommandHandlerTypeMap = {
   'CreateAssociateCommand': CreateAssociateCommand,
@@ -17,7 +18,8 @@ type CommandHandlerTypeMap = {
   'AllAgreementQuery': void,
   'AllAnnualRateQuery': void,
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQuery,
-  'ListAssociateQuery': void
+  'ListAssociateQuery': void,
+  'ListBorrowQuery': void
 };
 
 const commandConstructors: {
@@ -30,7 +32,8 @@ const commandConstructors: {
   'AllAgreementQuery': AllAgreementQueryHandler,
   'AllAnnualRateQuery': AllAnnualRateQueryHandler,
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQueryHandler,
-  'ListAssociateQuery': ListAssociateQueryHandler
+  'ListAssociateQuery': ListAssociateQueryHandler,
+  'ListBorrowQuery': ListBorrowQueryHandler
 };
 
 class CommandHandlerFactory {

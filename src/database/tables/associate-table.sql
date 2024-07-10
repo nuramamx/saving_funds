@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS catalog.associate;
-
-CREATE TABLE IF NOT EXISTS catalog.associate
+drop table if exists catalog.associate cascade;
+create table if not exists catalog.associate
 (
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-    name JSONB NOT NULL,
-    rfc VARCHAR(13) NOT NULL,
-    gender CHAR(1) NOT NULL,
-    created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT associate_pkey PRIMARY KEY (id),
-    CONSTRAINT associate_rfc_key UNIQUE (rfc)
+    id integer generated always as identity,
+    name jsonb not null,
+    rfc varchar(13) not null,
+    gender char(1) not null,
+    is_active boolean not null default true,
+    created_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone not null default CURRENT_TIMESTAMP,
+    constraint associate_pkey primary key (id),
+    constraint associate_rfc_key unique (rfc)
 );

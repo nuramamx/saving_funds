@@ -17,25 +17,21 @@ begin
   
   return query
   select
-    A.id
-    ,replace(A.name->>'firstname', '"', '') || ' ' ||
-      replace(A.name->>'paternal_lastname', '"', '') || ' ' ||
-      replace(A.name->>'maternal_lastname', '"', '') as fullname
-    ,(ADDR.street || ', ' || ADDR.settlement || ', C.P. ' || ADDR.postal_code || ', ' || CI.name) as address
-    ,AG.name AS agreement_name
-  from catalog.associate A
-  join catalog.associate_detail AD
-    on AD.associate_id = A.id
-  join catalog.address ADDR
-    on ADDR.associate_id = A.id
-  join administration.agreement AG
-    on AG.id = AD.agreement_id
-  join administration.city CI
-    on CI.id = ADDR.city_id
+    a.id
+    ,deconstruct_name(a."name") as fullname
+    ,(addr.street || ', ' || addr.settlement || ', C.P. ' || addr.postal_code || ', ' || c.name) as address
+    ,ag.name AS agreement_name
+  from catalog.associate a
+  join catalog.associate_detail ad
+    on ad.associate_id = a.id
+  join catalog.address addr
+    on addr.associate_id = a.id
+  join administration.agreement ag
+    on ag.id = ad.agreement_id
+  join administration.city c
+    on c.id = addr.city_id
   where 1=1
-  and (associate_search_by_id_or_name.associate_id = 0 or associate_search_by_id_or_name.associate_id = A.id)
-  and (associate_search_by_id_or_name.name = '' or (A.name->>'firstname') || ' ' ||
-    (A.name->>'paternal_lastname')  || ' ' ||
-    (A.name->>'maternal_lastname') like '%' || upper(associate_search_by_id_or_name.name) || '%');
+  and (associate_search_by_id_or_name.associate_id = 0 or associate_search_by_id_or_name.associate_id = a.id)
+  and (associate_search_by_id_or_name.name = '' or deconstruct_name(a."name") like '%' || upper(associate_search_by_id_or_name.name) || '%');
 end;
 $$ language plpgsql;
