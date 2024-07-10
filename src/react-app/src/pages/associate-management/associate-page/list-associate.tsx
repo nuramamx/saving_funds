@@ -4,7 +4,7 @@ import CommandResponseInfo from '../../../core/interfaces/command-response-info'
 import ListAssociateSpec from '../../../core/interfaces/specs/list/list-associate-spec';
 import { BinMinusIn, Edit, Erase, JournalPage } from 'iconoir-react';
 import { objectToCamel } from 'ts-case-convert';
-import TypeFormat from '../../../core/util/type-format';
+import ToMoney from '../../../core/util/conversions/money-conversion';
 
 export default function ListAssociate() {
   const [associates, setAssociates] = useState<ListAssociateSpec[]>([]);
@@ -50,7 +50,7 @@ export default function ListAssociate() {
                 <td>{associate.dependencyKey}</td>
                 <td>{associate.category}</td>
                 <td>{associate.agreementName}</td>
-                <td>{TypeFormat.toCurrency(associate.salary)}</td>
+                <td>{ToMoney(associate.salary)}</td>
                 <td>
                   <button><Edit /></button>&nbsp;&nbsp;
                   <button><JournalPage /></button>&nbsp;&nbsp;

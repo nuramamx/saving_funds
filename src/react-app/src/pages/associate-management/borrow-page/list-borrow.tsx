@@ -3,7 +3,7 @@ import { objectToCamel } from 'ts-case-convert';
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
 import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
-import TypeFormat from '../../../core/util/type-format';
+import ToMoney from '../../../core/util/conversions/money-conversion';
 
 export default function ListBorrow() {
   const [borrows, setBorrows] = useState<ListBorrowSpec[]>([]);
@@ -45,9 +45,9 @@ export default function ListBorrow() {
               <tr key={borrow.id}>
                 <td>{borrow.id}</td>
                 <td>{borrow.associateName}</td>
-                <td>{TypeFormat.toCurrency(borrow.requestedAmount)}</td>
-                <td>{TypeFormat.toCurrency(borrow.totalDue)}</td>
-                <td>{TypeFormat.toCurrency(borrow.totalPaid)}</td>
+                <td>{ToMoney(borrow.requestedAmount)}</td>
+                <td>{ToMoney(borrow.totalDue)}</td>
+                <td>{ToMoney(borrow.totalPaid)}</td>
                 <td>{borrow.period} {borrow.period > 1 ? 'AÑOS' : 'AÑO'}</td>
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
                 <td>
