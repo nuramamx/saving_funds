@@ -16,6 +16,34 @@
 			"**/node_modules": true,
 			"**/.dist": true,
 			"**/.dbeaver": true
-		}
+		},
+		"favorites.resources": [
+			{
+				"filePath": "src/api-app/src/application/factories/command-handler-factory.ts",
+				"group": "Default"
+			},
+			{
+				"filePath": "src/api-app/src/persistence/specs",
+				"group": "Default"
+			},
+			{
+				"filePath": "src/api-app/src/persistence/repositories",
+				"group": "Default"
+			},
+			{
+				"filePath": "src/api-app/src/presenters/api/routes",
+				"group": "Default"
+			},
+			{
+				"filePath": "src/react-app/src/core/interfaces",
+				"group": "Default"
+			}
+		],
+		"favorites.groups": [
+			"Default",
+			"t"
+		],
+		"favorites.currentGroup": "Default",
+		"favorites.sortOrder": "ASC"
 	}
 }

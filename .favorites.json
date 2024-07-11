@@ -1,0 +1,74 @@
+[
+    {
+        "type": "Group",
+        "name": "api",
+        "parent_id": null,
+        "workspaceRoot": null,
+        "workspacePath": null,
+        "id": "EPwU7kZheQTxb6vI"
+    },
+    {
+        "type": "Group",
+        "name": "react",
+        "parent_id": null,
+        "workspaceRoot": null,
+        "workspacePath": null,
+        "id": "wOd7EMBGHSvR9Z3o"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/react-app/src/core/interfaces",
+        "parent_id": "wOd7EMBGHSvR9Z3o",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/react-app/src/core/interfaces",
+        "id": "qUE1woLvWHmIlpna"
+    },
+    {
+        "type": "File",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/application/factories/command-handler-factory.ts",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/application/factories/command-handler-factory.ts",
+        "id": "T6EnvNBuzeDmF4a8"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/application/use-cases",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/application/use-cases",
+        "id": "z3gePbFv8ih9w7IB"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/persistence/repositories",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/persistence/repositories",
+        "id": "umYTePykVIU9t358"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/persistence/specs",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/persistence/specs",
+        "id": "hNczyTOB20buG1tU"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/presenters/api/routes",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/presenters/api/routes",
+        "id": "oCnmHPFYWVkhJ3g7"
+    },
+    {
+        "type": "File",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/presenters/api/server.ts",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/presenters/api/server.ts",
+        "id": "Md7CNlX6vb9khzyI"
+    }
+]
