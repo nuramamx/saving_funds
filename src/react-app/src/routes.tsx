@@ -8,6 +8,7 @@ import CreateAssociate from './pages/associate-management/associate-page/create-
 import CreateBorrow from './pages/associate-management/borrow-page/create-borrow';
 import ListAssociate from './pages/associate-management/associate-page/list-associate';
 import ListBorrow from './pages/associate-management/borrow-page/list-borrow';
+import ListBorrowHistory from './pages/associate-management/borrow-page/list-borrow-history';
 
 const Routes = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const Routes = createBrowserRouter([
           { path: 'create', element: <CreateAssociate /> },
           { path: 'borrow/list', element: <ListBorrow /> },
           { path: 'borrow/create', element: <CreateBorrow /> },
+          { path: 'borrow/history', element: <ListBorrowHistory /> }
         ]
       },
       {
@@ -51,7 +53,7 @@ const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'borrowing', name: 'Préstamos', location: '/associate', children: [
     { key: 'borrow-create', route: '/associate/borrow/create', name: 'Inscribir Préstamo' },
     { key: 'borrow-list', route: '/associate/borrow/list', name: 'Gestión de Préstamos' },
-    { key: 'borrow-history', route: '/associate//borrow/history', name: 'Historial de Préstamos' },
+    { key: 'borrow-history', route: '/associate/borrow/history', name: 'Historial de Préstamos' },
     { key: 'borrow-associate-debtors', route: '/associate//borrow/page', name: 'Socios Deudores' }
   ] },
   { key: 'payments', name: 'Pagos', location: '/associate', children: [

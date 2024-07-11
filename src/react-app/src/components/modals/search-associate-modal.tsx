@@ -3,7 +3,7 @@ import SFTextInput from '../form/sf-text-input';
 import AppConstants from '../../core/constants/app-constants';
 import CommandResponseInfo from '../../core/interfaces/command-response-info';
 import useNotificationStore from '../../core/stores/notification-store';
-import SearchAssociateByIdOrNameQuery from '../../core/interfaces/parameters/search-associate-by-id-or-name-param';
+import SearchAssociateByIdOrNameQuery from '../../core/interfaces/query/search-associate-by-id-or-name-param';
 import CheckAndAssign from '../../core/util/check-and-assign';
 import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
 import camelcaseKeys from 'camelcase-keys';
@@ -22,15 +22,14 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
 
   const handleSearchAssociateEnter = async () => {
     try {
-      const data = JSON.stringify({
-        associate_id: CheckAndAssign.checkNumber(associateInfo),
-        name: CheckAndAssign.checkText(associateInfo)
-      } as SearchAssociateByIdOrNameQuery);
-
       const response = await fetch(`${AppConstants.apiAssociate}/search_by_id_or_name`, {
         method: 'POST',
-        body: data
+        body: JSON.stringify({
+          associate_id: CheckAndAssign.checkNumber(associateInfo),
+          name: CheckAndAssign.checkText(associateInfo)
+        } as SearchAssociateByIdOrNameQuery)
       });
+
       if (!response.ok)
         throw new Error('Ocurrió un error al realizar la consulta.');
 

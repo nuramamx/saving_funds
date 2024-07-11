@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
+import { DownloadSquare, MoneySquare, NumberedListLeft } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
 import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
@@ -51,6 +52,9 @@ export default function ListBorrow() {
                 <td>{borrow.period} {borrow.period > 1 ? 'AÑOS' : 'AÑO'}</td>
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
                 <td>
+                  <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
+                  <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
+                  <button title="Ver pagos"><NumberedListLeft /></button>&nbsp;&nbsp;
                 </td>
               </tr>
             ))) : (

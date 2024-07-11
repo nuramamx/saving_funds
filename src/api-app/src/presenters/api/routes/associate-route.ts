@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { CreateAssociateCommand } from '../../../application/use_cases/commands/associate/create/create-associate-command-handler';
-import { ByIdOrNameAssociateQuery } from '../../../application/use_cases/queries/associate/by-id-or-name/by-id-or-name-associate-query-handler';
+import { CreateAssociateCommand } from '../../../application/use-cases/commands/associate/create/create-associate-command-handler';
+import { ByIdOrNameAssociateQuery } from '../../../application/use-cases/queries/associate/by-id-or-name/by-id-or-name-associate-query-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {

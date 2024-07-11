@@ -1,14 +1,15 @@
-import CreateAssociateCommandHandler, { CreateAssociateCommand } from '../use_cases/commands/associate/create/create-associate-command-handler'
-import ByIdOrNameAssociateQueryHandler, { ByIdOrNameAssociateQuery } from '../use_cases/queries/associate/by-id-or-name/by-id-or-name-associate-query-handler';
+import CreateAssociateCommandHandler, { CreateAssociateCommand } from '../use-cases/commands/associate/create/create-associate-command-handler'
+import ByIdOrNameAssociateQueryHandler, { ByIdOrNameAssociateQuery } from '../use-cases/queries/associate/by-id-or-name/by-id-or-name-associate-query-handler';
 import CommandHandler from '../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../abstractions/interfaces/command-response';
-import AllCityQueryHandler from '../use_cases/queries/city/all/all-city-query-handler';
-import AllStateQueryHandler from '../use_cases/queries/state/all/all-state-query-handler';
-import AllAgreementQueryHandler from '../use_cases/queries/agreement/all/all-agreement-query-handler';
-import AllAnnualRateQueryHandler from '../use_cases/queries/annual-rate/all/all-annual-rate-query-handler';
-import CreateBorrowCommandHandler, { CreateBorrowCommand } from '../use_cases/commands/borrow/create/create-borrow-command-handler';
-import ListAssociateQueryHandler from '../use_cases/queries/associate/list/list-associate-query-handler';
-import ListBorrowQueryHandler from '../use_cases/queries/borrow/list/list-borrow-query-handler';
+import AllCityQueryHandler from '../use-cases/queries/city/all/all-city-query-handler';
+import AllStateQueryHandler from '../use-cases/queries/state/all/all-state-query-handler';
+import AllAgreementQueryHandler from '../use-cases/queries/agreement/all/all-agreement-query-handler';
+import AllAnnualRateQueryHandler from '../use-cases/queries/annual-rate/all/all-annual-rate-query-handler';
+import CreateBorrowCommandHandler, { CreateBorrowCommand } from '../use-cases/commands/borrow/create/create-borrow-command-handler';
+import ListAssociateQueryHandler from '../use-cases/queries/associate/list/list-associate-query-handler';
+import ListBorrowQueryHandler from '../use-cases/queries/borrow/list/list-borrow-query-handler';
+import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
 
 type CommandHandlerTypeMap = {
   'CreateAssociateCommand': CreateAssociateCommand,
@@ -19,7 +20,8 @@ type CommandHandlerTypeMap = {
   'AllAnnualRateQuery': void,
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQuery,
   'ListAssociateQuery': void,
-  'ListBorrowQuery': void
+  'ListBorrowQuery': void,
+  'ListBorrowHistoryQuery': ListBorrowHistoryQuery
 };
 
 const commandConstructors: {
@@ -33,7 +35,8 @@ const commandConstructors: {
   'AllAnnualRateQuery': AllAnnualRateQueryHandler,
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQueryHandler,
   'ListAssociateQuery': ListAssociateQueryHandler,
-  'ListBorrowQuery': ListBorrowQueryHandler
+  'ListBorrowQuery': ListBorrowQueryHandler,
+  'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler
 };
 
 class CommandHandlerFactory {

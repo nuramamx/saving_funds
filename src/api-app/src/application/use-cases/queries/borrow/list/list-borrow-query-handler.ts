@@ -12,7 +12,7 @@ export default class ListBorrowQueryHandler implements CommandHandler<boolean, C
     } catch (err: any) {
       return {
         successful: false,
-        message: 'Socios no localizados.',
+        message: 'Registros no localizados.',
         data: err.message,
         type: 'danger'
       } as CommandResponse;
