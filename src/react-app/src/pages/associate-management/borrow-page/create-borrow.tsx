@@ -10,6 +10,8 @@ import CommandResponseInfo from '../../../core/interfaces/command-response-info'
 import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
+import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
+import { addDays } from 'date-fns';
 
 export default function CreateBorrow() {
   const { 
@@ -145,6 +147,14 @@ export default function CreateBorrow() {
         <SFMoneyInput id="borrow_amount_to_deliver" name="Total a Entregar"
           readonly={true}
           value={borrow.detail.amountDelivered.toFixed(2)} />
+        <SFDatePickerInput params={{
+          id: 'borrow_start_at',
+          name: 'Fecha de Inicio',
+          value: borrow.startAt,
+          onChange: (value) => setBorrow({ ...borrow, startAt: value }),
+          minDate: new Date(),
+          maxDate: addDays(new Date(), 30)
+        }} />
       </div>
     </div>
     <div className="mt-auto">

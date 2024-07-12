@@ -1,0 +1,13 @@
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__view-calendar-icon svg {
+  z-index: 99999;
+  padding-block: inherit;
+  top: 0.3rem;
+}
+
+.react-datepicker__view-calendar-icon input {
+  text-align: right;
+}

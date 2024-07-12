@@ -1,11 +1,12 @@
-export default interface ListBorrowSpec {
+export default interface ListBorrowDebtorSpec {
   id: number;
   associateId: number;
   associateName: string;
   requestedAmount: number;
   totalDue: number;
   totalPaid: number;
-  period: number;
   isFortnightly: boolean;
   createdAt: string;
+  lastPaymentDate: string;
+  latePayments: number;
 }

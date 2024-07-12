@@ -9,8 +9,9 @@ const borrowInitialState: CreateBorrowCommand = {
   requestedAmount: 0,
   period: 0,
   annualRate: 0,
-  requestDate: 0,
   isFortnightly: false,
+  requestDate: undefined!,
+  startAt: undefined!,
   detail: {
     borrowId: 0,
     numberPayments: 0,

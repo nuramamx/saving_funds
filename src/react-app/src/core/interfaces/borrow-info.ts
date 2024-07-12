@@ -6,7 +6,8 @@ export default interface BorrowInfo {
   requestedAmount: number;
   period: number;
   annualRate: number;
-  requestDate: number;
   isFortnightly: boolean;
+  requestDate: Date;
+  startAt: Date;
   detail: BorrowDetailInfo;
 }

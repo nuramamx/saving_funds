@@ -6,7 +6,7 @@ import useNotificationStore from '../../core/stores/notification-store';
 import SearchAssociateByIdOrNameQuery from '../../core/interfaces/query/search-associate-by-id-or-name-param';
 import CheckAndAssign from '../../core/util/check-and-assign';
 import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
-import camelcaseKeys from 'camelcase-keys';
+import { objectToCamel } from 'ts-case-convert';
 
 type SearchAssociateModalParams = {
   show: boolean;
@@ -35,7 +35,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
 
       const commandResponse = await response.json() as CommandResponseInfo;
 
-      setAssociateList(camelcaseKeys(commandResponse.data));
+      setAssociateList(objectToCamel(JSON.parse(commandResponse.data) as SearchAssociateSpec[]));
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }

@@ -37,6 +37,7 @@ export default function ListBorrow() {
               <th>Total pagado</th>
               <th>Periodo</th>
               <th>Periodicidad</th>
+              <th>Fecha</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -51,6 +52,7 @@ export default function ListBorrow() {
                 <td>{ToMoney(borrow.totalPaid)}</td>
                 <td>{borrow.period} {borrow.period > 1 ? 'AÑOS' : 'AÑO'}</td>
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
+                <td>{borrow.createdAt}</td>
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
                   <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
