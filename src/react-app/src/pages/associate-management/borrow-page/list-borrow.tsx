@@ -5,24 +5,37 @@ import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
 import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
+import useNotificationStore from '../../../core/stores/notification-store';
 
 export default function ListBorrow() {
+  const [hasError, setHasError] = useState<Boolean>(false);
   const [borrows, setBorrows] = useState<ListBorrowSpec[]>([]);
+  const { pushNotification } = useNotificationStore();
 
   useEffect(() => {
     const fetchBorrows = async () => {
-      const result = await fetch(`${AppConstants.apiBorrow}/list`, {
-        method: 'GET'
-      });
+      try {
+        const result = await fetch(`${AppConstants.apiBorrow}/list`, {
+          method: 'GET'
+        });
 
-      const response = await result.json() as CommandResponseInfo;
-      const list = objectToCamel(JSON.parse(response.data)) as ListBorrowSpec[];
+        if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');
+
+        const response = await result.json() as CommandResponseInfo;
+
+        if (!response.successful) throw new Error(response.message);
+
+        const list = objectToCamel(response.data) as ListBorrowSpec[];
       
-      setBorrows(list);
+        setBorrows(list);
+      } catch (err: any) {
+        setHasError(true);
+        pushNotification({ message: err.message, type: 'danger' });
+      }
     };
 
-    fetchBorrows();
-  }, []);
+    if (!hasError) fetchBorrows();
+  }, [hasError]);
 
   return (
     <div className="columns">

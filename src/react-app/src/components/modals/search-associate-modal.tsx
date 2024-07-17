@@ -22,7 +22,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
 
   const handleSearchAssociateEnter = async () => {
     try {
-      const response = await fetch(`${AppConstants.apiAssociate}/search_by_id_or_name`, {
+      const result = await fetch(`${AppConstants.apiAssociate}/search_by_id_or_name`, {
         method: 'POST',
         body: JSON.stringify({
           associate_id: CheckAndAssign.checkNumber(associateInfo),
@@ -30,12 +30,13 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
         } as SearchAssociateByIdOrNameQuery)
       });
 
-      if (!response.ok)
+      if (!result.ok)
         throw new Error('Ocurrió un error al realizar la consulta.');
 
-      const commandResponse = await response.json() as CommandResponseInfo;
+      const response = await result.json() as CommandResponseInfo;
+      const list = objectToCamel(response.data) as SearchAssociateSpec[];
 
-      setAssociateList(objectToCamel(JSON.parse(commandResponse.data) as SearchAssociateSpec[]));
+      setAssociateList(list);
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }

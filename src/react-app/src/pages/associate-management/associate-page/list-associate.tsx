@@ -15,8 +15,11 @@ export default function ListAssociate() {
         method: 'GET'
       });
 
+      if (!result.ok)
+        throw new Error(result.statusText);
+
       const response = await result.json() as CommandResponseInfo;
-      const list = objectToCamel(JSON.parse(response.data)) as ListAssociateSpec[];
+      const list = objectToCamel(response.data) as ListAssociateSpec[];
       
       setAssociates(list);
     };

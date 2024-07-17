@@ -7,6 +7,7 @@ export default interface ListBorrowDebtorSpec {
   totalPaid: number;
   isFortnightly: boolean;
   createdAt: string;
+  startAt: string;
   lastPaymentDate: string;
   latePayments: number;
 }
