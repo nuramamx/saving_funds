@@ -10,6 +10,7 @@ create table if not exists process.borrow
   annual_rate numeric(20,6) not null,
   is_fortnightly boolean not null,
   is_settled boolean not null default false, 
+  start_at timestamp with time zone not null default current_timestamp,
   created_at timestamp with time zone not null default current_timestamp,
   updated_at timestamp with time zone not null default current_timestamp,
   constraint borrow_pkey primary key (id),

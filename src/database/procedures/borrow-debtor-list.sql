@@ -1,7 +1,5 @@
---drop function process.borrow_history_by_associate_id;
-create or replace function process.borrow_history_by_associate_id(
-  in p_associate_id integer
-)
+--drop function process.borrow_debtor_list;
+create or replace function process.borrow_debtor_list()
 returns table (
   id integer,
   requested_amount numeric(20,6),
@@ -9,11 +7,10 @@ returns table (
   total_paid numeric(20,6),
   number_payments smallint,
   payments_made smallint,
-  "period" smallint,
+  
   is_fortnightly boolean,
-  start_at text,
   created_at text,
-  resolution text
+  
 ) as $$
 declare
 begin
@@ -26,7 +23,6 @@ begin
     payments_made smallint,
     "period" smallint,
     is_fortnightly boolean,
-    start_at text,
     created_at text,
     resolution text
   ) on commit drop;
@@ -36,12 +32,11 @@ begin
   select b.id
     ,b.requested_amount 
     ,bd.total_due 
-    ,coalesce(sum(p.paid_amount),0) as total_paid
+    ,coalesce(sum(p.amount_paid),0) as total_paid
     ,bd.number_payments
     ,coalesce(sum(p.id),0) as payments_made
     ,b."period"
     ,b.is_fortnightly 
-    ,to_char(b.start_at, 'YYYY-MM-dd') as start_at 
     ,to_char(b.created_at, 'YYYY-MM-dd') as created_at 
     ,'SIN IDENTIFICAR' as resolution
   from process.borrow as b 

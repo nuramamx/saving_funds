@@ -5,4 +5,5 @@ export default interface BorrowInfo {
   annualRate: number;
   isFortnightly: boolean;
   isSettled: boolean;
+  startAt: Date;
 }

@@ -1,5 +1,5 @@
 --drop type process.borrow_spec cascade;
-create type process.borrow_spec as (
+create type process.borrow_type as (
   rate numeric(20,6),
   number_payments smallint,
   payment numeric(20,6),

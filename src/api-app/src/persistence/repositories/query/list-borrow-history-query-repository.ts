@@ -14,6 +14,7 @@ export default class ListBorrowHistoryQueryRepository implements QueryRepository
           type: QueryTypes.SELECT
         }
       ) as ListBorrowHistorySpec[];
+      
       return result;
     } catch (err: any) {
       throw new Error(`[E-200]: ${err}`);

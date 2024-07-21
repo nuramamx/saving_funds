@@ -8,7 +8,7 @@ export default class ListAssociateQueryHandler implements CommandHandler<void, C
       const listAssociateRepository = new ListAssociateQueryRepository();
       const result = await listAssociateRepository.all();
 
-      return { successful: true, message: 'Busqueda exitosa.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,

@@ -5,7 +5,8 @@
         "parent_id": null,
         "workspaceRoot": null,
         "workspacePath": null,
-        "id": "EPwU7kZheQTxb6vI"
+        "id": "EPwU7kZheQTxb6vI",
+        "iconColor": "rgb(255, 0, 255)"
     },
     {
         "type": "Group",
@@ -13,7 +14,8 @@
         "parent_id": null,
         "workspaceRoot": null,
         "workspacePath": null,
-        "id": "wOd7EMBGHSvR9Z3o"
+        "id": "wOd7EMBGHSvR9Z3o",
+        "iconColor": "rgb(0, 255, 255)"
     },
     {
         "type": "Directory",

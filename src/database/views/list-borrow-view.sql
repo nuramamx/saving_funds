@@ -5,11 +5,13 @@ create or replace view process.list_borrow_view as
     ,deconstruct_name(a."name") as associate_name
     ,b.requested_amount
     ,bd.total_due
-    ,coalesce(sum(p.amount_paid), 0) as total_paid
+    ,coalesce(sum(p.paid_amount), 0) as total_paid
     ,b."period"
     ,b.is_fortnightly
+    ,to_char(b.start_at, 'YYYY-MM-dd') as start_at
+    ,to_char(b.created_at, 'YYYY-MM-dd') as created_at
   from process.borrow as b
-  join process.borrow_detail as bd on b.id = bd.id
+  join process.borrow_detail as bd on b.id = bd.borrow_id 
   join "catalog".associate as a on b.associate_id = a.id
   left join process.payment as p on b.id = p.borrow_id
   where b.is_settled = false

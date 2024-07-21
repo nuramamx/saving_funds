@@ -5,9 +5,9 @@ create or replace function process.calculate_borrow(
   period integer,
   is_fortnightly boolean
 )
-returns process.borrow_spec as $$
+returns process.borrow_type as $$
 declare
-  borrow process.borrow_spec;
+  borrow process.borrow_type;
   calculated_rate numeric(20,6);
   calculated_period smallint;
   calculated_divisor numeric(20,6);

@@ -7,6 +7,7 @@ import StateRoute from "./routes/state-route";
 import AgreementRoute from "./routes/agreement-route";
 import AnnualRateRoute from "./routes/annual-rate-route";
 import BorrowRoute from "./routes/borrow-route";
+import PaymentRoute from "./routes/payment-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -39,6 +40,7 @@ fastify.register(StateRoute);
 fastify.register(CityRoute);
 fastify.register(AssociateRoute);
 fastify.register(BorrowRoute);
+fastify.register(PaymentRoute);
 
 fastify.get('/', async (request, reply) => {
   reply.send({ hello: 'world' });

@@ -10,6 +10,7 @@ interface CreateBorrowCommand {
   annualRate: number;
   isFortnightly: boolean;
   isSettled: boolean;
+  startAt: Date;
 }
 
 class CreateBorrowCommandHandler implements CommandHandler<CreateBorrowCommand, CommandResponse> {
@@ -23,8 +24,11 @@ class CreateBorrowCommandHandler implements CommandHandler<CreateBorrowCommand, 
         data.period,
         data.annualRate,
         data.isFortnightly,
-        false
+        false,
+        data.startAt
       );
+      console.log(`[NUFLIN-Handler]: ${JSON.stringify(borrow)}`);
+
       const result = await borrowSaveRepository.save(borrow);
 
       return { successful: true, message: 'Socio fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;

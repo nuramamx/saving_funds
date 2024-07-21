@@ -10,6 +10,7 @@ import CreateBorrowCommandHandler, { CreateBorrowCommand } from '../use-cases/co
 import ListAssociateQueryHandler from '../use-cases/queries/associate/list/list-associate-query-handler';
 import ListBorrowQueryHandler from '../use-cases/queries/borrow/list/list-borrow-query-handler';
 import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
+import ListPaymentByBorrowIdQueryHandler, { ListPaymentByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/list-payment-by-borrow-id-query-handler';
 
 type CommandHandlerTypeMap = {
   'CreateAssociateCommand': CreateAssociateCommand,
@@ -21,7 +22,8 @@ type CommandHandlerTypeMap = {
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQuery,
   'ListAssociateQuery': void,
   'ListBorrowQuery': void,
-  'ListBorrowHistoryQuery': ListBorrowHistoryQuery
+  'ListBorrowHistoryQuery': ListBorrowHistoryQuery,
+  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQuery
 };
 
 const commandConstructors: {
@@ -36,7 +38,8 @@ const commandConstructors: {
   'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQueryHandler,
   'ListAssociateQuery': ListAssociateQueryHandler,
   'ListBorrowQuery': ListBorrowQueryHandler,
-  'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler
+  'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler,
+  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQueryHandler
 };
 
 class CommandHandlerFactory {

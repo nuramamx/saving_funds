@@ -8,7 +8,7 @@ export default class ListBorrowQueryHandler implements CommandHandler<boolean, C
       const listBorrowQueryRepository = new ListBorrowQueryRepository();
       const result = await listBorrowQueryRepository.all();
 
-      return { successful: true, message: 'Busqueda exitosa.', data: JSON.stringify(result), type: 'success' } as CommandResponse;;
+      return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;;
     } catch (err: any) {
       return {
         successful: false,

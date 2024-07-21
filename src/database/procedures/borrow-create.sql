@@ -4,6 +4,7 @@ create or replace function process.borrow_create(
   in requested_amount numeric,
   in period integer,
   in is_fortnightly boolean,
+  in start_at timestamp,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -11,7 +12,7 @@ create or replace function process.borrow_create(
 as $$
 declare
   annual_rate numeric(20,6);
-  borrow process.borrow_spec;
+  borrow process.borrow_type;
 begin
   inserted_id := null;
   success := false;
@@ -25,6 +26,12 @@ begin
     return;
   elseif period not in (1,2,3) then
     message := 'El periodo no está en el rango requerido (1, 2, 3).';
+    return;
+  elseif start_at < current_date then
+    message := 'La fecha de inicio no puede ser antes del día de la fecha de inscripción del préstamo.';
+    return;
+  elseif start_at > (current_date + interval '30 days') then
+    message := 'La fecha de inicio no puede ser mayor a 30 días a partir de la fecha de inscripción del préstamo.';
     return;
   end if;
 
@@ -45,13 +52,14 @@ begin
   where AR.period = borrow_create.period;
 
   begin
-    insert into process.borrow (associate_id, requested_amount, period, annual_rate, is_fortnightly)
+    insert into process.borrow (associate_id, requested_amount, period, annual_rate, is_fortnightly, start_at)
     values (
       borrow_create.associate_id,
       requested_amount,
       borrow_create.period,
       annual_rate,
-      is_fortnightly
+      is_fortnightly,
+      start_at
     )
     returning id into inserted_id;
 

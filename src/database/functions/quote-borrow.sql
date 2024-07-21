@@ -9,7 +9,7 @@ create or replace function process.quote_borrow(requested_amount numeric, annual
 )
 as $$
 declare
-  borrow process.borrow_spec;
+  borrow process.borrow_type;
   annual_rate numeric(20,6);
 begin
   select ar.rate into annual_rate

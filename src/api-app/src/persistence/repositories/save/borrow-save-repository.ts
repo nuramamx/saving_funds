@@ -9,13 +9,17 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
   save = async (data: Borrow): Promise<boolean> => {
     const transaction = await db.sequelize.transaction();
 
+    console.log(`[NUFLIN-Repo]: ${JSON.stringify(data)}`);
+    console.log(`[NUFLIN-Repo]: ${JSON.stringify(data.startAt)}`);
+
     try {
       const [saveBorrowResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.BORROW_CREATE, {
         replacements: {
           associate_id: data.associateId,
           requested_amount: data.requestedAmount.toFixed(6),
           period: data.period,
-          is_fortnightly: data.isFortnightly
+          is_fortnightly: data.isFortnightly,
+          start_at: data.startAt
         },
         type: QueryTypes.SELECT
       });
