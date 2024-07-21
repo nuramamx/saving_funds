@@ -57,13 +57,8 @@ const SidebarRoutes: SidebarParentMenu[] = [
     { key: 'borrow-associate-debtors', route: '/associate//borrow/page', name: 'Socios Deudores' }
   ] },
   { key: 'payments', name: 'Pagos', location: '/associate', children: [
-  { key: 'payment-register', route: '/associate/payment/create', name: 'Registrar Pago' },
-  { key: 'payment-list', route: '/associate/payment', name: 'Gestión de Pagos' }
-] },
-  // { name: 'Retiros', location: '/associate', children: [
-  //     { route: '/withdrawal/page', name: 'Gestión de Retiros' },
-  //     { route: '/withdrawal/page', name: 'Ver Retiros' }
-  // ] },
+    { key: 'payment-batch', route: '/associate/payment/batch', name: 'Carga Masiva' }
+  ] },
   { key: 'general', name: 'General', location: '/myaccount', children: [
     { key: 'myaccount-page', route: '/myaccount/page', name: 'Mis Datos' }
   ] },

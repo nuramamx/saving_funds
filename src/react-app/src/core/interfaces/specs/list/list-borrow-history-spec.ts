@@ -8,5 +8,6 @@ export default interface ListBorrowHistorySpec {
   period: number;
   isFortnightly: boolean;
   resolution: string;
+  startAt: string;
   createdAt: string;
 }

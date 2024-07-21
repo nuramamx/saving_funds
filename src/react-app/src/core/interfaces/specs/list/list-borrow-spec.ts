@@ -7,5 +7,6 @@ export default interface ListBorrowSpec {
   totalPaid: number;
   period: number;
   isFortnightly: boolean;
+  startAt: string;
   createdAt: string;
 }

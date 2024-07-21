@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
+import { objectToCamel } from 'ts-case-convert';
+import { BinMinusIn, Edit, JournalPage } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
 import ListAssociateSpec from '../../../core/interfaces/specs/list/list-associate-spec';
-import { BinMinusIn, Edit, Erase, JournalPage } from 'iconoir-react';
-import { objectToCamel } from 'ts-case-convert';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 
 export default function ListAssociate() {
@@ -46,7 +46,7 @@ export default function ListAssociate() {
           <tbody>
             {associates !== undefined && associates?.length > 0 ? (
               associates.map((associate: ListAssociateSpec) => (
-              <tr key={associate.id}>
+              <tr key={associate.id} className='animate__animated animate__fadeIn'>
                 <td>{associate.id}</td>
                 <td>{associate.fullname}</td>
                 <td className='truncate-200' title={associate.address}>{associate.address}</td>

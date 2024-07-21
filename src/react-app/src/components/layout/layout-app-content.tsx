@@ -14,10 +14,10 @@ export default function LayoutAppContent() {
 
   return (
     <>
-    <div className="column is-3">
+    <div className="column is-2">
       <LayoutAppSidebar location={basePage(location)} items={SidebarRoutes} />
     </div>
-    <div className="column is-9">
+    <div className="column is-10">
       <section className="section box is-flex is-flex-direction-column" style={{minHeight: '85vh'}}>
       <Outlet></Outlet>
       </section>

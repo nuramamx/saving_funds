@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { addDays } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
 import SFPercentageInput from '../../../components/form/sf-percentage-input';
@@ -11,7 +13,6 @@ import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
-import { addDays } from 'date-fns';
 
 export default function CreateBorrow() {
   const { 
@@ -24,6 +25,7 @@ export default function CreateBorrow() {
     updateAmountToDeliver,
     clearBorrow
   } = useBorrowStore();
+  const navigate = useNavigate();
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const { annualRates, setAnnualRates } = useCacheStore();
@@ -67,6 +69,8 @@ export default function CreateBorrow() {
       }
 
       pushNotification({ message: 'Préstamo creado con éxito.', type: 'success' });
+      handleClearBorrow();
+      navigate('/associate/borrow/list');
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }

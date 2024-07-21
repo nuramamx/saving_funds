@@ -6,6 +6,7 @@ import CommandResponseInfo from '../../../core/interfaces/command-response-info'
 import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import useNotificationStore from '../../../core/stores/notification-store';
+import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 
 export default function ListBorrow() {
   const [hasError, setHasError] = useState<Boolean>(false);
@@ -50,14 +51,15 @@ export default function ListBorrow() {
               <th>Total pagado</th>
               <th>Periodo</th>
               <th>Periodicidad</th>
-              <th>Fecha</th>
+              <th>Creado</th>
+              <th>Inicio</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
               borrows.map((borrow: ListBorrowSpec) => (
-              <tr key={borrow.id}>
+              <tr key={borrow.id} className='animate__animated animate__fadeIn'>
                 <td>{borrow.id}</td>
                 <td>{borrow.associateName}</td>
                 <td>{ToMoney(borrow.requestedAmount)}</td>
@@ -66,10 +68,11 @@ export default function ListBorrow() {
                 <td>{borrow.period} {borrow.period > 1 ? 'AÑOS' : 'AÑO'}</td>
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
                 <td>{borrow.createdAt}</td>
+                <td>{borrow.startAt}</td>
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
                   <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
-                  <button title="Ver pagos"><NumberedListLeft /></button>&nbsp;&nbsp;
+                  <PaymentListActionButton borrowId={borrow.id} />
                 </td>
               </tr>
             ))) : (

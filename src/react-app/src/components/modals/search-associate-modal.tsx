@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { objectToCamel } from 'ts-case-convert';
 import SFTextInput from '../form/sf-text-input';
 import AppConstants from '../../core/constants/app-constants';
 import CommandResponseInfo from '../../core/interfaces/command-response-info';
@@ -6,7 +7,6 @@ import useNotificationStore from '../../core/stores/notification-store';
 import SearchAssociateByIdOrNameQuery from '../../core/interfaces/query/search-associate-by-id-or-name-param';
 import CheckAndAssign from '../../core/util/check-and-assign';
 import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
-import { objectToCamel } from 'ts-case-convert';
 
 type SearchAssociateModalParams = {
   show: boolean;
@@ -58,7 +58,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
   }, [show, associateInfo, onSelectedAssociate]);
 
   return (
-    <div className={`modal ${showModal ? 'is-active' : ''}`}>
+    <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
       <div className="modal-background"></div>
       <div className="modal-card" style={{width: '60%'}}>
         <header className="modal-card-head">
@@ -81,7 +81,8 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
             </thead>
             <tbody>
               {associateList.map((associate: SearchAssociateSpec) => (
-                <tr key={associate.id} style={{ cursor: 'pointer' }} onClick={() => handleAssociateSelected(associate)}>
+                <tr key={associate.id} className='animate__animated animate__fadeIn' style={{ cursor: 'pointer' }}
+                  onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
                   <td>{associate.fullname}</td>
                   <td>{associate.address}</td>

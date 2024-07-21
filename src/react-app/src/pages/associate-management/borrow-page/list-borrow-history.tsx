@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
-import { DownloadSquare, NumberedListLeft, Tools } from 'iconoir-react';
+import { DownloadSquare, MoneySquare, NumberedListLeft, Tools } from 'iconoir-react';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
@@ -9,12 +9,21 @@ import ToMoney from '../../../core/util/conversions/money-conversion';
 import AppConstants from '../../../core/constants/app-constants';
 import ListBorrowHistoryQuery from '../../../core/interfaces/query/list-borrow-history-query';
 import CommandResponseInfo from '../../../core/interfaces/command-response-info';
+import PaymentListModal from '../../../components/modals/payment-list-modal';
+import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 
 export default function ListBorrowHistory() {
+  const [showPaymentList, setShowPaymentList] = useState(false);
   const [associate, setAssociate] = useState<number>(0);
   const [borrows, setBorrows] = useState<ListBorrowHistorySpec[]>([]);
+  const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
+
+  const handleListPaymentClick = (borrowId: number, show: boolean) => {
+    setSelectedBorrow(borrowId);
+    setShowPaymentList(show);
+  }
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -74,14 +83,15 @@ export default function ListBorrowHistory() {
               <th>Periodo</th>
               <th>Periodicidad</th>
               <th>Dictamen</th>
-              <th>Fecha</th>
+              <th>Creado</th>
+              <th>Inicio</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
               borrows.map((borrow: ListBorrowHistorySpec) => (
-              <tr key={borrow.id}>
+              <tr key={borrow.id} className='animate__animated animate__fadeIn'>
                 <td>{borrow.id}</td>
                 <td>{ToMoney(borrow.requestedAmount)}</td>
                 <td>{ToMoney(borrow.totalDue)}</td>
@@ -92,9 +102,12 @@ export default function ListBorrowHistory() {
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
                 <td>{borrow.resolution}</td>
                 <td>{borrow.createdAt}</td>
+                <td>{borrow.startAt}</td>
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
-                  <button title="Ver pagos"><NumberedListLeft /></button>&nbsp;&nbsp;
+                  <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
+                  {/* <button title="Ver pagos" onClick={() => handleListPaymentClick(borrow.id, true)}><NumberedListLeft /></button>&nbsp;&nbsp; */}
+                  <PaymentListActionButton borrowId={borrow.id} />
                   <button title="Corregir"><Tools /></button>
                 </td>
               </tr>
@@ -107,6 +120,7 @@ export default function ListBorrowHistory() {
         </table>
       </div>
     </div>
+    <PaymentListModal borrowId={selectedBorrow} show={showPaymentList} onClose={() => handleListPaymentClick(0, false)} />
     </>
   );
 }
