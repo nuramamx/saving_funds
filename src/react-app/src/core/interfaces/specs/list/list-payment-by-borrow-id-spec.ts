@@ -6,6 +6,7 @@ export default interface ListPaymentByBorrowIdSpec {
   number: number;
   paymentAmount: number;
   paidAmount: number;
+  balance: number;
   status: string;
   resolution: string;
   createdAt: string;

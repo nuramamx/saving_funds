@@ -1,6 +1,6 @@
 import { useState } from "react";
-import PaymentListModal from "../modals/payment-list-modal";
 import { NumberedListLeft } from "iconoir-react";
+import PaymentListModal from "../modals/payment-list-modal";
 
 type PaymentListActionButtonParams = {
   borrowId: number;

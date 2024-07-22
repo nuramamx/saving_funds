@@ -10,6 +10,7 @@ returns table (
   "number" integer,
   payment_amount numeric(20,6),
   paid_amount numeric(20,6),
+  balance numeric(20,6),
   status text,
   resolution text,
   applied_at text,
@@ -18,6 +19,9 @@ returns table (
 ) as $$
 declare
   start_at timestamp;
+  requested_amount numeric(20,6);
+  "period" integer;
+  annual_rate numeric(20,6);
   number_payments integer;
   is_fortnightly boolean;
 begin
@@ -29,11 +33,19 @@ begin
     "number" integer,
     payment_amount numeric(20,6),
     paid_amount numeric(20,6),
+    balance numeric(20,6),
     status text,
     resolution text,
     applied_at timestamp,
     created_at timestamp
   ) on commit drop;
+
+  select
+    b.requested_amount
+    ,b."period" 
+    ,b.annual_rate 
+  into requested_amount, "period", annual_rate
+  from process.borrow as b;
 
   select b.start_at, bd.number_payments, b.is_fortnightly
   into start_at, number_payments, is_fortnightly
@@ -99,6 +111,14 @@ begin
       else 'Sin resolución'
     end;
 
+  update payment_schedule
+  set 
+    balance = (
+    select q.balance
+    from process.quote_borrow(requested_amount, annual_rate, "period", is_fortnightly) as q
+    where q.payment_number = payment_schedule."number"
+  );
+  
   return query
   select
     ps.id
@@ -108,6 +128,7 @@ begin
     ,ps."number"
     ,ps.payment_amount
     ,ps.paid_amount
+    ,ps.balance
     ,ps.status
     ,ps.resolution
     ,to_char(ps.applied_at, 'YYYY-MM-dd HH:mm:ss') as applied_at

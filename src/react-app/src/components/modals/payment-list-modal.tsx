@@ -1,12 +1,12 @@
 import { CheckCircle, Circle, WarningCircle, XmarkCircle } from 'iconoir-react';
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
+import { Tooltip } from 'react-tooltip';
+import { chunkArray } from '../../core/util/array-util';
 import useNotificationStore from '../../core/stores/notification-store';
 import AppConstants from '../../core/constants/app-constants';
 import CommandResponseInfo from '../../core/interfaces/command-response-info';
 import ListPaymentByBorrowIdSpec from '../../core/interfaces/specs/list/list-payment-by-borrow-id-spec';
-import { chunkArray } from '../../core/util/array-util';
-import { Tooltip } from 'react-tooltip';
 import ToMoney from '../../core/util/conversions/money-conversion';
 import SFPaymentMark from '../dynamic-elements/sf-payment-mark';
 
@@ -22,6 +22,14 @@ const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) =>
   const [payments, setPayments] = useState<ListPaymentByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<ListPaymentByBorrowIdSpec[][]>([]);
 
+  const handleClose = () => {
+    if (onClose) {
+      setPayments([]);
+      setChunkedPayments([]);
+      onClose();
+    }
+  };
+
   useEffect(() => {
     const fetchPayments = async () => {
       try {
@@ -34,18 +42,13 @@ const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) =>
   
         const response = await result.json() as CommandResponseInfo;
         const list = objectToCamel(response.data) as ListPaymentByBorrowIdSpec[];
-
         
         setPayments(list);
         setChunkedPayments(chunkArray(payments, 10));
       } catch (err: any) {
         console.log(err);
       }
-    }
-
-    if (!show) {
-      
-    }
+    };
 
     setShowModal(show);
 
@@ -58,7 +61,7 @@ const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) =>
     <div className="modal-card" style={{width: '60%'}}>
       <header className="modal-card-head">
         <p className="modal-card-title">Listado de Pagos</p>
-        <button className="delete" aria-label="close" onClick={onClose}></button>
+        <button className="delete" aria-label="close" onClick={handleClose}></button>
       </header>
       <section className="modal-card-body" style={{fontSize: '12px'}}>
         {chunkedPayments.map((chunk, index) => (
@@ -68,16 +71,17 @@ const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) =>
                 <button data-tooltip-id={`item-${item.number}-${index}`} className="card-footer-item" key={`item-${item.number}-${index}`}>
                   <SFPaymentMark type={item.status} />&nbsp;&nbsp;&nbsp;
                   {item.number}
-                  <Tooltip border={'1px solid #85929E'} style={{
-                    backgroundColor: "rgb(236, 240, 241)",
+                  <Tooltip border={'1px solid #85929E'} opacity={100} style={{
+                    backgroundColor: "white",
                     color: "#222",
                     justifyContent: 'left',
                     fontSize: '14px',
                     zIndex: '999999999' }}
                     id={`item-${item.number}-${index}`}>
+                    <strong>Pagar en</strong>: {item.date}<br /><br />
                     <strong>A pagar</strong>: {ToMoney(item.paymentAmount)}<br />
                     <strong>Pagado</strong>: {ToMoney(item.paidAmount)}<br />
-                    <strong>Pagar en</strong>: {item.date}<br />
+                    <strong>Balance</strong>: {ToMoney(item.balance)}<br /><br />
                     <strong>Aplicado el</strong>: {item.appliedAt ?? '-'}<br />
                     <strong>Status</strong>: {item.status ?? '-'}<br />
                     <strong>Dictamen</strong>: {item.resolution ?? '-'}<br />

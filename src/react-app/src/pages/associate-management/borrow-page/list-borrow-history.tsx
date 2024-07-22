@@ -106,7 +106,6 @@ export default function ListBorrowHistory() {
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
                   <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
-                  {/* <button title="Ver pagos" onClick={() => handleListPaymentClick(borrow.id, true)}><NumberedListLeft /></button>&nbsp;&nbsp; */}
                   <PaymentListActionButton borrowId={borrow.id} />
                   <button title="Corregir"><Tools /></button>
                 </td>

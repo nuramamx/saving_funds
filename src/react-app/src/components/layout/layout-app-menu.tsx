@@ -7,12 +7,12 @@ const LayoutAppMenu = memo(() => {
 const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
 
 useLayoutEffect(() => {
-  restoreMenu();
+  // restoreMenu();
 }, []);
 
 const handleMenuClick = (menu: string) => {
   setSelectedMenu(menu);
-  restoreSidebarMenu();
+  // restoreSidebarMenu();
 };
 
 return (

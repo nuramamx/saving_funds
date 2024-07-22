@@ -30,15 +30,15 @@ begin
   with recursive quote_result as (
     select 1::smallint as payment_number
       ,borrow.payment::numeric(20,6) as payment
-      ,(borrow.payment - (requested_amount * borrow.rate))::numeric(20,6) as payment_toward_capital
-      ,(requested_amount * borrow.rate)::numeric(20,6) as payment_toward_interests
-      ,(requested_amount - (borrow.payment - (requested_amount * borrow.rate)))::numeric(20,6) as balance
+      ,(borrow.payment - (borrow.payment * borrow.rate))::numeric(20,6) as payment_toward_capital
+      ,(borrow.payment * borrow.rate)::numeric(20,6) as payment_toward_interests
+      ,(borrow.total_due - borrow.payment)::numeric(20,6) as balance
     union all
     select (bq.payment_number + 1)::smallint
       ,bq.payment::numeric(20,6)
-      ,(borrow.payment - (bq.balance * borrow.rate))::numeric(20,6)
-      ,(bq.balance * borrow.rate)::numeric(20,6)
-      ,(bq.balance - (borrow.payment - (bq.balance * borrow.rate)))::numeric(20,6)
+      ,(borrow.payment - (borrow.payment * borrow.rate))::numeric(20,6)
+      ,(borrow.payment * borrow.rate)::numeric(20,6)
+      ,(bq.balance - borrow.payment)::numeric(20,6)
     from quote_result bq
     where bq.payment_number < borrow.number_payments
   )
