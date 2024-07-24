@@ -91,7 +91,7 @@ export default function ListBorrowHistory() {
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
               borrows.map((borrow: ListBorrowHistorySpec) => (
-              <tr key={borrow.id} className='animate__animated animate__fadeIn'>
+              <tr key={borrow.id}>
                 <td>{borrow.id}</td>
                 <td>{ToMoney(borrow.requestedAmount)}</td>
                 <td>{ToMoney(borrow.totalDue)}</td>

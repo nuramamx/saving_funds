@@ -47,14 +47,25 @@ const useBorrowStore = create<BorrowStore>()(
       })),
     updateInterests: (period: number, rate: number) =>
       set(produce((state: BorrowStore) => {
-        const calculatedRate = (rate / (state.borrow.isFortnightly ? 24 : 12)) / 100;
-        const calculatedPeriod = (period * (state.borrow.isFortnightly ? 24 : 12));
-        const calculatedDivisor = 1 - (1 + calculatedRate) ** -calculatedPeriod;
+        const interests = [0,0,0];
 
-        if (calculatedDivisor > 0) {
-          const result = ((state.borrow.requestedAmount * calculatedRate) / calculatedDivisor);
-          state.borrow.detail.interests = (result * calculatedPeriod) - state.borrow.requestedAmount
-          state.borrow.detail.payment = result;
+        switch (period) {
+          case 1:
+            interests[0] = (state.borrow.requestedAmount * rate) / 100;
+            state.borrow.detail.interests = interests[0];
+            break;
+          case 2:
+            interests[0] = (state.borrow.requestedAmount * rate) / 100;
+            interests[1] = ((state.borrow.requestedAmount / 2) * rate) / 100;
+            state.borrow.detail.interests = interests[0] + interests[1];
+            break;
+          case 3:
+            const second_year_balance = (state.borrow.requestedAmount - (state.borrow.requestedAmount / 3));
+            interests[0] = (state.borrow.requestedAmount * rate) / 100;
+            interests[1] = (second_year_balance * rate) / 100;
+            interests[2] = ((second_year_balance - (state.borrow.requestedAmount / 3)) * rate) / 100;
+            state.borrow.detail.interests = interests[0] + interests[1] + interests[2];
+            break;
         }
       })),
     updateTotalDue: () =>
@@ -71,6 +82,8 @@ const useBorrowStore = create<BorrowStore>()(
     updateAmountToDeliver: () =>
       set(produce((state: BorrowStore) => {
         state.borrow.detail.amountDelivered = state.borrow.requestedAmount;
+        if (state.borrow.detail.numberPayments > 0)
+          state.borrow.detail.payment = (state.borrow.detail.totalDue / state.borrow.detail.numberPayments);
       })),
     clearBorrow: () =>
       set(produce((state: BorrowStore) => {

@@ -36,15 +36,15 @@ begin
   end if;
 
   -- Check if associate has a not settled borrow.
-  if exists (
-    select 1 from process.borrow B
-    where B.associate_id = borrow_create.associate_id
-    and B.is_settled = false
-    for update skip locked
-  ) then
-    message := 'El socio tiene un préstamo no liquidado.';
-    return;
-  end if;
+--  if exists (
+--    select 1 from process.borrow B
+--    where B.associate_id = borrow_create.associate_id
+--    and B.is_settled = false
+--    for update skip locked
+--  ) then
+--    message := 'El socio tiene un préstamo no liquidado.';
+--    return;
+--  end if;
 
   -- Get the annual rate based on period.
   select AR.rate into annual_rate

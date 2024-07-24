@@ -8,9 +8,7 @@ enum ViewName {
   // Catalog
   ASSOCIATE_LIST = 'select * from catalog.list_associate_view;',
   // Process
-  BORROW_LIST = 'select * from process.list_borrow_view;',
-  BORROW_HISTORY_LIST_BY_ASSOCIATE_ID = 'select * from process.borrow_history_by_associate_id(:p_associate_id);',
-  PAYMENT_LIST_BY_BORROW_ID = 'select * from process.payment_list_by_borrow_id(:borrow_id);'
+  BORROW_LIST = 'select * from process.list_borrow_view;'
 
   // Log
 }

@@ -15,14 +15,21 @@ async function BorrowRoute (fastify: FastifyInstance, options: FastifyPluginOpti
     return result;
   });
 
+  fastify.get('/borrow/list/debtor', async (request, reply) => {
+    console.log(JSON.stringify(request.body));
+    const command = new CommandHandlerMediator();
+    const result = await command.execute('ListBorrowDebtorQuery');
+
+    if (!result.successful) reply.statusCode = 400;
+
+    return result;
+  });
+
   fastify.post<{ Body: string }>('/borrow/list/history', async (request, reply) => {
     console.log(JSON.stringify(request.body));
     const data: ListBorrowHistoryQuery = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
     const result = await command.execute('ListBorrowHistoryQuery', data);
-
-    console.log(data);
-    console.log(result);
 
     if (!result.successful) reply.statusCode = 400;
 

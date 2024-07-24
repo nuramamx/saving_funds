@@ -46,7 +46,7 @@ export default function ListAssociate() {
           <tbody>
             {associates !== undefined && associates?.length > 0 ? (
               associates.map((associate: ListAssociateSpec) => (
-              <tr key={associate.id} className='animate__animated animate__fadeIn'>
+              <tr key={associate.id}>
                 <td>{associate.id}</td>
                 <td>{associate.fullname}</td>
                 <td className='truncate-200' title={associate.address}>{associate.address}</td>

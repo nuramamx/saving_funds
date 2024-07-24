@@ -17,6 +17,9 @@ enum ProcedureName {
   BENEFICIARY_UPDATE = 'select * from catalog.beneficiary_create(:id,:beneficiaries);',
   // Process
   BORROW_CREATE = 'select * from process.borrow_create(:associate_id,:requested_amount::numeric,:period,:is_fortnightly,:start_at::timestamp);',
+  BORROW_HISTORY_LIST_BY_ASSOCIATE_ID = 'select * from process.borrow_history_by_associate_id(:p_associate_id);',
+  BORROW_DEBTOR_LIST = 'select * from process.borrow_debtor_list();',
+  PAYMENT_LIST_BY_BORROW_ID = 'select * from process.payment_list_by_borrow_id(:borrow_id);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:user_id,:previous_data,:new_data)'
 }

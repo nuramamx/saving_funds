@@ -81,7 +81,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
             </thead>
             <tbody>
               {associateList.map((associate: SearchAssociateSpec) => (
-                <tr key={associate.id} className='animate__animated animate__fadeIn' style={{ cursor: 'pointer' }}
+                <tr key={associate.id} style={{ cursor: 'pointer' }}
                   onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
                   <td>{associate.fullname}</td>

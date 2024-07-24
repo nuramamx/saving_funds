@@ -31,17 +31,17 @@ begin
       where row_counter + 2 <= number_payments
   ),
   end_of_month_series as (
-    select 2 as row_counter
+    select 1 as row_counter
       ,(date_trunc('month', initial_date) + interval '1 month - 1 day')::timestamp as payment_date
     from params
     union all
-    select row_counter + 2
+    select row_counter + 1
       ,(date_trunc('month', payment_date + interval '1 day') + interval '1 month - 1 day')::timestamp
     from end_of_month_series, params
-    where row_counter + 2 <= number_payments
+    where row_counter + 1 <= number_payments
   ),
   combined_series as (
-    select * from fortnightly_series
+    select * from fortnightly_series where is_fortnightly
     union all
     select * from end_of_month_series
   ),

@@ -1,23 +1,3 @@
---drop function process.payment_list_by_borrow_id;
-create or replace function process.payment_list_by_borrow_id(
-  in p_borrow_id integer
-)
-returns table (
-  id integer,
-  borrow_id integer,
-  associate_id integer,
-  "date" text,
-  "year" integer,
-  "month" integer,
-  "number" integer,
-  payment_amount numeric(20,6),
-  paid_amount numeric(20,6),
-  balance numeric(20,6),
-  status text,
-  resolution text,
-  applied_at text,
-  created_at text
-) as $$
 declare
   v_borrow_id integer;
   v_associate_id integer;
@@ -138,7 +118,6 @@ begin
     where q.payment_number = payment_schedule."number"
   );
   
-  return query
   select
     ps.id
     ,ps.borrow_id

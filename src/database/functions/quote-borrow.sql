@@ -19,6 +19,7 @@ begin
   -- Calculate borrow
   borrow := process.calculate_borrow(requested_amount, annual_rate, period, is_fortnightly);
 
+  drop table if exists quote_borrow_temporary;
   create temporary table quote_borrow_temporary (
     payment_number smallint,
     payment numeric(20,6),

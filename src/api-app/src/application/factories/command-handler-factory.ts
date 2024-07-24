@@ -11,6 +11,7 @@ import ListAssociateQueryHandler from '../use-cases/queries/associate/list/list-
 import ListBorrowQueryHandler from '../use-cases/queries/borrow/list/list-borrow-query-handler';
 import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
 import ListPaymentByBorrowIdQueryHandler, { ListPaymentByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/list-payment-by-borrow-id-query-handler';
+import ListBorrowDebtorQueryHandler from '../use-cases/queries/borrow/list-debtor/list-borrow-debtor-query-handler';
 
 type CommandHandlerTypeMap = {
   'CreateAssociateCommand': CreateAssociateCommand,
@@ -23,7 +24,8 @@ type CommandHandlerTypeMap = {
   'ListAssociateQuery': void,
   'ListBorrowQuery': void,
   'ListBorrowHistoryQuery': ListBorrowHistoryQuery,
-  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQuery
+  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQuery,
+  'ListBorrowDebtorQuery': void
 };
 
 const commandConstructors: {
@@ -39,7 +41,8 @@ const commandConstructors: {
   'ListAssociateQuery': ListAssociateQueryHandler,
   'ListBorrowQuery': ListBorrowQueryHandler,
   'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler,
-  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQueryHandler
+  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQueryHandler,
+  'ListBorrowDebtorQuery': ListBorrowDebtorQueryHandler
 };
 
 class CommandHandlerFactory {
