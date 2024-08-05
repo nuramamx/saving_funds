@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { produce } from "immer";
 import CreateAssociateCommand from "../interfaces/commands/create-associate-command";
-import StateInfo from "../interfaces/state-info";
 
 const associateInitialState: CreateAssociateCommand = {
   name: {

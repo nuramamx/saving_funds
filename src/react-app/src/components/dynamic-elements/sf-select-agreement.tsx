@@ -1,9 +1,9 @@
 import { memo, useEffect } from "react"
 import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
-import CommandResponseInfo from "../../core/interfaces/command-response-info";
+import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
-import AgreementInfo from "../../core/interfaces/agreement-info";
+import AgreementInfo from "../../core/interfaces/info/agreement-info";
 
 const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
   const { agreements, setAgreements } = useCacheStore();

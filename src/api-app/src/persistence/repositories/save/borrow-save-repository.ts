@@ -3,17 +3,14 @@ import { ProcedureName } from '../../names/procedure-name';
 import { QueryTypes } from 'sequelize';
 import Borrow from '../../../domain/entities/borrow';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
-import ProcedureResponseModel from '../../interfaces/procedure-response-info';
+import ProcedureResponseInfo from '../../interfaces/procedure-response-info';
 
 export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, boolean> {
-  save = async (data: Borrow): Promise<boolean> => {
+  async save(data: Borrow): Promise<boolean> {
     const transaction = await db.sequelize.transaction();
 
-    console.log(`[NUFLIN-Repo]: ${JSON.stringify(data)}`);
-    console.log(`[NUFLIN-Repo]: ${JSON.stringify(data.startAt)}`);
-
     try {
-      const [saveBorrowResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.BORROW_CREATE, {
+      const [borrowSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(ProcedureName.BORROW_CREATE, {
         replacements: {
           associate_id: data.associateId,
           requested_amount: data.requestedAmount.toFixed(6),
@@ -24,16 +21,16 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
         type: QueryTypes.SELECT
       });
       
-      if (!saveBorrowResult.success)
-        throw new Error(saveBorrowResult.message);
+      if (!borrowSaveResult.success)
+        throw new Error(borrowSaveResult.message);
 
       await transaction.commit();
 
       return true;
     } catch (err: any) {
       await transaction.rollback();
-      console.error(`[NUFLIN] db-error: ${err}`);
 
+      //TODO: Improve this creating a util function
       if (err.parent !== null && err.parent !== undefined
         && err.parent.where !== null && err.parent.where !== undefined)
         throw new Error(`[E-201]: ${err.parent.where}`);

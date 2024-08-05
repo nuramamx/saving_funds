@@ -5,7 +5,7 @@ create or replace function process.generate_payment_schedule(
   in is_fortnightly boolean
 )
 returns table (
-  "date" timestamp,
+  "date" timestamp with time zone,
   "year" integer,
   "month" integer,
   "number" integer
@@ -53,7 +53,7 @@ begin
     order by payment_date
   )
   select
-    np.payment_date::timestamp as "date"
+    cast(np.payment_date as timestamp with time zone) as "date"
     ,extract(year from np.payment_date)::integer as "year"
     ,extract(month from np.payment_date)::integer as "month"
     ,np."number"::integer as "number"

@@ -1,4 +1,4 @@
-drop table if exists administration.payment_type;
+drop table if exists administration.payment_type cascade;
 
 create table if not exists administration.payment_type
 (

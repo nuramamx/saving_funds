@@ -1,4 +1,5 @@
 enum ProcedureName {
+  //TODO: Change all parameter names to include "p_" at beginning.
   // Search
   ASSOCIATE_SEARCH_BY_ID_OR_NAME = 'select * from catalog.associate_search_by_id_or_name(:associate_id,:name);',
   // Administration
@@ -20,6 +21,7 @@ enum ProcedureName {
   BORROW_HISTORY_LIST_BY_ASSOCIATE_ID = 'select * from process.borrow_history_by_associate_id(:p_associate_id);',
   BORROW_DEBTOR_LIST = 'select * from process.borrow_debtor_list();',
   PAYMENT_LIST_BY_BORROW_ID = 'select * from process.payment_list_by_borrow_id(:borrow_id);',
+  PAYMENT_CREATE = 'select * from process.payment_create(:p_borrow_id, :p_number, :p_paid_amount);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:user_id,:previous_data,:new_data)'
 }

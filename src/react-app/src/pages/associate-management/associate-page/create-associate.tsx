@@ -8,7 +8,7 @@ import SFPercentageInput from '../../../components/form/sf-percentage-input';
 import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
 import useNotificationStore from '../../../core/stores/notification-store';
 import useAssociateStore from '../../../core/stores/associate-store';
-import CommandResponseInfo from '../../../core/interfaces/command-response-info';
+import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import SFSelectCity from '../../../components/dynamic-elements/sf-select-city';
 import SFSelectState from '../../../components/dynamic-elements/sf-select-state';

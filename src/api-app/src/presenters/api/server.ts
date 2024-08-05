@@ -24,10 +24,10 @@ fastify.register(cors, {
 
     const hostname = new URL(url).hostname;
 
-    if (hostname !== "localhost") {
-      cb(new Error(`${hostname} => Not allowed`), false);
-      return;
-    }
+    // if (hostname !== "localhost" || hostname !== 'setepidsf.ngrok.io') {
+    //   cb(new Error(`${hostname} => Not allowed`), false);
+    //   return;
+    // }
 
     cb(null, true);
     return;
@@ -41,10 +41,6 @@ fastify.register(CityRoute);
 fastify.register(AssociateRoute);
 fastify.register(BorrowRoute);
 fastify.register(PaymentRoute);
-
-fastify.get('/', async (request, reply) => {
-  reply.send({ hello: 'world' });
-});
 
 const start = async () => {
   try {

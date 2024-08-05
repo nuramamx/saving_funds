@@ -33,17 +33,17 @@ begin
     id integer,
     borrow_id integer,
     associate_id integer,
-    "date" timestamp,
+    "date" timestamp with time zone,
     "year" integer,
     "month" integer,
     "number" integer,
-    payment_amount numeric(20,6),
-    paid_amount numeric(20,6),
-    balance numeric(20,6),
+    payment_amount numeric(20,2),
+    paid_amount numeric(20,2),
+    balance numeric(20,2),
     status text,
     resolution text,
-    applied_at timestamp,
-    created_at timestamp
+    applied_at timestamp with time zone,
+    created_at timestamp with time zone 
   ) on commit drop;
 
   select
@@ -82,7 +82,7 @@ begin
   set
     borrow_id = v_borrow_id
     ,associate_id = v_associate_id
-    ,paid_amount = 0::numeric(20,6)
+    ,paid_amount = 0::numeric(20,2)
   where payment_schedule.paid_amount is null;
 
   -- Update id and paid amount by borrow related to payment
@@ -93,21 +93,22 @@ begin
     ,applied_at = p.applied_at 
     ,created_at = p.created_at 
     ,status = case
-      when p.paid_amount = bd.payment then 'PAGADO'
-      else 'INCIDENCIA'
+      when p.paid_amount = cast(bd.payment as numeric(20,2)) and p.applied_at > payment_schedule."date" then 'INCIDENCIA'
+      when p.paid_amount = cast(bd.payment as numeric(20,2)) then 'PAGADO'
+      else 'DESCONOCIDO'
     end
     ,resolution = case
-      when p.paid_amount < bd.payment then 'El pago fue registrado con un monto menor.'
-      when p.paid_amount > bd.payment then 'El pago fue registrado con un monto mayor.'
+      when p.paid_amount < cast(bd.payment as numeric(20,2)) then 'El pago fue registrado con un monto menor.'
+      when p.paid_amount > cast(bd.payment as numeric(20,2)) then 'El pago fue registrado con un monto mayor.'
+      when p.applied_at > payment_schedule."date" then 'El pago fue registrado en una fecha posterior.'
+      when p.applied_at < payment_schedule."date" then 'El pago fue registrado en una fecha aún no alcanzada.'
       else 'Sin resolución'
     end
   from process.payment as p
   join process.borrow as b on b.id = p_borrow_id
   join process.borrow_detail as bd on bd.borrow_id = b.id
   where p.borrow_id = p_borrow_id
-  and payment_schedule."year" = extract(year from p.applied_at)::integer
-  and payment_schedule."month" = extract(month from p.applied_at)::integer
-  and payment_schedule."number" = p.payment_number;
+  and payment_schedule."number" = p."number";
 
   -- Set payment amount
   update payment_schedule
@@ -122,12 +123,12 @@ begin
     status = case
       when current_date < payment_schedule."date" and payment_schedule.paid_amount = 0 then 'PENDIENTE'
       when current_date > payment_schedule."date" and payment_schedule.paid_amount = 0 then 'ATRASADO'
-      else 'SIN IDENTIFICAR'
+      else payment_schedule.status
     end
     ,resolution = case
       when current_date < payment_schedule."date" and payment_schedule.paid_amount = 0 then 'La fecha de pago no se ha alcanzado.'
       when current_date > payment_schedule."date" and payment_schedule.paid_amount = 0 then 'No se realizó el pago en la fecha estipulada.'
-      else 'Sin resolución'
+      else payment_schedule.resolution
     end;
 
   update payment_schedule
@@ -152,8 +153,10 @@ begin
     ,ps.balance
     ,ps.status
     ,ps.resolution
-    ,to_char(ps.applied_at, 'YYYY-MM-dd HH:mm:ss') as applied_at
-    ,to_char(ps.created_at, 'YYYY-MM-dd HH:mm:ss') as created_at
-  from payment_schedule ps;
+    ,to_char(ps.applied_at, 'YYYY-MM-dd HH24:MI:SS') as applied_at
+    ,to_char(ps.created_at, 'YYYY-MM-dd HH24:MI:SS') as created_at
+  from payment_schedule ps
+  order by
+    ps."number";
 end;
 $$ language plpgsql;

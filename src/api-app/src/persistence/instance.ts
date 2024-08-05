@@ -5,6 +5,7 @@ const sequelize = new Sequelize('saving_funds', 'chachicha', '9834', {
   host: '127.0.0.1',
   port: 5432,
   dialect: 'postgres',
+  timezone: 'America/Mexico_City',
   retry: {
     match: [/Deadlock/i],
     max: 3, // Maximum rety 3 times

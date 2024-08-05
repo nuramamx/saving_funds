@@ -1,4 +1,4 @@
-import BorrowInfo from "../borrow-info";
+import BorrowInfo from "../info/borrow-info";
 
 export default interface CreateBorrowCommand extends BorrowInfo {
   commandId?: string;

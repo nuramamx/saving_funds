@@ -12,10 +12,13 @@ import ListBorrowQueryHandler from '../use-cases/queries/borrow/list/list-borrow
 import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
 import ListPaymentByBorrowIdQueryHandler, { ListPaymentByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/list-payment-by-borrow-id-query-handler';
 import ListBorrowDebtorQueryHandler from '../use-cases/queries/borrow/list-debtor/list-borrow-debtor-query-handler';
+import PaymentCreateCommandHandler, { PaymentCreateCommand } from '../use-cases/commands/payment/create/payment-create-command-handler';
 
 type CommandHandlerTypeMap = {
+  //TODO: Refactorize component name to entity-action-something.
   'CreateAssociateCommand': CreateAssociateCommand,
   'CreateBorrowCommand': CreateBorrowCommand,
+  'PaymentCreateCommand': PaymentCreateCommand,
   'AllCityQuery': void,
   'AllStateQuery': void,
   'AllAgreementQuery': void,
@@ -31,8 +34,10 @@ type CommandHandlerTypeMap = {
 const commandConstructors: {
   [K in keyof CommandHandlerTypeMap]?: new () => CommandHandler<CommandHandlerTypeMap[K], CommandResponse>
 } = {
+  //TODO: Refactorize component name to entity-action-something.
   'CreateAssociateCommand': CreateAssociateCommandHandler,
   'CreateBorrowCommand': CreateBorrowCommandHandler,
+  'PaymentCreateCommand': PaymentCreateCommandHandler,
   'AllCityQuery': AllCityQueryHandler,
   'AllStateQuery': AllStateQueryHandler,
   'AllAgreementQuery': AllAgreementQueryHandler,

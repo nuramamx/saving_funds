@@ -48,7 +48,7 @@ begin
     ,bd.total_due 
     ,(coalesce(sum(p.paid_amount), 0.00))::numeric(20,6) as total_paid
     ,bd.number_payments 
-    ,coalesce(sum(p.id),0)::smallint as payments_made
+    ,coalesce(count(p.id),0)::smallint as payments_made
     ,b.is_fortnightly 
     ,to_char(b.start_at, 'YYYY-MM-dd') as start_at 
     ,to_char(b.created_at, 'YYYY-MM-dd') as created_at 

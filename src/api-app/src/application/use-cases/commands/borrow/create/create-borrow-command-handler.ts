@@ -3,7 +3,7 @@ import CommandResponse from '../../../../../abstractions/interfaces/command-resp
 import Borrow from '../../../../../domain/entities/borrow';
 import BorrowSaveRepository from '../../../../../persistence/repositories/save/borrow-save-repository';
 
-interface CreateBorrowCommand {
+type CreateBorrowCommand = {
   associateId: number;
   requestedAmount: number;
   period: number;
@@ -11,7 +11,7 @@ interface CreateBorrowCommand {
   isFortnightly: boolean;
   isSettled: boolean;
   startAt: Date;
-}
+};
 
 class CreateBorrowCommandHandler implements CommandHandler<CreateBorrowCommand, CommandResponse> {
   execute = async (data: CreateBorrowCommand): Promise<CommandResponse> => {
@@ -27,11 +27,10 @@ class CreateBorrowCommandHandler implements CommandHandler<CreateBorrowCommand, 
         false,
         data.startAt
       );
-      console.log(`[NUFLIN-Handler]: ${JSON.stringify(borrow)}`);
 
       const result = await borrowSaveRepository.save(borrow);
 
-      return { successful: true, message: 'Socio fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Socio fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,

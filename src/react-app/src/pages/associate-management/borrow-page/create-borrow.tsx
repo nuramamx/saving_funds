@@ -7,8 +7,8 @@ import SFPercentageInput from '../../../components/form/sf-percentage-input';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import useBorrowStore from '../../../core/stores/borrow-store';
 import useCacheStore from '../../../core/stores/cache-store';
-import AnnualRateInfo from '../../../core/interfaces/annual-rates-info';
-import CommandResponseInfo from '../../../core/interfaces/command-response-info';
+import AnnualRateInfo from '../../../core/interfaces/info/annual-rates-info';
+import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
@@ -71,8 +71,8 @@ export default function CreateBorrow() {
       pushNotification({ message: 'Préstamo creado con éxito.', type: 'success' });
       handleClearBorrow();
       navigate('/associate/borrow/list');
-    } catch (error: any) {
-      pushNotification({ message: error.message, type: 'danger' });
+    } catch (err: any) {
+      pushNotification({ message: err.message, type: 'danger' });
     }
   };
 

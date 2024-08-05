@@ -17,6 +17,14 @@ type SFNumberInputInfo = {
   onChange?: (value: number) => void;
 }
 
+type SFMoneyInputInfo = {
+  id: string;
+  name: string;
+  value: number | string;
+  readonly?: boolean;
+  onChange?: (value: number) => void;
+}
+
 type SFRangeInputInfo = {
   id: string;
   name: string;
@@ -50,4 +58,4 @@ type DatePickerInputParams = {
   onChange?: (value: Date) => void;
 }
 
-export type { SFTextInputInfo, SFNumberInputInfo, SFRangeInputInfo, SFTextDisplayInfo, DatePickerInput, DatePickerInputParams }
+export type { SFTextInputInfo, SFNumberInputInfo, SFMoneyInputInfo, SFRangeInputInfo, SFTextDisplayInfo, DatePickerInput, DatePickerInputParams }

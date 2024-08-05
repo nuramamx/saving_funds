@@ -72,5 +72,13 @@
         "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
         "workspacePath": "src/api-app/src/presenters/api/server.ts",
         "id": "Md7CNlX6vb9khzyI"
+    },
+    {
+        "type": "Directory",
+        "name": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds/src/api-app/src/domain",
+        "parent_id": "EPwU7kZheQTxb6vI",
+        "workspaceRoot": "/Volumes/CHACHI SDXC/Projects/Personal/SETEPID/saving_funds",
+        "workspacePath": "src/api-app/src/domain",
+        "id": "6MzwDCohQkOePZ52"
     }
 ]

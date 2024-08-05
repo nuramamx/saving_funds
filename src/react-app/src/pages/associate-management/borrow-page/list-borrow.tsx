@@ -1,41 +1,46 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
-import { DownloadSquare, MoneySquare, NumberedListLeft } from 'iconoir-react';
+import { DownloadSquare } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
-import CommandResponseInfo from '../../../core/interfaces/command-response-info';
+import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import useNotificationStore from '../../../core/stores/notification-store';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
+import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 
 export default function ListBorrow() {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [borrows, setBorrows] = useState<ListBorrowSpec[]>([]);
   const { pushNotification } = useNotificationStore();
 
-  useEffect(() => {
-    const fetchBorrows = async () => {
-      try {
-        const result = await fetch(`${AppConstants.apiBorrow}/list`, {
-          method: 'GET'
-        });
+  const fetchBorrows = async () => {
+    try {
+      const result = await fetch(`${AppConstants.apiBorrow}/list`, {
+        method: 'GET'
+      });
 
-        if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');
+      if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');
 
-        const response = await result.json() as CommandResponseInfo;
+      const response = await result.json() as CommandResponseInfo;
 
-        if (!response.successful) throw new Error(response.message);
+      if (!response.successful) throw new Error(response.message);
 
-        const list = objectToCamel(response.data) as ListBorrowSpec[];
-      
-        setBorrows(list);
-      } catch (err: any) {
-        setHasError(true);
-        pushNotification({ message: err.message, type: 'danger' });
-      }
-    };
+      const list = objectToCamel(response.data) as ListBorrowSpec[];
+    
+      setBorrows(list);
+    } catch (err: any) {
+      setHasError(true);
+      pushNotification({ message: err.message, type: 'danger' });
+    }
+  };
 
+  const handleReload = () => {
     if (!hasError) fetchBorrows();
+  };
+
+  useEffect(() => {
+    handleReload();
   }, [hasError]);
 
   return (
@@ -71,7 +76,7 @@ export default function ListBorrow() {
                 <td>{borrow.startAt}</td>
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
-                  <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
+                  <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload}/>
                   <PaymentListActionButton borrowId={borrow.id} />
                 </td>
               </tr>

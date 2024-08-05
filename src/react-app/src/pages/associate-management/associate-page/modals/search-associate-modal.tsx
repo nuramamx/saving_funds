@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
-import SFTextInput from '../form/sf-text-input';
-import AppConstants from '../../core/constants/app-constants';
-import CommandResponseInfo from '../../core/interfaces/command-response-info';
-import useNotificationStore from '../../core/stores/notification-store';
-import SearchAssociateByIdOrNameQuery from '../../core/interfaces/query/search-associate-by-id-or-name-param';
-import CheckAndAssign from '../../core/util/check-and-assign';
-import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
+import SFTextInput from '../../../../components/form/sf-text-input';
+import AppConstants from '../../../../core/constants/app-constants';
+import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
+import useNotificationStore from '../../../../core/stores/notification-store';
+import SearchAssociateByIdOrNameQuery from '../../../../core/interfaces/query/search-associate-by-id-or-name-query';
+import CheckAndAssign from '../../../../core/util/check-and-assign';
+import SearchAssociateSpec from '../../../../core/interfaces/specs/search/search-associate-spec';
 
 type SearchAssociateModalParams = {
   show: boolean;

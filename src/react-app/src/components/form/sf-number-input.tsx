@@ -1,7 +1,7 @@
-import { SFMoneyInputInfo } from "./interfaces/sf-input-info";
+import { SFNumberInputInfo } from "./interfaces/sf-input-info";
 import { useEffect, useState } from "react";
 
-export default function SFMoneyInput({ id, name, value, readonly, onChange }: SFMoneyInputInfo) {
+export default function SFNumberInput({ id, name, value, readonly, onChange }: SFNumberInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,7 @@ export default function SFMoneyInput({ id, name, value, readonly, onChange }: SF
 
   const handleBlur = () => {
     const parsedValue = parseFloat(inputValue || "0");
-    const formattedValue = parsedValue.toFixed(2);
+    const formattedValue = parsedValue.toString();
     setInputValue(formattedValue);
     
     if (onChange) onChange(parsedValue);
@@ -32,7 +32,7 @@ export default function SFMoneyInput({ id, name, value, readonly, onChange }: SF
       return false;
     }
 
-    const isNumber = /^-?\d*\.?\d{0,2}$/.test(input);
+    const isNumber = /^-?\d*$/.test(input);
     return isNumber;
   };
 
@@ -43,12 +43,7 @@ export default function SFMoneyInput({ id, name, value, readonly, onChange }: SF
   return (
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
-      <div className="field has-addons">
-        <span className="control">
-          <label className="button is-static">
-            $
-          </label>
-        </span>
+      <div className="field">
         <div className="control is-expanded">
           <input id={id} className="input has-text-right" type="text" placeholder={name}
             readOnly={readonly}

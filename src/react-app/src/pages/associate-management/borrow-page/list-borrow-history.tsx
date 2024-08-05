@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
-import { DownloadSquare, MoneySquare, NumberedListLeft, Tools } from 'iconoir-react';
+import { DownloadSquare } from 'iconoir-react';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
@@ -8,9 +8,10 @@ import ListBorrowHistorySpec from '../../../core/interfaces/specs/list/list-borr
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import AppConstants from '../../../core/constants/app-constants';
 import ListBorrowHistoryQuery from '../../../core/interfaces/query/list-borrow-history-query';
-import CommandResponseInfo from '../../../core/interfaces/command-response-info';
-import PaymentListModal from '../../../components/modals/payment-list-modal';
+import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
+import PaymentListModal from './modals/payment-list-modal';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
+import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 
 export default function ListBorrowHistory() {
   const [showPaymentList, setShowPaymentList] = useState(false);
@@ -25,24 +26,24 @@ export default function ListBorrowHistory() {
     setShowPaymentList(show);
   }
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      const response = await fetch(`${AppConstants.apiBorrow}/list/history`, {
-        method: 'POST',
-        body: JSON.stringify({
-          associateId: associate
-        } as ListBorrowHistoryQuery)
-      });
-      
-      if (!response.ok)
-        throw new Error('Ocurrió un error al realizar la consulta.');
+  const fetchHistory = async () => {
+    const response = await fetch(`${AppConstants.apiBorrow}/list/history`, {
+      method: 'POST',
+      body: JSON.stringify({
+        associateId: associate
+      } as ListBorrowHistoryQuery)
+    });
+    
+    if (!response.ok)
+      throw new Error('Ocurrió un error al realizar la consulta.');
 
-      const commandResponse = await response.json() as CommandResponseInfo;
-      const list = objectToCamel(JSON.parse(commandResponse.data)) as ListBorrowHistorySpec[];
+    const commandResponse = await response.json() as CommandResponseInfo;
+    const list = objectToCamel(commandResponse.data) as ListBorrowHistorySpec[];
 
-      setBorrows(list);
-    }
+    setBorrows(list);
+  }
 
+  const handleReload = () => {
     if (associate > 0) {
       try {
         fetchHistory();
@@ -52,6 +53,10 @@ export default function ListBorrowHistory() {
     } else {
       setBorrows([]);
     }
+  };
+
+  useEffect(() => {
+    handleReload();
   }, [associate, setAssociate]);
 
   return (
@@ -105,9 +110,8 @@ export default function ListBorrowHistory() {
                 <td>{borrow.startAt}</td>
                 <td>
                   <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
-                  <button title="Realizar pago"><MoneySquare /></button>&nbsp;&nbsp;
+                  <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload} />
                   <PaymentListActionButton borrowId={borrow.id} />
-                  <button title="Corregir"><Tools /></button>
                 </td>
               </tr>
             ))) : (

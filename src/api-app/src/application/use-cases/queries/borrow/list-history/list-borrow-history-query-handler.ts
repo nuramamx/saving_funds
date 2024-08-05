@@ -12,7 +12,7 @@ export default class ListBorrowHistoryQueryHandler implements CommandHandler<Lis
       const listBorrowHistoryQueryRepository = new ListBorrowHistoryQueryRepository();
       const result = await listBorrowHistoryQueryRepository.all(data);
 
-      return { successful: true, message: 'Busqueda exitosa.', data: JSON.stringify(result), type: 'success' } as CommandResponse;;
+      return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;;
     } catch (err: any) {
       return {
         successful: false,

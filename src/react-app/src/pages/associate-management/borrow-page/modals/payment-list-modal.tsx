@@ -2,21 +2,21 @@ import { CheckCircle, Circle, WarningCircle, XmarkCircle } from 'iconoir-react';
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { Tooltip } from 'react-tooltip';
-import { chunkArray } from '../../core/util/array-util';
-import useNotificationStore from '../../core/stores/notification-store';
-import AppConstants from '../../core/constants/app-constants';
-import CommandResponseInfo from '../../core/interfaces/command-response-info';
-import ListPaymentByBorrowIdSpec from '../../core/interfaces/specs/list/list-payment-by-borrow-id-spec';
-import ToMoney from '../../core/util/conversions/money-conversion';
-import SFPaymentMark from '../dynamic-elements/sf-payment-mark';
+import { chunkArray } from '../../../../core/util/array-util';
+import useNotificationStore from '../../../../core/stores/notification-store';
+import AppConstants from '../../../../core/constants/app-constants';
+import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
+import ListPaymentByBorrowIdSpec from '../../../../core/interfaces/specs/list/list-payment-by-borrow-id-spec';
+import ToMoney from '../../../../core/util/conversions/money-conversion';
+import SFPaymentMark from '../../../../components/dynamic-elements/sf-payment-mark';
 
 type PaymentListModalParams = {
   borrowId: number;
   show: boolean;
   onClose: () => void;
-}
+};
 
-const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) => {
+export default function PaymentListModal({ borrowId, show, onClose}: PaymentListModalParams) {
   const { pushNotification } = useNotificationStore();
   const [showModal, setShowModal] = useState(show);
   const [payments, setPayments] = useState<ListPaymentByBorrowIdSpec[]>([]);
@@ -124,5 +124,3 @@ const PaymentListModal = ({ borrowId, show, onClose}: PaymentListModalParams) =>
   </div>
   )
 };
-
-export default PaymentListModal;

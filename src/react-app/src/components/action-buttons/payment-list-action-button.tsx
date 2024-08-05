@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { NumberedListLeft } from "iconoir-react";
-import PaymentListModal from "../modals/payment-list-modal";
+import PaymentListModal from "../../pages/associate-management/borrow-page/modals/payment-list-modal";
 
 type PaymentListActionButtonParams = {
   borrowId: number;
 };
 
 export default function PaymentListActionButton({ borrowId }: PaymentListActionButtonParams) {
-  const [showPaymentList, setShowPaymentList] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
 
-  const handleListPaymentClick = (borrowId: number, show: boolean) => {
+  const handleClick = (borrowId: number, show: boolean) => {
     setSelectedBorrow(borrowId);
-    setShowPaymentList(show);
+    setShowModal(show);
   }
 
   return (
     <>
-    <button title="Ver pagos" onClick={() => handleListPaymentClick(borrowId, true)}><NumberedListLeft /></button>&nbsp;&nbsp;
-    <PaymentListModal borrowId={selectedBorrow} show={showPaymentList} onClose={() => handleListPaymentClick(0, false)} />
+    <button title="Ver pagos" onClick={() => handleClick(borrowId, true)}><NumberedListLeft /></button>&nbsp;&nbsp;
+    <PaymentListModal borrowId={selectedBorrow} show={showModal} onClose={() => handleClick(0, false)} />
     </>
   )
 }

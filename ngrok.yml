@@ -1,0 +1,11 @@
+version: "2"
+authtoken: 2jo3qKtnurgqJFhTkM7gEHKP7MW_4qkSxosnRBrZJfsXoMMZs
+tunnels:
+  react-app:
+    addr: 3000
+    proto: http
+    subdomain: setepidsf
+  api:
+    addr: 8081
+    proto: http
+    subdomain: setepidsfapi
