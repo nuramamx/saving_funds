@@ -18,21 +18,13 @@ begin
   if p_borrow_id <= 0 then
     message := 'El préstamo no tiene un identificador válido.';
     return;
-  end if;
-  
-  if p_paid_amount <= 0 then
+  elseif p_paid_amount <= 0 then
     message := 'El monto del pago no tiene un valor aceptado.';
     return;
-  end if;
-
-raise notice '%', p_number;
-  
-  if p_number = 0 or p_number < 0 then
-    message := 'El número de pago no es correcto.'
+  elseif p_number = 0 or p_number < 0 then
+    message := 'El número de pago no es correcto.';
     return;
   end if;
-
-return;
 
   -- Set amount to pay
   select cast(bd.payment as numeric(20,2)) into v_amount_to_pay
