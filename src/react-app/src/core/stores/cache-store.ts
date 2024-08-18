@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { produce } from 'immer';
-import CityInfo from '../interfaces/city-info';
-import StateInfo from '../interfaces/state-info';
-import AgreementInfo from '../interfaces/agreement-info';
-import AnnualRateInfo from '../interfaces/annual-rates-info';
+import CityInfo from '../interfaces/info/city-info';
+import StateInfo from '../interfaces/info/state-info';
+import AgreementInfo from '../interfaces/info/agreement-info';
+import AnnualRateInfo from '../interfaces/info/annual-rates-info';
 
 interface CacheStore {
   states: StateInfo[];

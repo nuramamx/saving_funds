@@ -25,6 +25,7 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
 
   const handleClick = async () => {
     setError('');
+    setLoading(true);
 
     try {
       const response = await fetch(`${AppConstants.apiPayment}/create`, {
@@ -37,8 +38,7 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
         setError(`${error.message}${error.data ? ' ' + error.data : ''}`);
         return;
       }
-
-      clearPayment();
+      
       handleClose();
       pushNotification({
         message: 'Pago registrado con éxito.',
@@ -47,10 +47,15 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
     } catch (err: any) {
       setError(err);
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   const handleClose = () => {
     if (onClose) {
+      clearPayment();
+      setError('');
       onClose();
     }
   };
@@ -89,7 +94,6 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
       </section>
       <footer className="modal-card-foot" style={{ justifyContent: 'flex-end' }}>
         <div className="buttons">
-        {JSON.stringify(payment)}
           <button className="button is-success"
             onClick={handleClick}>
               {!loading ? 'Aceptar' : (<div className="loader"></div>)}
