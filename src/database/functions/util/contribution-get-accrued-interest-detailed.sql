@@ -26,6 +26,13 @@ begin
       ,'withdrawal' as transaction_type
     from process.withdrawal as w
     where w.is_interest = false
+    union all
+    select
+      w.applied_at as transaction_date
+      ,-w.amount
+      ,'withdrawal-interest' as transaction_type
+    from process.withdrawal as w
+    where w.is_interest = true
   ),
   sorted_transactions as (
     select
@@ -35,6 +42,16 @@ begin
       ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
       ,extract(year from t.transaction_date) as year
     from transaction_data as t
+    where t.transaction_type <> 'withdrawal-interest'
+    union all
+    select
+      t.transaction_date
+      ,t.amount
+      ,t.transaction_type
+      ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
+      ,extract(year from t.transaction_date) as year
+    from transaction_data as t
+    where t.transaction_type = 'withdrawal-interest'
   ),
   yearly_interest_calculation as (
     select

@@ -27,7 +27,9 @@ begin
   end if;
 
   -- Set amount to pay
-  select cast(bd.payment as numeric(20,2)) into v_amount_to_pay
+  select
+    cast(bd.payment as numeric(20,2))
+  into v_amount_to_pay
   from process.borrow_detail as bd
   where bd.borrow_id = p_borrow_id;
 
@@ -66,11 +68,11 @@ begin
     returning id into inserted_id;
   
     success := true;
-    message := 'El pago se ha registrado con éxito.';
+    message := 'Se realizó la transacción satisfactoriamente.';
   exception
     when others then
       success := false;
-      message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
+      message := 'Ocurrió un error al realizar la transacción: ' || SQLERRM;
   end;
 end;
 $$ language plpgsql;

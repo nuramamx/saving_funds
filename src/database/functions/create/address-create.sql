@@ -1,5 +1,5 @@
 --drop function catalog.address_create;
-create or replace function catalog.address_create(
+create or replace function "catalog".address_create(
   in p_associate_id integer,
   in p_city_id integer,
   in p_street varchar(50),
@@ -58,14 +58,14 @@ begin
   end if;
 
   if not exists(
-    select 1 from "catalog".associate as A where A.id = p_associate_id for update skip locked
+    select 1 from "catalog".associate as a where a.id = p_associate_id for update skip locked
   ) then
     message := 'El asociado no existe en el sistema.';
     return;
   end if;
 
   if not exists(
-    select 1 from administration.city as C where C.id = p_city_id
+    select 1 from administration.city as c where c.id = p_city_id
   ) then
     message := 'La ciudad no existe en el sistema.';
     return;
@@ -88,11 +88,11 @@ begin
     returning id into inserted_id;
 
     success := true;
-    message := 'La dirección del socio se ha registrado con éxito.';
+    message := 'Se realizó la transacción satisfactoriamente.';
   exception
     when others then
       success := false;
-      message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
+      message := 'Ocurrió un error al realizar la transacción: ' || sqlerrm;
   end;
 end;
 $$ language plpgsql;

@@ -1,8 +1,8 @@
--- drop function process.generate_payment_schedule;
-create or replace function process.generate_payment_schedule(
-  in start_date timestamp,
-  in number_payments integer,
-  in is_fortnightly boolean
+-- drop function process.payment_generate_schedule;
+create or replace function process.payment_generate_schedule(
+  in p_start_date timestamp,
+  in p_number_payments integer,
+  in p_is_fortnightly boolean
 )
 returns table (
   "date" timestamp with time zone,
@@ -14,7 +14,7 @@ declare
 begin
   return query
   with recursive params as (
-    select start_date as initial_date
+    select p_start_date as initial_date
   ),
   fortnightly_series as (
     select 1 as row_counter,
@@ -28,7 +28,7 @@ begin
       select row_counter + 2
         ,date_trunc('month', payment_date + interval '1 month') + interval '14 days'
       from fortnightly_series, params
-      where row_counter + 2 <= number_payments
+      where row_counter + 2 <= p_number_payments
   ),
   end_of_month_series as (
     select 1 as row_counter
@@ -38,10 +38,10 @@ begin
     select row_counter + 1
       ,(date_trunc('month', payment_date + interval '1 day') + interval '1 month - 1 day')::timestamp
     from end_of_month_series, params
-    where row_counter + 1 <= number_payments
+    where row_counter + 1 <= p_number_payments
   ),
   combined_series as (
-    select * from fortnightly_series where is_fortnightly
+    select * from fortnightly_series where p_is_fortnightly
     union all
     select * from end_of_month_series
   ),
@@ -58,6 +58,6 @@ begin
     ,extract(month from np.payment_date)::integer as "month"
     ,np."number"::integer as "number"
   from numbered_payments np
-  limit number_payments;
+  limit p_number_payments;
 end;
 $$ language plpgsql;

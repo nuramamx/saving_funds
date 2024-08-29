@@ -1,6 +1,7 @@
 drop view if exists process.list_borrow_view;
 create or replace view process.list_borrow_view as
-  select b.id
+  select
+    b.id
     ,a.id as associate_id
     ,deconstruct_name(a."name") as associate_name
     ,b.requested_amount
@@ -15,7 +16,8 @@ create or replace view process.list_borrow_view as
   join "catalog".associate as a on b.associate_id = a.id
   left join process.payment as p on b.id = p.borrow_id
   where b.is_settled = false
-  group by b.id
+  group by
+    b.id
     ,a.id
     ,a."name" 
     ,b.requested_amount 

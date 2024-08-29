@@ -24,9 +24,11 @@ begin
     return;
   end if;
 
-  select AR.rate into v_annual_rate
-  from administration.saving_fund_annual_rate as AR
-  where AR."year" = extract(year from current_date);
+  select
+    ar.rate
+  into v_annual_rate
+  from administration.saving_fund_annual_rate as ar
+  where ar."year" = extract(year from current_date);
 
   begin
     insert into process.saving_fund(associate_id, opening_balance, annual_rate, is_fortnightly)
@@ -45,11 +47,11 @@ begin
     );
   
     success := true;
-    message := 'El fondo de ahorro se ha registrado con éxito.';
+    message := 'Se realizó la transacción satisfactoriamente.';
   exception
     when others then
       success := false;
-      message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
+      message := 'Ocurrió un error al realizar la transacción: ' || SQLERRM;
   end;
 end;
 $$ language plpgsql;

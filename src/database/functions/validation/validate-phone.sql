@@ -1,10 +1,11 @@
-CREATE OR REPLACE FUNCTION validate_phone(phone TEXT)
-RETURNS BOOLEAN AS $$
-BEGIN
-  IF phone ~ '^\d{10}$' THEN
-    RETURN TRUE;
-  ELSE
-    RETURN FALSE;
-  END IF;
-END;
-$$ LANGUAGE plpgsql;
+--drop function public.validate_phone;
+create or replace function public.validate_phone(p_phone text)
+returns boolean as $$
+begin
+  if p_phone ~ '^\d{10}$' then
+    return true;
+  else
+    return false;
+  end if;
+end;
+$$ language plpgsql;

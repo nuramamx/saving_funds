@@ -31,9 +31,9 @@ begin
     resolution text
   ) on commit drop;
 
-
   insert into borrow_history_temp
-  select b.id
+  select
+    b.id
     ,b.requested_amount 
     ,bd.total_due 
     ,coalesce(sum(p.paid_amount),0) as total_paid

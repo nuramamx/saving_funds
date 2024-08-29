@@ -28,6 +28,19 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
     }
   };
 
+  const parseTransactionType = (transactionType: string) => {
+    switch (transactionType) {
+      case 'contribution':
+        return 'Aportación';
+      case 'withdrawal':
+        return 'Retiro';
+      case 'withdrawal-interest':
+        return 'Retiro de Intereses';
+      default:
+        return 'No identificado';
+    }
+  };
+
   const fetchPayments = async () => {
     try {
       const result = await fetch(`${AppConstants.apiSavingFund}/transactions/${savingFundId}/${year}`, {
@@ -77,11 +90,11 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
               transactions.map((savingFund: SavingFundTransactionListSpec) => (
               <tr key={`${uuid()}`}
                 style={{ 
-                  backgroundColor: (savingFund.transactionType == 'withdrawal') ? '#f2d7d5' : 'default'
+                  backgroundColor: (savingFund.transactionType.includes('withdrawal')) ? '#f2d7d5' : 'default'
                 }}>
                 <td>{savingFund.year}</td>
                 <td>{savingFund.transactionDate}</td>
-                <td>{savingFund.transactionType == 'contribution' ? 'Aportación' : 'Retiro'}</td>
+                <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.runningBalance)}</td>
                 <td>{ToMoney(savingFund.partialInterest)}</td>

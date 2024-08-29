@@ -54,17 +54,17 @@ const SidebarRoutes: SidebarParentMenu[] = [
     { key: 'associate-create', route: '/savingfunds/associate/create', name: 'Inscribir Socio' },
     { key: 'associate-list', route: '/savingfunds/associate/list', name: 'Gestión de Socios' }
   ] },
+  { key: 'saving-fund', name: 'Fondos de Ahorro', location: '/savingfunds', children: [
+    { key: 'saving-fund-list', route: '/savingfunds/list', name: 'Gestión de Fondos de Ahorro' },
+    { key: 'contribution-batch', route: '/savingfunds/payment/batch', name: 'Registrar abonos' },
+    { key: 'withdrawal-batch', route: '/savingfunds/payment/batch', name: 'Registrar retiros' }
+  ] },
   { key: 'borrowing', name: 'Préstamos', location: '/savingfunds', children: [
     { key: 'borrow-create', route: '/savingfunds/borrow/create', name: 'Inscribir Préstamo' },
     { key: 'borrow-list', route: '/savingfunds/borrow/list', name: 'Gestión de Préstamos' },
     { key: 'borrow-history', route: '/savingfunds/borrow/history', name: 'Historial de Préstamos' },
     { key: 'borrow-debtor', route: '/savingfunds/borrow/debtor', name: 'Socios Deudores' },
     { key: 'payment-batch', route: '/savingfunds/payment/batch', name: 'Registrar pagos' }
-  ] },
-  { key: 'payments', name: 'Fondos de Ahorro', location: '/savingfunds', children: [
-    { key: 'saving-fund-list', route: '/savingfunds/list', name: 'Gestión de Fondos de Ahorro' },
-    { key: 'contribution-batch', route: '/savingfunds/payment/batch', name: 'Registrar abonos' },
-    { key: 'withdrawal-batch', route: '/savingfunds/payment/batch', name: 'Registrar retiros' }
   ] },
   { key: 'general', name: 'General', location: '/myaccount', children: [
     { key: 'myaccount-page', route: '/myaccount/page', name: 'Mis Datos' }

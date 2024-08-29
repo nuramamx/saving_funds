@@ -21,12 +21,12 @@ returns table (
 declare
   v_borrow_id integer;
   v_associate_id integer;
-  start_at timestamp;
-  requested_amount numeric(20,6);
-  "period" integer;
-  annual_rate numeric(20,6);
-  number_payments integer;
-  is_fortnightly boolean;
+  v_start_at timestamp;
+  v_requested_amount numeric(20,6);
+  v_period integer;
+  v_annual_rate numeric(20,6);
+  v_number_payments integer;
+  v_is_fortnightly boolean;
 begin
   drop table if exists payment_schedule;
   create temporary table payment_schedule (
@@ -58,12 +58,12 @@ begin
   into
     v_borrow_id
     ,v_associate_id
-    ,requested_amount
-    ,"period"
-    ,annual_rate
-    ,start_at
-    ,number_payments
-    ,is_fortnightly
+    ,v_requested_amount
+    ,v_period
+    ,v_annual_rate
+    ,v_start_at
+    ,v_number_payments
+    ,v_is_fortnightly
   from process.borrow as b
   join process.borrow_detail as bd on b.id = bd.borrow_id
   where b.id = p_borrow_id;
@@ -75,7 +75,7 @@ begin
     ,ps."year"
     ,ps."month"
     ,ps."number"
-  from process.generate_payment_schedule(start_at, number_payments, is_fortnightly) as ps;
+  from process.generate_payment_schedule(v_start_at, v_number_payments, v_is_fortnightly) as ps;
 
   -- If payments are clear set to 0 and set associate id
   update payment_schedule
@@ -135,7 +135,7 @@ begin
   set 
     balance = (
     select q.balance
-    from process.quote_borrow(requested_amount, annual_rate, "period", is_fortnightly) as q
+    from process.quote_borrow(v_requested_amount, v_annual_rate, v_period, v_is_fortnightly) as q
     where q.payment_number = payment_schedule."number"
   );
   

@@ -40,7 +40,7 @@ begin
   end if;
 
   if exists(
-    select 1 from "catalog".associate A where A.rfc = p_rfc
+    select 1 from "catalog".associate as a where a.rfc = p_rfc
   ) then
     message := 'El R.F.C. ya se encuentra registrado.';
     return;
@@ -61,11 +61,11 @@ begin
     returning id into inserted_id;
 
     success := true;
-    message := 'El socio se ha registrado con éxito.';
+    message := 'Se realizó la transacción satisfactoriamente.';
   exception
     when others then
       success := false;
-      message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
+      message := 'Ocurrió un error al realizar la transacción: ' || sqlerrm;
   end;
 end;
 $$ language plpgsql;

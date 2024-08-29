@@ -55,11 +55,11 @@ begin
     returning id into inserted_id;
 
     success := true;
-    message := 'El detalle del socio se ha registrado con éxito.';
+    message := 'Se realizó la transacción satisfactoriamente.';
   exception
     when others then
       success := false;
-      message := 'Ocurrió un error al realizar la operación: ' || SQLERRM;
+      message := 'Ocurrió un error al realizar la transacción: ' || sqlerrm;
   end;
 end;
 $$ language plpgsql;

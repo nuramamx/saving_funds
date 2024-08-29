@@ -35,7 +35,7 @@ begin
   exception
     when others then
       success := false;
-      message := 'Ocurrión un error al realizar la operación: ' || sqlerrm;
+      message := 'Ocurrión un error al realizar la transacción: ' || sqlerrm;
   end;
 end;
 $$ language plpgsql;
