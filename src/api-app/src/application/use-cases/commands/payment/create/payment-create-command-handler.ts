@@ -11,21 +11,16 @@ type PaymentCreateCommand = {
 
 class PaymentCreateCommandHandler implements CommandHandler<PaymentCreateCommand, CommandResponse> {
   async execute(data: PaymentCreateCommand): Promise<CommandResponse> {
-    const paymentSaveRepository = new PaymentSaveRepository();
+    const repository = new PaymentSaveRepository();
 
     try {
-    console.log('1here...');
-    console.log(data);
-
       const payment = new Payment(
         data.borrowId,
         data.number,
         data.paidAmount
       );
 
-      console.log('2here...');
-
-      const result = await paymentSaveRepository.save(payment);
+      const result = await repository.save(payment);
 
       return {
         successful: true,

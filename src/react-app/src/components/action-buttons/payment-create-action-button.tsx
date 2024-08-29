@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MoneySquare } from "iconoir-react";
-import PaymentCreateModal from "../../pages/associate-management/borrow-page/modals/payment-create-modal";
+import PaymentCreateModal from "../../pages/saving-fund-management/borrow-page/modals/payment-create-modal";
 
 type PaymentCreateActionButtonParams = {
   borrowId: number;

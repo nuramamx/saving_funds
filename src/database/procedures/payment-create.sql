@@ -56,7 +56,7 @@ begin
   end if;
 
   begin
-    insert into process.payment (borrow_id, payment_type_id, "number", paid_amount)
+    insert into process.payment(borrow_id, payment_type_id, "number", paid_amount)
     values (
       p_borrow_id
       ,1

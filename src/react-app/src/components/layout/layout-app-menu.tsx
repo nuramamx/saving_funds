@@ -12,7 +12,7 @@ useLayoutEffect(() => {
 
 const handleMenuClick = (menu: string) => {
   setSelectedMenu(menu);
-  // restoreSidebarMenu();
+  restoreSidebarMenu();
 };
 
 return (
@@ -26,17 +26,11 @@ return (
         </Link>
       </div>
       <div className="navbar-item">
-        <Link to="/associate" className={`navbar-item ${selectedMenu === 'associate' ? 'is-selected' : ''}`}
-          onClick={() => handleMenuClick('associate')}>
+        <Link to="/savingfunds" className={`navbar-item ${selectedMenu === 'savingfunds' ? 'is-selected' : ''}`}
+          onClick={() => handleMenuClick('savingfunds')}>
           <Community />&nbsp;
-          Administraci&oacute;n de Socios
+          Administraci&oacute;n
         </Link>
-      </div>
-      <div className="navbar-item">
-        <a href="/savingfunds" className={`navbar-item ${selectedMenu === 'savingfunds' ? 'is-selected' : ''}`}>
-          <AppleWallet />&nbsp;
-          Administraci&oacute;n de Fondo de Ahorro
-        </a>
       </div>
       <div className="navbar-item">
         <Link to="/system" className={`navbar-item ${selectedMenu === 'system' ? 'is-selected' : ''}`}>

@@ -13,6 +13,10 @@ import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-ca
 import ListPaymentByBorrowIdQueryHandler, { ListPaymentByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/list-payment-by-borrow-id-query-handler';
 import ListBorrowDebtorQueryHandler from '../use-cases/queries/borrow/list-debtor/list-borrow-debtor-query-handler';
 import PaymentCreateCommandHandler, { PaymentCreateCommand } from '../use-cases/commands/payment/create/payment-create-command-handler';
+import SavingFundListQueryHandler, { SavingFundListQuery } from '../use-cases/queries/saving-fund/list/saving-fund-list-query-handler';
+import SavingFundTransactionListQueryHandler, { SavingFundTransactionListQuery } from '../use-cases/queries/saving-fund/transaction/list/saving-fund-transaction-list-query-handler';
+import ContributionCreateCommandHandler, { ContributionCreateCommand } from '../use-cases/commands/contribution/create/contribution-create-command-handler';
+import WithdrawalCreateCommandHandler, { WithdrawalCreateCommand } from '../use-cases/commands/withdrawal/create/withdrawal-create-command-handler';
 
 type CommandHandlerTypeMap = {
   //TODO: Refactorize component name to entity-action-something.
@@ -28,7 +32,11 @@ type CommandHandlerTypeMap = {
   'ListBorrowQuery': void,
   'ListBorrowHistoryQuery': ListBorrowHistoryQuery,
   'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQuery,
-  'ListBorrowDebtorQuery': void
+  'ListBorrowDebtorQuery': void,
+  'SavingFundListQuery': SavingFundListQuery,
+  'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
+  'ContributionCreate': ContributionCreateCommand,
+  'WithdrawalCreate': WithdrawalCreateCommand
 };
 
 const commandConstructors: {
@@ -47,7 +55,11 @@ const commandConstructors: {
   'ListBorrowQuery': ListBorrowQueryHandler,
   'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler,
   'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQueryHandler,
-  'ListBorrowDebtorQuery': ListBorrowDebtorQueryHandler
+  'ListBorrowDebtorQuery': ListBorrowDebtorQueryHandler,
+  'SavingFundListQuery': SavingFundListQueryHandler,
+  'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
+  'ContributionCreate': ContributionCreateCommandHandler,
+  'WithdrawalCreate': WithdrawalCreateCommandHandler
 };
 
 class CommandHandlerFactory {

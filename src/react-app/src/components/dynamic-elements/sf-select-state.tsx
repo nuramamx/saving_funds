@@ -1,9 +1,9 @@
 import { memo, useEffect } from "react"
 import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
-import CommandResponseInfo from "../../core/interfaces/command-response-info";
-import StateInfo from "../../core/interfaces/state-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
+import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
+import StateInfo from "../../core/interfaces/info/state-info";
 
 const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
   const { states, setStates } = useCacheStore();

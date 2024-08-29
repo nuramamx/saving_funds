@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Erase, InfoCircle, Search } from 'iconoir-react';
 import { SFNumberInputInfo } from '../form/interfaces/sf-input-info';
-import SearchAssociateModal from '../../pages/associate-management/associate-page/modals/search-associate-modal';
+import SearchAssociateModal from '../../pages/saving-fund-management/associate-page/modals/search-associate-modal';
 import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
 
 const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInfo) => {

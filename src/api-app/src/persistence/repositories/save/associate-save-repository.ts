@@ -106,6 +106,16 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
           throw new Error(x.message);
       });
 
+      const [saveSavingFundResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.SAVING_FUND_CREATE, {
+        replacements: {
+          p_associate_id: associateId,
+          p_opening_balance: associateDetail.socialContribution.toFixed(2),
+          p_is_fortnightly: true
+        },
+        type: QueryTypes.SELECT,
+        transaction
+      });
+
       await transaction.commit();
 
       return true;

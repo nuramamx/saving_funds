@@ -1,15 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { SidebarParentMenu } from './components/layout/layout-app-sidebar';
 import App from './App';
-import AssociateManagementPage from './pages/associate-management/associate-management';
+import AssociateManagementPage from './pages/saving-fund-management/saving-fund-management';
 import MyAccountManagementPage from './pages/myaccount-management/myaccount-management';
 import MyAccountPage from './pages/myaccount-management/myaccount-page/myaccount-page';
-import CreateAssociate from './pages/associate-management/associate-page/create-associate';
-import CreateBorrow from './pages/associate-management/borrow-page/create-borrow';
-import ListAssociate from './pages/associate-management/associate-page/list-associate';
-import ListBorrow from './pages/associate-management/borrow-page/list-borrow';
-import ListBorrowHistory from './pages/associate-management/borrow-page/list-borrow-history';
-import ListBorrowDebtor from './pages/associate-management/borrow-page/list-borrow-debtor';
+import CreateAssociate from './pages/saving-fund-management/associate-page/create-associate';
+import CreateBorrow from './pages/saving-fund-management/borrow-page/create-borrow';
+import ListAssociate from './pages/saving-fund-management/associate-page/list-associate';
+import ListBorrow from './pages/saving-fund-management/borrow-page/list-borrow';
+import ListBorrowHistory from './pages/saving-fund-management/borrow-page/list-borrow-history';
+import ListBorrowDebtor from './pages/saving-fund-management/borrow-page/list-borrow-debtor';
+import SavingFundList from './pages/saving-fund-management/saving-fund-page/saving-fund-list';
 
 const Routes = createBrowserRouter([
   {
@@ -17,11 +18,12 @@ const Routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: 'associate',
+        path: 'savingfunds',
         element: <AssociateManagementPage />,
         children: [
-          { path: 'list', element: <ListAssociate /> },
-          { path: 'create', element: <CreateAssociate /> },
+          { path: 'list', element: <SavingFundList /> },
+          { path: 'associate/list', element: <ListAssociate /> },
+          { path: 'associate/create', element: <CreateAssociate /> },
           { path: 'borrow/list', element: <ListBorrow /> },
           { path: 'borrow/create', element: <CreateBorrow /> },
           { path: 'borrow/history', element: <ListBorrowHistory /> },
@@ -48,18 +50,21 @@ const SidebarRoutes: SidebarParentMenu[] = [
     { key: 'report-1', route: '/report/1', name: 'Reporte de X' },
     { key: 'report-2', route: '/report/2', name: 'Reporte de Y' },
   ] },
-  { key: 'associates', name: 'Socios', location: '/associate', children: [
-    { key: 'associate-create', route: '/associate/create', name: 'Inscribir Socio' },
-    { key: 'associate-list', route: '/associate/list', name: 'Gestión de Socios' }
+  { key: 'associates', name: 'Socios', location: '/savingfunds', children: [
+    { key: 'associate-create', route: '/savingfunds/associate/create', name: 'Inscribir Socio' },
+    { key: 'associate-list', route: '/savingfunds/associate/list', name: 'Gestión de Socios' }
   ] },
-  { key: 'borrowing', name: 'Préstamos', location: '/associate', children: [
-    { key: 'borrow-create', route: '/associate/borrow/create', name: 'Inscribir Préstamo' },
-    { key: 'borrow-list', route: '/associate/borrow/list', name: 'Gestión de Préstamos' },
-    { key: 'borrow-history', route: '/associate/borrow/history', name: 'Historial de Préstamos' },
-    { key: 'borrow-debtor', route: '/associate/borrow/debtor', name: 'Socios Deudores' }
+  { key: 'borrowing', name: 'Préstamos', location: '/savingfunds', children: [
+    { key: 'borrow-create', route: '/savingfunds/borrow/create', name: 'Inscribir Préstamo' },
+    { key: 'borrow-list', route: '/savingfunds/borrow/list', name: 'Gestión de Préstamos' },
+    { key: 'borrow-history', route: '/savingfunds/borrow/history', name: 'Historial de Préstamos' },
+    { key: 'borrow-debtor', route: '/savingfunds/borrow/debtor', name: 'Socios Deudores' },
+    { key: 'payment-batch', route: '/savingfunds/payment/batch', name: 'Registrar pagos' }
   ] },
-  { key: 'payments', name: 'Pagos', location: '/associate', children: [
-    { key: 'payment-batch', route: '/associate/payment/batch', name: 'Carga Masiva' }
+  { key: 'payments', name: 'Fondos de Ahorro', location: '/savingfunds', children: [
+    { key: 'saving-fund-list', route: '/savingfunds/list', name: 'Gestión de Fondos de Ahorro' },
+    { key: 'contribution-batch', route: '/savingfunds/payment/batch', name: 'Registrar abonos' },
+    { key: 'withdrawal-batch', route: '/savingfunds/payment/batch', name: 'Registrar retiros' }
   ] },
   { key: 'general', name: 'General', location: '/myaccount', children: [
     { key: 'myaccount-page', route: '/myaccount/page', name: 'Mis Datos' }

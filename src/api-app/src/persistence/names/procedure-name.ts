@@ -22,6 +22,11 @@ enum ProcedureName {
   BORROW_DEBTOR_LIST = 'select * from process.borrow_debtor_list();',
   PAYMENT_LIST_BY_BORROW_ID = 'select * from process.payment_list_by_borrow_id(:borrow_id);',
   PAYMENT_CREATE = 'select * from process.payment_create(:p_borrow_id, :p_number, :p_paid_amount);',
+  SAVING_FUND_CREATE = 'select * from process.saving_fund_create(:p_associate_id, :p_opening_balance, :p_is_fortnightly)',
+  SAVING_FUND_LIST = 'select * from process.saving_fund_list(:p_filter, :p_page, :p_page_size);',
+  SAVING_FUND_TRANSACTION_LIST = 'select * from process.saving_fund_transaction_list(:p_saving_fund_id, :p_year);',
+  CONTRIBUTION_CREATE = 'select * from process.contribution_create(:p_saving_fund_id, :p_amount, :p_applied_at);',
+  WITHDRAWAL_CREATE = 'select * from process.withdrawal_create(:p_saving_fund_id, :p_amount, :p_is_interest);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:user_id,:previous_data,:new_data)'
 }

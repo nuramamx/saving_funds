@@ -25,9 +25,9 @@ interface CreateAssociateCommand {
 }
 
 class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCommand, CommandResponse> {
-  execute = async(data: CreateAssociateCommand): Promise<CommandResponse> => {
+  async execute(data: CreateAssociateCommand): Promise<CommandResponse> {
     const validation = new CreateAssociateCommandValidator(data).validate();
-    const associateRepository = new AssociateSaveRepository();
+    const repository = new AssociateSaveRepository();
 
     if (validation.length > 0) {
       return {
@@ -45,9 +45,10 @@ class CreateAssociateCommandHandler implements CommandHandler<CreateAssociateCom
         .updateAddress(new Address(data.address))
         .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
         .addBeneficiaries(data.beneficiaries);
-      const result = await associateRepository.save(associate);
 
-      return { successful: true, message: 'Préstamo fue creado con éxito.', data: JSON.stringify(result), type: 'success' } as CommandResponse;
+      const result = await repository.save(associate);
+
+      return { successful: true, message: 'Préstamo fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
       return {
         successful: false,

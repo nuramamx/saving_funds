@@ -8,6 +8,9 @@ import AgreementRoute from "./routes/agreement-route";
 import AnnualRateRoute from "./routes/annual-rate-route";
 import BorrowRoute from "./routes/borrow-route";
 import PaymentRoute from "./routes/payment-route";
+import SavingFundRoute from "./routes/saving-fund-route";
+import ContributionRoute from "./routes/contribution-route";
+import WithdrawalRoute from "./routes/withdrawal-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -41,6 +44,9 @@ fastify.register(CityRoute);
 fastify.register(AssociateRoute);
 fastify.register(BorrowRoute);
 fastify.register(PaymentRoute);
+fastify.register(SavingFundRoute);
+fastify.register(ContributionRoute);
+fastify.register(WithdrawalRoute);
 
 const start = async () => {
   try {

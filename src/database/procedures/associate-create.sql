@@ -1,11 +1,11 @@
 --drop function catalog.associate_create;
 create or replace function catalog.associate_create(
-  in firstname varchar(25),
-  in middlename varchar(25),
-  in paternal_lastname varchar(25),
-  in maternal_lastname varchar(25),
-  in rfc varchar(13),
-  in gender char(1),
+  in p_firstname varchar(25),
+  in p_middlename varchar(25),
+  in p_paternal_lastname varchar(25),
+  in p_maternal_lastname varchar(25),
+  in p_rfc varchar(13),
+  in p_gender char(1),
   out inserted_id integer,
   out success boolean,
   out message text
@@ -16,52 +16,52 @@ begin
   success := false;
   message := 'Operación no inciada.';
 
-  if firstname is null or firstname = '' then
+  if p_firstname is null or p_firstname = '' then
     message := 'El primer nombre es requerido.';
     return;
-  elseif paternal_lastname is null or paternal_lastname = '' then
+  elseif p_paternal_lastname is null or p_paternal_lastname = '' then
     message := 'El apellido paterno es requerido.';
     return;
-  elseif maternal_lastname is null or maternal_lastname = '' then
+  elseif p_maternal_lastname is null or p_maternal_lastname = '' then
     message := 'El apellido materno es requerido.';
     return;
-  elseif rfc is null or rfc = '' then
+  elseif p_rfc is null or p_rfc = '' then
     message := 'El R.F.C. es requerido.';
     return;
-  elseif length(rfc) <> 10 and length(rfc) <> 13 then
+  elseif length(p_rfc) <> 10 and length(p_rfc) <> 13 then
     message := 'El R.F.C. debe tener 10 o 13 caracteres.';
     return;
-  elseif gender is null or gender = '' then
+  elseif p_gender is null or p_gender = '' then
     message := 'El género es requerido.';
     return;
-  elseif gender not in ('M', 'F') then
+  elseif p_gender not in ('M', 'F') then
     message := 'El género debe ser "M" (Masculino) o "F" (Femenino).';
     return;
   end if;
 
   if exists(
-    select 1 from catalog.associate A where A.rfc = associate_create.rfc
+    select 1 from "catalog".associate A where A.rfc = p_rfc
   ) then
     message := 'El R.F.C. ya se encuentra registrado.';
     return;
   end if;
 
   begin
-    insert into catalog.associate (rfc, gender, name)
+    insert into "catalog".associate (rfc, gender, "name")
     values (
-      upper(rfc)
-      ,upper(gender)
+      upper(p_rfc)
+      ,upper(p_gender)
       ,jsonb_build_object(
-        'firstname', upper(firstname),
-        'middlename', upper(middlename),
-        'paternal_lastname', upper(paternal_lastname),
-        'maternal_lastname', upper(maternal_lastname)
+        'firstname', upper(p_firstname),
+        'middlename', upper(p_middlename),
+        'paternal_lastname', upper(p_paternal_lastname),
+        'maternal_lastname', upper(p_maternal_lastname)
       )
     )
     returning id into inserted_id;
 
     success := true;
-    message := 'Se realizó la transacción satisfactoriamente.';
+    message := 'El socio se ha registrado con éxito.';
   exception
     when others then
       success := false;

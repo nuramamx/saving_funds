@@ -3,12 +3,10 @@ import { CreateBorrowCommand } from '../../../application/use-cases/commands/bor
 import { ListBorrowHistoryQuery } from '../../../application/use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
-async function BorrowRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
+async function BorrowRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/borrow/list', async (request, reply) => {
     const command = new CommandHandlerMediator();
     const result = await command.execute('ListBorrowQuery');
-
-    console.log(JSON.stringify(result));
 
     if (!result.successful) reply.statusCode = 400;
 
@@ -26,7 +24,6 @@ async function BorrowRoute (fastify: FastifyInstance, options: FastifyPluginOpti
   });
 
   fastify.post<{ Body: string }>('/borrow/list/history', async (request, reply) => {
-    console.log(JSON.stringify(request.body));
     const data: ListBorrowHistoryQuery = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
     const result = await command.execute('ListBorrowHistoryQuery', data);
