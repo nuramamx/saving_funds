@@ -1,5 +1,4 @@
-drop table if exists administration.saving_fund_annual_rate;
-
+--drop table if exists administration.saving_fund_annual_rate;
 create table if not exists administration.saving_fund_annual_rate
 (
   id integer generated always as identity,

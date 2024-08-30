@@ -1,5 +1,4 @@
-drop table if exists process.borrow_detail cascade;
-
+--drop table if exists process.borrow_detail cascade;
 create table if not exists process.borrow_detail
 (
   id integer generated always as identity,

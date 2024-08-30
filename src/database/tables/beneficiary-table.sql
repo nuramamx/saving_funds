@@ -1,14 +1,13 @@
-DROP TABLE IF EXISTS catalog.beneficiary;
-
-CREATE TABLE IF NOT EXISTS catalog.beneficiary
+--drop table if exists catalog.beneficiary;
+create table if not exists "catalog".beneficiary
 (
-    id INT GENERATED ALWAYS AS IDENTITY,
-    associate_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    percentage INT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT beneficiary_pkey PRIMARY KEY (id),
-    CONSTRAINT beneficiary_associate_id_fkey FOREIGN KEY (associate_id)
-        REFERENCES catalog.associate (id)
+  id int generated always as identity,
+  associate_id int not null,
+  "name" varchar(100) not null,
+  percentage int not null,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint beneficiary_pkey primary key (id),
+  constraint beneficiary_associate_id_fkey foreign key (associate_id)
+    references "catalog".associate (id)
 );

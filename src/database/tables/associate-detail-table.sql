@@ -1,22 +1,21 @@
-DROP TABLE IF EXISTS catalog.associate_detail cascade;
-
-CREATE TABLE IF NOT EXISTS catalog.associate_detail
+--drop table if exists catalog.associate_detail cascade;
+create table if not exists "catalog".associate_detail
 (
-    id INT GENERATED ALWAYS AS IDENTITY,
-    associate_id INT NOT NULL,
-    agreement_id INT NOT NULL,
-    dependency_key VARCHAR(10) NOT NULL,
-    category VARCHAR(8) NOT NULL,
-    salary NUMERIC(20,6) CONSTRAINT salary_positive CHECK (salary > 0) NOT NULL,
-    social_contribution NUMERIC(20,6) CONSTRAINT social_contribution CHECK (social_contribution > 0) NOT NULL,
-    fortnightly_contribution NUMERIC(20,6) CONSTRAINT fortnightly_contribution CHECK (fortnightly_contribution > 0) NOT NULL,
-    request_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT associate_detail_pkey PRIMARY KEY (id),
-    CONSTRAINT associate_detail_associate_id_key UNIQUE (associate_id),
-    CONSTRAINT associate_detail_associate_id_fkey FOREIGN KEY (associate_id)
-        REFERENCES catalog.associate (id),
-    CONSTRAINT associate_detail_agreement_id_fkey FOREIGN KEY (agreement_id)
-        REFERENCES administration.agreement (id)
+  id integer generated always as identity,
+  associate_id integer not null,
+  agreement_id integer not null,
+  dependency_key varchar(10) not null,
+  category varchar(8) not null,
+  salary numeric(20,6) constraint salary_positive check (salary > 0) not null,
+  social_contribution numeric(20,6) constraint social_contribution check (social_contribution > 0) not null,
+  fortnightly_contribution numeric(20,6) constraint fortnightly_contribution check (fortnightly_contribution > 0) not null,
+  request_date timestamp with time zone not null default current_timestamp,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint associate_detail_pkey primary key (id),
+  constraint associate_detail_associate_id_key unique (associate_id),
+  constraint associate_detail_associate_id_fkey foreign key (associate_id)
+    references "catalog".associate (id),
+  constraint associate_detail_agreement_id_fkey foreign key (agreement_id)
+    references administration.agreement (id)
 );

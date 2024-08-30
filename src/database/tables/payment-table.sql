@@ -1,4 +1,4 @@
-drop table if exists process.payment cascade;
+--drop table if exists process.payment cascade;
 create table if not exists process.payment
 (
   id integer generated always as identity,

@@ -1,13 +1,12 @@
-DROP TABLE IF EXISTS administration.city;
-
-CREATE TABLE IF NOT EXISTS administration.city
+--drop table if exists administration.city;
+create table if not exists administration.city
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  state_id INT NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT city_pkey PRIMARY KEY (id),
-  CONSTRAINT city_state_id_fkey FOREIGN KEY (state_id)
-    REFERENCES administration.state (id)
+  id int generated always as identity,
+  state_id int not null,
+  "name" varchar(50) not null,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint city_pkey primary key (id),
+  constraint city_state_id_fkey foreign key (state_id)
+    references administration.state (id)
 );

@@ -1,4 +1,4 @@
-drop table if exists process.saving_fund cascade;
+--drop table if exists process.saving_fund cascade;
 create table if not exists process.saving_fund
 (
   id integer generated always as identity,

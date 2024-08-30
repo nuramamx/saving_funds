@@ -1,14 +1,13 @@
-DROP TABLE IF EXISTS log.audit;
-
-CREATE TABLE IF NOT EXISTS log.audit
+--drop table if exists log.audit;
+create table if not exists "log".audit
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  user_id INT NOT NULL,
-  previous_data JSONB NOT NULL,
-  new_data JSONB NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT audit_id_pkey PRIMARY KEY (id),
-  CONSTRAINT audit_user_id_fkey FOREIGN KEY (user_id)
-    REFERENCES security.user (id)
+  id integer generated always as identity,
+  user_id integer not null,
+  previous_data jsonb not null,
+  new_data jsonb not null,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint audit_id_pkey primary key (id),
+  constraint audit_user_id_fkey foreign key (user_id)
+    references security.user (id)
 );

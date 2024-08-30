@@ -1,6 +1,5 @@
-drop table if exists catalog.address;
-
-create table if not exists catalog.address
+--drop table if exists catalog.address;
+create table if not exists "catalog".address
 (
   id integer generated always as identity,
   associate_id integer not null,
@@ -17,7 +16,7 @@ create table if not exists catalog.address
   constraint address_pkey primary key (id),
   constraint address_associate_id_key unique (associate_id),
   constraint address_associate_id_fkey foreign key (associate_id)
-    references catalog.associate (id),
+    references "catalog".associate (id),
   constraint address_city_id_fkey foreign key (city_id)
     references administration.city (id)
 );

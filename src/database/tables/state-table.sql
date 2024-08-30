@@ -1,11 +1,10 @@
-DROP TABLE IF EXISTS administration.state;
-
-CREATE TABLE IF NOT EXISTS administration.state
+--drop table if exists administration.state;
+create table if not exists administration.state
 (
-  id INT GENERATED ALWAYS AS IDENTITY,
-  key CHAR(3) NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT state_pkey PRIMARY KEY (id)
+  id int generated always as identity,
+  "key" char(3) not null,
+  "name" varchar(50) not null,
+  created_at timestamp with time zone not null default current_timestamp,
+  updated_at timestamp with time zone not null default current_timestamp,
+  constraint state_pkey primary key (id)
 );
