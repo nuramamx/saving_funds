@@ -1,6 +1,6 @@
-CREATE SCHEMA IF NOT EXISTS administration;
-CREATE SCHEMA IF NOT EXISTS catalog;
-CREATE SCHEMA IF NOT EXISTS process;
-CREATE SCHEMA IF NOT EXISTS security;
-CREATE SCHEMA IF NOT EXISTS log;
-CREATE SCHEMA IF NOT EXISTS config;
+create schema if not exists administration;
+create schema if not exists "catalog";
+create schema if not exists process;
+create schema if not exists "security";
+create schema if not exists "log";
+create schema if not exists config;

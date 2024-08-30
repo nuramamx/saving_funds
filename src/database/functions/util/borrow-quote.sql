@@ -17,7 +17,7 @@ declare
   v_borrow process.borrow_type;
 begin
   -- Calculate borrow
-  v_borrow := process.calculate_borrow(p_requested_amount, p_annual_rate, p_period, is_fortnightly);
+  v_borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
 
   drop table if exists quote_borrow_temporary;
   create temporary table quote_borrow_temporary (
@@ -52,7 +52,7 @@ begin
   set
     payment = (quote_borrow_temporary.payment + quote_borrow_temporary.balance)
     ,balance = 0
-  where quote_borrow_temporary.payment_number = borrow.number_payments;
+  where quote_borrow_temporary.payment_number = v_borrow.number_payments;
   
   return query
   select * from quote_borrow_temporary;

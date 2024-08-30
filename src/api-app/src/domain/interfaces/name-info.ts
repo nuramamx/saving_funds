@@ -1,4 +1,3 @@
-
 export default interface NameInfo {
   firstname: string;
   middlename: string;

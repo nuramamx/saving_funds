@@ -4,7 +4,7 @@ import CommandHandlerMediator from '../../../application/mediators/command-handl
 async function CityRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/city', async (request, reply) => {
     const command = new CommandHandlerMediator();
-    const result = await command.execute('AllCityQuery');
+    const result = await command.execute('CityListQuery');
 
     if (!result.successful) reply.statusCode = 400; 
 

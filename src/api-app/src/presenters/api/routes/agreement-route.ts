@@ -4,7 +4,7 @@ import CommandHandlerMediator from '../../../application/mediators/command-handl
 async function AgreementRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/agreement', async (request, reply) => {
     const command = new CommandHandlerMediator();
-    const result = await command.execute('AllAgreementQuery');
+    const result = await command.execute('AgreementListQuery');
 
     if (!result.successful) reply.statusCode = 400; 
 

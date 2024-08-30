@@ -75,7 +75,7 @@ begin
     ,ps."year"
     ,ps."month"
     ,ps."number"
-  from process.generate_payment_schedule(v_start_at, v_number_payments, v_is_fortnightly) as ps;
+  from process.payment_generate_schedule(v_start_at, v_number_payments, v_is_fortnightly) as ps;
 
   -- If payments are clear set to 0 and set associate id
   update payment_schedule
@@ -135,7 +135,7 @@ begin
   set 
     balance = (
     select q.balance
-    from process.quote_borrow(v_requested_amount, v_annual_rate, v_period, v_is_fortnightly) as q
+    from process.borrow_quote(v_requested_amount, v_annual_rate, v_period, v_is_fortnightly) as q
     where q.payment_number = payment_schedule."number"
   );
   

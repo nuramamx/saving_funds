@@ -4,7 +4,7 @@ import CommandHandlerMediator from '../../../application/mediators/command-handl
 async function StateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/state', async (request, reply) => {
     const command = new CommandHandlerMediator();
-    const result = await command.execute('AllStateQuery');
+    const result = await command.execute('StateListQuery');
 
     if (!result.successful) reply.statusCode = 400; 
 

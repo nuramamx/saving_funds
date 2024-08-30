@@ -1,65 +1,69 @@
-import CreateAssociateCommandHandler, { CreateAssociateCommand } from '../use-cases/commands/associate/create/create-associate-command-handler'
-import ByIdOrNameAssociateQueryHandler, { ByIdOrNameAssociateQuery } from '../use-cases/queries/associate/by-id-or-name/by-id-or-name-associate-query-handler';
 import CommandHandler from '../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../abstractions/interfaces/command-response';
-import AllCityQueryHandler from '../use-cases/queries/city/all/all-city-query-handler';
-import AllStateQueryHandler from '../use-cases/queries/state/all/all-state-query-handler';
-import AllAgreementQueryHandler from '../use-cases/queries/agreement/all/all-agreement-query-handler';
-import AllAnnualRateQueryHandler from '../use-cases/queries/annual-rate/all/all-annual-rate-query-handler';
-import CreateBorrowCommandHandler, { CreateBorrowCommand } from '../use-cases/commands/borrow/create/create-borrow-command-handler';
-import ListAssociateQueryHandler from '../use-cases/queries/associate/list/list-associate-query-handler';
-import ListBorrowQueryHandler from '../use-cases/queries/borrow/list/list-borrow-query-handler';
-import ListBorrowHistoryQueryHandler, { ListBorrowHistoryQuery } from '../use-cases/queries/borrow/list-history/list-borrow-history-query-handler';
-import ListPaymentByBorrowIdQueryHandler, { ListPaymentByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/list-payment-by-borrow-id-query-handler';
-import ListBorrowDebtorQueryHandler from '../use-cases/queries/borrow/list-debtor/list-borrow-debtor-query-handler';
+import AssociateCreateCommandHandler, { AssociateCreateCommand } from '../use-cases/commands/associate/create/associate-create-command-handler';
+import BorrowCreateCommandHandler, { BorrowCreateCommand } from '../use-cases/commands/borrow/create/borrow-create-command-handler';
+import ContributionCreateCommandHandler, { ContributionCreateCommand } from '../use-cases/commands/contribution/create/contribution-create-command-handler';
 import PaymentCreateCommandHandler, { PaymentCreateCommand } from '../use-cases/commands/payment/create/payment-create-command-handler';
+import WithdrawalCreateCommandHandler, { WithdrawalCreateCommand } from '../use-cases/commands/withdrawal/create/withdrawal-create-command-handler';
+import AgreementListQueryHandler from '../use-cases/queries/agreement/list/agreement-list-query-handler';
+import AnnualRateListQueryHandler from '../use-cases/queries/annual-rate/list/annual-rate-list-query-handler';
+import AssociateListByIdOrNameQueryHandler, { AssociateListByIdOrNameQuery } from '../use-cases/queries/associate/by-id-or-name/associate-list-by-id-or-name-query-handler';
+import AssociateListQueryHandler from '../use-cases/queries/associate/list/associate-list-query-handler';
+import BorrowDebtorListQueryHandler from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
+import BorrowHistoryListQueryHandler, { BorrowHistoryListQuery } from '../use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
+import BorrowListQueryHandler from '../use-cases/queries/borrow/list/borrow-list-query-handler';
+import CityListQueryHandler from '../use-cases/queries/city/list/city-list-query-handler';
+import PaymentListByBorrowIdQueryHandler, { PaymentListByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/payment-list-by-borrow-id-query-handler';
 import SavingFundListQueryHandler, { SavingFundListQuery } from '../use-cases/queries/saving-fund/list/saving-fund-list-query-handler';
 import SavingFundTransactionListQueryHandler, { SavingFundTransactionListQuery } from '../use-cases/queries/saving-fund/transaction/list/saving-fund-transaction-list-query-handler';
-import ContributionCreateCommandHandler, { ContributionCreateCommand } from '../use-cases/commands/contribution/create/contribution-create-command-handler';
-import WithdrawalCreateCommandHandler, { WithdrawalCreateCommand } from '../use-cases/commands/withdrawal/create/withdrawal-create-command-handler';
+import StateListQueryHandler from '../use-cases/queries/state/list/state-list-query-handler';
 
 type CommandHandlerTypeMap = {
-  //TODO: Refactorize component name to entity-action-something.
-  'CreateAssociateCommand': CreateAssociateCommand,
-  'CreateBorrowCommand': CreateBorrowCommand,
+  // Commands
+  'AssociateCreateCommand': AssociateCreateCommand,
+  'BorrowCreateCommand': BorrowCreateCommand,
   'PaymentCreateCommand': PaymentCreateCommand,
-  'AllCityQuery': void,
-  'AllStateQuery': void,
-  'AllAgreementQuery': void,
-  'AllAnnualRateQuery': void,
-  'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQuery,
-  'ListAssociateQuery': void,
-  'ListBorrowQuery': void,
-  'ListBorrowHistoryQuery': ListBorrowHistoryQuery,
-  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQuery,
-  'ListBorrowDebtorQuery': void,
+  'ContributionCreateCommand': ContributionCreateCommand,
+  'WithdrawalCreateCommand': WithdrawalCreateCommand,
+  // Queries
+  'CityListQuery': void,
+  'StateListQuery': void,
+  'AgreementListQuery': void,
+  'AnnualRateListQuery': void,
+  'AssociateListByIdOrNameQuery': AssociateListByIdOrNameQuery,
+  'AssociateListQuery': void,
+  'BorrowListQuery': void,
+  'BorrowHistoryListQuery': BorrowHistoryListQuery,
+  'PaymentListByBorrowIdQuery': PaymentListByBorrowIdQuery,
+  'BorrowDebtorListQuery': void,
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
-  'ContributionCreate': ContributionCreateCommand,
-  'WithdrawalCreate': WithdrawalCreateCommand
+  
 };
 
 const commandConstructors: {
   [K in keyof CommandHandlerTypeMap]?: new () => CommandHandler<CommandHandlerTypeMap[K], CommandResponse>
 } = {
-  //TODO: Refactorize component name to entity-action-something.
-  'CreateAssociateCommand': CreateAssociateCommandHandler,
-  'CreateBorrowCommand': CreateBorrowCommandHandler,
+  // Commands
+  'AssociateCreateCommand': AssociateCreateCommandHandler,
+  'BorrowCreateCommand': BorrowCreateCommandHandler,
   'PaymentCreateCommand': PaymentCreateCommandHandler,
-  'AllCityQuery': AllCityQueryHandler,
-  'AllStateQuery': AllStateQueryHandler,
-  'AllAgreementQuery': AllAgreementQueryHandler,
-  'AllAnnualRateQuery': AllAnnualRateQueryHandler,
-  'ByIdOrNameAssociateQuery': ByIdOrNameAssociateQueryHandler,
-  'ListAssociateQuery': ListAssociateQueryHandler,
-  'ListBorrowQuery': ListBorrowQueryHandler,
-  'ListBorrowHistoryQuery': ListBorrowHistoryQueryHandler,
-  'ListPaymentByBorrowIdQuery': ListPaymentByBorrowIdQueryHandler,
-  'ListBorrowDebtorQuery': ListBorrowDebtorQueryHandler,
+  'ContributionCreateCommand': ContributionCreateCommandHandler,
+  'WithdrawalCreateCommand': WithdrawalCreateCommandHandler,
+  // Queries
+  'CityListQuery': CityListQueryHandler,
+  'StateListQuery': StateListQueryHandler,
+  'AgreementListQuery': AgreementListQueryHandler,
+  'AnnualRateListQuery': AnnualRateListQueryHandler,
+  'AssociateListByIdOrNameQuery': AssociateListByIdOrNameQueryHandler,
+  'AssociateListQuery': AssociateListQueryHandler,
+  'BorrowListQuery': BorrowListQueryHandler,
+  'BorrowHistoryListQuery': BorrowHistoryListQueryHandler,
+  'PaymentListByBorrowIdQuery': PaymentListByBorrowIdQueryHandler,
+  'BorrowDebtorListQuery': BorrowDebtorListQueryHandler,
   'SavingFundListQuery': SavingFundListQueryHandler,
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
-  'ContributionCreate': ContributionCreateCommandHandler,
-  'WithdrawalCreate': WithdrawalCreateCommandHandler
+  
 };
 
 class CommandHandlerFactory {

@@ -19,8 +19,6 @@ export default class SavingFundListQueryRepository implements QueryRepositoryInf
         }
       ) as SavingFundListSpec[];
 
-      console.log(result);
-
       return result;
     } catch (err: any) {
       throw new Error(`[E-200]: ${err}`);

@@ -23,12 +23,12 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
     {
       const [saveAssociateResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ASSOCIATE_CREATE, {
         replacements: {
-          firstname: data.name.firstname,
-          middlename: data.name.middlename,
-          paternal_lastname: data.name.paternalLastname,
-          maternal_lastname: data.name.maternalLastname,
-          rfc: data.rfc,
-          gender: data.gender
+          p_firstname: data.name.firstname,
+          p_middlename: data.name.middlename,
+          p_paternal_lastname: data.name.paternalLastname,
+          p_maternal_lastname: data.name.maternalLastname,
+          p_rfc: data.rfc,
+          p_gender: data.gender
         },
         type: QueryTypes.SELECT,
         transaction
@@ -41,13 +41,13 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
       const [saveDetailResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ASSOCIATE_DETAIL_CREATE, {
         replacements: {
-          associate_id: associateId,
-          agreement_id: associateDetail.agreementId,
-          dependency_key: associateDetail.dependencyKey,
-          category: associateDetail.category,
-          salary: associateDetail.salary,
-          social_contribution: associateDetail.socialContribution,
-          fortnightly_contribution: associateDetail.fortnightlyContribution
+          p_associate_id: associateId,
+          p_agreement_id: associateDetail.agreementId,
+          p_dependency_key: associateDetail.dependencyKey,
+          p_category: associateDetail.category,
+          p_salary: associateDetail.salary,
+          p_social_contribution: associateDetail.socialContribution,
+          p_fortnightly_contribution: associateDetail.fortnightlyContribution
         },
         type: QueryTypes.SELECT,
         transaction
@@ -58,15 +58,15 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
       const [saveAddressResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ADDRESS_CREATE, {
         replacements: {
-          associate_id: associateId,
-          city_id: associateAddress.cityId,
-          street: associateAddress.street,
-          settlement: associateAddress.settlement,
-          town: associateAddress.town,
-          postal_code: associateAddress.postalCode,
-          phone: associateAddress.phone,
-          mobile: associateAddress.mobile,
-          email: associateAddress.email
+          p_associate_id: associateId,
+          p_city_id: associateAddress.cityId,
+          p_street: associateAddress.street,
+          p_settlement: associateAddress.settlement,
+          p_town: associateAddress.town,
+          p_postal_code: associateAddress.postalCode,
+          p_phone: associateAddress.phone,
+          p_mobile: associateAddress.mobile,
+          p_email: associateAddress.email
         },
         type: QueryTypes.SELECT,
         transaction
@@ -77,10 +77,10 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
       const [saveWorkspaceResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.WORKPLACE_CREATE, {
         replacements: {
-          associate_id: associateId,
-          key: associateWorkplace.key,
-          name: associateWorkplace.name,
-          phone: associateWorkplace.phone
+          p_associate_id: associateId,
+          p_key: associateWorkplace.key,
+          p_name: associateWorkplace.name,
+          p_phone: associateWorkplace.phone
         },
         type: QueryTypes.SELECT,
         transaction
@@ -91,8 +91,8 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
       const [saveBeneficiariesResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.BENEFICIARY_CREATE, {
         replacements: {
-          associate_id: associateId,
-          beneficiaries: JSON.stringify(associateBeneficiaries),
+          p_associate_id: associateId,
+          p_beneficiaries: JSON.stringify(associateBeneficiaries),
         },
         type: QueryTypes.SELECT,
         transaction

@@ -53,7 +53,7 @@ export default class Associate implements AssociateInfo {
       .reduce((sum, percentage) => sum + percentage, 0);
 
     if (totalPercentage > 100)
-      throw new Error('DOMAIN: El porcentaje total es superior al 100%');
+      throw new Error('DOMAIN: El porcentaje total es superior al 100%.');
 
     this.beneficiaries = [] = beneficiaries.filter((x) => x.percentage > 0);
 

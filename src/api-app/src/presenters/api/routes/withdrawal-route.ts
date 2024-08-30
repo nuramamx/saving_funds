@@ -6,7 +6,7 @@ async function WithdrawalRoute(fastify: FastifyInstance, options: FastifyPluginO
   fastify.post<{ Body: string }>('/withdrawal/create', async (request, reply) => {
     const data: WithdrawalCreateCommand = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
-    const result = await command.execute('WithdrawalCreate', data);
+    const result = await command.execute('WithdrawalCreateCommand', data);
 
     if (!result.successful) reply.statusCode = 400;
 

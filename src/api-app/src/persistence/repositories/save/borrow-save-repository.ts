@@ -12,11 +12,11 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
     try {
       const [borrowSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(ProcedureName.BORROW_CREATE, {
         replacements: {
-          associate_id: data.associateId,
-          requested_amount: data.requestedAmount.toFixed(6),
-          period: data.period,
-          is_fortnightly: data.isFortnightly,
-          start_at: data.startAt
+          p_associate_id: data.associateId,
+          p_requested_amount: data.requestedAmount.toFixed(6),
+          p_period: data.period,
+          p_is_fortnightly: data.isFortnightly,
+          p_start_at: data.startAt
         },
         type: QueryTypes.SELECT
       });

@@ -66,7 +66,7 @@ begin
     returning id into inserted_id;
 
     -- Get borrow calculations
-    borrow := process.calculate_borrow(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
+    borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
 
     -- Create detail
     insert into process.borrow_detail(borrow_id,number_payments,interests,total_due,guarantee_fund,payment,amount_delivered)

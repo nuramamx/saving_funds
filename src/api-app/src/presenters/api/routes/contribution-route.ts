@@ -6,7 +6,7 @@ async function ContributionRoute(fastify: FastifyInstance, options: FastifyPlugi
   fastify.post<{ Body: string }>('/contribution/create', async (request, reply) => {
     const data: ContributionCreateCommand = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
-    const result = await command.execute('ContributionCreate', data);
+    const result = await command.execute('ContributionCreateCommand', data);
 
     if (!result.successful) reply.statusCode = 400;
 

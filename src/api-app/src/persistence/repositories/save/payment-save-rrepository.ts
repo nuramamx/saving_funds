@@ -27,7 +27,7 @@ export default class PaymentSaveRepository implements SaveRepositoryInfo<Payment
       return true;
     } catch (err: any) {
       await transaction.rollback();
-      console.log(err);
+      
       //TODO: Improve this creating a util function
       if (err.parent !== null && err.parent !== undefined
         && err.parent.where !== null && err.parent.where !== undefined)

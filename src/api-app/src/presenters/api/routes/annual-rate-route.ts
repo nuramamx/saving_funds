@@ -4,7 +4,7 @@ import CommandHandlerMediator from '../../../application/mediators/command-handl
 async function AnnualRateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/annual_rate', async (request, reply) => {
     const command = new CommandHandlerMediator();
-    const result = await command.execute('AllAnnualRateQuery');
+    const result = await command.execute('AnnualRateListQuery');
 
     if (!result.successful) reply.statusCode = 400; 
 
