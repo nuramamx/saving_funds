@@ -24,7 +24,7 @@ begin
    v_available_interest_balance := (select * from process.contribution_get_accrued_interest(p_saving_fund_id));
 
   select
-    (sum(coalesce(c.amount, 0)) - sum(coalesce(w.amount, 0))) 
+    sum(coalesce(c.amount, 0))
   into
     v_available_balance
   from process.contribution as c
@@ -35,12 +35,10 @@ begin
   into
     v_withdrawal_sum_amount
   from process.withdrawal as w
-  where w.saving_fund_id = p_saving_fund_id;
+  where w.saving_fund_id = p_saving_fund_id
+  and w.is_interest = false;
 
   v_available_balance := v_available_balance - v_withdrawal_sum_amount;
-
-message := 'El monto del retiro es superior al balance actual con intereses acumulados sss(' || v_available_balance::numeric(20,2) || ') del fondo de ahorro.';
-    return;
 
   if v_available_balance < 0 then
     v_available_balance := 0;
