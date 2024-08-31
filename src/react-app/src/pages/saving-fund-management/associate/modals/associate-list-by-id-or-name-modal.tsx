@@ -4,21 +4,21 @@ import SFTextInput from '../../../../components/form/sf-text-input';
 import AppConstants from '../../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
 import useNotificationStore from '../../../../core/stores/notification-store';
-import SearchAssociateByIdOrNameQuery from '../../../../core/interfaces/query/search-associate-by-id-or-name-query';
 import CheckAndAssign from '../../../../core/util/check-and-assign';
-import SearchAssociateSpec from '../../../../core/interfaces/specs/search/search-associate-spec';
+import AssociateListByIdOrNameSpec from '../../../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
+import AssociateListByIdOrNameQuery from '../../../../core/interfaces/query/associate-list-by-id-or-name-query';
 
-type SearchAssociateModalParams = {
+type AssociateListByIdOrNameModalParams = {
   show: boolean;
-  onSelectedAssociate: (associate: SearchAssociateSpec) => void;
+  onSelectedAssociate: (associate: AssociateListByIdOrNameSpec) => void;
   onClose: () => any;
 };
 
-const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAssociateModalParams) => {
+export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociate, onClose }: AssociateListByIdOrNameModalParams) {
   const { pushNotification } = useNotificationStore();
   const [showModal, setShowModal] = useState(show);
   const [associateInfo, setAssociateInfo] = useState('');
-  const [associateList, setAssociateList] = useState<SearchAssociateSpec[]>([]);
+  const [associateList, setAssociateList] = useState<AssociateListByIdOrNameSpec[]>([]);
 
   const handleSearchAssociateEnter = async () => {
     try {
@@ -27,14 +27,14 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
         body: JSON.stringify({
           associate_id: CheckAndAssign.checkNumber(associateInfo),
           name: CheckAndAssign.checkText(associateInfo)
-        } as SearchAssociateByIdOrNameQuery)
+        } as AssociateListByIdOrNameQuery)
       });
 
       if (!result.ok)
         throw new Error('Ocurrió un error al realizar la consulta.');
 
       const response = await result.json() as CommandResponseInfo;
-      const list = objectToCamel(response.data) as SearchAssociateSpec[];
+      const list = objectToCamel(response.data) as AssociateListByIdOrNameSpec[];
 
       setAssociateList(list);
     } catch (error: any) {
@@ -42,7 +42,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
     }
   };
 
-  const handleAssociateSelected = (associate: SearchAssociateSpec) => {
+  const handleAssociateSelected = (associate: AssociateListByIdOrNameSpec) => {
     if (onSelectedAssociate) {
       onSelectedAssociate(associate);
       onClose();
@@ -80,7 +80,7 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
               </tr>
             </thead>
             <tbody>
-              {associateList.map((associate: SearchAssociateSpec) => (
+              {associateList.map((associate: AssociateListByIdOrNameSpec) => (
                 <tr key={associate.id} style={{ cursor: 'pointer' }}
                   onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
@@ -99,4 +99,4 @@ const SearchAssociateModal = ({ show, onSelectedAssociate, onClose }: SearchAsso
   );
 };
 
-export default SearchAssociateModal;
+export type { AssociateListByIdOrNameModalParams };

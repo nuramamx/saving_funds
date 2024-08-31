@@ -1,4 +1,4 @@
-export default interface ListPaymentByBorrowIdSpec {
+export default interface PaymentListByBorrowIdSpec {
   id: number;
   date: string;
   year: number;

@@ -16,7 +16,7 @@ import useAssociateDraftStore from '../../../core/stores/associate-draft-store';
 import AppConstants from '../../../core/constants/app-constants';
 import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-agreement';
 
-export default function CreateAssociate() {
+export default function AssociateCreate() {
   const {
     associate,
     stateId,
@@ -64,7 +64,7 @@ export default function CreateAssociate() {
       }
 
       pushNotification({ message: 'Socio creado con éxito.', type: 'success' });
-      navigate('/associate/list');
+      navigate('/savingfunds/associate/list');
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }

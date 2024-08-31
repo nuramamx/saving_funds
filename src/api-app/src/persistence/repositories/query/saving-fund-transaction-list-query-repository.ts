@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
 import { db } from "../../instance";
-import { ProcedureName } from "../../names/procedure-name";
+import { FunctionName } from "../../names/function-name";
 import { SavingFundTransactionListQuery } from "../../../application/use-cases/queries/saving-fund/transaction/list/saving-fund-transaction-list-query-handler";
 import QueryRepositoryInfo from "../../interfaces/query-repository-info";
 import SavingFundTransactionListSpec from "../../specs/list/saving-fund-transaction-list-spec";
@@ -9,7 +9,7 @@ export default class SavingFundTransactionListQueryRepository implements QueryRe
   async all(data: SavingFundTransactionListQuery): Promise<SavingFundTransactionListSpec[]> {
     try {
       const result = await db.sequelize.query(
-        ProcedureName.SAVING_FUND_TRANSACTION_LIST, {
+        FunctionName.SAVING_FUND_TRANSACTION_LIST, {
           replacements: {
             p_saving_fund_id: data.savingFundId,
             p_year: data.year ?? null

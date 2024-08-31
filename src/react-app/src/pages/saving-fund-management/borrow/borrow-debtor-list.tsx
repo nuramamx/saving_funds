@@ -5,12 +5,12 @@ import CommandResponseInfo from '../../../core/interfaces/info/command-response-
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import useNotificationStore from '../../../core/stores/notification-store';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
-import ListBorrowDebtorSpec from '../../../core/interfaces/specs/list/list-borrow-debtor-spec';
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
+import BorrowDebtorListSpec from '../../../core/interfaces/specs/list/borrow-debtor-list-spec';
 
-export default function ListBorrowDebtor() {
+export default function BorrowDebtorList() {
   const [hasError, setHasError] = useState<Boolean>(false);
-  const [borrows, setBorrows] = useState<ListBorrowDebtorSpec[]>([]);
+  const [borrows, setBorrows] = useState<BorrowDebtorListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
 
   const fetchBorrows = async () => {
@@ -25,7 +25,7 @@ export default function ListBorrowDebtor() {
 
       if (!response.successful) throw new Error(response.message);
 
-      const list = objectToCamel(response.data) as ListBorrowDebtorSpec[];
+      const list = objectToCamel(response.data) as BorrowDebtorListSpec[];
     
       setBorrows(list);
     } catch (err: any) {
@@ -64,7 +64,7 @@ export default function ListBorrowDebtor() {
           </thead>
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
-              borrows.map((borrow: ListBorrowDebtorSpec) => (
+              borrows.map((borrow: BorrowDebtorListSpec) => (
                 <tr key={borrow.id}>
                   <td>{borrow.id}</td>
                   <td>{borrow.associateId}</td>

@@ -1,4 +1,4 @@
-export default interface SearchAssociateSpec {
+export default interface AssociateListByIdOrNameSpec {
   id: number;
   fullname: string;
   address: string;

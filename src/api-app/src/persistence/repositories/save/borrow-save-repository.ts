@@ -1,5 +1,5 @@
 import { db } from '../../instance';
-import { ProcedureName } from '../../names/procedure-name';
+import { FunctionName } from '../../names/function-name';
 import { QueryTypes } from 'sequelize';
 import Borrow from '../../../domain/entities/borrow';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
@@ -10,7 +10,7 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
     const transaction = await db.sequelize.transaction();
 
     try {
-      const [borrowSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(ProcedureName.BORROW_CREATE, {
+      const [borrowSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(FunctionName.BORROW_CREATE, {
         replacements: {
           p_associate_id: data.associateId,
           p_requested_amount: data.requestedAmount.toFixed(6),

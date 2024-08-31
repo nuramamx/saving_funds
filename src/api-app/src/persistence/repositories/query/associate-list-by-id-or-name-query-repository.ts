@@ -1,6 +1,6 @@
 import { db } from '../../instance';
 import { QueryTypes } from 'sequelize';
-import { ProcedureName } from '../../names/procedure-name';
+import { FunctionName } from '../../names/function-name';
 import QuerySearchRepositoryInfo from '../../interfaces/query-search-repository-info';
 import AssociateListByIdOrNameQuery from '../../specs/list/associate-list-by-id-or-name-spec';
 
@@ -8,7 +8,7 @@ export default class AssociateListByIdOrNameQueryRepository implements QuerySear
   async byIdOrName(id: number, name: string): Promise<AssociateListByIdOrNameQuery[]> {
     try {
       const result = await db.sequelize.query(
-        ProcedureName.ASSOCIATE_SEARCH_BY_ID_OR_NAME, {
+        FunctionName.ASSOCIATE_SEARCH_BY_ID_OR_NAME, {
           replacements: {
             p_associate_id: id,
             p_name: name 

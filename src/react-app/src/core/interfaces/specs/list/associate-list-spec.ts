@@ -1,4 +1,4 @@
-export default interface ListAssociateSpec {
+export default interface AssociateListSpec {
   id: number;
   fullname: string;
   rfc: string;

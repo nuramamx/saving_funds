@@ -4,19 +4,19 @@ import { DownloadSquare } from 'iconoir-react';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
-import ListBorrowHistorySpec from '../../../core/interfaces/specs/list/list-borrow-history-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import AppConstants from '../../../core/constants/app-constants';
-import ListBorrowHistoryQuery from '../../../core/interfaces/query/list-borrow-history-query';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import PaymentListModal from './modals/payment-list-modal';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
+import BorrowHistoryListSpec from '../../../core/interfaces/specs/list/borrow-history-list-spec';
+import BorrowHistoryListQuery from '../../../core/interfaces/query/borrow-history-list-query';
 
-export default function ListBorrowHistory() {
+export default function BorrowHistoryList() {
   const [showPaymentList, setShowPaymentList] = useState(false);
   const [associate, setAssociate] = useState<number>(0);
-  const [borrows, setBorrows] = useState<ListBorrowHistorySpec[]>([]);
+  const [borrows, setBorrows] = useState<BorrowHistoryListSpec[]>([]);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
@@ -31,14 +31,14 @@ export default function ListBorrowHistory() {
       method: 'POST',
       body: JSON.stringify({
         associateId: associate
-      } as ListBorrowHistoryQuery)
+      } as BorrowHistoryListQuery)
     });
     
     if (!response.ok)
       throw new Error('Ocurrió un error al realizar la consulta.');
 
     const commandResponse = await response.json() as CommandResponseInfo;
-    const list = objectToCamel(commandResponse.data) as ListBorrowHistorySpec[];
+    const list = objectToCamel(commandResponse.data) as BorrowHistoryListSpec[];
 
     setBorrows(list);
   }
@@ -95,7 +95,7 @@ export default function ListBorrowHistory() {
           </thead>
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
-              borrows.map((borrow: ListBorrowHistorySpec) => (
+              borrows.map((borrow: BorrowHistoryListSpec) => (
               <tr key={borrow.id}>
                 <td>{borrow.id}</td>
                 <td>{ToMoney(borrow.requestedAmount)}</td>

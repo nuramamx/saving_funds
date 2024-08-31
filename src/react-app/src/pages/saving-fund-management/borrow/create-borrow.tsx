@@ -70,7 +70,7 @@ export default function CreateBorrow() {
 
       pushNotification({ message: 'Préstamo creado con éxito.', type: 'success' });
       handleClearBorrow();
-      navigate('/associate/borrow/list');
+      navigate('/savingfunds/borrow/list');
     } catch (err: any) {
       pushNotification({ message: err.message, type: 'danger' });
     }

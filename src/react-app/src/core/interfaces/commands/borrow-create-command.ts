@@ -1,5 +1,5 @@
 import BorrowInfo from "../info/borrow-info";
 
-export default interface CreateBorrowCommand extends BorrowInfo {
+export default interface BorrowCreateCommand extends BorrowInfo {
   commandId?: string;
 }

@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
 import { db } from "../../instance";
-import { ProcedureName } from "../../names/procedure-name";
+import { FunctionName } from "../../names/function-name";
 import ProcedureResponseInfo from "../../interfaces/procedure-response-info";
 import SaveRepositoryInfo from "../../interfaces/save-repository-info";
 import Payment from "../../../domain/entities/payment";
@@ -10,7 +10,7 @@ export default class PaymentSaveRepository implements SaveRepositoryInfo<Payment
     const transaction = await db.sequelize.transaction();
 
     try {
-      const [paymentSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(ProcedureName.PAYMENT_CREATE, {
+      const [paymentSaveResult] = await db.sequelize.query<ProcedureResponseInfo>(FunctionName.PAYMENT_CREATE, {
         replacements: {
           p_borrow_id: data.borrowId,
           p_number: data.number,

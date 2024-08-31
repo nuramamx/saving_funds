@@ -1,7 +1,7 @@
 
 import { db } from '../../instance';
 import { QueryTypes } from 'sequelize';
-import { ProcedureName } from '../../names/procedure-name';
+import { FunctionName } from '../../names/function-name';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
 import Associate from '../../../domain/entities/associate';
 import AssociateDetail from '../../../domain/entities/associate-detail';
@@ -21,7 +21,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
     try
     {
-      const [saveAssociateResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ASSOCIATE_CREATE, {
+      const [saveAssociateResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ASSOCIATE_CREATE, {
         replacements: {
           p_firstname: data.name.firstname,
           p_middlename: data.name.middlename,
@@ -39,7 +39,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
 
       const associateId = saveAssociateResult.inserted_id;
 
-      const [saveDetailResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ASSOCIATE_DETAIL_CREATE, {
+      const [saveDetailResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ASSOCIATE_DETAIL_CREATE, {
         replacements: {
           p_associate_id: associateId,
           p_agreement_id: associateDetail.agreementId,
@@ -56,7 +56,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
       if (!saveDetailResult.success)
         throw new Error(saveDetailResult.message);
 
-      const [saveAddressResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.ADDRESS_CREATE, {
+      const [saveAddressResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ADDRESS_CREATE, {
         replacements: {
           p_associate_id: associateId,
           p_city_id: associateAddress.cityId,
@@ -75,7 +75,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
       if (!saveAddressResult.success)
         throw new Error(saveAddressResult.message);
 
-      const [saveWorkspaceResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.WORKPLACE_CREATE, {
+      const [saveWorkspaceResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.WORKPLACE_CREATE, {
         replacements: {
           p_associate_id: associateId,
           p_key: associateWorkplace.key,
@@ -89,7 +89,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
       if (!saveWorkspaceResult.success)
         throw new Error(saveWorkspaceResult.message);
 
-      const [saveBeneficiariesResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.BENEFICIARY_CREATE, {
+      const [saveBeneficiariesResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.BENEFICIARY_CREATE, {
         replacements: {
           p_associate_id: associateId,
           p_beneficiaries: JSON.stringify(associateBeneficiaries),
@@ -106,7 +106,7 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
           throw new Error(x.message);
       });
 
-      const [saveSavingFundResult] = await db.sequelize.query<ProcedureResponseModel>(ProcedureName.SAVING_FUND_CREATE, {
+      const [saveSavingFundResult] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.SAVING_FUND_CREATE, {
         replacements: {
           p_associate_id: associateId,
           p_opening_balance: associateDetail.socialContribution.toFixed(2),

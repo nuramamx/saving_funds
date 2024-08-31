@@ -11,8 +11,8 @@ create or replace function process.borrow_create(
 )
 as $$
 declare
-  annual_rate numeric(20,6);
-  borrow process.borrow_type;
+  v_annual_rate numeric(20,6);
+  v_borrow process.borrow_type;
 begin
   success := false;
   message := 'Operación no iniciada.';
@@ -49,7 +49,8 @@ begin
   -- Get the annual rate based on period.
   select
     ar.rate
-  into annual_rate
+  into
+    v_annual_rate
   from administration.annual_rate as ar
   where ar."period" = p_period;
 
@@ -59,24 +60,24 @@ begin
       p_associate_id,
       p_requested_amount,
       p_period,
-      p_annual_rate,
+      v_annual_rate,
       p_is_fortnightly,
       p_start_at
     )
     returning id into inserted_id;
 
     -- Get borrow calculations
-    borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
+    v_borrow := process.borrow_calculate(p_requested_amount, v_annual_rate, p_period, p_is_fortnightly);
 
     -- Create detail
     insert into process.borrow_detail(borrow_id,number_payments,interests,total_due,guarantee_fund,payment,amount_delivered)
     values (
       inserted_id
-      ,borrow.number_payments
-      ,borrow.interests
-      ,borrow.total_due
-      ,borrow.guarantee_fund
-      ,borrow.payment
+      ,v_borrow.number_payments
+      ,v_borrow.interests
+      ,v_borrow.total_due
+      ,v_borrow.guarantee_fund
+      ,v_borrow.payment
       ,p_requested_amount
     );
 

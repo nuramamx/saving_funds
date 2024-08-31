@@ -1,13 +1,12 @@
-export default interface ListBorrowHistorySpec {
+export default interface BorrowListSpec {
   id: number;
+  associateId: number;
+  associateName: string;
   requestedAmount: number;
   totalDue: number;
   totalPaid: number;
-  numberPayments: number;
-  paymentsMade: number;
   period: number;
   isFortnightly: boolean;
-  resolution: string;
   startAt: string;
   createdAt: string;
 }

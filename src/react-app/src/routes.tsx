@@ -3,14 +3,14 @@ import { SidebarParentMenu } from './components/layout/layout-app-sidebar';
 import App from './App';
 import AssociateManagementPage from './pages/saving-fund-management/saving-fund-management';
 import MyAccountManagementPage from './pages/myaccount-management/myaccount-management';
-import MyAccountPage from './pages/myaccount-management/myaccount-page/myaccount-page';
-import CreateAssociate from './pages/saving-fund-management/associate-page/create-associate';
-import CreateBorrow from './pages/saving-fund-management/borrow-page/create-borrow';
-import ListAssociate from './pages/saving-fund-management/associate-page/list-associate';
-import ListBorrow from './pages/saving-fund-management/borrow-page/list-borrow';
-import ListBorrowHistory from './pages/saving-fund-management/borrow-page/list-borrow-history';
-import ListBorrowDebtor from './pages/saving-fund-management/borrow-page/list-borrow-debtor';
-import SavingFundList from './pages/saving-fund-management/saving-fund-page/saving-fund-list';
+import MyAccountPage from './pages/myaccount-management/myaccount/myaccount-page';
+import CreateAssociate from './pages/saving-fund-management/associate/associate-create';
+import CreateBorrow from './pages/saving-fund-management/borrow/create-borrow';
+import SavingFundList from './pages/saving-fund-management/saving-fund/saving-fund-list';
+import AssociateList from './pages/saving-fund-management/associate/associate-list';
+import BorrowList from './pages/saving-fund-management/borrow/borrow-list';
+import BorrowHistoryList from './pages/saving-fund-management/borrow/borrow-history-list';
+import BorrowDebtorList from './pages/saving-fund-management/borrow/borrow-debtor-list';
 
 const Routes = createBrowserRouter([
   {
@@ -22,12 +22,12 @@ const Routes = createBrowserRouter([
         element: <AssociateManagementPage />,
         children: [
           { path: 'list', element: <SavingFundList /> },
-          { path: 'associate/list', element: <ListAssociate /> },
           { path: 'associate/create', element: <CreateAssociate /> },
-          { path: 'borrow/list', element: <ListBorrow /> },
+          { path: 'associate/list', element: <AssociateList /> },
           { path: 'borrow/create', element: <CreateBorrow /> },
-          { path: 'borrow/history', element: <ListBorrowHistory /> },
-          { path: 'borrow/debtor', element: <ListBorrowDebtor />}
+          { path: 'borrow/list', element: <BorrowList /> },
+          { path: 'borrow/history', element: <BorrowHistoryList /> },
+          { path: 'borrow/debtor', element: <BorrowDebtorList />},
         ]
       },
       {
@@ -60,8 +60,8 @@ const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'borrowing', name: 'Préstamos', location: '/savingfunds', children: [
     { key: 'borrow-create', route: '/savingfunds/borrow/create', name: 'Inscribir Préstamo' },
     { key: 'borrow-list', route: '/savingfunds/borrow/list', name: 'Gestión de Préstamos' },
-    { key: 'borrow-history', route: '/savingfunds/borrow/history', name: 'Historial de Préstamos' },
-    { key: 'borrow-debtor', route: '/savingfunds/borrow/debtor', name: 'Socios Deudores' }
+    { key: 'borrow-history-list', route: '/savingfunds/borrow/history', name: 'Historial de Préstamos' },
+    { key: 'borrow-debtor-list', route: '/savingfunds/borrow/debtor', name: 'Socios Deudores' }
   ] },
   { key: 'util', name: 'Cargas Masivas', location: '/savingfunds', children: [
     { key: 'associate-batch', route: '/savingfunds/associate/batch', name: 'Asociados' },

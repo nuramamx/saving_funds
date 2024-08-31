@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
 import { BinMinusIn, Edit, JournalPage } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
-import ListAssociateSpec from '../../../core/interfaces/specs/list/list-associate-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
+import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
 
-export default function ListAssociate() {
-  const [associates, setAssociates] = useState<ListAssociateSpec[]>([]);
+export default function AssociateList() {
+  const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
 
   const fetchAssociates = async () => {
     const result = await fetch(`${AppConstants.apiAssociate}/list`, {
@@ -18,7 +18,7 @@ export default function ListAssociate() {
       throw new Error(result.statusText);
 
     const response = await result.json() as CommandResponseInfo;
-    const list = objectToCamel(response.data) as ListAssociateSpec[];
+    const list = objectToCamel(response.data) as AssociateListSpec[];
     
     setAssociates(list);
   };
@@ -45,7 +45,7 @@ export default function ListAssociate() {
           </thead>
           <tbody>
             {associates !== undefined && associates?.length > 0 ? (
-              associates.map((associate: ListAssociateSpec) => (
+              associates.map((associate: AssociateListSpec) => (
               <tr key={associate.id}>
                 <td>{associate.id}</td>
                 <td>{associate.fullname}</td>

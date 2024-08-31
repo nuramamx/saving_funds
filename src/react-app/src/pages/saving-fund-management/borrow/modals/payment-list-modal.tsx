@@ -6,9 +6,9 @@ import { chunkArray } from '../../../../core/util/array-util';
 import useNotificationStore from '../../../../core/stores/notification-store';
 import AppConstants from '../../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
-import ListPaymentByBorrowIdSpec from '../../../../core/interfaces/specs/list/list-payment-by-borrow-id-spec';
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SFPaymentMark from '../../../../components/dynamic-elements/sf-payment-mark';
+import PaymentListByBorrowIdSpec from '../../../../core/interfaces/specs/list/payment-list-by-borrow-id-spec';
 
 type PaymentListModalParams = {
   borrowId: number;
@@ -19,8 +19,8 @@ type PaymentListModalParams = {
 export default function PaymentListModal({ borrowId, show, onClose}: PaymentListModalParams) {
   const { pushNotification } = useNotificationStore();
   const [showModal, setShowModal] = useState(show);
-  const [payments, setPayments] = useState<ListPaymentByBorrowIdSpec[]>([]);
-  const [chunkedPayments, setChunkedPayments] = useState<ListPaymentByBorrowIdSpec[][]>([]);
+  const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
+  const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
 
   const handleClose = () => {
     if (onClose) {
@@ -40,7 +40,7 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
         throw new Error(result.statusText);
 
       const response = await result.json() as CommandResponseInfo;
-      const list = objectToCamel(response.data) as ListPaymentByBorrowIdSpec[];
+      const list = objectToCamel(response.data) as PaymentListByBorrowIdSpec[];
       
       setPayments(list);
       setChunkedPayments(chunkArray(payments, 10));

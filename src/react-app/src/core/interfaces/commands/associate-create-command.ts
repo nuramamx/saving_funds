@@ -1,5 +1,5 @@
 import AssociateInfo from "../info/associate-info";
 
-export default interface CreateAssociateCommand extends AssociateInfo {
+export default interface AssociateCreateCommand extends AssociateInfo {
   commandId?: string;
 }

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { produce } from "immer";
 import { v4 as uuid } from "uuid";
 import useNotificationStore from "./notification-store";
-import CreateAssociateCommand from "../interfaces/commands/create-associate-command";
+import CreateAssociateCommand from "../interfaces/commands/associate-create-command";
 
 interface AssociateDraftStore {
     associates: CreateAssociateCommand[];

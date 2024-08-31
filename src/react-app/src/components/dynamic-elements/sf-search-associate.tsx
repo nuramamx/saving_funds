@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Erase, InfoCircle, Search } from 'iconoir-react';
 import { SFNumberInputInfo } from '../form/interfaces/sf-input-info';
-import SearchAssociateModal from '../../pages/saving-fund-management/associate-page/modals/search-associate-modal';
-import SearchAssociateSpec from '../../core/interfaces/specs/search/search-associate-spec';
+import SearchAssociateSpec from '../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
+import AssociateListByIdOrNameModal from '../../pages/saving-fund-management/associate/modals/associate-list-by-id-or-name-modal';
 
 const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInfo) => {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +40,7 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
         </li>
       </ul>
     </nav>
-    <SearchAssociateModal
+    <AssociateListByIdOrNameModal
       show={showModal}
       onSelectedAssociate={(value) => handleSelectedAssociate(value)}
       onClose={() => setShowModal(false)} />

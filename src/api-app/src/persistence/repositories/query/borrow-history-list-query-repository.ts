@@ -1,6 +1,6 @@
 import { db } from '../../instance';
 import { QueryTypes } from 'sequelize';
-import { ProcedureName } from '../../names/procedure-name';
+import { FunctionName } from '../../names/function-name';
 import { BorrowHistoryListQuery } from '../../../application/use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
 import QueryRepositoryInfo from '../../interfaces/query-repository-info';
 import BorrowHistoryListSpec from '../../specs/list/borrow-history-list-spec';
@@ -9,7 +9,7 @@ export default class BorrowHistoryListQueryRepository implements QueryRepository
   async all(data: BorrowHistoryListQuery): Promise<BorrowHistoryListSpec[]> {
     try {
       const result = await db.sequelize.query(
-        ProcedureName.BORROW_HISTORY_LIST_BY_ASSOCIATE_ID, {
+        FunctionName.BORROW_HISTORY_LIST_BY_ASSOCIATE_ID, {
           replacements: {
             p_associate_id: data.associateId
           },

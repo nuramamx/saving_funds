@@ -3,15 +3,15 @@ import { objectToCamel } from 'ts-case-convert';
 import { DownloadSquare } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
-import ListBorrowSpec from '../../../core/interfaces/specs/list/list-borrow-spec';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import useNotificationStore from '../../../core/stores/notification-store';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
+import BorrowListSpec from '../../../core/interfaces/specs/list/borrow-list-spec';
 
-export default function ListBorrow() {
+export default function BorrowList() {
   const [hasError, setHasError] = useState<Boolean>(false);
-  const [borrows, setBorrows] = useState<ListBorrowSpec[]>([]);
+  const [borrows, setBorrows] = useState<BorrowListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
 
   const fetchBorrows = async () => {
@@ -26,7 +26,7 @@ export default function ListBorrow() {
 
       if (!response.successful) throw new Error(response.message);
 
-      const list = objectToCamel(response.data) as ListBorrowSpec[];
+      const list = objectToCamel(response.data) as BorrowListSpec[];
     
       setBorrows(list);
     } catch (err: any) {
@@ -63,7 +63,7 @@ export default function ListBorrow() {
           </thead>
           <tbody>
             {borrows !== undefined && borrows?.length > 0 ? (
-              borrows.map((borrow: ListBorrowSpec) => (
+              borrows.map((borrow: BorrowListSpec) => (
               <tr key={borrow.id}>
                 <td>{borrow.id}</td>
                 <td>{borrow.associateName}</td>

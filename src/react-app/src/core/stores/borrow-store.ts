@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { produce } from "immer";
-import CreateBorrowCommand from "../interfaces/commands/create-borrow-command";
+import BorrowCreateCommand from "../interfaces/commands/borrow-create-command";
 
-const borrowInitialState: CreateBorrowCommand = {
+const borrowInitialState: BorrowCreateCommand = {
   id: 0,
   associateId: 0,
   requestedAmount: 0,
@@ -24,8 +24,8 @@ const borrowInitialState: CreateBorrowCommand = {
 };
 
 interface BorrowStore {
-  borrow: CreateBorrowCommand;
-  setBorrow: (newState: CreateBorrowCommand) => void;
+  borrow: BorrowCreateCommand;
+  setBorrow: (newState: BorrowCreateCommand) => void;
   updateGuaranteeFund: () => void;
   updateInterests: (period: number, rate: number) => void;
   updateTotalDue: () => void;
@@ -37,7 +37,7 @@ interface BorrowStore {
 const useBorrowStore = create<BorrowStore>()(
   immer((set) => ({
     borrow: borrowInitialState,
-    setBorrow: (newState: CreateBorrowCommand) =>
+    setBorrow: (newState: BorrowCreateCommand) =>
       set(produce((state: BorrowStore) => {
         state.borrow = newState;
       })),

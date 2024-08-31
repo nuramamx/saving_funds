@@ -1,6 +1,6 @@
 import { db } from "../../instance";
 import { QueryTypes } from "sequelize";
-import { ProcedureName } from "../../names/procedure-name";
+import { FunctionName } from "../../names/function-name";
 import QueryRepositoryInfo from "../../interfaces/query-repository-info";
 import PaymentListByBorrowIdSpec from "../../specs/list/payment-list-by-borrow-id-spec";
 import { PaymentListByBorrowIdQuery } from "../../../application/use-cases/queries/payment/list-by-borrow-id/payment-list-by-borrow-id-query-handler";
@@ -9,7 +9,7 @@ export default class PaymentListByBorrowIdQueryRepository implements QueryReposi
   async all(data: PaymentListByBorrowIdQuery): Promise<PaymentListByBorrowIdSpec[]> {
     try {
       const result = await db.sequelize.query(
-        ProcedureName.PAYMENT_LIST_BY_BORROW_ID, {
+        FunctionName.PAYMENT_LIST_BY_BORROW_ID, {
           replacements: {
             p_borrow_id: data.borrowId
           },
