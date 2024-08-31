@@ -1,4 +1,4 @@
-export default function MyAccountPage() {
+export default function MyAccount() {
     return (
         <div>MyAccount</div>
     );

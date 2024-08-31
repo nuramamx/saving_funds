@@ -1,5 +1,5 @@
---drop table if exists administration.state;
-create table if not exists administration.state
+--drop table if exists system.state;
+create table if not exists "system".state
 (
   id int generated always as identity,
   "key" char(3) not null,

@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 
-export default function MyAccountManagementPage() {
+export default function MyAccountManagement() {
     const location = useLocation();
     const route: string = "/myaccount";
 

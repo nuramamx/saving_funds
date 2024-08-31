@@ -63,16 +63,15 @@ const commandConstructors: {
   'BorrowDebtorListQuery': BorrowDebtorListQueryHandler,
   'SavingFundListQuery': SavingFundListQueryHandler,
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
-  
 };
 
 class CommandHandlerFactory {
   static createCommand<K extends keyof CommandHandlerTypeMap>(type: K): CommandHandler<CommandHandlerTypeMap[K], CommandResponse> {
-    const CommandConstructors = commandConstructors[type];
+    const Command = commandConstructors[type];
 
-    if (!CommandConstructors) throw new Error('Comando no soportado.');
+    if (!Command) throw new Error('Comando no soportado.');
 
-    return new CommandConstructors() as CommandHandler<CommandHandlerTypeMap[K], CommandResponse>;
+    return new Command() as CommandHandler<CommandHandlerTypeMap[K], CommandResponse>;
   }
 }
 

@@ -1,5 +1,5 @@
---drop table if exists administration.borrow_annual_rate;
-create table if not exists administration.borrow_annual_rate
+--drop table if exists system.borrow_annual_rate;
+create table if not exists "system".borrow_annual_rate
 (
   id integer generated always as identity,
   rate decimal(20,6) not null,

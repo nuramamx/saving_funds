@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 
-export default function AssociateManagementPage() {
+export default function SavingFundManagement() {
   const location = useLocation();
   const route: string = "/associate";
 
