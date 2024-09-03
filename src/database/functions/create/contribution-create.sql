@@ -27,8 +27,7 @@ begin
       p_saving_fund_id      
       ,p_amount
       ,v_server_datetime
-    )
-    returning id into inserted_id;
+    ) returning id into inserted_id;
 
     success := true;
     message := 'Se realizó la transacción satisfactoriamente.';

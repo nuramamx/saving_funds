@@ -45,7 +45,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
       pushNotification({
         message: 'Aportación registrada con éxito.',
         type: 'success'
-      })
+      });
     } catch (err: any) {
       setError(err);
     }

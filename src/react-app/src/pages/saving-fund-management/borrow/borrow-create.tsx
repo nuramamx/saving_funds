@@ -14,7 +14,7 @@ import useValidationModalStore from '../../../core/stores/validation-modal-store
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
 
-export default function CreateBorrow() {
+export default function BorrowCreate() {
   const { 
     borrow,
     setBorrow,

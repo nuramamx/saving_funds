@@ -15,8 +15,7 @@ async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginO
 
   fastify.post<{ Body: string }>('/associate/create', async (request, reply) => {
     const data: AssociateCreateCommand = JSON.parse(request.body);
-    const command = new CommandHandlerMediator();
-    
+    const command = new CommandHandlerMediator();    
     const result = await command.execute('AssociateCreateCommand', data);
 
     if (!result.successful) reply.statusCode = 400;
@@ -26,8 +25,7 @@ async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginO
 
   fastify.post<{ Body: string }>('/associate/search_by_id_or_name', async (request, reply) => {
     const data: AssociateListByIdOrNameQuery = JSON.parse(request.body);
-    const command = new CommandHandlerMediator();
-    
+    const command = new CommandHandlerMediator();    
     const result = await command.execute('AssociateListByIdOrNameQuery', data);
 
     if (!result.successful) reply.statusCode = 400;

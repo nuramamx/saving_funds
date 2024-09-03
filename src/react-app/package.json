@@ -3,9 +3,10 @@
   "version": "1.0",
   "private": true,
   "dependencies": {
-    "animate.css": "^4.1.1",
+    "animate.css": "~4.1.1",
     "bulma": "~1.0.0",
     "date-fns": "~3.6.0",
+    "i18next": "~23.14.0",
     "iconoir-react": "~7.7.0",
     "immer": "~10.1.1",
     "react": "~18.3.1",
@@ -17,6 +18,8 @@
     "ts-case-convert": "~2.0.7",
     "uuid": "~9.0.1",
     "web-vitals": "~2.1.4",
+    "zod": "~3.23.8",
+    "zod-i18n-map": "~2.27.0",
     "zustand": "~4.5.2"
   },
   "devDependencies": {

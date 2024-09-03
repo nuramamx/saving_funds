@@ -1,10 +1,11 @@
-import DatePicker from "react-datepicker";
+import { ZodIssue } from "zod";
 
 type SFTextInputInfo = {
   id: string;
   name: string;
   value: string | number;
   readonly?: boolean;
+  issues?: ZodIssue[];
   onEnter?: () => void;
   onChange?: (value: string) => void;
 }

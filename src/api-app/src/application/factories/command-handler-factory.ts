@@ -9,6 +9,8 @@ import AgreementListQueryHandler from '../use-cases/queries/agreement/list/agree
 import AnnualRateListQueryHandler from '../use-cases/queries/annual-rate/list/annual-rate-list-query-handler';
 import AssociateListByIdOrNameQueryHandler, { AssociateListByIdOrNameQuery } from '../use-cases/queries/associate/by-id-or-name/associate-list-by-id-or-name-query-handler';
 import AssociateListQueryHandler from '../use-cases/queries/associate/list/associate-list-query-handler';
+import BatchCreateCommandHandler, { BatchCreateCommand } from '../use-cases/queries/batch/create/batch-create-command-handler';
+import BatchListQueryHandler, { BatchListQuery } from '../use-cases/queries/batch/list/batch-list-query-handler';
 import BorrowDebtorListQueryHandler from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
 import BorrowHistoryListQueryHandler, { BorrowHistoryListQuery } from '../use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
 import BorrowListQueryHandler from '../use-cases/queries/borrow/list/borrow-list-query-handler';
@@ -25,6 +27,7 @@ type CommandHandlerTypeMap = {
   'PaymentCreateCommand': PaymentCreateCommand,
   'ContributionCreateCommand': ContributionCreateCommand,
   'WithdrawalCreateCommand': WithdrawalCreateCommand,
+  'BatchCreateCommand': BatchCreateCommand,
   // Queries
   'CityListQuery': void,
   'StateListQuery': void,
@@ -38,7 +41,7 @@ type CommandHandlerTypeMap = {
   'BorrowDebtorListQuery': void,
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
-  
+  'BatchListQuery': BatchListQuery
 };
 
 const commandConstructors: {
@@ -50,6 +53,7 @@ const commandConstructors: {
   'PaymentCreateCommand': PaymentCreateCommandHandler,
   'ContributionCreateCommand': ContributionCreateCommandHandler,
   'WithdrawalCreateCommand': WithdrawalCreateCommandHandler,
+  'BatchCreateCommand': BatchCreateCommandHandler,
   // Queries
   'CityListQuery': CityListQueryHandler,
   'StateListQuery': StateListQueryHandler,
@@ -63,6 +67,7 @@ const commandConstructors: {
   'BorrowDebtorListQuery': BorrowDebtorListQueryHandler,
   'SavingFundListQuery': SavingFundListQueryHandler,
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
+  'BatchListQuery': BatchListQueryHandler
 };
 
 class CommandHandlerFactory {

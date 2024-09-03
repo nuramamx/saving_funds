@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
 
-export default function SavingFundManagement() {
+export default function SystemManagement() {
   const location = useLocation();
-  const route: string = "/savingfund";
+  const route: string = "/system";
 
   return (
     <>

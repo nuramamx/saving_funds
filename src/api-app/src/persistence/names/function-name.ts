@@ -1,9 +1,11 @@
 enum FunctionName {
   // Search
   ASSOCIATE_SEARCH_BY_ID_OR_NAME = 'select * from catalog.associate_list_by_id_or_name(:p_associate_id, :p_name);',
-  // Administration
-  AGREEMENT_CREATE = 'select * from administration.agreement_create(:p_name);',
-  AGREEMENT_UPDATE = 'select * from administration.agreement_update(:p_id, :p_name);',
+  // System
+  AGREEMENT_CREATE = 'select * from system.agreement_create(:p_name);',
+  AGREEMENT_UPDATE = 'select * from system.agreement_update(:p_id, :p_name);',
+  BATCH_LIST = 'select * from system.batch_list();',
+  BATCH_CREATE = 'select * from system.batch_create(:p_name, :p_batch_function, :p_details);',
   // Catalog
   ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_firstname, :p_middlename, :p_paternal_lastname, :p_maternal_lastname, :p_rfc, :p_gender);',
   ASSOCIATE_UPDATE = 'select * from catalog.associate_update(:p_id, :p_name, :p_rfc, :p_gender);',

@@ -11,5 +11,5 @@ create table if not exists "system".batch_detail
   updated_at timestamp with time zone not null default current_timestamp,
   constraint batch_detail_pkey primary key (id),
   constraint batch_detail_batch_id_fkey foreign key (batch_id)
-    references "system".batch (id)
+    references "system".batch_detail (id)
 );

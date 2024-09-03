@@ -3,15 +3,16 @@ import { objectToCamel } from "ts-case-convert";
 import useNotificationStore from "../../../core/stores/notification-store";
 import AppConstants from "../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../core/interfaces/info/command-response-info";
+import BatchListSpec from "../../../core/interfaces/specs/list/batch-list-spec";
 
 export default function BatchList() {
   const [hasError, setHasError] = useState<Boolean>(false);
-  const [batchs, setBatchs] = useState<BatchListSpec[]([]);
+  const [batchs, setBatchs] = useState<BatchListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
 
   const fetchBatchs = async () => {
     try {
-      const result = await fetch(`${AppConstants.apiBatch}/list`, {
+      const result = await fetch(`${AppConstants.apiBatch}`, {
         method: 'GET'
       });
       
@@ -47,6 +48,7 @@ export default function BatchList() {
               <th>Id</th>
               <th>Nombre</th>
               <th>Funci&oacute;n</th>
+              <th style={{ textAlign: 'center' }}>Activo</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -56,14 +58,15 @@ export default function BatchList() {
               <tr key={batch.id}>
                 <td>{batch.id}</td>
                 <td>{batch.name}</td>
-                <td>{batch.batch_function}</td>
+                <td>{batch.batchFunction}</td>
+                <td style={{ textAlign: 'center' }}>{batch.isActive ? 'Si' : 'No'}</td>
                 <td>
                   
                 </td>
               </tr>
             ))) : (
               <tr>
-                <td colSpan={4} style={{textAlign: 'center'}}>No hay batchs disponibles</td>
+                <td colSpan={5} style={{textAlign: 'center'}}>No hay batchs disponibles</td>
               </tr>
             )}
           </tbody>

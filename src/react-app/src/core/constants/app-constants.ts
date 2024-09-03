@@ -10,6 +10,7 @@ interface AppConstants {
   apiState: string;
   apiAgreement: string;
   apiAnnualRate: string;
+  apiBatch: string;
 }
 
 const AppConstants: AppConstants = {
@@ -23,7 +24,8 @@ const AppConstants: AppConstants = {
   apiCity: `${process.env.REACT_APP_API_URL}/city`,
   apiState: `${process.env.REACT_APP_API_URL}/state`,
   apiAgreement: `${process.env.REACT_APP_API_URL}/agreement`,
-  apiAnnualRate: `${process.env.REACT_APP_API_URL}/annual_rate`
+  apiAnnualRate: `${process.env.REACT_APP_API_URL}/annual_rate`,
+  apiBatch: `${process.env.REACT_APP_API_URL}/batch`
 }
 
 export default AppConstants;
