@@ -21,12 +21,11 @@ export default function BatchComposer() {
     name: '',
     batchFunction: '',
     isActive: true,
-    details: ''
+    details: []
   };
   const batchDetailSpecInitialState = {
-    id: undefined!,
-    batchId: '',
     name: '',
+    friendlyName: '',
     description: '',
     parameter: '',
     type: '',
@@ -103,6 +102,7 @@ export default function BatchComposer() {
       setBatchDetail(batchDetailSpecInitialState);
       setBatchDetailEdit(false);
     } else {
+      console.log(batchDetail);
       setBatchDetails((draft) => [...draft, batchDetail]);
       setBatchDetail(batchDetailSpecInitialState);
     }
@@ -179,8 +179,8 @@ export default function BatchComposer() {
   };
 
   useEffect(() => {
-    setBatch({...batch, details: JSON.stringify(batchDetails)});
-  }, [(batchDetails.length > 0)])
+    setBatch({...batch, details: batchDetails});
+  }, [(batchDetails)])
 
   return (
     <>
@@ -191,6 +191,7 @@ export default function BatchComposer() {
       </div>
       <div className="column">
         <SFTextInput id="batch-detail-column-name" name="Nombre de columna" value={batchDetail.name} onChange={(v) => setBatchDetail({...batchDetail, name: v.toLocaleUpperCase() })} issues={issues} />
+        <SFTextInput id="batch-detail-column-friendly-name" name="Nombre identificativo" value={batchDetail.friendlyName} onChange={(v) => setBatchDetail({...batchDetail, friendlyName: v.toLocaleUpperCase() })} issues={issues} />
         <SFTextInput id="batch-detail-column-description" name="Descripción" value={batchDetail.description} onChange={(v) => setBatchDetail({...batchDetail, description: v.toLocaleUpperCase() })} issues={issues} />
         <SFTextInput id="batch-detail-column-parameter" name="Parámetro" value={batchDetail.parameter} onChange={(v) => setBatchDetail({...batchDetail, parameter: v.toLocaleLowerCase() })} issues={issues} />
         <SFSelectInput options={columnTypes} id="batch-detail-column-type" name="Tipo de dato" value={batchDetail.type} onChange={(v) => setBatchDetail({...batchDetail, type: v })} issues={issues} />

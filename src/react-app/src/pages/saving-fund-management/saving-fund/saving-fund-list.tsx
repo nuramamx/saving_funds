@@ -45,7 +45,7 @@ export default function SavingFundList() {
               <th>Salario</th>
               <th>Aportaci&oacute;n inicial</th>
               <th>Balance</th>
-              <th>Intereses</th>
+              <th>Rendimientos</th>
               <th>Aportaciones</th>
               <th>Retiros</th>
               <th>Total</th>

@@ -6,6 +6,7 @@ enum FunctionName {
   AGREEMENT_UPDATE = 'select * from system.agreement_update(:p_id, :p_name);',
   BATCH_LIST = 'select * from system.batch_list();',
   BATCH_CREATE = 'select * from system.batch_create(:p_name, :p_batch_function, :p_details);',
+  BATCH_UPLOAD_CREATE = '',
   // Catalog
   ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_firstname, :p_middlename, :p_paternal_lastname, :p_maternal_lastname, :p_rfc, :p_gender);',
   ASSOCIATE_UPDATE = 'select * from catalog.associate_update(:p_id, :p_name, :p_rfc, :p_gender);',

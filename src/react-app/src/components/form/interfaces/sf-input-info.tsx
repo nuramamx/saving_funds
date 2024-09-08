@@ -15,6 +15,7 @@ type SFNumberInputInfo = {
   name: string;
   value: number | string;
   readonly?: boolean;
+  issues?: ZodIssue[];
   onChange?: (value: number) => void;
 }
 
@@ -44,6 +45,15 @@ type SFTextDisplayInfo = {
   display: string
 }
 
+type SFFileInfo = {
+  id: string;
+  name: string;
+  accept: string;
+  readonly?: boolean;
+  issues?: ZodIssue[];
+  onChange?: (filename: string, file: File) => void;
+}
+
 type DatePickerInput = {
   params: DatePickerInputParams;
 }
@@ -59,4 +69,13 @@ type DatePickerInputParams = {
   onChange?: (value: Date) => void;
 }
 
-export type { SFTextInputInfo, SFNumberInputInfo, SFMoneyInputInfo, SFRangeInputInfo, SFTextDisplayInfo, DatePickerInput, DatePickerInputParams }
+export type { 
+  SFTextInputInfo, 
+  SFNumberInputInfo, 
+  SFMoneyInputInfo, 
+  SFRangeInputInfo, 
+  SFTextDisplayInfo, 
+  SFFileInfo, 
+  DatePickerInput, 
+  DatePickerInputParams 
+}

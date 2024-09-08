@@ -14,6 +14,7 @@ import BatchList from './pages/system-management/batch/batch-list';
 import SystemManagement from './pages/system-management/system-management';
 import BorrowCreate from './pages/saving-fund-management/borrow/borrow-create';
 import BatchComposer from './pages/system-management/batch/batch-composer';
+import BatchUpload from './pages/saving-fund-management/batch/batch-upload';
 
 const Routes = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const Routes = createBrowserRouter([
           { path: 'borrow/list', element: <BorrowList /> },
           { path: 'borrow/history', element: <BorrowHistoryList /> },
           { path: 'borrow/debtor', element: <BorrowDebtorList />},
+          { path: 'batch/upload', element: <BatchUpload />},
         ]
       },
       {
@@ -75,7 +77,7 @@ const SidebarRoutes: SidebarParentMenu[] = [
     { key: 'borrow-debtor-list', route: '/savingfund/borrow/debtor', name: 'Socios Deudores' }
   ] },
   { key: 'util', name: 'Utilidades', location: '/savingfund', children: [
-    { key: 'batch-process', route: '/savingfund/batch', name: 'Carga por Batch' }
+    { key: 'batch-upload', route: '/savingfund/batch/upload', name: 'Carga por Batch' }
   ]},
   { key: 'batch', name: 'Batch', location: '/system', children: [
     { key: 'batch-composer', route: '/system/batch/composer', name: 'Crear Batch' },

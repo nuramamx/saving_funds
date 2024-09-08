@@ -4,6 +4,7 @@ returns table (
   id integer,
   "name" varchar,
   batch_function text,
+  details jsonb,
   is_active boolean
 ) as $$
 declare
@@ -13,8 +14,9 @@ begin
     b.id
     ,b."name"
     ,b.batch_function
+    ,b.details
     ,b.is_active
   from "system".batch as b
-  order by b.is_active desc;
+  order by b.id asc, b.is_active desc;
 end;
 $$ language plpgsql;

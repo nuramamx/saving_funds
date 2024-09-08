@@ -11,6 +11,7 @@ import AssociateListByIdOrNameQueryHandler, { AssociateListByIdOrNameQuery } fro
 import AssociateListQueryHandler from '../use-cases/queries/associate/list/associate-list-query-handler';
 import BatchCreateCommandHandler, { BatchCreateCommand } from '../use-cases/queries/batch/create/batch-create-command-handler';
 import BatchListQueryHandler, { BatchListQuery } from '../use-cases/queries/batch/list/batch-list-query-handler';
+import BatchUploadCommandHandler, { BatchUploadCommand } from '../use-cases/queries/batch/upload/batch-upload-command-handler';
 import BorrowDebtorListQueryHandler from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
 import BorrowHistoryListQueryHandler, { BorrowHistoryListQuery } from '../use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
 import BorrowListQueryHandler from '../use-cases/queries/borrow/list/borrow-list-query-handler';
@@ -28,6 +29,7 @@ type CommandHandlerTypeMap = {
   'ContributionCreateCommand': ContributionCreateCommand,
   'WithdrawalCreateCommand': WithdrawalCreateCommand,
   'BatchCreateCommand': BatchCreateCommand,
+  'BatchUploadCommand': BatchUploadCommand,
   // Queries
   'CityListQuery': void,
   'StateListQuery': void,
@@ -54,6 +56,7 @@ const commandConstructors: {
   'ContributionCreateCommand': ContributionCreateCommandHandler,
   'WithdrawalCreateCommand': WithdrawalCreateCommandHandler,
   'BatchCreateCommand': BatchCreateCommandHandler,
+  'BatchUploadCommand': BatchUploadCommandHandler,
   // Queries
   'CityListQuery': CityListQueryHandler,
   'StateListQuery': StateListQueryHandler,

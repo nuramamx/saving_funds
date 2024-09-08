@@ -6,7 +6,7 @@ import QueryRepositoryInfo from "../../interfaces/query-repository-info";
 import BatchListSpec from "../../specs/list/batch-list-spec";
 
 export default class BatchListQueryRepository implements QueryRepositoryInfo<BatchListQuery, BatchListSpec> {
-  async all(data: BatchListQuery): Promise<BatchListSpec[]> {
+  async all(data?: BatchListQuery): Promise<BatchListSpec[]> {
     try {
       const result = await db.sequelize.query(
         FunctionName.BATCH_LIST, {

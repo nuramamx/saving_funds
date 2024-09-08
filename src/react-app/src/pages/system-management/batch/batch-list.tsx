@@ -37,7 +37,7 @@ export default function BatchList() {
 
   useEffect(() => {
     handleReload();
-  }, [hasError])
+  }, [hasError]);
 
   return (
     <div className="columns">
