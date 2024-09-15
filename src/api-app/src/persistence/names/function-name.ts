@@ -8,7 +8,7 @@ enum FunctionName {
   BATCH_CREATE = 'select * from system.batch_create(:p_name, :p_batch_function, :p_details);',
   BATCH_UPLOAD_CREATE = '',
   // Catalog
-  ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_firstname, :p_middlename, :p_paternal_lastname, :p_maternal_lastname, :p_rfc, :p_gender);',
+  ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_name, :p_rfc, :p_gender, :p_detail, :p_address, :p_workplace, :p_beneficiaries);',
   ASSOCIATE_UPDATE = 'select * from catalog.associate_update(:p_id, :p_name, :p_rfc, :p_gender);',
   ASSOCIATE_DETAIL_CREATE = 'select * from catalog.associate_detail_create(:p_associate_id, :p_agreement_id, :p_dependency_key, :p_category, :p_salary, :p_social_contribution, :p_fortnightly_contribution);',
   ASSOCIATE_DETAIL_UPDATE = 'select * from catalog.associate_detail_create(:p_id, :p_agreement_id, :p_dependency_key, :p_category, :p_salary, :p_social_contribution, :p_fortnightly_contribution);',

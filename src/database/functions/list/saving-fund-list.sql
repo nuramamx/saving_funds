@@ -14,7 +14,7 @@ returns table (
   opening_balance numeric(20,6),
   is_fortnightly boolean,
   balance numeric(20,6),
-  accrued_interest numeric(20,6),
+  yields numeric(20,6),
   total numeric(20,6),
   contributions numeric(20,6),
   withdrawals numeric(20,6)
@@ -32,28 +32,27 @@ begin
     ,d.opening_balance
     ,d.is_fortnightly
     ,d.balance
-    ,d.accrued_interest
-    ,d.balance + d.accrued_interest as total
+    ,d.yields
+    ,d.balance + d.yields as total
     ,d.contributions
     ,d.withdrawals
   from (
     select 
       sf.id
       ,sf.associate_id
-      ,deconstruct_name(a."name") as associate_name
+      ,a."name"::text as associate_name
       ,ag."name" as agreement_name
-      ,ad.salary
+      ,(a.detail->>'salary')::numeric(20,6) as salary
       ,sf.opening_balance
       ,sf.annual_rate
       ,sf.is_fortnightly
       ,(coalesce(contribution.amount,0) - coalesce(withdrawal.amount, 0)) as balance
-      ,process.contribution_get_accrued_interest(sf.id) as accrued_interest
+      ,process.contribution_get_accrued_yields(sf.id) as yields
       ,(coalesce(contribution.amount, 0)) as contributions
       ,(coalesce(withdrawal.amount)) as withdrawals
     from process.saving_fund as sf
     join "catalog".associate as a on sf.associate_id = a.id
-    join "catalog".associate_detail as ad on a.id = ad.associate_id
-    join administration.agreement as ag on ad.agreement_id = ag.id
+    join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
     left join lateral (
       select
         sum(c.amount) as amount
@@ -65,7 +64,7 @@ begin
         sum(w.amount) as amount
       from process.withdrawal as w
       where sf.id = w.saving_fund_id
-      and w.is_interest = false
+      and w.is_yields = false
     ) as withdrawal on true
   ) as d;
 end;

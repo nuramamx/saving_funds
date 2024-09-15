@@ -7,15 +7,12 @@ import Workplace from '../../../../../domain/entities/workplace';
 import AddressInfo from '../../../../../domain/interfaces/address-info';
 import AssociateDetailInfo from '../../../../../domain/interfaces/associate-detail-info';
 import BeneficiaryInfo from '../../../../../domain/interfaces/beneficiary-info';
-import NameInfo from '../../../../../domain/interfaces/name-info';
 import WorkplaceInfo from '../../../../../domain/interfaces/workplace-info';
-import ErrorCodes from '../../../../../domain/types/error-codes';
 import AssociateSaveRepository from '../../../../../persistence/repositories/save/associate-save-repository';
-import AssociateCreateCommandValidator from './associate-create-command-validator';
 
 interface AssociateCreateCommand {
   commandId?: string;
-  name: NameInfo;
+  name: string;
   rfc: string;
   gender: string;
   detail: AssociateDetailInfo;
@@ -26,18 +23,7 @@ interface AssociateCreateCommand {
 
 export default class AssociateCreateCommandHandler implements CommandHandler<AssociateCreateCommand, CommandResponse> {
   async execute(data: AssociateCreateCommand): Promise<CommandResponse> {
-    const validation = new AssociateCreateCommandValidator(data).validate();
     const repository = new AssociateSaveRepository();
-
-    if (validation.length > 0) {
-      return {
-        successful: false,
-        code: ErrorCodes.API_CMD_HANDLER_VALIDATION,
-        message: 'Ocurrieron algunos errores de validación, favor de revisarlos.',
-        type: 'danger',
-        errors: [...validation.map((rule) => (rule.message))]
-      } as CommandResponse;
-    }
 
     try {
       const associate = new Associate(data.name, data.rfc, data.gender)
@@ -46,16 +32,13 @@ export default class AssociateCreateCommandHandler implements CommandHandler<Ass
         .updateWorkplace(new Workplace(data.workplace.key, data.workplace.name, data.workplace.phone))
         .addBeneficiaries(data.beneficiaries);
 
+      console.log(associate);
+
       const result = await repository.save(associate);
 
-      return { successful: true, message: 'Préstamo fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Registro fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
-      return {
-        successful: false,
-        message: 'Préstamo no pudo ser creado.',
-        data: err.message,
-        type: 'danger'
-      } as CommandResponse;
+      return { successful: false, message: 'Registro no pudo ser creado.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }

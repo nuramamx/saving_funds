@@ -5,7 +5,7 @@ import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
 import AgreementInfo from "../../core/interfaces/info/agreement-info";
 
-const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
+const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberInputInfo) => {
   const { agreements, setAgreements } = useCacheStore();
 
   useEffect(() => {
@@ -34,6 +34,7 @@ const SFSelectAgreement = memo(({ id, name, value, onChange }: SFNumberInputInfo
         ])}
         </select>
       </div>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   )
 });

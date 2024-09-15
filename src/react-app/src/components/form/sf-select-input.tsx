@@ -11,7 +11,7 @@ export default function SFSelectInput({ id, name, value, options, onChange, issu
           ])}
         </select>
       </div>
-      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path[0]}-${x.path[1]}` === id)?.message}</span>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   );
 }

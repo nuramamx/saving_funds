@@ -1,6 +1,6 @@
 export default interface AssociateListSpec {
   id: number;
-  fullname: string;
+  name: string;
   rfc: string;
   gender: string;
   dependencyKey: string;

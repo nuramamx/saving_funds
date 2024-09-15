@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { SFRangeInputInfo } from "./interfaces/sf-input-info";
 
-export default function SFPercentageInput({ id, name, min = 0, max = 100, value, readonly = false, onChange }: SFRangeInputInfo) {
+export default function SFPercentageInput({ id, name, min = 0, max = 100, value, readonly = false, issues, onChange }: SFRangeInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleBackspaceKeypres = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -47,7 +47,7 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
   return (
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
-      <div className="field has-addons">
+      <div className="field has-addons" style={{ marginBottom: 0 }}>
         <span className="control">
           <label className="button is-static">
             %
@@ -63,6 +63,7 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
             onChange={(e) => handleChange(e)} />
         </div>
       </div>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   );
 }

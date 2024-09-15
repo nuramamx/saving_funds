@@ -15,6 +15,9 @@ import SFSelectState from '../../../components/dynamic-elements/sf-select-state'
 import useAssociateDraftStore from '../../../core/stores/associate-draft-store';
 import AppConstants from '../../../core/constants/app-constants';
 import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-agreement';
+import AssociateValidation from '../../../core/validations/associate-validation';
+import { ZodIssue } from 'zod';
+import IssueTransform from '../../../core/util/transforms/issue-transform';
 
 export default function AssociateCreate() {
   const {
@@ -30,6 +33,7 @@ export default function AssociateCreate() {
   const { pushNotification } = useNotificationStore();
   const { pushAssociateDraft } = useAssociateDraftStore();
   const { setValidationModal } = useValidationModalStore();
+  const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
   const tabsOptions: SFTabsOptions[] = [
     { id: 'associate', name: 'Socio' },
@@ -38,12 +42,9 @@ export default function AssociateCreate() {
     { id: 'beneficiary', name: 'Beneficiarios' }
   ];
 
-  const draft = () => {
-    pushAssociateDraft(associate);
-    pushNotification({ message: 'Borrador guardado correctamente.', type: 'info' });
-  };
+  const handleSave = async () => {
+    if (!handleAssociateValidate()) return;
 
-  const save = async () => {
     try {
       const response = await fetch(`${AppConstants.apiAssociate}/create`, {
         method: 'POST',
@@ -52,8 +53,6 @@ export default function AssociateCreate() {
 
       if (!response.ok) {
         const error = await response.json() as CommandResponseInfo;
-
-        console.log(error);
 
         return setValidationModal({
           message: error.message,
@@ -64,10 +63,30 @@ export default function AssociateCreate() {
       }
 
       pushNotification({ message: 'Socio creado con éxito.', type: 'success' });
-      navigate('/savingfunds/associate/list');
+      navigate('/savingfund/associate/list');
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });
     }
+  };
+
+  const handleAssociateValidate = (): boolean => {
+    const result = AssociateValidation.safeParse(associate);
+
+    if (!result.success) {
+      pushNotification({
+        message: `Favor de revisar los campos requeridos.`,
+        type: 'danger'
+      });
+
+      setIssues(IssueTransform('associate', result.error.issues));      
+    }
+
+    return result.success;
+  };
+
+  const handleClear = () => {
+    clearAssociate();
+    setIssues([]);
   };
 
   useEffect(() => {
@@ -84,96 +103,107 @@ export default function AssociateCreate() {
       <div id="associate">
         <div className="columns">
           <div className="column">
-            <SFTextInput id="associate_firstname" name="Nombre"
-              value={associate.name.firstname}
-              onChange={(value) => setAssociate({ ...associate, name: { ...associate.name, firstname: value.toUpperCase() }})} />
-            <SFTextInput id="associate_middlename" name="Segundo Nombre"
-              value={associate.name.middlename}
-              onChange={(value) => setAssociate({ ...associate, name: { ...associate.name, middlename: value.toUpperCase() }})} />
-            <SFTextInput id="associate_paternal_lastname" name="Apellido Paterno"
-              value={associate.name.paternalLastname}
-              onChange={(value) => setAssociate({ ...associate, name: { ...associate.name, paternalLastname: value.toUpperCase() }})} />
-            <SFTextInput id="associate_maternal_lastname" name="Apellido Materno"
-              value={associate.name.maternalLastname}
-              onChange={(value) => setAssociate({ ...associate, name: { ...associate.name, maternalLastname: value.toUpperCase() }})} />
-            <SFTextInput id="associate_rfc" name="R.F.C."
+            <SFTextInput id="associate-name" name="Nombre"
+              value={associate.name}
+              onChange={(value) => setAssociate({ ...associate, name: value.toUpperCase() })}
+              issues={issues} />
+            <SFTextInput id="associate-rfc" name="R.F.C."
               value={associate.rfc}
-              onChange={(value) => setAssociate({ ...associate, rfc: value.toUpperCase() })} />
-            <SFSelectInput id="associate_gender" name="Sexo"
+              onChange={(value) => setAssociate({ ...associate, rfc: value.toUpperCase() })}
+              issues={issues} />
+            <SFSelectInput id="associate-gender" name="Sexo"
               value={associate.gender}
-              options={([ { key: '-', value: '---'}, { key: 'M', value: 'MASCULINO'}, { key: 'F', value: 'FEMENINO' }])}
-              onChange={(value) => setAssociate({ ...associate, gender: value.toUpperCase() })} />
+              options={([ { key: '-', value: '---'}, { key: 'MASCULINO', value: 'M'}, { key: 'FEMENINO', value: 'F' }])}
+              onChange={(value) => setAssociate({ ...associate, gender: value.toUpperCase() })}
+              issues={issues} />
+            <SFTextInput id="associate-detail-dependencyKey" name="Clave de Dependencia"
+              value={associate.detail.dependencyKey}
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, dependencyKey: value.toUpperCase() }})}
+              issues={issues} />
+            <SFSelectAgreement id="associate-detail-agreementId" name="Convenio"
+              value={associate.detail.agreementId}
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, agreementId: value }})}
+              issues={issues} />
+            <SFTextInput id="associate-detail-category" name="Categoría"
+              value={associate.detail.category}
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, category: value.toUpperCase() }})}
+              issues={issues} />
           </div>
           <div className="column">
-            <SFTextInput id="associate_dependency_key" name="Clave de Dependencia"
-              value={associate.detail.dependencyKey}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, dependencyKey: value.toUpperCase() }})} />
-            <SFSelectAgreement id="associate_agreement" name="Convenio"
-              value={associate.detail.agreementId}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, agreementId: value }})} />
-            <SFTextInput id="associate_category" name="Categoría"
-              value={associate.detail.category}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, category: value.toUpperCase() }})} />
-            <SFMoneyInput id="associate_salary" name="Sueldo / Pensión"
+            <SFMoneyInput id="associate-detail-salary" name="Sueldo / Pensión"
               value={associate.detail.salary}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, salary: value }})} />
-            <SFMoneyInput id="associate_social_contribution" name="Aportación Social"
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, salary: value }})}
+              issues={issues} />
+            <SFMoneyInput id="associate-detail-socialContribution" name="Aportación Social"
               value={associate.detail.socialContribution}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, socialContribution: value }})} />
-            <SFMoneyInput id="associate_fortnighly_contribution" name="Aportación Quincenal"
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, socialContribution: value }})}
+              issues={issues} />
+            <SFMoneyInput id="associate-detail-fortnightlyContribution" name="Aportación Quincenal"
               value={associate.detail.fortnightlyContribution}
-              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, fortnightlyContribution: value }})} />
+              onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, fortnightlyContribution: value }})}
+              issues={issues} />
           </div>
         </div>
       </div>
       <div id="address">
         <div className="columns">
           <div className="column">
-            <SFTextInput id="address_street" name="Calle y N&uacute;mero"
+            <SFTextInput id="associate-address-street" name="Calle y N&uacute;mero"
               value={associate.address.street}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, street: value.toUpperCase() }})} />
-            <SFTextInput id="address_settlement" name="Colonia"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, street: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-address-settlement" name="Colonia"
               value={associate.address.settlement}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, settlement: value.toUpperCase() }})} />
-            <SFTextInput id="address_town" name="Localidad"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, settlement: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-address-town" name="Localidad"
               value={associate.address.town}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, town: value.toUpperCase() }})} />
-            <SFTextInput id="address_postal_code" name="C&oacute;digo Postal"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, town: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-address-postalCode" name="C&oacute;digo Postal"
               value={associate.address.postalCode}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, postalCode: value.toUpperCase() }})} />
-            <SFSelectState id="address_state_id" name="Estado"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, postalCode: value.toUpperCase() }})}
+              issues={issues} />
+            <SFSelectState id="associate-address-stateId" name="Estado"
               value={stateId}
               onChange={(value) => setStateId(value)} />
-            <SFSelectCity id="address_city_id" name="Ciudad"
+            <SFSelectCity id="associate-address-cityId" name="Ciudad"
               value={associate.address.cityId}
               stateId={stateId}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, cityId: value }})} />
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, cityId: value }})}
+              issues={issues} />
           </div>
           <div className="column">
-            <SFTextInput id="address_phone" name="Tel&eacute;fono"
+            <SFTextInput id="associate-address-phone" name="Tel&eacute;fono"
               value={associate.address.phone}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, phone: value.toUpperCase() }})} />
-            <SFTextInput id="address_mobile" name="Celular"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, phone: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-address-mobile" name="Celular"
               value={associate.address.mobile}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, mobile: value.toUpperCase() }})} />
-            <SFTextInput id="address_email" name="Email"
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, mobile: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-address-email" name="Email"
               value={associate.address.email}
-              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, email: value.toUpperCase() }})} />
+              onChange={(value) => setAssociate({ ...associate, address: { ...associate.address, email: value.toUpperCase() }})}
+              issues={issues} />
           </div>
         </div>
       </div>
       <div id="workplace">
         <div className="columns">
           <div className="column">
-            <SFTextInput id="workplace_key" name="Clave de Centro de Trabajo"
+            <SFTextInput id="associate-workplace-key" name="Clave de Centro de Trabajo"
               value={associate.workplace.key}
-              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, key: value.toUpperCase() }})} />
-            <SFTextInput id="workplace_name" name="Centro de Trabajo / Instituci&oacute;n"
+              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, key: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-workplace-name" name="Centro de Trabajo / Instituci&oacute;n"
               value={associate.workplace.name}
-              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, name: value.toUpperCase() }})} />
-            <SFTextInput id="workplace_phone" name="Tel&eacute;fono"
+              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, name: value.toUpperCase() }})}
+              issues={issues} />
+            <SFTextInput id="associate-workplace-phone" name="Tel&eacute;fono"
               value={associate.workplace.phone}
-              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, phone: value.toUpperCase() }})} />
+              onChange={(value) => setAssociate({ ...associate, workplace: { ...associate.workplace, phone: value.toUpperCase() }})}
+              issues={issues} />
           </div>
           <div className="column"></div>
         </div>
@@ -182,22 +212,25 @@ export default function AssociateCreate() {
         <div className="columns">
           <div className="column is-four-fifths">
             {associate.beneficiaries.map((beneficiary, index) => (
-              <SFTextInput key={index} id={`beneficiary_${index+1}`} name={`Beneficiario ${index+1}`}
+              <SFTextInput key={index} id={`associate-beneficiaries-${index}-name`} name={`Beneficiario ${index + 1}`}
                 value={beneficiary.name}
-                onChange={(value) => updateBeneficiaryName(index, value.toUpperCase())} />
+                onChange={(value) => updateBeneficiaryName(index, value.toUpperCase())}
+                issues={issues} />
             ))}
           </div>
           <div className="column">
             {associate.beneficiaries.map((beneficiary, index) => (
-              <SFPercentageInput key={index} id={`beneficiary_percentage_${index + 1}`} name="Porcentaje"
+              <SFPercentageInput key={index} id={`associate-beneficiaries-${index}-percentage`} name="Porcentaje"
                 min={0} max={100}
                 value={beneficiary.percentage}
-                onChange={(value) => updateBeneficiaryPercentage(index, value)} />
+                onChange={(value) => updateBeneficiaryPercentage(index, value)}
+                issues={issues} />
             ))}
-            <SFTextDisplayInput key="beneficiary_percentage_summarized" id="beneficiary_percentage_summarized" name="Total Cubierto"
+            <SFTextDisplayInput id="associate-beneficiaries-summarized" key="associate-beneficiary-percentage-summarized"  name="Total Cubierto"
               display="%"
               readonly={true}
-              value={beneficiaryTotalPercentage.toString()} />
+              value={beneficiaryTotalPercentage.toString()}
+              issues={issues} />
           </div>
         </div>
       </div>
@@ -207,13 +240,10 @@ export default function AssociateCreate() {
         <div className="level-left"></div>
         <div className="level-right">
           <div className="level-item">
-            <button className="button is-light" onClick={() => clearAssociate()}>Limpiar</button>
+            <button className="button is-light" onClick={() => handleClear()}>Limpiar</button>
           </div>
           <div className="level-item">
-            <button className="button is-light" onClick={() => draft()}>Borrador</button>
-          </div>
-          <div className="level-item">
-          <button className="button is-primary" onClick={() => save()}>Guardar</button>
+          <button className="button is-primary" onClick={() => handleSave()}>Guardar</button>
           </div>
         </div>
       </nav>

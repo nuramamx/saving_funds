@@ -1,7 +1,7 @@
 import NameInfo from "./name-info";
 
 export default interface AssociateInfo {
-  name: NameInfo;
+  name: string;
   rfc: string;
   gender: string;
 }

@@ -4,7 +4,7 @@ create table if not exists process.withdrawal
   id integer generated always as identity,
   saving_fund_id integer not null,
   amount numeric(20,6) not null,
-  is_interest boolean not null default false,
+  is_yields boolean not null default false,
   applied_at timestamp with time zone not null default current_timestamp,
   created_at timestamp with time zone not null default current_timestamp,
   updated_at timestamp with time zone not null default current_timestamp,

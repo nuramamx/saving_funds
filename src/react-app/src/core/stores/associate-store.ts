@@ -3,44 +3,39 @@ import { produce } from "immer";
 import CreateAssociateCommand from "../interfaces/commands/associate-create-command";
 
 const associateInitialState: CreateAssociateCommand = {
-  name: {
-    firstname: "",
-    middlename: "",
-    paternalLastname: "",
-    maternalLastname: ""
-  },
-  rfc: "",
-  gender: "",
+  name: '',
+  rfc: '',
+  gender: '',
   detail: {
     agreementId: 0,
-    dependencyKey: "",
-    category: "",
+    dependencyKey: '',
+    category: '',
     salary: 0,
     socialContribution: 0,
     fortnightlyContribution: 0,
-    requestDate: undefined!
+    requestDate: new Date()
   },
   address: {
     cityId: 0,
-    street: "",
-    settlement: "",
-    town: "",
-    postalCode: "",
-    phone: "",
-    mobile: "",
-    email: ""
+    street: '',
+    settlement: '',
+    town: '',
+    postalCode: '',
+    phone: '',
+    mobile: '',
+    email: ''
   },
   workplace: {
-    key: "",
-    name: "",
-    phone: ""
+    key: '',
+    name: '',
+    phone: ''
   },
   beneficiaries: [
-    { name: "", percentage: 0 },
-    { name: "", percentage: 0 },
-    { name: "", percentage: 0 },
-    { name: "", percentage: 0 },
-    { name: "", percentage: 0 }
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 },
+    { name: '', percentage: 0 }
   ]
 }
 

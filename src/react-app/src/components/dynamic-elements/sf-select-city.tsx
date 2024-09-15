@@ -10,7 +10,7 @@ interface SFSelectCityProps extends SFNumberInputInfo {
   stateId: number;
 }
 
-const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityProps) => {
+const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSelectCityProps) => {
   const { cities, setCities } = useCacheStore();
 
   useEffect(() => {
@@ -39,6 +39,7 @@ const SFSelectCity = memo(({ id, name, value, stateId, onChange }: SFSelectCityP
         ])}
         </select>
       </div>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   )
 });

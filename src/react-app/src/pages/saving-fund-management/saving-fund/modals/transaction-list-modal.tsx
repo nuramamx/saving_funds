@@ -82,7 +82,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
               <th>Tipo</th>
               <th>Monto</th>
               <th>Balance</th>
-              <th>Inter&eacute;s</th>
+              <th>Rendimientos</th>
             </tr>
           </thead>
           <tbody>
@@ -97,11 +97,11 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.runningBalance)}</td>
-                <td>{ToMoney(savingFund.partialInterest)}</td>
+                <td>{ToMoney(savingFund.partialYields)}</td>
               </tr>
             ))) : (
               <tr>
-                <td colSpan={9} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
+                <td colSpan={6} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
               </tr>
             )}
           </tbody>
@@ -109,9 +109,9 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>
-        <label style={{ fontSize: '2vh' }}>Intereses del a&ntilde;o:</label>&nbsp;&nbsp;
+        <label style={{ fontSize: '2vh' }}>Rendimientos del a&ntilde;o:</label>&nbsp;&nbsp;
         <label style={{ fontWeight: 'bold', fontSize: '2vh' }}>
-          {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialInterest)), 0))}
+          {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
         </label>
         </div>
         <div className='is-pulled-right'>

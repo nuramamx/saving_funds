@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import { DbInfo } from "./interfaces/db-info";
 
-const sequelize = new Sequelize('saving_funds', 'chachicha', '9834', {
+const sequelize = new Sequelize('saving_fund', 'chachicha', '9834', {
   host: '127.0.0.1',
   port: 5432,
   dialect: 'postgres',

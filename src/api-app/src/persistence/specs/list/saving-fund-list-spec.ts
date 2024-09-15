@@ -6,7 +6,7 @@ export default interface SavingFundListSpec {
   salary: number;
   openingBalance: number;
   balance: number;
-  accruedInterest: number;
+  yields: number;
   contributions: number;
   total: number;
   withdrawals: number;

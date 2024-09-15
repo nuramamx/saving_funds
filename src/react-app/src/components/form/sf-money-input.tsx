@@ -1,7 +1,7 @@
 import { SFMoneyInputInfo } from "./interfaces/sf-input-info";
 import { useEffect, useState } from "react";
 
-export default function SFMoneyInput({ id, name, value, readonly, onChange }: SFMoneyInputInfo) {
+export default function SFMoneyInput({ id, name, value, readonly, issues, onChange }: SFMoneyInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +43,7 @@ export default function SFMoneyInput({ id, name, value, readonly, onChange }: SF
   return (
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
-      <div className="field has-addons">
+      <div className="field has-addons" style={{ marginBottom: 0 }}>
         <span className="control">
           <label className="button is-static">
             $
@@ -58,6 +58,7 @@ export default function SFMoneyInput({ id, name, value, readonly, onChange }: SF
             onChange={(e) => handleChange(e)} />
         </div>
       </div>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   );
 }

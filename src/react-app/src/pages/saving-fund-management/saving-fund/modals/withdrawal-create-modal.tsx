@@ -15,7 +15,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   const initialState = {
     savingFundId: undefined!,
     amount: 0,
-    isInterest: false
+    isYields: false
   };
   const [withdrawal, setWithdrawal] = useState<WithdrawalCreateCommand>(initialState);
   const { pushNotification } = useNotificationStore();
@@ -83,9 +83,9 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
             <label className="checkbox">
               <input type="checkbox"
                 id={`${uuid()}_withdrawal_is_interest`}
-                checked={withdrawal.isInterest}
-                onChange={() => setWithdrawal({ ...withdrawal, isInterest: !withdrawal.isInterest })} />
-              &nbsp;Retiro de intereses
+                checked={withdrawal.isYields}
+                onChange={() => setWithdrawal({ ...withdrawal, isYields: !withdrawal.isYields })} />
+              &nbsp;Retiro de Rendimientos
             </label>
           </div>
           <div className="column is-1"></div>

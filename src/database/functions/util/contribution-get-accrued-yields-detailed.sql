@@ -1,5 +1,5 @@
---drop function process.contribution_get_accrued_interest_detailed;
-create or replace function process.contribution_get_accrued_interest_detailed(
+--drop function process.contribution_get_accrued_yields_detailed;
+create or replace function process.contribution_get_accrued_yields_detailed(
   in p_saving_fund_id integer,
   in p_year integer default null
 ) returns table (
@@ -8,7 +8,7 @@ create or replace function process.contribution_get_accrued_interest_detailed(
   amount numeric(20,6),
   transaction_type text,
   running_balance numeric(20,6),
-  partial_interest numeric(20,6)
+  partial_yields numeric(20,6)
 ) as $$
 declare
 begin 
@@ -25,14 +25,14 @@ begin
       ,-w.amount
       ,'withdrawal' as transaction_type
     from process.withdrawal as w
-    where w.is_interest = false
+    where w.is_yields = false
     union all
     select
       w.applied_at as transaction_date
       ,-w.amount
-      ,'withdrawal-interest' as transaction_type
+      ,'withdrawal-yields' as transaction_type
     from process.withdrawal as w
-    where w.is_interest = true
+    where w.is_yields = true
   ),
   sorted_transactions as (
     select
@@ -42,7 +42,7 @@ begin
       ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
       ,extract(year from t.transaction_date) as year
     from transaction_data as t
-    where t.transaction_type <> 'withdrawal-interest'
+    where t.transaction_type <> 'withdrawal-yields'
     union all
     select
       t.transaction_date
@@ -51,9 +51,9 @@ begin
       ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
       ,extract(year from t.transaction_date) as year
     from transaction_data as t
-    where t.transaction_type = 'withdrawal-interest'
+    where t.transaction_type = 'withdrawal-yields'
   ),
-  yearly_interest_calculation as (
+  yearly_yields_calculation as (
     select
       s."year"
       ,max(s.running_balance) as end_of_year_balance
@@ -62,7 +62,7 @@ begin
     where s.transaction_type = 'contribution'
     group by s."year"
   ),
-  interest_distribution as (
+  yields_distribution as (
     select
       s.transaction_date
       ,s.amount
@@ -73,13 +73,13 @@ begin
       ,y.contribution_count
       ,case
         when s.transaction_type = 'contribution' and extract(year from s.transaction_date) < extract(year from current_date) then
-          -- distribute the annual interest proportionally based on the number of contributions in the year
+          -- distribute the annual yields proportionally based on the number of contributions in the year
           (y.end_of_year_balance * 0.11) / y.contribution_count
         else
           0
-      end as partial_interest
+      end as partial_yields
     from sorted_transactions as s
-    left join yearly_interest_calculation as y on s."year" = y."year"
+    left join yearly_yields_calculation as y on s."year" = y."year"
   )
   select
       r."year"::integer
@@ -87,8 +87,8 @@ begin
       ,r.amount::numeric(20,6)
       ,r.transaction_type::text
       ,r.running_balance::numeric(20,6)
-      ,r.partial_interest::numeric(20,6)
-  from interest_distribution as r
+      ,r.partial_yields::numeric(20,6)
+  from yields_distribution as r
   where p_year is null or r."year"::integer = p_year
   order by r.transaction_date;
 end;

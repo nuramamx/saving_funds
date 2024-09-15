@@ -48,7 +48,7 @@ export default function AssociateList() {
               associates.map((associate: AssociateListSpec) => (
               <tr key={associate.id}>
                 <td>{associate.id}</td>
-                <td>{associate.fullname}</td>
+                <td>{associate.name}</td>
                 <td className='truncate-200' title={associate.address}>{associate.address}</td>
                 <td>{associate.dependencyKey}</td>
                 <td>{associate.category}</td>

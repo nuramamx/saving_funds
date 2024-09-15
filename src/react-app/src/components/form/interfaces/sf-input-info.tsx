@@ -24,6 +24,7 @@ type SFMoneyInputInfo = {
   name: string;
   value: number | string;
   readonly?: boolean;
+  issues?: ZodIssue[];
   onChange?: (value: number) => void;
 }
 
@@ -34,6 +35,7 @@ type SFRangeInputInfo = {
   max?: number;
   value: number;
   readonly?: boolean;
+  issues?: ZodIssue[];
   onChange?: (value: any) => void;
 }
 
@@ -42,7 +44,8 @@ type SFTextDisplayInfo = {
   name: string;
   value: string;
   readonly?: boolean;
-  display: string
+  display: string;
+  issues: ZodIssue[];
 }
 
 type SFFileInfo = {

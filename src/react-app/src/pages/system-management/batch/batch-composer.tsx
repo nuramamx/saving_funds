@@ -11,7 +11,7 @@ import SFSelectInput from "../../../components/form/sf-select-input";
 import BatchDetailSpec from "../../../core/interfaces/specs/batch-detail-spec";
 import BatchDetailValidation from "../../../core/validations/batch-detail-validation";
 import IssueTransform from "../../../core/util/transforms/issue-transform";
-import batchValidation from "../../../core/validations/batch-validation";
+import BatchValidation from "../../../core/validations/batch-validation";
 import AppConstants from "../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../core/interfaces/info/command-response-info";
 
@@ -157,7 +157,7 @@ export default function BatchComposer() {
   };
 
   const handleBatchValidate = (): boolean => {
-    const result = batchValidation.safeParse(batch);
+    const result = BatchValidation.safeParse(batch);
 
     if (!result.success) {
       pushNotification({

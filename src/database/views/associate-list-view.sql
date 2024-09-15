@@ -2,16 +2,13 @@
 create or replace view "catalog".associate_list_view as
   select 
     a.id
-    ,name_deconstruct(a."name") as fullname
+    ,a."name"
     ,a.rfc
-    ,(addr.street || ', ' || addr.settlement || ', C.P. ' || addr.postal_code || ', ' || c."name") as address
-    ,ad.dependency_key
-    ,ad.category
+    ,a.address->>'street' as address
+    ,a.detail->>'dependencyKey' as dependency_key
+    ,a.detail->>'category' as category
     ,ag."name" as agreement_name
-    ,ad.salary
+    ,a.detail->>'salary' as salary
   from "catalog".associate as a
-  join "catalog".address as addr on a.id = addr.associate_id
-  join "catalog".associate_detail as ad on a.id = ad.associate_id
-  join administration.agreement as ag on ad.agreement_id = ag.id
-  join administration.city as c on c.id = addr.city_id
+  join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
   order by a.id;

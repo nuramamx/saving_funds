@@ -62,7 +62,7 @@ export default function SavingFundList() {
                 <td>{ToMoney(savingFund.salary)}</td>
                 <td>{ToMoney(savingFund.openingBalance)}</td>
                 <td>{ToMoney(savingFund.balance)}</td>
-                <td>{ToMoney(savingFund.accruedInterest)}</td>
+                <td>{ToMoney(savingFund.yields)}</td>
                 <td>{ToMoney(savingFund.contributions)}</td>
                 <td>{ToMoney(savingFund.withdrawals)}</td>
                 <td>{ToMoney(savingFund.total)}</td>

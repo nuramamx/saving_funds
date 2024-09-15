@@ -4,7 +4,6 @@ import App from './App';
 import CreateAssociate from './pages/saving-fund-management/associate/associate-create';
 import SavingFundList from './pages/saving-fund-management/saving-fund/saving-fund-list';
 import AssociateList from './pages/saving-fund-management/associate/associate-list';
-import BorrowList from './pages/saving-fund-management/borrow/borrow-list';
 import BorrowHistoryList from './pages/saving-fund-management/borrow/borrow-history-list';
 import BorrowDebtorList from './pages/saving-fund-management/borrow/borrow-debtor-list';
 import MyAccount from './pages/myaccount-management/myaccount/myaccount';
@@ -29,8 +28,8 @@ const Routes = createBrowserRouter([
           { path: 'associate/create', element: <CreateAssociate /> },
           { path: 'associate/list', element: <AssociateList /> },
           { path: 'borrow/create', element: <BorrowCreate /> },
-          { path: 'borrow/list', element: <BorrowList /> },
-          { path: 'borrow/history', element: <BorrowHistoryList /> },
+          // { path: 'borrow/list', element: <BorrowList /> },
+          { path: 'borrow/list', element: <BorrowHistoryList /> },
           { path: 'borrow/debtor', element: <BorrowDebtorList />},
           { path: 'batch/upload', element: <BatchUpload />},
         ]
@@ -72,8 +71,8 @@ const SidebarRoutes: SidebarParentMenu[] = [
   ] },
   { key: 'borrowing', name: 'Préstamos', location: '/savingfund', children: [
     { key: 'borrow-create', route: '/savingfund/borrow/create', name: 'Inscribir Préstamo' },
-    { key: 'borrow-list', route: '/savingfund/borrow/list', name: 'Gestión de Préstamos' },
-    { key: 'borrow-history-list', route: '/savingfund/borrow/history', name: 'Historial de Préstamos' },
+    // { key: 'borrow-list', route: '/savingfund/borrow/list', name: 'Gestión de Préstamos' },
+    { key: 'borrow-history-list', route: '/savingfund/borrow/list', name: 'Gestión de Préstamos' },
     { key: 'borrow-debtor-list', route: '/savingfund/borrow/debtor', name: 'Socios Deudores' }
   ] },
   { key: 'util', name: 'Utilidades', location: '/savingfund', children: [

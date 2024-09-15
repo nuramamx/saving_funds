@@ -116,7 +116,7 @@ export default function BorrowHistoryList() {
               </tr>
             ))) : (
               <tr>
-                <td colSpan={10} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles para el socio</td>
+                <td colSpan={10} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles para el socio seleccionado.</td>
               </tr>
             )}
           </tbody>

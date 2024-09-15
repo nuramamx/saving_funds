@@ -1,44 +1,25 @@
 {
 	"folders": {},
 	"connections": {
-		"postgres-jdbc-1909aaa3ce0-42d1b25d7dc997d4": {
+		"postgres-jdbc-191d270d39b-1e54ec3661cc4f08": {
 			"provider": "postgresql",
 			"driver": "postgres-jdbc",
-			"name": "saving_funds",
+			"name": "saving_fund",
 			"save-password": true,
-			"show-system-objects": true,
-			"virtual-model-id": "postgres-jdbc-190943d5c67-346bf2738e20047",
 			"configuration": {
 				"host": "localhost",
 				"port": "5432",
-				"database": "saving_funds",
-				"url": "jdbc:postgresql://localhost:5432/saving_funds",
+				"database": "saving_fund",
+				"url": "jdbc:postgresql://localhost:5432/saving_fund",
 				"configurationType": "MANUAL",
 				"home": "/Applications/Postgres.app/Contents/Versions/16",
 				"type": "dev",
 				"closeIdleConnection": true,
-				"properties": {
-					"connectTimeout": "20",
-					"loginTimeout": "20",
-					"escapeSyntaxCallMode": "callIfNoReturn"
-				},
 				"provider-properties": {
 					"@dbeaver-show-non-default-db@": "false",
-					"@dbeaver-chosen-role@": "",
-					"@dbeaver-show-template-db@": "false",
-					"@dbeaver-show-unavailable-db@": "false",
-					"show-database-statistics": "false",
-					"@dbeaver-read-all-data-types-db@": "false",
-					"read-keys-with-columns": "false",
-					"@dbeaver-use-prepared-statements-db@": "false",
-					"postgresql.dd.plain.string": "false",
-					"postgresql.dd.tag.string": "false"
+					"@dbeaver-chosen-role@": ""
 				},
-				"auth-model": "native",
-				"handlers": {},
-				"bootstrap": {
-					"defaultCatalog": "saving_funds"
-				}
+				"auth-model": "native"
 			}
 		}
 	},

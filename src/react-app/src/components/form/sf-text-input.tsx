@@ -16,7 +16,7 @@ export default function SFTextInput({ id, name, value, readonly = false, onEnter
           onKeyDown={handleKeyDown}
           onChange={(e) => onChange ? onChange(e.target.value) : undefined} />
       </div>
-      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path[0]}-${x.path[1]}` === id)?.message}</span>
+      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
     </div>
   );
 }

@@ -1,2 +1,2 @@
-insert into administration.agreement (name)
+insert into "system".agreement (name)
 values ('SFA'), ('SEP'), ('ISS');

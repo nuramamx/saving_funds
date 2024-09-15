@@ -4,5 +4,5 @@ export default interface SavingFundTransactionListSpec {
   transactionType: string;
   amount: number;
   runningBalance: number;
-  partialInterest: number;
+  partialYields: number;
 }

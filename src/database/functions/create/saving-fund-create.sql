@@ -2,7 +2,7 @@
 create or replace function process.savind_fund_create(
   in p_associate_id integer,
   in p_opening_balance numeric(20,6),
-  in p_is_fortnigthly boolean,
+  in p_is_fortnightly boolean,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -27,7 +27,7 @@ begin
   select
     ar.rate
   into v_annual_rate
-  from administration.saving_fund_annual_rate as ar
+  from "system".saving_fund_annual_rate as ar
   where ar."year" = extract(year from current_date);
 
   begin

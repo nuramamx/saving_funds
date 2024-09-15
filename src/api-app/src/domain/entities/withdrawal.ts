@@ -4,6 +4,6 @@ export default class Withdrawal implements WithdrawalInfo {
   constructor(
     readonly savingFundId: number,
     readonly amount: number,
-    readonly isInterest: boolean
+    readonly isYields: boolean
   ) {}
 }
