@@ -8,6 +8,7 @@ import './styles/aside.css';
 import './styles/notification.css';
 import './styles/navbar.css';
 import './styles/table.css';
+import './styles/input.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
 

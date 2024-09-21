@@ -120,12 +120,20 @@ export default function BorrowCreate() {
           onChange={(value) => setBorrow({ ...borrow, requestedAmount: value })} />
         <SFSelectInput id="borrow_period_type" name="Tipo de Periodo"
           value={periodType}
-          options={([ { key: "-", value: "---"}, { key: "F", value: "QUINCENAL"}, { key: "M", value: "MENSUAL" }])}
+          options={([ { key: "---", value: "-"}, { key: "QUINCENAL", value: "F"}, { key: "MENSUAL", value: "M" }])}
           onChange={(value) => handlePeriodType(value)} />
         <SFSelectInput id="borrow_period" name="Duración"
           value={borrow.period}
-          options={([ { key: 0, value: "---"}, { key: 1, value: "1 AÑO"}, { key: 2, value: "2 AÑOS"}, { key: 3, value: "3 AÑOS" } ])}
+          options={([ { key: '---', value: '-'}, { key: "1 AÑO", value: 1}, { key: "2 AÑOS", value: 2}, { key: "3 AÑOS", value: 3 } ])}
           onChange={(value) => handlePeriod(value)} />
+        <SFDatePickerInput params={{
+          id: 'borrow_start_at',
+          name: 'Fecha de Inicio',
+          value: borrow.startAt,
+          onChange: (value) => setBorrow({ ...borrow, startAt: value }),
+          minDate: new Date(),
+          maxDate: addDays(new Date(), 30)
+        }} />
       </div>
       <div className="column">
         <h5 className="title is-5">Cotizaci&oacute;n del pr&eacute;stamo</h5>
@@ -150,23 +158,12 @@ export default function BorrowCreate() {
         <SFMoneyInput id="borrow_amount_to_deliver" name="Total a Entregar"
           readonly={true}
           value={borrow.detail.amountDelivered.toFixed(2)} />
-        <SFDatePickerInput params={{
-          id: 'borrow_start_at',
-          name: 'Fecha de Inicio',
-          value: borrow.startAt,
-          onChange: (value) => setBorrow({ ...borrow, startAt: value }),
-          minDate: new Date(),
-          maxDate: addDays(new Date(), 30)
-        }} />
       </div>
     </div>
     <div className="mt-auto">
       <nav className="level">
         <div className="level-left"></div>
         <div className="level-right">
-          <div className="level-item">
-            <button className="button is-light">Imprimir cotizaci&oacute;n</button>
-          </div>
           <div className="level-item">
             <button className="button is-light" onClick={() => handleClearBorrow()}>Limpiar</button>
           </div>

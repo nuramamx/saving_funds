@@ -1,0 +1,5 @@
+input[readonly] {
+  background-color: #f2f1f1;
+  color: #6a6a6a;
+  cursor: not-allowed;
+}
