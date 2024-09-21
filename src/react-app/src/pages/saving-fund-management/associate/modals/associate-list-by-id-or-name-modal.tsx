@@ -67,6 +67,8 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
         </header>
         <section className="modal-card-body">
           <SFTextInput id="search-associate-name" name="Nombre del Asociado"
+            autofocus={true}
+            onModal={show}
             value={associateInfo}
             onEnter={handleSearchAssociateEnter}
             onChange={(value) => setAssociateInfo(value)} />
@@ -84,7 +86,7 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
                 <tr key={associate.id} style={{ cursor: 'pointer' }}
                   onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
-                  <td>{associate.fullname}</td>
+                  <td>{associate.name}</td>
                   <td>{associate.address}</td>
                   <td>{associate.agreementName}</td>
                 </tr>

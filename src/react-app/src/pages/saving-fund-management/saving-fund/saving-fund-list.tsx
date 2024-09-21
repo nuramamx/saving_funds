@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
@@ -7,13 +7,21 @@ import ContributionCreateActionButton from './actions/contribution-create-action
 import WithdrawalCreateActionButton from './actions/withdrawal-create-action-button';
 import SavingFundListSpec from '../../../core/interfaces/specs/list/saving-fund-list-spec';
 import SavingFundTransactionListActionButton from './actions/transaction-list-action';
+import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
+import SavingFundListQuery from '../../../core/interfaces/query/saving-fund-list-query';
+import useNotificationStore from '../../../core/stores/notification-store';
 
 export default function SavingFundList() {
   const [savingFunds, setSavingFunds] = useState<SavingFundListSpec[]>([]);
+  const [associate, setAssociate] = useState<number>(0);
+  const { pushNotification } = useNotificationStore();
 
   const fectchSavingFunds = async () => {
     const result = await fetch(`${AppConstants.apiSavingFund}/list`, {
-      method: 'GET'
+      method: 'POST',
+      body: JSON.stringify({
+        associateId: associate
+      } as SavingFundListQuery)
     });
 
     if (!result.ok)
@@ -26,14 +34,33 @@ export default function SavingFundList() {
   };
 
   const handleReload = () => {
-    fectchSavingFunds();
+    if (associate > 0) {
+      try {
+        fectchSavingFunds();
+      } catch (err: any) {
+        pushNotification({ message: err.message, type: 'danger' });
+      }
+    } else setSavingFunds([]);
   }
 
   useEffect(() => {
     handleReload();
-  }, []);
+  }, [associate]);
 
   return (
+    <>
+    <div className="columns">
+      <div className="column"></div>
+      <div className="column">
+        <SearchAssociate
+          id="borrow_associate_name"
+          name="Socio"
+          value={associate}
+          readonly={true}
+          onChange={(value) => setAssociate(value)} />
+      </div>
+      <div className="column"></div>
+    </div>
     <div className="columns">
       <div className="column">
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
@@ -74,12 +101,13 @@ export default function SavingFundList() {
               </tr>
             ))) : (
               <tr>
-                <td colSpan={9} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
+                <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
     </div>
+    </>
   )
 }

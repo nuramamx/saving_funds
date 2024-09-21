@@ -1,4 +1,8 @@
-import { SFTextDisplayInfo } from "./interfaces/sf-input-info";
+import { SFInputInfo } from "./interfaces/sf-input-info";
+
+type SFTextDisplayInfo = SFInputInfo & {
+  value: string | number | readonly string[] | undefined;
+};
 
 export default function SFTextDisplayInput({ id, name, value, readonly = false, display = '', issues }: SFTextDisplayInfo) {
   return (

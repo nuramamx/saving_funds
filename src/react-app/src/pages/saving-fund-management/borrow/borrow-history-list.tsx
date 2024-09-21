@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { DownloadSquare } from 'iconoir-react';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
-import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import AppConstants from '../../../core/constants/app-constants';
@@ -19,7 +18,6 @@ export default function BorrowHistoryList() {
   const [borrows, setBorrows] = useState<BorrowHistoryListSpec[]>([]);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
-  const { setValidationModal } = useValidationModalStore();
 
   const handleListPaymentClick = (borrowId: number, show: boolean) => {
     setSelectedBorrow(borrowId);
@@ -50,14 +48,12 @@ export default function BorrowHistoryList() {
       } catch (err: any) {
         pushNotification({ message: err.message, type: 'danger' });
       }
-    } else {
-      setBorrows([]);
-    }
+    } else setBorrows([]);
   };
 
   useEffect(() => {
     handleReload();
-  }, [associate, setAssociate]);
+  }, [associate]);
 
   return (
     <>
@@ -73,7 +69,6 @@ export default function BorrowHistoryList() {
       </div>
       <div className="column"></div>
     </div>
-    <div className="columns">&nbsp;</div>
     <div className="columns">
       <div className="column">
       <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
@@ -116,7 +111,7 @@ export default function BorrowHistoryList() {
               </tr>
             ))) : (
               <tr>
-                <td colSpan={10} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles para el socio seleccionado.</td>
+                <td colSpan={12} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles para el socio seleccionado.</td>
               </tr>
             )}
           </tbody>

@@ -1,5 +1,5 @@
 import { memo, useEffect } from "react"
-import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
+import { SFNumberInputInfo } from "../form/sf-number-input";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";

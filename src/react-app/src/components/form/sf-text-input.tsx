@@ -1,16 +1,33 @@
-import { useCallback } from "react";
-import { SFTextInputInfo } from "./interfaces/sf-input-info";
+import { useCallback, useEffect, useRef } from "react";
+import { SFInputInfo } from "./interfaces/sf-input-info";
 
-export default function SFTextInput({ id, name, value, readonly = false, onEnter, onChange, issues }: SFTextInputInfo) {
+type SFTextInputInfo = SFInputInfo & {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function SFTextInput({ id, name, value, readonly = false, autofocus = false, onEnter, onChange, issues, onModal }: SFTextInputInfo) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && onEnter) onEnter();
   }, [onChange]);
+
+  useEffect(() => {
+    if (onModal) {
+      const timer = setTimeout(() => {
+        if (inputRef.current && autofocus) inputRef.current.focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [onModal, autofocus]);
 
   return (
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="control">
-        <input id={id} className="input" type="text" placeholder={name}
+        <input ref={inputRef} id={id} className="input" type="text" placeholder={name}
           readOnly={readonly}
           value={value}
           onKeyDown={handleKeyDown}

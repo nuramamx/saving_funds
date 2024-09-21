@@ -1,14 +1,19 @@
 import { db } from '../../instance';
-import { ViewName } from '../../names/view-name';
+import { FunctionName } from '../../names/function-name';
 import { QueryTypes } from 'sequelize';
 import QueryRepositoryInfo from '../../interfaces/query-repository-info';
 import AssociateListSpec from '../../specs/list/associate-list-spec';
+import { AssociateListQuery } from '../../../application/use-cases/queries/associate/list/associate-list-query-handler';
 
-export default class AssociateListQueryRepository implements QueryRepositoryInfo<void, AssociateListSpec> {
-  async all(): Promise<AssociateListSpec[]> {
+export default class AssociateListQueryRepository implements QueryRepositoryInfo<AssociateListQuery, AssociateListSpec> {
+  async all(data: AssociateListQuery): Promise<AssociateListSpec[]> {
     try {
       const result = await db.sequelize.query(
-        ViewName.ASSOCIATE_LIST, {
+        FunctionName.ASSOCIATE_LIST, {
+          replacements: {
+            p_limit: 10,
+            p_offset: data.offset
+          },
           type: QueryTypes.SELECT
         }
       ) as AssociateListSpec[];

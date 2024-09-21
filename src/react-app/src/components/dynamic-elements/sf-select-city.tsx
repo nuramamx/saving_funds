@@ -1,16 +1,16 @@
 import { memo, useEffect } from "react"
-import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
 import { objectToCamel } from "ts-case-convert";
+import { SFNumberInputInfo } from "../form/sf-number-input";
 import CityInfo from "../../core/interfaces/info/city-info";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
 
-interface SFSelectCityProps extends SFNumberInputInfo {
+interface SFSelectCityParams extends SFNumberInputInfo {
   stateId: number;
 }
 
-const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSelectCityProps) => {
+const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSelectCityParams) => {
   const { cities, setCities } = useCacheStore();
 
   useEffect(() => {

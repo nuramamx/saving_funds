@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Erase, InfoCircle, Search } from 'iconoir-react';
-import { SFNumberInputInfo } from '../form/interfaces/sf-input-info';
 import SearchAssociateSpec from '../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
 import AssociateListByIdOrNameModal from '../../pages/saving-fund-management/associate/modals/associate-list-by-id-or-name-modal';
+import { SFInputInfo } from '../form/interfaces/sf-input-info';
 
-const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInfo) => {
+type SearchAssociateInputParams = SFInputInfo & {
+  value: number;
+  onChange: (id: number) => void;
+}
+
+const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputParams) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedAssociate, setSelectedAssociate] = useState<SearchAssociateSpec>();
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') setShowModal(false);
+    if (e.key === 'F6') setShowModal(true);
+  }, []);
 
   const handleSelectedAssociate = (value: SearchAssociateSpec) => {
     setSelectedAssociate(value);
@@ -21,22 +31,26 @@ const SearchAssociate = ({id, name, value, readonly, onChange}: SFNumberInputInf
       onChange(0);
   };
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => { window.removeEventListener('keydown', handleKeyDown); };
+  }, [])
+
   return (
     <>
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="control">
         <input id={id} className="input" type="text" placeholder={name} style={{fontSize: '13px'}}
-          value={`${selectedAssociate?.id ?? ''}|${selectedAssociate?.fullname ?? ''}`}
+          value={`${selectedAssociate?.id ?? ''}|${selectedAssociate?.name ?? ''}`}
           readOnly={readonly} />
       </div>
     </div>
     <nav className="pagination" role="navigation" aria-label="pagination">
-      <button className="pagination-previous"><Erase onClick={handleEraseAssociate} /></button>
       <button className="pagination-next" onClick={() => setShowModal(true)}><Search /></button>
       <ul className="pagination-list">
         <li>
-          <button className="pagination-link"><InfoCircle /></button>
+          <button className="pagination-previous"><Erase onClick={handleEraseAssociate} /></button>
         </li>
       </ul>
     </nav>

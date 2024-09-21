@@ -14,12 +14,7 @@ class PaymentListByBorrowIdQueryHandler implements CommandHandler<PaymentListByB
 
       return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;;
     } catch (err: any) {
-      return {
-        successful: false,
-        message: 'Registros no localizados.',
-        data: err.message,
-        type: 'danger'
-      } as CommandResponse;
+      return { successful: false, message: 'Registros no localizados.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }

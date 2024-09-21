@@ -1,10 +1,14 @@
-import { SFTextInputInfo } from "./sf-input-info";
+import { SFInputInfo } from "./sf-input-info";
 
-export interface SFSelectOptionInfo {
+type SFSelectOptionInfo = {
     key: string | number;
-    value: string | number;
+    value: string | number | readonly string[] | undefined;
 }
 
-export interface SFSelectInfo extends SFTextInputInfo {
-    options: SFSelectOptionInfo[]
+type SFSelectInfo = SFInputInfo & {
+    value: string | number | readonly string[] | undefined;
+    options: SFSelectOptionInfo[];
+    onChange: (value: string) => void;
 }
+
+export type { SFSelectOptionInfo, SFSelectInfo };

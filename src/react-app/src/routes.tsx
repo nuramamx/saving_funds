@@ -14,6 +14,8 @@ import SystemManagement from './pages/system-management/system-management';
 import BorrowCreate from './pages/saving-fund-management/borrow/borrow-create';
 import BatchComposer from './pages/system-management/batch/batch-composer';
 import BatchUpload from './pages/saving-fund-management/batch/batch-upload';
+import SavingFundAnnualRateList from './pages/system-management/saving-fund-annual-rate/saving-fund-annual-rate-list';
+import BorrowAnnualRateList from './pages/system-management/borrow-annual-rate/borrow-annual-rate-list';
 
 const Routes = createBrowserRouter([
   {
@@ -28,7 +30,6 @@ const Routes = createBrowserRouter([
           { path: 'associate/create', element: <CreateAssociate /> },
           { path: 'associate/list', element: <AssociateList /> },
           { path: 'borrow/create', element: <BorrowCreate /> },
-          // { path: 'borrow/list', element: <BorrowList /> },
           { path: 'borrow/list', element: <BorrowHistoryList /> },
           { path: 'borrow/debtor', element: <BorrowDebtorList />},
           { path: 'batch/upload', element: <BatchUpload />},
@@ -39,7 +40,9 @@ const Routes = createBrowserRouter([
         element: <SystemManagement />,
         children: [
           { path: 'batch/composer', element: <BatchComposer /> },
-          { path: 'batch/list', element: <BatchList /> }
+          { path: 'batch/list', element: <BatchList /> },
+          { path: 'annualrate/savingfund/list', element: <SavingFundAnnualRateList />},
+          { path: 'annualrate/borrow/list', element: <BorrowAnnualRateList />}
         ]
       },
       {
@@ -81,10 +84,6 @@ const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'batch', name: 'Batch', location: '/system', children: [
     { key: 'batch-composer', route: '/system/batch/composer', name: 'Crear Batch' },
     { key: 'batch-list', route: '/system/batch/list', name: 'Gestión de Batchs' }
-  ] },
-  { key: 'agreement', name: 'Convenios', location: '/system', children: [
-    { key: 'agreement-create', route: '/system/agreement/create', name: 'Crear Convenio' },
-    { key: 'agreement-list', route: '/system/agreement/list', name: 'Gestión de Convenios' }
   ] },
   { key: 'annual-rate', name: 'Interés Anual', location: '/system', children: [
     { key: 'saving-fund-annual-rate-list', route: '/system/annualrate/savingfund/list', name: 'Fondo de Ahorro' },

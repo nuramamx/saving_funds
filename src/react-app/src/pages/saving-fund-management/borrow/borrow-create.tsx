@@ -3,7 +3,6 @@ import { addDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
-import SFPercentageInput from '../../../components/form/sf-percentage-input';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import useBorrowStore from '../../../core/stores/borrow-store';
 import useCacheStore from '../../../core/stores/cache-store';
@@ -13,6 +12,7 @@ import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
+import SFPercentageInput from '../../../components/form/sf-percentage-input';
 
 export default function BorrowCreate() {
   const { 
@@ -130,7 +130,6 @@ export default function BorrowCreate() {
       <div className="column">
         <h5 className="title is-5">Cotizaci&oacute;n del pr&eacute;stamo</h5>
         <SFPercentageInput id="borrow_annual_rate" name="Tasa de Interés"
-          min={0} max={100}
           readonly={true}
           value={borrow.annualRate} />
         <SFMoneyInput id="borrow_interest_to_pay" name="Intereses"

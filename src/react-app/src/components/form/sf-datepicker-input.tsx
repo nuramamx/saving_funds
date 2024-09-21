@@ -1,8 +1,19 @@
 import { Calendar } from 'iconoir-react';
 import DatePicker from 'react-datepicker';
-import { DatePickerInput } from './interfaces/sf-input-info';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../styles/datepicker.css';
+import { SFInputInfo } from './interfaces/sf-input-info';
+
+type DatePickerInputParams = SFInputInfo & {
+  value: Date;
+  minDate?: Date;
+  maxDate?: Date;
+  onChange: (date: Date) => void;
+}
+
+type DatePickerInput = {
+  params: DatePickerInputParams;
+}
 
 export default function SFDatePickerInput({ params }: DatePickerInput) {
   return (

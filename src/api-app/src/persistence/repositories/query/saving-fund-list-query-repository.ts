@@ -11,9 +11,7 @@ export default class SavingFundListQueryRepository implements QueryRepositoryInf
       const result = await db.sequelize.query(
         FunctionName.SAVING_FUND_LIST, {
           replacements: {
-            p_filter: JSON.stringify({}),
-            p_page: 0,
-            p_page_size: 0
+            p_associate_id: data.associateId
           },
           type: QueryTypes.SELECT
         }

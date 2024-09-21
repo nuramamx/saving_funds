@@ -1,9 +1,10 @@
 import { db } from "../../instance";
 import { QueryTypes } from "sequelize";
-import { BatchUploadCommand } from "../../../application/use-cases/queries/batch/upload/batch-upload-command-handler";
+import { BatchUploadCommand } from "../../../application/use-cases/commands/batch/upload/batch-upload-command-handler";
 import SaveRepositoryInfo from "../../interfaces/save-repository-info";
 import ProcedureResponseInfo from "../../interfaces/procedure-response-info";
 import BatchDetailSpec from "../../specs/batch-detail-spec";
+import ParseError from "../../util/check-error";
 
 export default class BatchUploadSaveRepository implements SaveRepositoryInfo<BatchUploadCommand, boolean> {
   async save(data: BatchUploadCommand): Promise<boolean> {
@@ -28,15 +29,7 @@ export default class BatchUploadSaveRepository implements SaveRepositoryInfo<Bat
       return true;
     } catch (err: any) {
       await transaction.rollback();
-
-      //TODO: Improve this creating a util function
-      if (err.parent !== null && err.parent !== undefined
-        && err.parent.where !== null && err.parent.where !== undefined)
-        throw new Error(`[E-201]: ${err.parent.where}`);
-      else if (err.message !== null && err.message !== undefined)
-        throw new Error(`[E-202]: ${err.message}`);
-      else
-        throw new Error(`[E-200]: `);
+      throw ParseError(err);
     }
   }
 }

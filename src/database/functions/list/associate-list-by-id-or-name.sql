@@ -5,7 +5,7 @@ create or replace function "catalog".associate_list_by_id_or_name(
 )
 returns table (
   id integer,
-  fullname text,
+  "name" text,
   address text,
   agreement_name varchar(50)
 ) as $$
@@ -18,20 +18,14 @@ begin
   return query
   select
     a.id
-    ,deconstruct_name(a."name") as fullname
-    ,(addr.street || ', ' || addr.settlement || ', C.P. ' || addr.postal_code || ', ' || c."name") as address
+    ,a."name"::text as "name"
+    ,((a.address->>'street')::text || ', ' || (a.address->>'settlement')::text || ', C.P. ' || (a.address->>'postalCode')::text)::text as address
     ,ag."name" AS agreement_name
-  from "catalog".associate a
-  join "catalog".associate_detail ad
-    on ad.associate_id = a.id
-  join "catalog".address addr
-    on addr.associate_id = a.id
-  join administration.agreement ag
-    on ag.id = ad.agreement_id
-  join administration.city c
-    on c.id = addr.city_id
+  from "catalog".associate as a
+  join "system".agreement as ag
+    on (a.detail->>'agreementId')::integer = ag.id
   where 1=1
   and (p_associate_id = 0 or p_associate_id = a.id)
-  and (p_name = '' or deconstruct_name(a."name") like '%' || upper(p_name) || '%');
+  and (p_name = '' or a."name" like '%' || upper(p_name) || '%');
 end;
 $$ language plpgsql;

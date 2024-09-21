@@ -4,6 +4,7 @@ import { FunctionName } from "../../names/function-name";
 import ProcedureResponseInfo from "../../interfaces/procedure-response-info";
 import SaveRepositoryInfo from "../../interfaces/save-repository-info";
 import Payment from "../../../domain/entities/payment";
+import ParseError from "../../util/check-error";
 
 export default class PaymentSaveRepository implements SaveRepositoryInfo<Payment, boolean> {
   async save(data: Payment): Promise<boolean> {
@@ -27,15 +28,7 @@ export default class PaymentSaveRepository implements SaveRepositoryInfo<Payment
       return true;
     } catch (err: any) {
       await transaction.rollback();
-      
-      //TODO: Improve this creating a util function
-      if (err.parent !== null && err.parent !== undefined
-        && err.parent.where !== null && err.parent.where !== undefined)
-        throw new Error(`[E-201]: ${err.parent.where}`);
-      else if (err.message !== null && err.message !== undefined)
-        throw new Error(`[E-202]: ${err.message}`);
-      else
-        throw new Error(`[E-200]: ${err}`);
+      throw ParseError(err);
     }
   }
 } 

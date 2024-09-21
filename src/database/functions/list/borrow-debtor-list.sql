@@ -43,7 +43,7 @@ begin
   select
     b.id
     ,b.associate_id 
-    ,deconstruct_name(a.name) as associate_name 
+    ,a."name"::text as associate_name 
     ,b.requested_amount 
     ,bd.total_due 
     ,(coalesce(sum(p.paid_amount), 0.00))::numeric(20,6) as total_paid
@@ -60,7 +60,7 @@ begin
   group by
     b.id
     ,b.associate_id
-    ,a.name
+    ,a."name"
     ,b.requested_amount 
     ,bd.total_due
     ,bd.number_payments 

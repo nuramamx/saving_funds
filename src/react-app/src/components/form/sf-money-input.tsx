@@ -1,5 +1,10 @@
-import { SFMoneyInputInfo } from "./interfaces/sf-input-info";
 import { useEffect, useState } from "react";
+import { SFInputInfo } from "./interfaces/sf-input-info";
+
+type SFMoneyInputInfo = SFInputInfo & {
+  value: number | string;
+  onChange?: (value: number) => void;
+}
 
 export default function SFMoneyInput({ id, name, value, readonly, issues, onChange }: SFMoneyInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());

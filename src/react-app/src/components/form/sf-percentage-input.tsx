@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import { SFRangeInputInfo } from "./interfaces/sf-input-info";
+import { useEffect, useState } from "react";
+import { SFInputInfo } from "./interfaces/sf-input-info";
 
-export default function SFPercentageInput({ id, name, min = 0, max = 100, value, readonly = false, issues, onChange }: SFRangeInputInfo) {
+type SFPercentageInputInfo = SFInputInfo & {
+  value: number;
+  onChange?: (value: number) => void;
+}
+
+export default function SFPercentageInput({ id, name, value, readonly, issues, isSmallInput, style, onChange }: SFPercentageInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
-
-  const handleBackspaceKeypres = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace") setInputValue('0');
-  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -24,9 +25,9 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
 
   const handleBlur = () => {
     const parsedValue = parseFloat(inputValue || "0");
-    const formattedValue = parsedValue.toString();
+    const formattedValue = parsedValue.toFixed(2);
     setInputValue(formattedValue);
-
+    
     if (onChange) onChange(parsedValue);
   };
 
@@ -41,29 +42,44 @@ export default function SFPercentageInput({ id, name, min = 0, max = 100, value,
   };
 
   useEffect(() => {
-    setInputValue(Number(value).toFixed(2).toString());
+    setInputValue(value.toString());
   }, [value]);
-
+  
   return (
-    <div className="field">
-      <label htmlFor={id} className="label">{name}</label>
-      <div className="field has-addons" style={{ marginBottom: 0 }}>
-        <span className="control">
-          <label className="button is-static">
-            %
-          </label>
-        </span>
-        <div className="control is-expanded">
-          <input id={id} className="input has-text-right" type="text" placeholder={name}
-            readOnly={readonly}
-            value={inputValue}
-            onClick={handleClick}
-            onBlur={handleBlur}
-            onKeyDown={handleBackspaceKeypres}
-            onChange={(e) => handleChange(e)} />
+    <>
+    {name === '' || name === undefined || name === null ? (
+      <>
+      <input id={id} className={`input has-text-right ${isSmallInput ? 'is-small' : ''}`} type="text" placeholder={name}
+        readOnly={readonly}
+        value={inputValue}
+        style={style}
+        onClick={handleClick}
+        onBlur={handleBlur}
+        onChange={(e) => handleChange(e)} />
+      </>
+    ) : (
+      <>
+      <div className="field">
+        <label htmlFor={id} className="label">{name}</label>
+        <div className="field has-addons" style={{ marginBottom: 0 }}>
+          <span className="control">
+            <label className="button is-static">
+              %
+            </label>
+          </span>
+          <div className="control is-expanded">
+            <input id={id} className="input has-text-right" type="text" placeholder={name}
+              readOnly={readonly}
+              value={inputValue}
+              onClick={handleClick}
+              onBlur={handleBlur}
+              onChange={(e) => handleChange(e)} />
+          </div>
         </div>
+        <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
       </div>
-      <span className="has-text-danger" style={{ fontSize: '13px' }}>{issues?.find(x => `${x.path.join('-')}` === id)?.message}</span>
-    </div>
+      </>
+    )}
+    </>
   );
 }

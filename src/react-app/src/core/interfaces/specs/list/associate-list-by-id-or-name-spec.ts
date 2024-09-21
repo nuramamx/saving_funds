@@ -1,6 +1,6 @@
 export default interface AssociateListByIdOrNameSpec {
   id: number;
-  fullname: string;
+  name: string;
   address: string;
   agreementName: string;
 }

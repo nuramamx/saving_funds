@@ -1,8 +1,6 @@
 --drop function process.saving_fund_list;
 create or replace function process.saving_fund_list(
-  in p_filter jsonb default null,
-  in p_page integer default 1,
-  in p_page_size integer default 20
+  in p_associate_id integer
 )
 returns table (
   id integer,
@@ -66,6 +64,7 @@ begin
       where sf.id = w.saving_fund_id
       and w.is_yields = false
     ) as withdrawal on true
-  ) as d;
+  ) as d
+  where d.associate_id = p_associate_id;
 end;
 $$ language plpgsql;

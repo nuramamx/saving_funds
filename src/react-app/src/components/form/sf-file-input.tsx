@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { SFFileInfo } from "./interfaces/sf-input-info";
+import { SFInputInfo } from "./interfaces/sf-input-info";
 import { Page } from "iconoir-react";
 import TooltipElement from "../elements/tooltip-element";
+
+type SFFileInfo = SFInputInfo & {
+  accept: string;
+  onChange?: (filename: string, file: File) => void;
+}
 
 export default function SFFileInput({ id, name, readonly = false, accept, issues, onChange,  }: SFFileInfo) {
   const [filename, setFilename] = useState<string>(undefined!);

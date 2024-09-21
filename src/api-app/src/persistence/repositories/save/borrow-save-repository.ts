@@ -4,6 +4,7 @@ import { QueryTypes } from 'sequelize';
 import Borrow from '../../../domain/entities/borrow';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
 import ProcedureResponseInfo from '../../interfaces/procedure-response-info';
+import ParseError from '../../util/check-error';
 
 export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, boolean> {
   async save(data: Borrow): Promise<boolean> {
@@ -29,15 +30,7 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
       return true;
     } catch (err: any) {
       await transaction.rollback();
-
-      //TODO: Improve this creating a util function
-      if (err.parent !== null && err.parent !== undefined
-        && err.parent.where !== null && err.parent.where !== undefined)
-        throw new Error(`[E-201]: ${err.parent.where}`);
-      else if (err.message !== null && err.message !== undefined)
-        throw new Error(`[E-202]: ${err.message}`);
-      else
-        throw new Error(`[E-200]: ${err}`);
+      throw ParseError(err);
     }
   }
 }

@@ -51,7 +51,7 @@ begin
     ar.rate
   into
     v_annual_rate
-  from administration.annual_rate as ar
+  from "system".borrow_annual_rate as ar
   where ar."period" = p_period;
 
   begin

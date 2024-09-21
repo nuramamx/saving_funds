@@ -82,7 +82,7 @@ export default function BorrowList() {
               </tr>
             ))) : (
               <tr>
-                <td colSpan={10} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles</td>
+                <td colSpan={11} style={{textAlign: 'center'}}>No hay pr&eacute;stamos disponibles</td>
               </tr>
             )}
           </tbody>

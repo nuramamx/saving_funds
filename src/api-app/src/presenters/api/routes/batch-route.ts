@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { fastifyMultipart } from "@fastify/multipart";
-import { BatchCreateCommand } from '../../../application/use-cases/queries/batch/create/batch-create-command-handler';
-import { BatchUploadCommand } from '../../../application/use-cases/queries/batch/upload/batch-upload-command-handler';
+import { BatchCreateCommand } from '../../../application/use-cases/commands/batch/create/batch-create-command-handler';
+import { BatchUploadCommand } from '../../../application/use-cases/commands/batch/upload/batch-upload-command-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 export default async function BatchRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {

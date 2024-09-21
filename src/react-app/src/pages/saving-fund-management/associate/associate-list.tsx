@@ -5,12 +5,16 @@ import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
+import SFPagination from '../../../components/dynamic-elements/sf-pagination';
 
 export default function AssociateList() {
   const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalRows, setTotalRows] = useState<number>(0);
 
-  const fetchAssociates = async () => {
-    const result = await fetch(`${AppConstants.apiAssociate}/list`, {
+  const fetchAssociates = async (page: number) => {
+    const result = await fetch(`${AppConstants.apiAssociate}/list?page=${page}`, {
       method: 'GET'
     });
 
@@ -20,14 +24,21 @@ export default function AssociateList() {
     const response = await result.json() as CommandResponseInfo;
     const list = objectToCamel(response.data) as AssociateListSpec[];
     
+    setTotalRows(response.totalRows ?? 0);
+    setTotalPages(Math.ceil((response.totalRows ?? 0) / 10));
     setAssociates(list);
   };
 
+  const handlePagination = (currentPage: number) => {
+    console.log(currentPage);
+  };
+
   useEffect(() => {
-    fetchAssociates();
-  }, []);
+    fetchAssociates(page);
+  }, [page]);
 
   return (
+    <>
     <div className="columns">
       <div className="column">
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
@@ -69,5 +80,16 @@ export default function AssociateList() {
         </table>
       </div>
     </div>
+    <div className="mt-auto">
+      <nav className="level">
+        <div className="level-left"></div>
+        <div className="level-right">
+          <div className="level-item">
+          <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
+          </div>
+        </div>
+      </nav>
+    </div>
+    </>
   )
 }

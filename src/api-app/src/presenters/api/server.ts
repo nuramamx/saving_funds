@@ -5,7 +5,6 @@ import AssociateRoute from "./routes/associate-route";
 import CityRoute from "./routes/city-route";
 import StateRoute from "./routes/state-route";
 import AgreementRoute from "./routes/agreement-route";
-import AnnualRateRoute from "./routes/annual-rate-route";
 import BorrowRoute from "./routes/borrow-route";
 import PaymentRoute from "./routes/payment-route";
 import SavingFundRoute from "./routes/saving-fund-route";
@@ -39,7 +38,6 @@ fastify.register(cors, {
 });
 
 fastify.register(AgreementRoute);
-fastify.register(AnnualRateRoute);
 fastify.register(StateRoute);
 fastify.register(CityRoute);
 fastify.register(AssociateRoute);

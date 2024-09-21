@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import SFTextInput from '../../../components/form/sf-text-input';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
-import SFPercentageInput from '../../../components/form/sf-percentage-input';
 import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
 import useNotificationStore from '../../../core/stores/notification-store';
 import useAssociateStore from '../../../core/stores/associate-store';
@@ -18,6 +17,7 @@ import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-ag
 import AssociateValidation from '../../../core/validations/associate-validation';
 import { ZodIssue } from 'zod';
 import IssueTransform from '../../../core/util/transforms/issue-transform';
+import SFPercentageInput from '../../../components/form/sf-percentage-input';
 
 export default function AssociateCreate() {
   const {
@@ -221,7 +221,6 @@ export default function AssociateCreate() {
           <div className="column">
             {associate.beneficiaries.map((beneficiary, index) => (
               <SFPercentageInput key={index} id={`associate-beneficiaries-${index}-percentage`} name="Porcentaje"
-                min={0} max={100}
                 value={beneficiary.percentage}
                 onChange={(value) => updateBeneficiaryPercentage(index, value)}
                 issues={issues} />
