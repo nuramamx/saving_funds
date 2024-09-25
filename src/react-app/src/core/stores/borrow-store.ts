@@ -70,14 +70,14 @@ const useBorrowStore = create<BorrowStore>()(
       })),
     updateTotalDue: () =>
       set(produce((state: BorrowStore) => {
-        state.borrow.detail.totalDue = (state.borrow.requestedAmount + state.borrow.detail.interests);
+        state.borrow.detail.totalDue = (state.borrow.requestedAmount + state.borrow.detail.interests + state.borrow.detail.guaranteeFund);
       })),
     updateNumberOfPayments: () =>
       set(produce((state: BorrowStore) => {
         if (state.borrow.isFortnightly)
-          state.borrow.detail.numberPayments = (state.borrow.period * 12);
-        else
           state.borrow.detail.numberPayments = (state.borrow.period * 24);
+        else
+          state.borrow.detail.numberPayments = (state.borrow.period * 12);
       })),
     updateAmountToDeliver: () =>
       set(produce((state: BorrowStore) => {

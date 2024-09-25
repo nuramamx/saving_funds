@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
-import { BinMinusIn, Edit, JournalPage } from 'iconoir-react';
+import { BinMinusIn, Edit } from 'iconoir-react';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
 import SFPagination from '../../../components/dynamic-elements/sf-pagination';
+import StatementReportActionItem from './action-items/statement-report-action-item';
 
 export default function AssociateList() {
   const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
@@ -67,7 +68,7 @@ export default function AssociateList() {
                 <td>{ToMoney(associate.salary)}</td>
                 <td>
                   <button><Edit /></button>&nbsp;&nbsp;
-                  <button><JournalPage /></button>&nbsp;&nbsp;
+                  <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
                   <button><BinMinusIn /></button>
                 </td>
               </tr>

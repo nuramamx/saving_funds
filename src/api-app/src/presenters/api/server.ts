@@ -11,6 +11,7 @@ import SavingFundRoute from "./routes/saving-fund-route";
 import ContributionRoute from "./routes/contribution-route";
 import WithdrawalRoute from "./routes/withdrawal-route";
 import BatchRoute from "./routes/batch-route";
+import ReportRoute from "./routes/report-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -47,6 +48,7 @@ fastify.register(SavingFundRoute);
 fastify.register(ContributionRoute);
 fastify.register(WithdrawalRoute);
 fastify.register(BatchRoute);
+fastify.register(ReportRoute);
 
 const start = async () => {
   try {

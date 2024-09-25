@@ -34,7 +34,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
         return 'Aportación';
       case 'withdrawal':
         return 'Retiro';
-      case 'withdrawal-interest':
+      case 'withdrawal-yields':
         return 'Retiro de Intereses';
       default:
         return 'No identificado';

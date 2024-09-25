@@ -14,8 +14,6 @@ export default class BatchListQueryRepository implements QueryRepositoryInfo<Bat
         }
       ) as BatchListSpec[];
 
-      console.log(result);
-
       return result;
     } catch (err: any) {
       throw new Error(`[E-200]: ${err}`);

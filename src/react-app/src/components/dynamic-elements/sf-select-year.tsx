@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
+import { SFNumberInputInfo } from "../form/sf-number-input";
 
 const SFSelectYear = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
   const getCurrentYear = (): number => {
@@ -7,7 +7,7 @@ const SFSelectYear = memo(({ id, name, value, onChange }: SFNumberInputInfo) => 
   };
 
   const createYears = () => {
-    const lastAvailableYear = 2023;
+    const lastAvailableYear = 2020;
     const currentYear = getCurrentYear();
     const yearList = [lastAvailableYear];
 

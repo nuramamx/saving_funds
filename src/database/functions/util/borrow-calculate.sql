@@ -22,7 +22,7 @@ begin
       else 12
     end;
 
-    v_borrow.total_due := p_requested_amount + v_calculated_interest_1;
+    v_borrow.total_due := p_requested_amount + v_calculated_interest_1 + v_borrow.guarantee_fund;
     v_borrow.interests := v_calculated_interest_1; 
     v_borrow.payment := v_borrow.total_due / v_borrow.number_payments;
     v_borrow.rate := p_annual_rate / 100;
@@ -34,7 +34,7 @@ begin
       else 24
     end;
 
-    v_borrow.total_due := p_requested_amount + v_calculated_interest_1 + v_calculated_interest_2;
+    v_borrow.total_due := p_requested_amount + v_calculated_interest_1 + v_calculated_interest_2 + v_borrow.guarantee_fund;
     v_borrow.interests := v_calculated_interest_1 + v_calculated_interest_2; 
     v_borrow.payment := v_borrow.total_due / v_borrow.number_payments;
     v_borrow.rate := p_annual_rate / 100;
@@ -48,7 +48,7 @@ begin
       else 36
     end;
 
-    v_borrow.total_due := p_requested_amount + v_calculated_interest_1 + v_calculated_interest_2 + v_calculated_interest_3;
+    v_borrow.total_due := p_requested_amount + v_calculated_interest_1 + v_calculated_interest_2 + v_calculated_interest_3 + v_borrow.guarantee_fund;
     v_borrow.interests := v_calculated_interest_1 + v_calculated_interest_2 + v_calculated_interest_3; 
     v_borrow.payment := v_borrow.total_due / v_borrow.number_payments;
     v_borrow.rate := p_annual_rate / 100;

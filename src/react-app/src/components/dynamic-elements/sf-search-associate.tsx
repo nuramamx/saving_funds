@@ -6,7 +6,7 @@ import { SFInputInfo } from '../form/interfaces/sf-input-info';
 
 type SearchAssociateInputParams = SFInputInfo & {
   value: number;
-  onChange: (id: number) => void;
+  onChange: (id: number, name: string) => void;
 }
 
 const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputParams) => {
@@ -22,19 +22,19 @@ const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputPar
     setSelectedAssociate(value);
 
     if (onChange)
-      onChange(value.id);
+      onChange(value.id, value.name);
   };
 
   const handleEraseAssociate = () => {
     setSelectedAssociate({} as SearchAssociateSpec);
     if (onChange)
-      onChange(0);
+      onChange(0, '');
   };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => { window.removeEventListener('keydown', handleKeyDown); };
-  }, [])
+  }, []);
 
   return (
     <>

@@ -17,7 +17,7 @@ declare
   v_saving_fund_message text;
 begin
   success := false;
-  message := 'Operación no inciada.';
+  message := 'Operación no iniciada.';
 
   if p_name is null or p_name = '' then
     message := 'El nombre es requerido.';

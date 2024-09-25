@@ -81,7 +81,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
           <div className="column">
             <SFDatePickerInput params={{
               id: 'contribution_applied_date',
-              name: 'Fecha de Inicio',
+              name: 'Fecha de Aplicación',
               value: contribution.appliedAt,
               onChange: (value) => setContribution({ ...contribution, appliedAt: value }),
               minDate: addDays(new Date(), -90),

@@ -14,6 +14,4 @@ type SFInputInfo = {
   onEnter?: () => void;
 }
 
-export type { 
-  SFInputInfo 
-}
+export type { SFInputInfo }

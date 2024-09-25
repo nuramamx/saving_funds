@@ -14,19 +14,9 @@ export default class BatchListQueryHandler implements CommandHandler<BatchListQu
       const repository = new BatchListQueryRepository();
       const result = await repository.all(data);
 
-      return {
-        successful: true,
-        message: 'Busqueda exitosa.',
-        data: result,
-        type: 'success'
-      } as CommandResponse;
+      return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
-      return {
-        successful: false,
-        message: 'Registros no localizados.',
-        data: err.message,
-        type: 'danger'
-      } as CommandResponse;
+      return { successful: false, message: 'Registros no localizados.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }

@@ -15,7 +15,7 @@ export default class ContributionSaveRepository implements SaveRepositoryInfo<Co
         replacements: {
           p_saving_fund_id: data.savingFundId,
           p_applied_at: data.appliedAt,
-          p_amount: data.amount.toFixed(6)
+          p_amount: data.amount
         },
         type: QueryTypes.SELECT
       });

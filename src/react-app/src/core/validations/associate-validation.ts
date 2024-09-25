@@ -1,7 +1,6 @@
 import { z } from "../configs/zod-i18n";
 import AssociateAddressValidation from "./associate-address-validation";
 import AssociateBeneficiariesValidation from "./associate-beneficiary-validation";
-import AssociateBeneficiaryValidation from "./associate-beneficiary-validation";
 import AssociateDetailValidation from "./associate-detail-validation";
 import AssociateWorkplaceValidation from "./associate-workplace-validation";
 

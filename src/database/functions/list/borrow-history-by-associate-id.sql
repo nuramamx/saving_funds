@@ -42,19 +42,20 @@ begin
     ,b."period"
     ,b.is_fortnightly 
     ,to_char(b.start_at, 'YYYY-MM-dd') as start_at 
-    ,to_char(b.created_at, 'YYYY-MM-dd') as created_at 
-    ,'SIN IDENTIFICAR' as resolution
+    ,to_char(b.created_at, 'YYYY-MM-dd') as created_at
+    ,case when (bd.number_payments = coalesce(sum(p.id), 0)) then 'LIQUIDADO' else 'NO LIQUIDADO' end
+      as resolution
   from process.borrow as b 
   join process.borrow_detail as bd on b.id = bd.borrow_id
   left join process.payment as p on b.id = p.borrow_id
-  where 1=1
-  and b.associate_id = p_associate_id
+  where b.associate_id = p_associate_id
   group by b.id
     ,b.requested_amount 
     ,bd.total_due 
     ,bd.number_payments 
     ,b."period" 
     ,b.is_fortnightly
+    ,b.created_at
   order by b.id,
     b.created_at desc;
 

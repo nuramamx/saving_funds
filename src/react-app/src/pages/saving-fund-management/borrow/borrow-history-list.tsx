@@ -11,10 +11,12 @@ import PaymentListActionButton from '../../../components/action-buttons/payment-
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 import BorrowHistoryListSpec from '../../../core/interfaces/specs/list/borrow-history-list-spec';
 import BorrowHistoryListQuery from '../../../core/interfaces/query/borrow-history-list-query';
+import BorrowAuthorizationReportActionItem from './action-items/borrow-authorization-report-action-item';
 
 export default function BorrowHistoryList() {
   const [showPaymentList, setShowPaymentList] = useState(false);
   const [associate, setAssociate] = useState<number>(0);
+  const [associateName, setAssociateName] = useState<string>('');
   const [borrows, setBorrows] = useState<BorrowHistoryListSpec[]>([]);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
@@ -41,6 +43,11 @@ export default function BorrowHistoryList() {
     setBorrows(list);
   }
 
+  const handleAssociateChange = (id: number, name: string) => {
+    setAssociate(id);
+    setAssociateName(name);
+  }
+
   const handleReload = () => {
     if (associate > 0) {
       try {
@@ -65,7 +72,7 @@ export default function BorrowHistoryList() {
           name="Socio"
           value={associate}
           readonly={true}
-          onChange={(value) => setAssociate(value)} />
+          onChange={(id, name) => handleAssociateChange(id, name)} />
       </div>
       <div className="column"></div>
     </div>
@@ -104,7 +111,7 @@ export default function BorrowHistoryList() {
                 <td>{borrow.createdAt}</td>
                 <td>{borrow.startAt}</td>
                 <td>
-                  <button title="Descargar"><DownloadSquare /></button>&nbsp;&nbsp;
+                  <BorrowAuthorizationReportActionItem associateName={associateName.toUpperCase()} borrowId={borrow.id} />
                   <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload} />
                   <PaymentListActionButton borrowId={borrow.id} />
                 </td>

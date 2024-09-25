@@ -1,7 +1,6 @@
 import AssociateDetailInfo from "../interfaces/associate-detail-info";
 
 export default class AssociateDetail implements AssociateDetailInfo {
-  private picture: string = null!;
   readonly agreementId: number;
   readonly dependencyKey: string;
   readonly category: string;
@@ -20,11 +19,5 @@ export default class AssociateDetail implements AssociateDetailInfo {
     this.socialContribution = params.socialContribution;
     this.fortnightlyContribution = params.fortnightlyContribution;
     this.requestDate = params.requestDate;
-  }
-
-  definePicture(picture: string): AssociateDetail {
-    this.picture = picture;
-    
-    return this;
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SFTabs, SFTabsOptions } from '../../../components/ui/sf-tabs';
 import { useNavigate } from 'react-router-dom';
+import { ZodIssue } from 'zod';
 import SFTextInput from '../../../components/form/sf-text-input';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
@@ -11,11 +12,9 @@ import CommandResponseInfo from '../../../core/interfaces/info/command-response-
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import SFSelectCity from '../../../components/dynamic-elements/sf-select-city';
 import SFSelectState from '../../../components/dynamic-elements/sf-select-state';
-import useAssociateDraftStore from '../../../core/stores/associate-draft-store';
 import AppConstants from '../../../core/constants/app-constants';
 import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-agreement';
 import AssociateValidation from '../../../core/validations/associate-validation';
-import { ZodIssue } from 'zod';
 import IssueTransform from '../../../core/util/transforms/issue-transform';
 import SFPercentageInput from '../../../components/form/sf-percentage-input';
 
@@ -31,7 +30,6 @@ export default function AssociateCreate() {
   } = useAssociateStore();
   const navigate = useNavigate();
   const { pushNotification } = useNotificationStore();
-  const { pushAssociateDraft } = useAssociateDraftStore();
   const { setValidationModal } = useValidationModalStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);

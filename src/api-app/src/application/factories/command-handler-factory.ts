@@ -1,5 +1,6 @@
 import CommandHandler from '../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../abstractions/interfaces/command-response';
+import Excel from "exceljs";
 import AssociateCreateCommandHandler, { AssociateCreateCommand } from '../use-cases/commands/associate/create/associate-create-command-handler';
 import BorrowCreateCommandHandler, { BorrowCreateCommand } from '../use-cases/commands/borrow/create/borrow-create-command-handler';
 import ContributionCreateCommandHandler, { ContributionCreateCommand } from '../use-cases/commands/contribution/create/contribution-create-command-handler';
@@ -23,6 +24,8 @@ import SavingFundTransactionListQueryHandler, { SavingFundTransactionListQuery }
 import StateListQueryHandler from '../use-cases/queries/state/list/state-list-query-handler';
 import SavingFundAnnualRateUpdateCommandHandler, { SavingFundAnnualRateUpdateCommand } from '../use-cases/commands/saving_fund/rate/update/saving-fund-annual-rate-update-command-handler';
 import BorrowAnnualRateUpdateCommandHandler, { BorrowAnnualRateUpdateCommand } from '../use-cases/commands/borrow/rate/update/borrow-annual-rate-update-command-handler';
+import StatementReportGenerateQueryHandler, { StatementReportGenerateQuery } from '../use-cases/queries/report/statement/generate/statement-report-generate-query-handler';
+import BorrowAuthorizationReportGenerateQueryHandler, { BorrowAuthorizationReportGenerateQuery } from '../use-cases/queries/report/borrow-authorization/generate/borrow-authorization-report-generate-query-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -49,11 +52,14 @@ type CommandHandlerTypeMap = {
   'BorrowDebtorListQuery': void,
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
-  'BatchListQuery': BatchListQuery
+  'BatchListQuery': BatchListQuery,
+  // Reports
+  'StatementReport': StatementReportGenerateQuery,
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
 };
 
 const commandConstructors: {
-  [K in keyof CommandHandlerTypeMap]?: new () => CommandHandler<CommandHandlerTypeMap[K], CommandResponse>
+  [K in keyof CommandHandlerTypeMap]?: new () => CommandHandler<CommandHandlerTypeMap[K], CommandResponse | Excel.Buffer>
 } = {
   // Commands
   'AssociateCreateCommand': AssociateCreateCommandHandler,
@@ -79,7 +85,10 @@ const commandConstructors: {
   'BorrowDebtorListQuery': BorrowDebtorListQueryHandler,
   'SavingFundListQuery': SavingFundListQueryHandler,
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
-  'BatchListQuery': BatchListQueryHandler
+  'BatchListQuery': BatchListQueryHandler,
+  // Reports
+  'StatementReport': StatementReportGenerateQueryHandler,
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler
 };
 
 class CommandHandlerFactory {

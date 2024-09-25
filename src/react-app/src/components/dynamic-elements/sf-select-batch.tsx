@@ -1,9 +1,9 @@
 import { memo, useEffect, useState } from "react"
-import { SFNumberInputInfo } from "../form/interfaces/sf-input-info";
+import { objectToCamel } from "ts-case-convert";
+import { SFNumberInputInfo } from "../form/sf-number-input";
 import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import BatchListSpec from "../../core/interfaces/specs/list/batch-list-spec";
-import { objectToCamel } from "ts-case-convert";
 import useNotificationStore from "../../core/stores/notification-store";
 
 const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFNumberInputInfo) => {
