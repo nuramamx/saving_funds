@@ -1,4 +1,4 @@
---drop function administration.batch_create;
+--drop function system.batch_create;
 create or replace function "system".batch_create(
   in p_name varchar,
   in p_batch_function text,

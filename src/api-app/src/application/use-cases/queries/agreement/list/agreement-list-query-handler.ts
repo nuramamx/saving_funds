@@ -7,6 +7,6 @@ export default class AgreementListQueryHandler implements CommandHandler<void, C
     const repository = new AgreementListQueryRepository();
     const list = await repository.all();
 
-    return { successful: true, message: 'Convenios generados correctamente.', data: JSON.stringify(list), type: 'success' } as CommandResponse;
+    return { successful: true, message: 'Convenios generados correctamente.', data: list, type: 'success' } as CommandResponse;
   }
 }

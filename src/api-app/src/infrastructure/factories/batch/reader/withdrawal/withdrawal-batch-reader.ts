@@ -29,8 +29,6 @@ export default class WithdrawalBatchReader implements BatchReaderInfo<BatchReade
           messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna C.`);
         }
 
-        console.log(d[index][0]);
-
         data.push({
           p_associate_name: row[0],
           p_amount: Number(row[1]),

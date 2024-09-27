@@ -20,7 +20,7 @@ const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSel
       });
 
       const response = await result.json() as CommandResponseInfo;
-      const cities = objectToCamel(JSON.parse(response.data)) as CityInfo[];
+      const cities = objectToCamel(response.data) as CityInfo[];
 
       setCities(cities);
     };

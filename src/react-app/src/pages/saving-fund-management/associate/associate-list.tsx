@@ -67,8 +67,8 @@ export default function AssociateList() {
                 <td>{associate.agreementName}</td>
                 <td>{ToMoney(associate.salary)}</td>
                 <td>
-                  <button><Edit /></button>&nbsp;&nbsp;
                   <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
+                  <button><Edit /></button>&nbsp;&nbsp;
                   <button><BinMinusIn /></button>
                 </td>
               </tr>

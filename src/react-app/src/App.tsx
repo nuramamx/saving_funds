@@ -9,6 +9,7 @@ import './styles/notification.css';
 import './styles/navbar.css';
 import './styles/table.css';
 import './styles/input.css';
+import './styles/menu.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
 

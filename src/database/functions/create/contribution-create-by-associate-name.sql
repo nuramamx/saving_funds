@@ -1,5 +1,5 @@
---drop function process.contribution_create_by_name;
-create or replace function process.contribution_create_by_name(
+--drop function process.contribution_create_by_associate_name;
+create or replace function process.contribution_create_by_associate_name(
   in p_associate_name text,
   in p_amount numeric,
   in p_applied_at timestamp with time zone,

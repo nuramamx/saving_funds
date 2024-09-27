@@ -15,7 +15,7 @@ const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberI
       });
 
       const response = await result.json() as CommandResponseInfo;
-      const agreements = JSON.parse(response.data!) as AgreementInfo[];
+      const agreements = response.data as AgreementInfo[];
 
       setAgreements(agreements);
     };

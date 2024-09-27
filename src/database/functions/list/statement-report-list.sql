@@ -110,19 +110,6 @@ begin
     where temp_report_statement."year" = v_year_iterated;
   end loop;
 
---   -- Summarize the initial balance with net total by year.
---   for v_year_iterated in v_year_first_contribution..v_current_year loop
---     update temp_report_statement
---       set net_total = (
---           select
---             (coalesce(trs.initial_balance, 0) + trs.net_total)
---           from temp_report_statement as trs
---           where trs.year = v_year_iterated
---           limit 1
---         )
---     where temp_report_statement."year" = v_year_iterated;
---   end loop;
-
   return query
   select
     t.year

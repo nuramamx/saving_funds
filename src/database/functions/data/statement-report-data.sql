@@ -75,14 +75,14 @@ begin
         ,(
           select
             case when rs.net_total < 0 then 0 else rs.net_total end as net_total
-          from process.report_statement_list(p_associate_id) as rs
+          from process.statement_report_list(p_associate_id) as rs
           where rs."year" = (v_current_year - 1)
           limit 1
         ) as amount_available_to_withdrawal
         ,(
           select
             case when rs.net_total < 0 then 0 else rs.net_total end as net_total
-          from process.report_statement_list(p_associate_id) as rs
+          from process.statement_report_list(p_associate_id) as rs
           where rs."year" = v_current_year
           limit 1
         ) as net_balance

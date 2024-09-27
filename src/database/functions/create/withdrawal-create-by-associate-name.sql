@@ -1,6 +1,6 @@
---drop function process.withdrawal_create;
-create or replace function process.withdrawal_create(
-  in p_saving_fund_id integer,
+--drop function process.withdrawal_create_by_associate_name;
+create or replace function process.withdrawal_create_by_associate_name(
+  in p_associate_name text,
   in p_amount numeric,
   in p_is_yields boolean default false,
   out inserted_id integer,
@@ -9,6 +9,7 @@ create or replace function process.withdrawal_create(
 )
 returns RECORD as $$
 declare
+  v_saving_fund_id integer;
   v_associate_agreement text;
   v_first_contribution_amount numeric(20,2);
   v_amount_to_withhold numeric(20,2);
@@ -19,8 +20,26 @@ begin
   success := false;
   message := 'Operación no iniciada.';
 
+  if length(p_associate_name) = 0 then
+    message := 'El nombre del socio no puede estar vacío.';
+    return;
+  end if;
+
   if p_amount <= 0 then
     message := 'El monto del retiro debe ser mayor a cero.';
+    return;
+  end if;
+
+  v_saving_fund_id := (
+    select
+      s.id
+    from process.saving_fund as s
+    join catalog.associate as a on s.associate_id = a.id
+    where a.name = trim(upper(p_associate_name))
+  );
+
+  if v_saving_fund_id <= 0 then
+    message := 'Fondo de ahorro no pudo ser localizado.'
     return;
   end if;
 
@@ -61,14 +80,14 @@ begin
     sum(coalesce(c.amount, 0))
   into v_available_balance
   from process.contribution as c
-  where c.saving_fund_id = p_saving_fund_id;
+  where c.saving_fund_id = v_saving_fund_id;
 
   -- Get all withdrawals registered.
   select
     sum(coalesce(w.amount, 0))
   into v_withdrawal_sum_amount
   from process.withdrawal as w
-  where w.saving_fund_id = p_saving_fund_id
+  where w.saving_fund_id = v_saving_fund_id
   and w.is_yields = false;
 
   -- Subtract withdrawals and amount to withhold from current balance.
@@ -96,7 +115,7 @@ begin
   begin
     insert into process.withdrawal(saving_fund_id, amount, is_yields)
     values (
-      p_saving_fund_id
+      v_saving_fund_id
       ,p_amount
       ,p_is_yields
     )

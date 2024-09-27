@@ -17,6 +17,6 @@ begin
     ,b.details
     ,b.is_active
   from "system".batch as b
-  order by b.id asc, b.is_active desc;
+  order by b.id, b.is_active desc;
 end;
 $$ language plpgsql;

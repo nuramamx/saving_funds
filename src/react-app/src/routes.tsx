@@ -6,13 +6,9 @@ import SavingFundList from './pages/saving-fund-management/saving-fund/saving-fu
 import AssociateList from './pages/saving-fund-management/associate/associate-list';
 import BorrowHistoryList from './pages/saving-fund-management/borrow/borrow-history-list';
 import BorrowDebtorList from './pages/saving-fund-management/borrow/borrow-debtor-list';
-import MyAccount from './pages/myaccount-management/myaccount/myaccount';
-import MyAccountManagement from './pages/myaccount-management/myaccount-management';
 import SavingFundManagement from './pages/saving-fund-management/saving-fund-management';
-import BatchList from './pages/system-management/batch/batch-list';
 import SystemManagement from './pages/system-management/system-management';
 import BorrowCreate from './pages/saving-fund-management/borrow/borrow-create';
-import BatchComposer from './pages/system-management/batch/batch-composer';
 import BatchUpload from './pages/saving-fund-management/batch/batch-upload';
 import SavingFundAnnualRateList from './pages/system-management/saving-fund-annual-rate/saving-fund-annual-rate-list';
 import BorrowAnnualRateList from './pages/system-management/borrow-annual-rate/borrow-annual-rate-list';
@@ -39,19 +35,19 @@ const Routes = createBrowserRouter([
         path: 'system',
         element: <SystemManagement />,
         children: [
-          { path: 'batch/composer', element: <BatchComposer /> },
-          { path: 'batch/list', element: <BatchList /> },
+          // { path: 'batch/composer', element: <BatchComposer /> },
+          // { path: 'batch/list', element: <BatchList /> },
           { path: 'annualrate/savingfund/list', element: <SavingFundAnnualRateList />},
           { path: 'annualrate/borrow/list', element: <BorrowAnnualRateList />}
         ]
       },
-      {
-        path: 'myaccount',
-        element: <MyAccountManagement />,
-        children: [
-          { path: 'page', element: <MyAccount /> }
-        ]
-      },
+      // {
+      //   path: 'myaccount',
+      //   element: <MyAccountManagement />,
+      //   children: [
+      //     { path: 'page', element: <MyAccount /> }
+      //   ]
+      // },
     ],
   },
 ]);
@@ -81,17 +77,17 @@ const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'util', name: 'Utilidades', location: '/savingfund', children: [
     { key: 'batch-upload', route: '/savingfund/batch/upload', name: 'Carga por Batch' }
   ]},
-  { key: 'batch', name: 'Batch', location: '/system', children: [
-    { key: 'batch-composer', route: '/system/batch/composer', name: 'Crear Batch' },
-    { key: 'batch-list', route: '/system/batch/list', name: 'Gestión de Batchs' }
-  ] },
+  // { key: 'batch', name: 'Batch', location: '/system', children: [
+  //   { key: 'batch-composer', route: '/system/batch/composer', name: 'Crear Batch' },
+  //   { key: 'batch-list', route: '/system/batch/list', name: 'Gestión de Batchs' }
+  // ] },
   { key: 'annual-rate', name: 'Interés Anual', location: '/system', children: [
     { key: 'saving-fund-annual-rate-list', route: '/system/annualrate/savingfund/list', name: 'Fondo de Ahorro' },
     { key: 'borrow-annual-rate-list', route: '/system/annualrate/borrow/list', name: 'Préstamos' }
   ] },
-  { key: 'general', name: 'General', location: '/myaccount', children: [
-    { key: 'myaccount-page', route: '/myaccount/page', name: 'Mis Datos' }
-  ] },
+  // { key: 'general', name: 'General', location: '/myaccount', children: [
+  //   { key: 'myaccount-page', route: '/myaccount/page', name: 'Mis Datos' }
+  // ] },
 ];
 
 export { Routes, SidebarRoutes }
