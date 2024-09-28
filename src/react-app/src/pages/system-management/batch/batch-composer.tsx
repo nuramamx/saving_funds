@@ -63,6 +63,7 @@ export default function BatchComposer() {
     try {
       const response = await fetch(`${AppConstants.apiBatch}/create`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(batch)
       });
 

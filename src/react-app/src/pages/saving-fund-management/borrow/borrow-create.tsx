@@ -12,7 +12,6 @@ import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
-import SFPercentageInput from '../../../components/form/sf-percentage-input';
 
 export default function BorrowCreate() {
   const { 
@@ -84,12 +83,13 @@ export default function BorrowCreate() {
     updateAmountToDeliver();
 
     const fetchAnnualRates = async () => {
-      const result = await fetch(AppConstants.apiAnnualRate, {
-        method: 'GET'
+      const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       const response = await result.json() as CommandResponseInfo;
-      const list = JSON.parse(response.data!) as AnnualRateInfo[];
+      const list = response.data as AnnualRateInfo[];
 
       setAnnualRates(list);
     };
@@ -137,9 +137,10 @@ export default function BorrowCreate() {
       </div>
       <div className="column">
         <h5 className="title is-5">Cotizaci&oacute;n del pr&eacute;stamo</h5>
-        <SFPercentageInput id="borrow_annual_rate" name="Tasa de Interés"
+        <SFMoneyInput id="borrow_annual_rate" name="Tasa de Interés"
+          mask="%"
           readonly={true}
-          value={borrow.annualRate} />
+          value={Number(borrow.annualRate).toFixed(2)} />
         <SFMoneyInput id="borrow_interest_to_pay" name="Intereses"
           readonly={true}
           value={borrow.detail.interests.toFixed(2)} />

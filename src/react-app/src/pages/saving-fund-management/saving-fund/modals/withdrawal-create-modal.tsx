@@ -30,6 +30,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
     try {
       const response = await fetch(`${AppConstants.apiWithdrawal}/create`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(withdrawal)
       });
 

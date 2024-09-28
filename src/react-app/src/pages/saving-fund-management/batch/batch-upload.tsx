@@ -32,6 +32,7 @@ export default function BatchUpload() {
     try {
       const response = await fetch(`${AppConstants.apiBatch}/upload`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: formData
       });
 

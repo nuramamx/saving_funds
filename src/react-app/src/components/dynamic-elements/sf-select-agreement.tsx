@@ -11,7 +11,8 @@ const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberI
   useEffect(() => {
     const fetchAgreements = async () => {
       const result = await fetch(AppConstants.apiAgreement, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

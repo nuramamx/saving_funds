@@ -16,7 +16,8 @@ export default function AssociateList() {
 
   const fetchAssociates = async (page: number) => {
     const result = await fetch(`${AppConstants.apiAssociate}/list?page=${page}`, {
-      method: 'GET'
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
     });
 
     if (!result.ok)

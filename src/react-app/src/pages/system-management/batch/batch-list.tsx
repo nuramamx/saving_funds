@@ -13,7 +13,8 @@ export default function BatchList() {
   const fetchBatchs = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBatch}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
       
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición');

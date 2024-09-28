@@ -21,7 +21,8 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
   const handleDownloadExcel = async () => {
     try {
       const response = await fetch(`${AppConstants.apiReport}/borrow_authorization/${borrowId}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       if (!response.ok)

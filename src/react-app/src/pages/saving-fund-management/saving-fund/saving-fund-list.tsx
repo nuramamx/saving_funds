@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
@@ -19,6 +19,7 @@ export default function SavingFundList() {
   const fectchSavingFunds = async () => {
     const result = await fetch(`${AppConstants.apiSavingFund}/list`, {
       method: 'POST',
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
       body: JSON.stringify({
         associateId: associate
       } as SavingFundListQuery)

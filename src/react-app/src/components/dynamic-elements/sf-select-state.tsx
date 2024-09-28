@@ -11,7 +11,8 @@ const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) =>
   useEffect(() => {
     const fetchStates = async () => {
       const result = await fetch(`${AppConstants.apiState}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

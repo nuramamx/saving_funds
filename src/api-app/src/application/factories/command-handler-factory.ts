@@ -26,6 +26,7 @@ import SavingFundAnnualRateUpdateCommandHandler, { SavingFundAnnualRateUpdateCom
 import BorrowAnnualRateUpdateCommandHandler, { BorrowAnnualRateUpdateCommand } from '../use-cases/commands/borrow/rate/update/borrow-annual-rate-update-command-handler';
 import StatementReportGenerateQueryHandler, { StatementReportGenerateQuery } from '../use-cases/queries/report/statement/generate/statement-report-generate-query-handler';
 import BorrowAuthorizationReportGenerateQueryHandler, { BorrowAuthorizationReportGenerateQuery } from '../use-cases/queries/report/borrow-authorization/generate/borrow-authorization-report-generate-query-handler';
+import UserDataByUserAndPasswordQueryHandler, { UserDataByUserAndPasswordQuery } from '../use-cases/queries/security/user/data/user-data-by-user-and-password-query-command-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -53,6 +54,7 @@ type CommandHandlerTypeMap = {
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
   'BatchListQuery': BatchListQuery,
+  'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQuery
   // Reports
   'StatementReport': StatementReportGenerateQuery,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
@@ -86,6 +88,7 @@ const commandConstructors: {
   'SavingFundListQuery': SavingFundListQueryHandler,
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
   'BatchListQuery': BatchListQueryHandler,
+  'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQueryHandler,
   // Reports
   'StatementReport': StatementReportGenerateQueryHandler,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler

@@ -3,10 +3,11 @@ import { SFInputInfo } from "./interfaces/sf-input-info";
 
 type SFMoneyInputInfo = SFInputInfo & {
   value: number | string;
+  mask?: string;
   onChange?: (value: number) => void;
 }
 
-export default function SFMoneyInput({ id, name, value, readonly, issues, onChange }: SFMoneyInputInfo) {
+export default function SFMoneyInput({ id, name, value, mask = '$', readonly, issues, onChange }: SFMoneyInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +52,7 @@ export default function SFMoneyInput({ id, name, value, readonly, issues, onChan
       <div className="field has-addons" style={{ marginBottom: 0 }}>
         <span className="control">
           <label className="button is-static">
-            $
+            {mask}
           </label>
         </span>
         <div className="control is-expanded">

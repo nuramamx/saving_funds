@@ -18,7 +18,8 @@ export default function BorrowAnnualRateList() {
   const fetchAnnualRates = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
       
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición');
@@ -57,6 +58,7 @@ export default function BorrowAnnualRateList() {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
         method: 'PUT',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(record)
       });
       

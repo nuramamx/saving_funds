@@ -12,8 +12,14 @@ import BorrowCreate from './pages/saving-fund-management/borrow/borrow-create';
 import BatchUpload from './pages/saving-fund-management/batch/batch-upload';
 import SavingFundAnnualRateList from './pages/system-management/saving-fund-annual-rate/saving-fund-annual-rate-list';
 import BorrowAnnualRateList from './pages/system-management/borrow-annual-rate/borrow-annual-rate-list';
+import ProtectedRoute from './components/security/protected-content';
+import Login from './pages/login/login';
 
 const Routes = createBrowserRouter([
+  {
+    path: 'login',
+    element: <Login />,
+  },
   {
     path: '/',
     element: <App />,
@@ -22,13 +28,13 @@ const Routes = createBrowserRouter([
         path: 'savingfund',
         element: <SavingFundManagement />,
         children: [
-          { path: 'list', element: <SavingFundList /> },
-          { path: 'associate/create', element: <CreateAssociate /> },
-          { path: 'associate/list', element: <AssociateList /> },
-          { path: 'borrow/create', element: <BorrowCreate /> },
-          { path: 'borrow/list', element: <BorrowHistoryList /> },
-          { path: 'borrow/debtor', element: <BorrowDebtorList />},
-          { path: 'batch/upload', element: <BatchUpload />},
+          { path: 'list', element: <ProtectedRoute><SavingFundList /></ProtectedRoute> },
+          { path: 'associate/create', element: <ProtectedRoute><CreateAssociate /></ProtectedRoute> },
+          { path: 'associate/list', element: <ProtectedRoute><AssociateList /></ProtectedRoute> },
+          { path: 'borrow/create', element: <ProtectedRoute><BorrowCreate /></ProtectedRoute> },
+          { path: 'borrow/list', element: <ProtectedRoute><BorrowHistoryList /></ProtectedRoute> },
+          { path: 'borrow/debtor', element: <ProtectedRoute><BorrowDebtorList /></ProtectedRoute> },
+          { path: 'batch/upload', element: <ProtectedRoute><BatchUpload /></ProtectedRoute> },
         ]
       },
       {
@@ -37,8 +43,8 @@ const Routes = createBrowserRouter([
         children: [
           // { path: 'batch/composer', element: <BatchComposer /> },
           // { path: 'batch/list', element: <BatchList /> },
-          { path: 'annualrate/savingfund/list', element: <SavingFundAnnualRateList />},
-          { path: 'annualrate/borrow/list', element: <BorrowAnnualRateList />}
+          { path: 'annualrate/savingfund/list', element: <ProtectedRoute><SavingFundAnnualRateList /></ProtectedRoute> },
+          { path: 'annualrate/borrow/list', element: <ProtectedRoute><BorrowAnnualRateList /></ProtectedRoute> }
         ]
       },
       // {

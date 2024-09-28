@@ -44,7 +44,8 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
   const fetchPayments = async () => {
     try {
       const result = await fetch(`${AppConstants.apiSavingFund}/transactions/${savingFundId}/${year}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       if (!result.ok)

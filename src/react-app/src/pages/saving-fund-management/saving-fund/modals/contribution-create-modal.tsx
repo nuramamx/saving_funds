@@ -32,6 +32,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
     try {
       const response = await fetch(`${AppConstants.apiContribution}/create`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(contribution)
       });
 

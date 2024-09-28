@@ -1,6 +1,8 @@
 enum FunctionName {
   // Search
   ASSOCIATE_SEARCH_BY_ID_OR_NAME = 'select * from catalog.associate_list_by_id_or_name(:p_associate_id, :p_name);',
+  // Security
+  USER_DATA_BY_USER_AND_PASSWORD = 'select * from security.user_data_by_user_and_password(:p_user, :p_password);',
   // System
   AGREEMENT_CREATE = 'select * from system.agreement_create(:p_name);',
   AGREEMENT_UPDATE = 'select * from system.agreement_update(:p_id, :p_name);',

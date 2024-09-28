@@ -21,7 +21,8 @@ export default function StatementReportActionItem({ associateName, associateId }
   const handleDownloadExcel = async () => {
     try {
       const response = await fetch(`${AppConstants.apiReport}/statement/${associateId}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
       });
 
       if (!response.ok)

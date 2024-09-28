@@ -24,6 +24,7 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
     try {
       const result = await fetch(`${AppConstants.apiAssociate}/search_by_id_or_name`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify({
           associate_id: CheckAndAssign.checkNumber(associateInfo),
           name: CheckAndAssign.checkText(associateInfo)

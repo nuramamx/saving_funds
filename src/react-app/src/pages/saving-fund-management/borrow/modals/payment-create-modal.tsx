@@ -30,6 +30,7 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
     try {
       const response = await fetch(`${AppConstants.apiPayment}/create`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(payment)
       });
 

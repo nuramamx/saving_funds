@@ -1,6 +1,7 @@
 import { customLogger } from "./logger/custom-logger";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import jwt from "@fastify/jwt";
 import AssociateRoute from "./routes/associate-route";
 import CityRoute from "./routes/city-route";
 import StateRoute from "./routes/state-route";
@@ -12,6 +13,7 @@ import ContributionRoute from "./routes/contribution-route";
 import WithdrawalRoute from "./routes/withdrawal-route";
 import BatchRoute from "./routes/batch-route";
 import ReportRoute from "./routes/report-route";
+import SecurityRoute from "./routes/security-route";
 
 const fastify = Fastify({
   logger: customLogger['development'] ?? true
@@ -38,6 +40,10 @@ fastify.register(cors, {
   }
 });
 
+fastify.register(jwt, {
+  secret: 'setepid-sf'
+});
+
 fastify.register(AgreementRoute);
 fastify.register(StateRoute);
 fastify.register(CityRoute);
@@ -49,6 +55,21 @@ fastify.register(ContributionRoute);
 fastify.register(WithdrawalRoute);
 fastify.register(BatchRoute);
 fastify.register(ReportRoute);
+fastify.register(SecurityRoute);
+
+fastify.addHook('onRequest', async (request, reply) => {
+  const publicRoutes = ['/security/token'];
+
+  console.log(request.raw.url);
+
+  if (!publicRoutes.includes(request.raw.url!)) {
+    try {
+      await request.jwtVerify();
+    } catch (err: any) {
+      reply.send(err);
+    }
+  }
+});
 
 const start = async () => {
   try {

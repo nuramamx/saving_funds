@@ -29,6 +29,7 @@ export default function BorrowHistoryList() {
   const fetchHistory = async () => {
     const response = await fetch(`${AppConstants.apiBorrow}/list/history`, {
       method: 'POST',
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
       body: JSON.stringify({
         associateId: associate
       } as BorrowHistoryListQuery)

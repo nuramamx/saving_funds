@@ -16,7 +16,8 @@ export default function BorrowDebtorList() {
   const fetchBorrows = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/list/debtor`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');

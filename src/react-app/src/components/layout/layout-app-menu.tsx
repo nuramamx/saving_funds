@@ -1,20 +1,23 @@
 import React, { memo, useLayoutEffect, useState } from 'react';
-import { Community, AppleWallet, Settings, ReportColumns, UserCircle, LogOut } from 'iconoir-react';
+import { Community, Settings, UserCircle, LogOut } from 'iconoir-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../security/auth-context';
 import useLayoutStore from '../../core/stores/layout-store';
 
 const LayoutAppMenu = memo(() => {
-  const [isActive, setIsActive] = useState<boolean>(true);
+  const { logout } = useAuth();
   const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
-
-  useLayoutEffect(() => {
-    // restoreMenu();
-  }, []);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   const handleMenuClick = (menu: string) => {
     setSelectedMenu(menu);
     restoreSidebarMenu();
   };
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/login';
+  }
 
   return (
     <div id="ui-app-menu" className="navbar-menu">
@@ -48,13 +51,7 @@ const LayoutAppMenu = memo(() => {
               </div>
               <div className="dropdown-menu" id="dropdown-menu" role="menu">
                 <div className="dropdown-content">
-                  <div className="dropdown-item">
-                    <strong>
-                      ADMIN
-                    </strong>
-                  </div>
-                  <hr className="dropdown-divider" />
-                  <button className='button is-light myaccount-item' style={{ background: 'none', width: '100%' }}><LogOut />&nbsp;Cerrar sesi&oacute;n</button>
+                  <button className='button is-light myaccount-item' style={{ background: 'none', width: '100%' }} onClick={handleLogout}><LogOut />&nbsp;Cerrar sesi&oacute;n</button>
                 </div>
               </div>
             </div>

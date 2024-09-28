@@ -16,7 +16,8 @@ const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSel
   useEffect(() => {
     const fetchCities = async () => {
       const result = await fetch(AppConstants.apiCity, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

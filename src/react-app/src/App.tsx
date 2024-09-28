@@ -10,8 +10,10 @@ import './styles/navbar.css';
 import './styles/table.css';
 import './styles/input.css';
 import './styles/menu.css';
+import './styles/login.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
+import { AuthProvider } from './components/security/auth-context';
 
 function App() {
   const { notifications } = useNotificationStore();
@@ -34,7 +36,7 @@ function App() {
         </GenericErrorBoundary>
       </div>
       <ValidationModal />
-      </>
+    </>
   );
 }
 

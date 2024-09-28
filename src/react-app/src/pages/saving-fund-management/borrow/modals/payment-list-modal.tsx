@@ -33,7 +33,8 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
   const fetchPayments = async () => {
     try {
       const result = await fetch(`${AppConstants.apiPayment}/list/${borrowId}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
       });
 
       if (!result.ok)
