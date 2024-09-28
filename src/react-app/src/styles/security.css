@@ -1,0 +1,14 @@
+.blocking-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(236, 236, 236, 0.9); /* Semi-transparent background */
+  z-index: 9999; /* Make sure it is above all other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+}

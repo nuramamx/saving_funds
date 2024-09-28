@@ -11,15 +11,18 @@ import './styles/table.css';
 import './styles/input.css';
 import './styles/menu.css';
 import './styles/login.css';
+import './styles/security.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
-import { AuthProvider } from './components/security/auth-context';
+import { useAuth } from './components/security/auth-context';
 
 function App() {
   const { notifications } = useNotificationStore();
+  const { isAuthenticated } = useAuth();
   
   return (
     <>
+      <div className="blocking-div" style={{ display: `${isAuthenticated ? 'none' : 'block' } `}}></div>
       <LayoutAppHeader />
       <div className="notification-container">
         {notifications.map((notification) => (

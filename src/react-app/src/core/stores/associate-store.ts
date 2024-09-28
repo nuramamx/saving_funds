@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import { produce } from "immer";
-import CreateAssociateCommand from "../interfaces/commands/associate-create-command";
+import AssociateComposerCommand from "../interfaces/commands/associate-composer-command";
 
-const associateInitialState: CreateAssociateCommand = {
+const associateInitialState: AssociateComposerCommand = {
   name: '',
   rfc: '',
   gender: '',
@@ -12,10 +12,11 @@ const associateInitialState: CreateAssociateCommand = {
     category: '',
     salary: 0,
     socialContribution: 0,
-    fortnightlyContribution: 0,
+    frequentContribution: 0,
     requestDate: new Date()
   },
   address: {
+    stateId: 0,
     cityId: 0,
     street: '',
     settlement: '',
@@ -40,9 +41,9 @@ const associateInitialState: CreateAssociateCommand = {
 }
 
 interface AssociateStore {
-  associate: CreateAssociateCommand;
+  associate: AssociateComposerCommand;
   stateId: number,
-  setAssociate: (newState: CreateAssociateCommand) => void,
+  setAssociate: (newState: AssociateComposerCommand) => void,
   setStateId: (value: number) => void,
   updateBeneficiaryName: (index: number, name: string) => void,
   updateBeneficiaryPercentage: (index: number, percentage: number) => void,
@@ -52,7 +53,7 @@ interface AssociateStore {
 const useAssociateStore = create<AssociateStore>((set) => ({
   associate: associateInitialState,
   stateId: 0,
-  setAssociate: (newState: CreateAssociateCommand) => set(
+  setAssociate: (newState: AssociateComposerCommand) => set(
     produce((state: AssociateStore) => {
       state.associate = newState;
     })

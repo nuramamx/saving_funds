@@ -12,6 +12,7 @@ export default class Associate implements AssociateInfo {
   private beneficiaries: Beneficiary[] = [];
 
   constructor(
+    readonly id: number,
     readonly name: string,
     readonly rfc: string,
     readonly gender: string

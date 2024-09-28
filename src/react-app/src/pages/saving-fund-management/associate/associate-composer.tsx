@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SFTabs, SFTabsOptions } from '../../../components/ui/sf-tabs';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { ZodIssue } from 'zod';
 import SFTextInput from '../../../components/form/sf-text-input';
 import SFMoneyInput from '../../../components/form/sf-money-input';
@@ -17,8 +17,19 @@ import SFSelectAgreement from '../../../components/dynamic-elements/sf-select-ag
 import AssociateValidation from '../../../core/validations/associate-validation';
 import IssueTransform from '../../../core/util/transforms/issue-transform';
 import SFPercentageInput from '../../../components/form/sf-percentage-input';
+import AssociateSpec from '../../../core/interfaces/specs/base/associate-spec';
+import { objectToCamel } from 'ts-case-convert';
 
-export default function AssociateCreate() {
+type AssociateComposerParams = {
+  id?: number
+}
+
+export const associateComposerLoader = async ({ params }: { params: AssociateComposerParams }) => {
+  const { id } = params;
+  return { id: id || null };
+};
+
+export function AssociateComposer() {
   const {
     associate,
     stateId,
@@ -29,9 +40,11 @@ export default function AssociateCreate() {
     clearAssociate
   } = useAssociateStore();
   const navigate = useNavigate();
+  const { id } = useLoaderData() as { id?: number };
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
   const tabsOptions: SFTabsOptions[] = [
     { id: 'associate', name: 'Socio' },
@@ -40,11 +53,26 @@ export default function AssociateCreate() {
     { id: 'beneficiary', name: 'Beneficiarios' }
   ];
 
+  const fetchAssociate = async () => {
+    const result = await fetch(`${AppConstants.apiAssociate}/${id}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+    });
+
+    if (!result.ok)
+      throw new Error(result.statusText);
+
+    const response = await result.json() as CommandResponseInfo;
+    const associate = objectToCamel(response.data) as unknown as AssociateSpec;
+    setAssociate(associate);
+    setStateId(associate.address.stateId);
+  };
+
   const handleSave = async () => {
     if (!handleAssociateValidate()) return;
 
     try {
-      const response = await fetch(`${AppConstants.apiAssociate}/create`, {
+      const response = await fetch(`${AppConstants.apiAssociate}/${!editMode ? 'create' : 'update' }`, {
         method: 'POST',
         body: JSON.stringify(associate)
       });
@@ -88,12 +116,21 @@ export default function AssociateCreate() {
   };
 
   useEffect(() => {
+    if (id !== null && id !== undefined && id > 0) {
+      setEditMode(true);
+      fetchAssociate();
+    } else {
+      clearAssociate();
+    }
+  }, [id]); 
+
+  useEffect(() => {
     const beneficiaryTotalPercentage = associate.beneficiaries
       .map(item => parseInt(item.percentage.toString()))
       .reduce((sum, percentage) => sum + percentage, 0);
 
       setBeneficiaryTotalPercentage(beneficiaryTotalPercentage);
-  }, [associate.beneficiaries])
+  }, [associate.beneficiaries]);
 
   return (
     <>
@@ -248,3 +285,5 @@ export default function AssociateCreate() {
     </>
   );
 }
+
+export type { AssociateComposerParams };

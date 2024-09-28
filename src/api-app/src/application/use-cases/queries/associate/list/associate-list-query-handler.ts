@@ -14,12 +14,7 @@ export default class AssociateListQueryHandler implements CommandHandler<Associa
 
       return { successful: true, message: 'Busqueda exitosa.', data: result, totalRows: GetTotalRows(result), type: 'success' } as CommandResponse;
     } catch (err: any) {
-      return {
-        successful: false,
-        message: 'Socios no localizados.',
-        data: err.message,
-        type: 'danger'
-      } as CommandResponse;
+      return { successful: false, message: 'Socios no localizados.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }

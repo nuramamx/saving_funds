@@ -7,6 +7,7 @@ import CommandResponseInfo from '../../../core/interfaces/info/command-response-
 import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
 import SFPagination from '../../../components/dynamic-elements/sf-pagination';
 import StatementReportActionItem from './action-items/statement-report-action-item';
+import { Link } from 'react-router-dom';
 
 export default function AssociateList() {
   const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
@@ -69,7 +70,7 @@ export default function AssociateList() {
                 <td>{ToMoney(associate.salary)}</td>
                 <td>
                   <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
-                  <button><Edit /></button>&nbsp;&nbsp;
+                  <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
                   <button><BinMinusIn /></button>
                 </td>
               </tr>

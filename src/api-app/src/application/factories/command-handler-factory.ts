@@ -1,7 +1,7 @@
 import CommandHandler from '../../abstractions/interfaces/command-handler';
 import CommandResponse from '../../abstractions/interfaces/command-response';
 import Excel from "exceljs";
-import AssociateCreateCommandHandler, { AssociateCreateCommand } from '../use-cases/commands/associate/create/associate-create-command-handler';
+import AssociateCreateCommandHandler, { AssociateComposerCommand } from '../use-cases/commands/associate/create/associate-create-command-handler';
 import BorrowCreateCommandHandler, { BorrowCreateCommand } from '../use-cases/commands/borrow/create/borrow-create-command-handler';
 import ContributionCreateCommandHandler, { ContributionCreateCommand } from '../use-cases/commands/contribution/create/contribution-create-command-handler';
 import PaymentCreateCommandHandler, { PaymentCreateCommand } from '../use-cases/commands/payment/create/payment-create-command-handler';
@@ -27,10 +27,13 @@ import BorrowAnnualRateUpdateCommandHandler, { BorrowAnnualRateUpdateCommand } f
 import StatementReportGenerateQueryHandler, { StatementReportGenerateQuery } from '../use-cases/queries/report/statement/generate/statement-report-generate-query-handler';
 import BorrowAuthorizationReportGenerateQueryHandler, { BorrowAuthorizationReportGenerateQuery } from '../use-cases/queries/report/borrow-authorization/generate/borrow-authorization-report-generate-query-handler';
 import UserDataByUserAndPasswordQueryHandler, { UserDataByUserAndPasswordQuery } from '../use-cases/queries/security/user/data/user-data-by-user-and-password-query-command-handler';
+import AssociateDataByIdQueryHandler, { AssociateDataByIdQuery } from '../use-cases/queries/associate/data/byId/associate-data-by-id-query-handler';
+import AssociateUpdateCommandHandler from '../use-cases/commands/associate/update/associate-update-command-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
-  'AssociateCreateCommand': AssociateCreateCommand,
+  'AssociateCreateCommand': AssociateComposerCommand,
+  'AssociateUpdateCommand': AssociateComposerCommand,
   'BorrowCreateCommand': BorrowCreateCommand,
   'PaymentCreateCommand': PaymentCreateCommand,
   'ContributionCreateCommand': ContributionCreateCommand,
@@ -54,7 +57,8 @@ type CommandHandlerTypeMap = {
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
   'BatchListQuery': BatchListQuery,
-  'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQuery
+  'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQuery,
+  'AssociateDataByIdQuery': AssociateDataByIdQuery,
   // Reports
   'StatementReport': StatementReportGenerateQuery,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
@@ -65,6 +69,7 @@ const commandConstructors: {
 } = {
   // Commands
   'AssociateCreateCommand': AssociateCreateCommandHandler,
+  'AssociateUpdateCommand': AssociateUpdateCommandHandler,
   'BorrowCreateCommand': BorrowCreateCommandHandler,
   'PaymentCreateCommand': PaymentCreateCommandHandler,
   'ContributionCreateCommand': ContributionCreateCommandHandler,
@@ -89,6 +94,7 @@ const commandConstructors: {
   'SavingFundTransactionListQuery': SavingFundTransactionListQueryHandler,
   'BatchListQuery': BatchListQueryHandler,
   'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQueryHandler,
+  'AssociateDataByIdQuery': AssociateDataByIdQueryHandler,
   // Reports
   'StatementReport': StatementReportGenerateQueryHandler,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler

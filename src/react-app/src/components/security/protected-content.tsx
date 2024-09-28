@@ -8,5 +8,5 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     window.location.href = '/login';
   }
 
-  return <>{children}</>;
+  return <div>{children}</div>;
 };

@@ -1,4 +1,4 @@
-export default interface AssociateDetailInfo {
+export default interface AssociateDetailSpec {
   agreementId: number;
   dependencyKey: string;
   category: string;

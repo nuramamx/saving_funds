@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import AppConstants from "../../core/constants/app-constants";
-import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import { useAuth } from "../../components/security/auth-context";
 import { ToSHA1 } from "../../core/util/conversions/sha1-conversion";
+import AppConstants from "../../core/constants/app-constants";
+import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 
 export default function Login() {
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [isBlurred, setIsBlurred] = useState(false);
   const { login, isAuthenticated } = useAuth();
 
   const handleLogin = async () => {
     setLoading(true);
+    setIsBlurred(true);
+
     const response = await fetch(`${AppConstants.apiSecurity}/token`, {
       method: 'POST',
       body: JSON.stringify({
@@ -38,7 +41,7 @@ export default function Login() {
   }, []);
 
   return (
-    <section className="hero">
+    <section className={`hero ${isBlurred ? 'blur-transition blurred' : ''}`}>
       <div className="hero-body">
         <div className="container">
           <div className="columns is-centered">

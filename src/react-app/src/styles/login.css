@@ -2,3 +2,11 @@
   color: white;
   background-color: hsl(313.41deg 82.49% 57.45%);
 }
+
+.blur-transition {
+  transition: filter 0.5s ease-in-out; /* Smooth transition for the blur effect */
+}
+
+.blurred {
+  filter: blur(8px); /* Apply blur effect */
+}

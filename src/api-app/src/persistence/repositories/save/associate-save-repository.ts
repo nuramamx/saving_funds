@@ -3,25 +3,26 @@ import { db } from '../../instance';
 import { QueryTypes } from 'sequelize';
 import { FunctionName } from '../../names/function-name';
 import SaveRepositoryInfo from '../../interfaces/save-repository-info';
-import Associate from '../../../domain/entities/associate';
 import ProcedureResponseModel from '../../interfaces/procedure-response-info';
 import ParseError from '../../util/check-error';
+import { AssociateComposerCommand } from '../../../application/use-cases/commands/associate/create/associate-create-command-handler';
 
-export default class AssociateSaveRepository implements SaveRepositoryInfo<Associate, boolean> {
-  save = async (data: Associate): Promise<boolean> => {
+export default class AssociateSaveRepository implements SaveRepositoryInfo<AssociateComposerCommand, boolean> {
+  save = async (data: AssociateComposerCommand): Promise<boolean> => {
     const transaction = await db.sequelize.transaction();
 
     try
     {
       const [result] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ASSOCIATE_CREATE, {
         replacements: {
+          p_id: data.id,
           p_name: data.name,
           p_rfc: data.rfc,
           p_gender: data.gender,
-          p_detail: JSON.stringify(data.getDetail()),
-          p_address: JSON.stringify(data.getAddress()),
-          p_workplace: JSON.stringify(data.getWorkplace()),
-          p_beneficiaries: JSON.stringify(data.getBeneficiaries())
+          p_detail: JSON.stringify(data.detail),
+          p_address: JSON.stringify(data.address),
+          p_workplace: JSON.stringify(data.workplace),
+          p_beneficiaries: JSON.stringify(data.beneficiaries)
         },
         type: QueryTypes.SELECT,
         transaction

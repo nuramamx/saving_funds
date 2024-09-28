@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { SidebarParentMenu } from './components/layout/layout-app-sidebar';
 import App from './App';
-import CreateAssociate from './pages/saving-fund-management/associate/associate-create';
 import SavingFundList from './pages/saving-fund-management/saving-fund/saving-fund-list';
 import AssociateList from './pages/saving-fund-management/associate/associate-list';
 import BorrowHistoryList from './pages/saving-fund-management/borrow/borrow-history-list';
@@ -14,6 +13,7 @@ import SavingFundAnnualRateList from './pages/system-management/saving-fund-annu
 import BorrowAnnualRateList from './pages/system-management/borrow-annual-rate/borrow-annual-rate-list';
 import ProtectedRoute from './components/security/protected-content';
 import Login from './pages/login/login';
+import { AssociateComposer, associateComposerLoader } from './pages/saving-fund-management/associate/associate-composer';
 
 const Routes = createBrowserRouter([
   {
@@ -29,7 +29,7 @@ const Routes = createBrowserRouter([
         element: <SavingFundManagement />,
         children: [
           { path: 'list', element: <ProtectedRoute><SavingFundList /></ProtectedRoute> },
-          { path: 'associate/create', element: <ProtectedRoute><CreateAssociate /></ProtectedRoute> },
+          { path: 'associate/composer/:id?', element: <ProtectedRoute><AssociateComposer /></ProtectedRoute>, loader: associateComposerLoader },
           { path: 'associate/list', element: <ProtectedRoute><AssociateList /></ProtectedRoute> },
           { path: 'borrow/create', element: <ProtectedRoute><BorrowCreate /></ProtectedRoute> },
           { path: 'borrow/list', element: <ProtectedRoute><BorrowHistoryList /></ProtectedRoute> },
@@ -68,7 +68,7 @@ const SidebarRoutes: SidebarParentMenu[] = [
     { key: 'report-2', route: '/report/2', name: 'Reporte de Y' },
   ] },
   { key: 'associates', name: 'Socios', location: '/savingfund', children: [
-    { key: 'associate-create', route: '/savingfund/associate/create', name: 'Inscribir Socio' },
+    { key: 'associate-composer', route: '/savingfund/associate/composer', name: 'Inscribir Socio' },
     { key: 'associate-list', route: '/savingfund/associate/list', name: 'Gestión de Socios' }
   ] },
   { key: 'saving-fund', name: 'Fondos de Ahorro', location: '/savingfund', children: [

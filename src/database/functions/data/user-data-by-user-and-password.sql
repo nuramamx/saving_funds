@@ -6,7 +6,7 @@ create or replace function "security".user_data_by_user_and_password(
 returns table (
   id integer,
   username text,
-  role text
+  "role" text
 ) as $$
 declare
 begin

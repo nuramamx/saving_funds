@@ -14,6 +14,7 @@ enum FunctionName {
   // Catalog
   ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_name, :p_rfc, :p_gender, :p_detail, :p_address, :p_workplace, :p_beneficiaries);',
   ASSOCIATE_LIST = 'select * from catalog.associate_list(:p_limit, :p_offset);',
+  ASSOCIATE_DATA_BY_ID = 'select * from catalog.associate_data_by_id(:p_id);',
   // Process
   BORROW_CREATE = 'select * from process.borrow_create(:p_associate_id, :p_requested_amount::numeric, :p_period, :p_is_fortnightly, :p_start_at::timestamp);',
   BORROW_HISTORY_LIST_BY_ASSOCIATE_ID = 'select * from process.borrow_history_list_by_associate_id(:p_associate_id);',
