@@ -19,6 +19,7 @@ import IssueTransform from '../../../core/util/transforms/issue-transform';
 import SFPercentageInput from '../../../components/form/sf-percentage-input';
 import AssociateSpec from '../../../core/interfaces/specs/base/associate-spec';
 import { objectToCamel } from 'ts-case-convert';
+import useAuthStore from '../../../core/stores/auth-store';
 
 type AssociateComposerParams = {
   id?: number
@@ -43,6 +44,7 @@ export function AssociateComposer() {
   const { id } = useLoaderData() as { id?: number };
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
+  const { token } = useAuthStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [beneficiaryTotalPercentage, setBeneficiaryTotalPercentage] = useState<number>(0);
@@ -56,7 +58,7 @@ export function AssociateComposer() {
   const fetchAssociate = async () => {
     const result = await fetch(`${AppConstants.apiAssociate}/${id}`, {
       method: 'GET',
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
 
     if (!result.ok)
@@ -74,7 +76,7 @@ export function AssociateComposer() {
     try {
       const response = await fetch(`${AppConstants.apiAssociate}/${!editMode ? 'create' : 'update' }`, {
         method: !editMode ? 'POST' : 'PUT',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(associate)
       });
 

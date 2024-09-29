@@ -7,17 +7,19 @@ import useNotificationStore from '../../../core/stores/notification-store';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 import BorrowDebtorListSpec from '../../../core/interfaces/specs/list/borrow-debtor-list-spec';
+import useAuthStore from '../../../core/stores/auth-store';
 
 export default function BorrowDebtorList() {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [borrows, setBorrows] = useState<BorrowDebtorListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const fetchBorrows = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/list/debtor`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');

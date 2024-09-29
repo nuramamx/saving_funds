@@ -7,6 +7,7 @@ import CommandResponseInfo from '../../../../core/interfaces/info/command-respon
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SavingFundTransactionListSpec from '../../../../core/interfaces/specs/list/saving-fund-transaction-list-spec';
 import SFSelectYear from '../../../../components/dynamic-elements/sf-select-year';
+import useAuthStore from '../../../../core/stores/auth-store';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -16,6 +17,7 @@ type TransactionListModalParams = {
 
 export default function TransactionListModal({ savingFundId, show, onClose}: TransactionListModalParams) {
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [year, setYear] = useState(new Date().getFullYear());
   const [transactions, setTransactions] = useState<SavingFundTransactionListSpec[]>([]);
@@ -45,7 +47,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
     try {
       const result = await fetch(`${AppConstants.apiSavingFund}/transactions/${savingFundId}/${year}`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (!result.ok)

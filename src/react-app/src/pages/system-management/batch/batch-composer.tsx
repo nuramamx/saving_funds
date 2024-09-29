@@ -14,6 +14,7 @@ import IssueTransform from "../../../core/util/transforms/issue-transform";
 import BatchValidation from "../../../core/validations/batch-validation";
 import AppConstants from "../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../core/interfaces/info/command-response-info";
+import useAuthStore from "../../../core/stores/auth-store";
 
 export default function BatchComposer() {
   const batchSpecInitialState = {
@@ -40,6 +41,7 @@ export default function BatchComposer() {
   const navigate = useNavigate();
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
+  const { token } = useAuthStore();
   const columnTypes = [
     { key: '-', value: '-' },
     { key: 'Texto corto', value: 'varchar' },
@@ -63,7 +65,7 @@ export default function BatchComposer() {
     try {
       const response = await fetch(`${AppConstants.apiBatch}/create`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(batch)
       });
 

@@ -4,15 +4,17 @@ import CommandResponseInfo from "../../core/interfaces/info/command-response-inf
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
 import AgreementInfo from "../../core/interfaces/info/agreement-info";
+import useAuthStore from "../../core/stores/auth-store";
 
 const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberInputInfo) => {
   const { agreements, setAgreements } = useCacheStore();
+  const { token } = useAuthStore();
 
   useEffect(() => {
     const fetchAgreements = async () => {
       const result = await fetch(AppConstants.apiAgreement, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

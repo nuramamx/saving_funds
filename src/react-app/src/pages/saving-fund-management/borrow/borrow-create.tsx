@@ -12,6 +12,7 @@ import AppConstants from '../../../core/constants/app-constants';
 import useValidationModalStore from '../../../core/stores/validation-modal-store';
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
+import useAuthStore from '../../../core/stores/auth-store';
 
 export default function BorrowCreate() {
   const { 
@@ -28,6 +29,7 @@ export default function BorrowCreate() {
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const { annualRates, setAnnualRates } = useCacheStore();
+  const { token } = useAuthStore();
   const [periodType, setPeriodType] = useState('-');
 
   const handleClearBorrow = () => {
@@ -85,7 +87,7 @@ export default function BorrowCreate() {
     const fetchAnnualRates = async () => {
       const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

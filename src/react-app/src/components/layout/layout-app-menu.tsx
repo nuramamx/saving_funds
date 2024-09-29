@@ -3,10 +3,13 @@ import { Community, Settings, UserCircle, LogOut } from 'iconoir-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../security/auth-context';
 import useLayoutStore from '../../core/stores/layout-store';
+import useCacheStore from '../../core/stores/cache-store';
 
 const LayoutAppMenu = memo(() => {
   const { logout } = useAuth();
   const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
+  const { reset: resetCache } = useCacheStore();
+  const { reset: resetLayout } = useLayoutStore(); 
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const handleMenuClick = (menu: string) => {
@@ -16,6 +19,8 @@ const LayoutAppMenu = memo(() => {
 
   const handleLogout = () => {
     logout();
+    resetCache();
+    resetLayout();
     window.location.href = '/login';
   }
 

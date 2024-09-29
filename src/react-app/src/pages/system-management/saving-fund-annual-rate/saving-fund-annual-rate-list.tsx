@@ -7,6 +7,7 @@ import SavingFundAnnualRateListSpec from "../../../core/interfaces/specs/list/sa
 import EditInlineActionButton from "../../../components/action-buttons/edit-inline-action-button";
 import SavingFundAnnualRateUpdateCommand from "../../../core/interfaces/commands/saving-fund-annual-rate-update-command";
 import SFPercentageInput from "../../../components/form/sf-percentage-input";
+import useAuthStore from "../../../core/stores/auth-store";
 
 export default function SavingFundAnnualRateList() {
   const [hasError, setHasError] = useState<Boolean>(false);
@@ -14,12 +15,13 @@ export default function SavingFundAnnualRateList() {
   const [record, setRecord] = useState<SavingFundAnnualRateUpdateCommand>();
   const [annualRates, setAnnualRates] = useState<SavingFundAnnualRateListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const fetchAnnualRates = async () => {
     try {
       const result = await fetch(`${AppConstants.apiSavingFund}/rates`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición');
@@ -56,7 +58,7 @@ export default function SavingFundAnnualRateList() {
     try {
       const result = await fetch(`${AppConstants.apiSavingFund}/rates`, {
         method: 'PUT',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(record)
       });
       

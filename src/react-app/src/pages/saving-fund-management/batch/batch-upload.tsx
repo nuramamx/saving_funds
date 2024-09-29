@@ -9,6 +9,7 @@ import IssueTransform from "../../../core/util/transforms/issue-transform";
 import AppConstants from "../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../core/interfaces/info/command-response-info";
 import useValidationModalStore from "../../../core/stores/validation-modal-store";
+import useAuthStore from "../../../core/stores/auth-store";
 
 export default function BatchUpload() {
   const initialState: BatchUploadCommand = {
@@ -19,6 +20,7 @@ export default function BatchUpload() {
   const [batchUpload, setBatchUpload] = useState<BatchUploadCommand>(initialState);
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
+  const { token } = useAuthStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -33,7 +35,7 @@ export default function BatchUpload() {
     try {
       const response = await fetch(`${AppConstants.apiBatch}/upload`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
 

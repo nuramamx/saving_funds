@@ -7,6 +7,7 @@ import BorrowAnnualRateListSpec from "../../../core/interfaces/specs/list/borrow
 import BorrowAnnualRateUpdateCommand from "../../../core/interfaces/commands/borrow-annual-rate-update-command";
 import SFPercentageInput from "../../../components/form/sf-percentage-input";
 import EditInlineActionButton from "../../../components/action-buttons/edit-inline-action-button";
+import useAuthStore from "../../../core/stores/auth-store";
 
 export default function BorrowAnnualRateList() {
   const [hasError, setHasError] = useState<Boolean>(false);
@@ -14,12 +15,13 @@ export default function BorrowAnnualRateList() {
   const [record, setRecord] = useState<BorrowAnnualRateUpdateCommand>();
   const [annualRates, setAnnualRates] = useState<BorrowAnnualRateListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const fetchAnnualRates = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición');
@@ -58,7 +60,7 @@ export default function BorrowAnnualRateList() {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
         method: 'PUT',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(record)
       });
       

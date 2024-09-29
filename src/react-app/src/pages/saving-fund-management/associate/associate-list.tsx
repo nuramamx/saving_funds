@@ -8,17 +8,19 @@ import CommandResponseInfo from '../../../core/interfaces/info/command-response-
 import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
 import SFPagination from '../../../components/dynamic-elements/sf-pagination';
 import StatementReportActionItem from './action-items/statement-report-action-item';
+import useAuthStore from '../../../core/stores/auth-store';
 
 export default function AssociateList() {
   const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
   const [page, setPage] = useState<number>(1);
+  const { token } = useAuthStore();
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalRows, setTotalRows] = useState<number>(0);
 
   const fetchAssociates = async (page: number) => {
     const result = await fetch(`${AppConstants.apiAssociate}/list?page=${page}`, {
       method: 'GET',
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
 
     if (!result.ok)

@@ -7,6 +7,7 @@ import useNotificationStore from '../../../../core/stores/notification-store';
 import CheckAndAssign from '../../../../core/util/check-and-assign';
 import AssociateListByIdOrNameSpec from '../../../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
 import AssociateListByIdOrNameQuery from '../../../../core/interfaces/query/associate-list-by-id-or-name-query';
+import useAuthStore from '../../../../core/stores/auth-store';
 
 type AssociateListByIdOrNameModalParams = {
   show: boolean;
@@ -19,12 +20,13 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
   const [showModal, setShowModal] = useState(show);
   const [associateInfo, setAssociateInfo] = useState('');
   const [associateList, setAssociateList] = useState<AssociateListByIdOrNameSpec[]>([]);
+  const { token } = useAuthStore();
 
   const handleSearchAssociateEnter = async () => {
     try {
       const result = await fetch(`${AppConstants.apiAssociate}/search_by_id_or_name`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
           associate_id: CheckAndAssign.checkNumber(associateInfo),
           name: CheckAndAssign.checkText(associateInfo)

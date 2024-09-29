@@ -12,6 +12,7 @@ import PaymentCreateActionButton from '../../../components/action-buttons/paymen
 import BorrowHistoryListSpec from '../../../core/interfaces/specs/list/borrow-history-list-spec';
 import BorrowHistoryListQuery from '../../../core/interfaces/query/borrow-history-list-query';
 import BorrowAuthorizationReportActionItem from './action-items/borrow-authorization-report-action-item';
+import useAuthStore from '../../../core/stores/auth-store';
 
 export default function BorrowHistoryList() {
   const [showPaymentList, setShowPaymentList] = useState(false);
@@ -20,6 +21,7 @@ export default function BorrowHistoryList() {
   const [borrows, setBorrows] = useState<BorrowHistoryListSpec[]>([]);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const handleListPaymentClick = (borrowId: number, show: boolean) => {
     setSelectedBorrow(borrowId);
@@ -29,7 +31,7 @@ export default function BorrowHistoryList() {
   const fetchHistory = async () => {
     const response = await fetch(`${AppConstants.apiBorrow}/list/history`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+      headers: { 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({
         associateId: associate
       } as BorrowHistoryListQuery)

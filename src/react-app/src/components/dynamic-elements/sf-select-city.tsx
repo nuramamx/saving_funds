@@ -5,6 +5,7 @@ import CityInfo from "../../core/interfaces/info/city-info";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
+import useAuthStore from "../../core/stores/auth-store";
 
 interface SFSelectCityParams extends SFNumberInputInfo {
   stateId: number;
@@ -12,12 +13,13 @@ interface SFSelectCityParams extends SFNumberInputInfo {
 
 const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSelectCityParams) => {
   const { cities, setCities } = useCacheStore();
+  const { token } = useAuthStore();
 
   useEffect(() => {
     const fetchCities = async () => {
       const result = await fetch(AppConstants.apiCity, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

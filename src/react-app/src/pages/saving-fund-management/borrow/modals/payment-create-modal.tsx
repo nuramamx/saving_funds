@@ -7,6 +7,7 @@ import SFNumberInput from "../../../../components/form/sf-number-input";
 import usePaymentStore from "../../../../core/stores/payment-store";
 import AppConstants from "../../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
+import useAuthStore from "../../../../core/stores/auth-store";
 
 interface PaymentCreateModalParams extends SFModalInfo {
   borrowId: number;
@@ -19,6 +20,7 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
     clearPayment
   } = usePaymentStore();
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,7 +32,7 @@ export default function PaymentCreateModal({ borrowId, show, onClose }: PaymentC
     try {
       const response = await fetch(`${AppConstants.apiPayment}/create`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(payment)
       });
 

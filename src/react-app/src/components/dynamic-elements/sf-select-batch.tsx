@@ -5,17 +5,19 @@ import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import BatchListSpec from "../../core/interfaces/specs/list/batch-list-spec";
 import useNotificationStore from "../../core/stores/notification-store";
+import useAuthStore from "../../core/stores/auth-store";
 
 const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFTextInputInfo) => {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [batchs, setBatchs] = useState<BatchListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const fetchBatchs = async () => {
     try {
       const result = await fetch(`${AppConstants.apiBatch}`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición');

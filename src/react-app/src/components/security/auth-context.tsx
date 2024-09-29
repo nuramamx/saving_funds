@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import useAuthStore from '../../core/stores/auth-store';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -19,13 +20,9 @@ const useAuth = () => {
 };
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const { token, isAuthenticated, setToken, setIsAuthenticated, reset } = useAuthStore();
 
   useEffect(() => {
-    const token = sessionStorage.getItem('jwt-token');
-
-    if (token === null || token === undefined) sessionStorage.removeItem('jwt-token');
-
     if (token !== null && token !== undefined) {
       setIsAuthenticated(true);
     } else {
@@ -34,13 +31,12 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }, []);
 
   const login = (token: string) => {
-    sessionStorage.setItem('jwt-token', token);
+    setToken(token);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
-    sessionStorage.removeItem('jwt-token');
-    setIsAuthenticated(false);
+    reset();
   };
 
   return (

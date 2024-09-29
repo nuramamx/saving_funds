@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
 import useValidationModalStore from "../../../../core/stores/validation-modal-store";
+import useAuthStore from "../../../../core/stores/auth-store";
 
 type StatementReportActionItemParams = {
   associateName: string;
@@ -13,6 +14,7 @@ export default function StatementReportActionItem({ associateName, associateId }
   const [isActive, setIsActive] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
+  const { token } = useAuthStore();
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);
@@ -22,7 +24,7 @@ export default function StatementReportActionItem({ associateName, associateId }
     try {
       const response = await fetch(`${AppConstants.apiReport}/statement/${associateId}`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
 
       if (!response.ok)

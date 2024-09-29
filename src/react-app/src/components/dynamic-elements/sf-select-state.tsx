@@ -4,15 +4,17 @@ import useCacheStore from "../../core/stores/cache-store";
 import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import StateInfo from "../../core/interfaces/info/state-info";
+import useAuthStore from "../../core/stores/auth-store";
 
 const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
   const { states, setStates } = useCacheStore();
+  const { token } = useAuthStore();
 
   useEffect(() => {
     const fetchStates = async () => {
       const result = await fetch(`${AppConstants.apiState}`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       const response = await result.json() as CommandResponseInfo;

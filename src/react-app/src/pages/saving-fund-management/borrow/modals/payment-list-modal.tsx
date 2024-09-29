@@ -9,6 +9,7 @@ import CommandResponseInfo from '../../../../core/interfaces/info/command-respon
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SFPaymentMark from '../../../../components/dynamic-elements/sf-payment-mark';
 import PaymentListByBorrowIdSpec from '../../../../core/interfaces/specs/list/payment-list-by-borrow-id-spec';
+import useAuthStore from '../../../../core/stores/auth-store';
 
 type PaymentListModalParams = {
   borrowId: number;
@@ -18,6 +19,7 @@ type PaymentListModalParams = {
 
 export default function PaymentListModal({ borrowId, show, onClose}: PaymentListModalParams) {
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
@@ -34,7 +36,7 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
     try {
       const result = await fetch(`${AppConstants.apiPayment}/list/${borrowId}`, {
         method: 'GET',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (!result.ok)

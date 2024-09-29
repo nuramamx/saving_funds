@@ -14,7 +14,8 @@ interface CacheStore {
   setStates: (states: StateInfo[]) => void,
   setCities: (cities: CityInfo[]) => void,
   setAgreements: (agreements: AgreementInfo[]) => void,
-  setAnnualRates: (annualRates: AnnualRateInfo[]) => void
+  setAnnualRates: (annualRates: AnnualRateInfo[]) => void,
+  reset: () => void
 };
 
 const useCacheStore = create(persist<CacheStore>(
@@ -42,10 +43,19 @@ const useCacheStore = create(persist<CacheStore>(
       produce((state: CacheStore) => {
         state.annualRates = annualRates;
       })
+    ),
+    reset: () => set(
+      produce((state: CacheStore) => {
+        state.states = [];
+        state.cities = [];
+        state.agreements = [];
+        state.annualRates = [];
+        localStorage.removeItem('cache_store');
+      })
     )
   }),
   {
-    name: 'cache-store',
+    name: 'cache_store',
     storage: createJSONStorage(() => localStorage)
   }
 ));

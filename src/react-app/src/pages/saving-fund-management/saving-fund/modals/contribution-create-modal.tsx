@@ -8,6 +8,7 @@ import AppConstants from "../../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 import ContributionCreateCommand from "../../../../core/interfaces/commands/contribution-create-command";
 import SFDatePickerInput from "../../../../components/form/sf-datepicker-input";
+import useAuthStore from "../../../../core/stores/auth-store";
 
 interface ContributionCreateModalParams extends SFModalInfo {
   savingFundId: number;
@@ -20,7 +21,8 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
     amount: 0
   };
   const [contribution, setContribution] = useState<ContributionCreateCommand>(initialState);
-  const { pushNotification } = useNotificationStore();  
+  const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -32,7 +34,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
     try {
       const response = await fetch(`${AppConstants.apiContribution}/create`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(contribution)
       });
 

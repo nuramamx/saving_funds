@@ -6,6 +6,7 @@ import SFMoneyInput from "../../../../components/form/sf-money-input";
 import AppConstants from "../../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 import WithdrawalCreateCommand from "../../../../core/interfaces/commands/withdrawal-create-command";
+import useAuthStore from "../../../../core/stores/auth-store";
 
 interface WithdrawalCreateModalParams extends SFModalInfo {
   savingFundId: number;
@@ -19,6 +20,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   };
   const [withdrawal, setWithdrawal] = useState<WithdrawalCreateCommand>(initialState);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,7 +32,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
     try {
       const response = await fetch(`${AppConstants.apiWithdrawal}/create`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(withdrawal)
       });
 

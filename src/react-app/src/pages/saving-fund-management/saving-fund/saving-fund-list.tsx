@@ -10,16 +10,18 @@ import SavingFundTransactionListActionButton from './actions/transaction-list-ac
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
 import SavingFundListQuery from '../../../core/interfaces/query/saving-fund-list-query';
 import useNotificationStore from '../../../core/stores/notification-store';
+import useAuthStore from '../../../core/stores/auth-store';
 
 export default function SavingFundList() {
   const [savingFunds, setSavingFunds] = useState<SavingFundListSpec[]>([]);
   const [associate, setAssociate] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
+  const { token } = useAuthStore();
 
   const fectchSavingFunds = async () => {
     const result = await fetch(`${AppConstants.apiSavingFund}/list`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
+      headers: { 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({
         associateId: associate
       } as SavingFundListQuery)
