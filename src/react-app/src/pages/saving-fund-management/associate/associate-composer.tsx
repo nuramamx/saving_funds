@@ -113,6 +113,7 @@ export function AssociateComposer() {
 
   const handleClear = () => {
     clearAssociate();
+    setEditMode(false);
     setIssues([]);
   };
 
@@ -183,6 +184,13 @@ export function AssociateComposer() {
               value={associate.detail.frequentContribution}
               onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, frequentContribution: value }})}
               issues={issues} />
+
+            {editMode && (
+              <>
+              <br />
+              <img className="is-pulled-right" src={`${process.env.PUBLIC_URL}/associates/${associate.rfc.trim()}.png`} style={{ width: '150px', height: '150px' }} />
+              </>
+            )}
           </div>
         </div>
       </div>
