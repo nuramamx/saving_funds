@@ -12,6 +12,7 @@ import './styles/input.css';
 import './styles/menu.css';
 import './styles/login.css';
 import './styles/security.css';
+import './styles/content.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
 import { useAuth } from './components/security/auth-context';

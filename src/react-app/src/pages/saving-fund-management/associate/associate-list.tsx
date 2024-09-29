@@ -42,56 +42,51 @@ export default function AssociateList() {
 
   return (
     <>
-    <div className="columns">
-      <div className="column">
-        <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
-          <thead>
-            <tr key={1}>
-              <th>Id</th>
-              <th>Nombre</th>
-              <th>Direcci&oacute;n</th>
-              <th>Clave de Dependencia</th>
-              <th>Categor&iacute;a</th>
-              <th>Convenio</th>
-              <th>Salario</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {associates !== undefined && associates?.length > 0 ? (
-              associates.map((associate: AssociateListSpec) => (
-              <tr key={associate.id}>
-                <td>{associate.id}</td>
-                <td>{associate.name}</td>
-                <td className='truncate-200' title={associate.address}>{associate.address}</td>
-                <td>{associate.dependencyKey}</td>
-                <td>{associate.category}</td>
-                <td>{associate.agreementName}</td>
-                <td>{ToMoney(associate.salary)}</td>
-                <td>
-                  <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
-                  <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
-                  <button><BinMinusIn /></button>
-                </td>
+    <div className="is-flex-grow-1">
+      <div className="columns content-section">
+        <div className="column table-container">
+          <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
+            <thead>
+              <tr key={1}>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Direcci&oacute;n</th>
+                <th>Clave de Dependencia</th>
+                <th>Categor&iacute;a</th>
+                <th>Convenio</th>
+                <th>Salario</th>
+                <th>Acciones</th>
               </tr>
-            ))) : (
-              <tr>
-                <td colSpan={8} style={{textAlign: 'center'}}>No hay socios disponibles</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {associates !== undefined && associates?.length > 0 ? (
+                associates.map((associate: AssociateListSpec) => (
+                <tr key={associate.id}>
+                  <td>{associate.id}</td>
+                  <td>{associate.name}</td>
+                  <td className='truncate-200' title={associate.address}>{associate.address}</td>
+                  <td>{associate.dependencyKey}</td>
+                  <td>{associate.category}</td>
+                  <td>{associate.agreementName}</td>
+                  <td>{ToMoney(associate.salary)}</td>
+                  <td>
+                    <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
+                    <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
+                    <button><BinMinusIn /></button>
+                  </td>
+                </tr>
+              ))) : (
+                <tr>
+                  <td colSpan={8} style={{textAlign: 'center'}}>No hay socios disponibles</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <div className="mt-auto">
-      <nav className="level">
-        <div className="level-left"></div>
-        <div className="level-right">
-          <div className="level-item">
-          <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
-          </div>
-        </div>
-      </nav>
+    <div className="bottom-content-container">
+      <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
     </div>
     </>
   )

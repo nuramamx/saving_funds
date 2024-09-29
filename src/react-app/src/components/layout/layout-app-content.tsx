@@ -18,7 +18,7 @@ export default function LayoutAppContent() {
       <LayoutAppSidebar location={basePage(location)} items={SidebarRoutes} />
     </div>
     <div className="column is-10">
-      <section className="section box is-flex is-flex-direction-column" style={{minHeight: '85vh'}}>
+      <section className="section section-custom box is-flex is-flex-direction-column" style={{minHeight: '90vh'}}>
       <Outlet></Outlet>
       </section>
     </div>

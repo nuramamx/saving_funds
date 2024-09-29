@@ -1,0 +1,16 @@
+.content-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+
+.table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.bottom-content-container {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
