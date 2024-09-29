@@ -22,7 +22,8 @@ begin
     a.id
     ,a."name"
     ,a.rfc
-    ,a.address->>'street' as address
+    ,((a.address->>'street')::text || ', ' || (a.address->>'settlement')::text ||
+      ', ' || (a.address->>'town')::text || ', C.P. ' || (a.address->>'postalCode')::text) as address
     ,a.detail->>'dependencyKey' as dependency_key
     ,a.detail->>'category' as category
     ,ag."name" as agreement_name

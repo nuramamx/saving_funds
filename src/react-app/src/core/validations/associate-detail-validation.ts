@@ -6,8 +6,7 @@ const AssociateDetailValidation = z.object({
   category: z.string().min(1).max(100),
   salary: z.number().min(1),
   socialContribution: z.number().min(1),
-  fortnightlyContribution: z.number().min(1),
-  requestDate: z.date()
+  frequentContribution: z.number().min(1)
 });
 
 export default AssociateDetailValidation;

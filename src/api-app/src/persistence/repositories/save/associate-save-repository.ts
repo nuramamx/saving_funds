@@ -10,10 +10,11 @@ import { AssociateComposerCommand } from '../../../application/use-cases/command
 export default class AssociateSaveRepository implements SaveRepositoryInfo<AssociateComposerCommand, boolean> {
   save = async (data: AssociateComposerCommand): Promise<boolean> => {
     const transaction = await db.sequelize.transaction();
+    const editMode = (data.id !== null && data.id !== undefined && data.id > 0);
 
     try
     {
-      const [result] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ASSOCIATE_CREATE, {
+      const [result] = await db.sequelize.query<ProcedureResponseModel>(!editMode ? FunctionName.ASSOCIATE_CREATE : FunctionName.ASSOCIATE_UPDATE, {
         replacements: {
           p_id: data.id,
           p_name: data.name,

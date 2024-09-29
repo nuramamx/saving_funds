@@ -13,6 +13,7 @@ enum FunctionName {
   BORROW_ANNUAL_RATE_UPDATE = 'select * from system.borrow_annual_rate_update(:p_id, :p_rate);',
   // Catalog
   ASSOCIATE_CREATE = 'select * from catalog.associate_create(:p_name, :p_rfc, :p_gender, :p_detail, :p_address, :p_workplace, :p_beneficiaries);',
+  ASSOCIATE_UPDATE = 'select * from catalog.associate_update(:p_id, :p_name, :p_rfc, :p_gender, :p_detail, :p_address, :p_workplace, :p_beneficiaries);',
   ASSOCIATE_LIST = 'select * from catalog.associate_list(:p_limit, :p_offset);',
   ASSOCIATE_DATA_BY_ID = 'select * from catalog.associate_data_by_id(:p_id);',
   // Process

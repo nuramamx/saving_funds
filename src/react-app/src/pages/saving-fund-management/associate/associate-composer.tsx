@@ -73,7 +73,8 @@ export function AssociateComposer() {
 
     try {
       const response = await fetch(`${AppConstants.apiAssociate}/${!editMode ? 'create' : 'update' }`, {
-        method: 'POST',
+        method: !editMode ? 'POST' : 'PUT',
+        headers: { 'Authorization': `Bearer ${sessionStorage.getItem('jwt-token')}` },
         body: JSON.stringify(associate)
       });
 
@@ -115,12 +116,17 @@ export function AssociateComposer() {
     setIssues([]);
   };
 
+  const handleCancel = () => {
+    handleClear();
+    navigate('/savingfund/associate/list');
+  }
+
   useEffect(() => {
     if (id !== null && id !== undefined && id > 0) {
       setEditMode(true);
       fetchAssociate();
     } else {
-      clearAssociate();
+      handleClear();
     }
   }, [id]); 
 
@@ -273,9 +279,12 @@ export function AssociateComposer() {
       <nav className="level">
         <div className="level-left"></div>
         <div className="level-right">
-          <div className="level-item">
+          {!editMode && (<div className="level-item">
             <button className="button is-light" onClick={() => handleClear()}>Limpiar</button>
-          </div>
+          </div>)}
+          {editMode && (<div className="level-item">
+            <button className="button is-light" onClick={() => handleCancel()}>Cancelar</button>
+          </div>)}
           <div className="level-item">
           <button className="button is-primary" onClick={() => handleSave()}>Guardar</button>
           </div>
