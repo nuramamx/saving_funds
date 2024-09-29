@@ -3,16 +3,18 @@ import { QueryTypes } from "sequelize";
 import { BatchUploadCommand } from "../../../application/use-cases/commands/batch/upload/batch-upload-command-handler";
 import SaveRepositoryInfo from "../../interfaces/save-repository-info";
 import ProcedureResponseInfo from "../../interfaces/procedure-response-info";
-import BatchDetailSpec from "../../specs/batch-detail-spec";
 import ParseError from "../../util/check-error";
+import { error } from "console";
 
-export default class BatchUploadSaveRepository implements SaveRepositoryInfo<BatchUploadCommand, boolean> {
-  async save(data: BatchUploadCommand): Promise<boolean> {
+export default class BatchUploadSaveRepository implements SaveRepositoryInfo<BatchUploadCommand, BatchUploadCommand> {
+  async save(data: BatchUploadCommand): Promise<BatchUploadCommand> {
     const transaction = await db.sequelize.transaction();
-    const details = data.info?.details as BatchDetailSpec[];
+    const messages: string[] = [];
 
     try {
-      data.reader?.rows.forEach(async (row, index) => {
+      if (data.reader === null || data.reader === undefined) throw error('No existen filas que deban ser almacenadas.');
+
+      for (const [index, row] of data.reader.rows.entries()) {
         const [result] = await db.sequelize.query<ProcedureResponseInfo>(data.info!.batch_function, {
           replacements: {
             ...row
@@ -21,12 +23,14 @@ export default class BatchUploadSaveRepository implements SaveRepositoryInfo<Bat
         });
         
         if (!result.success)
-          data.messages?.push(`Error en línea ${index+1}: ${JSON.stringify(result)}`);
-      });
+          messages.push(`Error en línea ${index+1}: ${result.message}`);
+      }
+
+      data.messages = [...messages];
 
       await transaction.commit();
 
-      return true;
+      return data;
     } catch (err: any) {
       await transaction.rollback();
       throw ParseError(err);

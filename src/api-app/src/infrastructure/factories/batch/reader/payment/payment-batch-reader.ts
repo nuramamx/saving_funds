@@ -3,17 +3,18 @@ import xlsx from "node-xlsx";
 import BatchReaderResult from "../../batch-reader-result";
 import EmptyString from "../../../../util/empty-string";
 
-type WithdrawalBatchReaderInfo = {
+type PaymentBatchReaderInfo = {
   p_associate_rfc: string;
+  p_number: number;
   p_amount: number;
-  p_is_yields: boolean;
+  p_applied_at: string;
 }
 
-export default class WithdrawalBatchReader implements BatchReaderInfo<BatchReaderResult> {
+export default class PaymentBatchReader implements BatchReaderInfo<BatchReaderResult> {
   async execute(file: Buffer): Promise<BatchReaderResult> {
     const excel = xlsx.parse(file);
     const worksheet = excel[0].data;
-    const data: WithdrawalBatchReaderInfo[] = [];
+    const data: PaymentBatchReaderInfo[] = [];
     const messages: string[] = [];
 
     worksheet.forEach((row, index, d) => {
@@ -23,23 +24,32 @@ export default class WithdrawalBatchReader implements BatchReaderInfo<BatchReade
         }
 
         if (EmptyString(row[2]) === '') {
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna número de pago.`);
+        }
+
+        if (EmptyString(row[3]) === '') {
           messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna monto.`);
+        }
+
+        if (EmptyString(row[4]) === '') {
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna fecha.`);
         }
 
         data.push({
           p_associate_rfc: row[0],
-          p_amount: Number(row[2]),
-          p_is_yields: !(EmptyString(row[3]) === '')
+          p_number: Number(row[2] ?? 0),
+          p_amount: Number(row[3] ?? 0),
+          p_applied_at: `${row[4]}T00:00:00.000Z`
         });
       }
     });
 
-    const result: BatchReaderResult = { 
-      rows: data as WithdrawalBatchReaderInfo[],
-      messages: messages
+    const result: BatchReaderResult = {
+      messages: messages,
+      rows: data as PaymentBatchReaderInfo[]
     };
 
     return result;
   }
 }
-export type { WithdrawalBatchReaderInfo }
+export type { PaymentBatchReaderInfo }

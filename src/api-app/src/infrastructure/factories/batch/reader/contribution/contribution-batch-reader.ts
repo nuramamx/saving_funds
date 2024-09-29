@@ -1,9 +1,10 @@
 import BatchReaderInfo from "../../batch-reader-info";
 import xlsx from "node-xlsx";
 import BatchReaderResult from "../../batch-reader-result";
+import EmptyString from "../../../../util/empty-string";
 
 type ContributionBatchReaderInfo = {
-  p_associate_name: string;
+  p_associate_rfc: string;
   p_amount: number;
   p_applied_at: string;
 }
@@ -17,23 +18,23 @@ export default class ContributionBatchReader implements BatchReaderInfo<BatchRea
 
     worksheet.forEach((row, index, d) => {
       if (index > 0) { // skiping headers
-        if (row[0] === null && row[0] === undefined && row[0].trim() === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna A.`);
+        if (EmptyString(row[0]) === '') {
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna rfc.`);
         }
 
-        if (row[1] === null && row[1] === undefined && row[1].trim() === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna B.`);
+        if (EmptyString(row[2]) === '') {
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna monto.`);
         }
 
-        if (row[2] === null && row[2] === undefined && row[2].trim() === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna C.`);
+        if (EmptyString(row[3]) === '') {
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna fecha.`);
         }
 
         data.push({
-          p_associate_name: row[0],
-          p_amount: Number(row[1]),
-          p_applied_at: `${row[2]}T00:00:00.000Z`
-        })
+          p_associate_rfc: row[0],
+          p_amount: Number(row[2]),
+          p_applied_at: `${row[3]}T00:00:00.000Z`
+        });
       }
     });
 
@@ -41,8 +42,6 @@ export default class ContributionBatchReader implements BatchReaderInfo<BatchRea
       messages: messages,
       rows: data as ContributionBatchReaderInfo[]
     };
-
-    console.log(result);
 
     return result;
   }

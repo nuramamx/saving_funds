@@ -7,6 +7,7 @@ export default interface AssociateListSpec {
   category: string;
   agreement_name: string;
   salary: number;
+  frequent_contribution: number;
   address: string;
   total_rows: number;
 }

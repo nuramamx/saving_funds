@@ -1,6 +1,6 @@
---drop function process.withdrawal_create_by_associate_name;
-create or replace function process.withdrawal_create_by_associate_name(
-  in p_associate_name text,
+--drop function process.withdrawal_create_by_associate_rfc;
+create or replace function process.withdrawal_create_by_associate_rfc(
+  in p_associate_rfc text,
   in p_amount numeric,
   in p_is_yields boolean default false,
   out inserted_id integer,
@@ -20,8 +20,8 @@ begin
   success := false;
   message := 'Operación no iniciada.';
 
-  if length(p_associate_name) = 0 then
-    message := 'El nombre del socio no puede estar vacío.';
+  if length(p_associate_rfc) <= 0 then
+    message := 'El rfc del socio no puede estar vacío.';
     return;
   end if;
 
@@ -35,7 +35,7 @@ begin
       s.id
     from process.saving_fund as s
     join catalog.associate as a on s.associate_id = a.id
-    where a.name = trim(upper(p_associate_name))
+    where a.rfc = trim(upper(p_associate_rfc))
   );
 
   if v_saving_fund_id <= 0 then
@@ -44,7 +44,7 @@ begin
   end if;
 
   -- Get the yields (all years passed).
-  v_available_interest_balance := (select * from process.contribution_get_accrued_yields(p_saving_fund_id));
+  v_available_interest_balance := (select * from process.contribution_get_accrued_yields(v_saving_fund_id));
 
   if p_is_yields and p_amount > v_available_interest_balance then
     message := 'El monto de retiro de rendimientos excede de los disponibles.';

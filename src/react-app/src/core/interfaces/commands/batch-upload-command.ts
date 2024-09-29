@@ -1,5 +1,5 @@
 export default interface BatchUploadCommand {
-  process: number;
+  process: string;
   filename: string;
   file: File;
 }

@@ -9,6 +9,7 @@ create or replace view "catalog".associate_list_view as
     ,a.detail->>'category' as category
     ,ag."name" as agreement_name
     ,a.detail->>'salary' as salary
+    ,a.detail->>'frequentContribution' as frequentContribution
   from "catalog".associate as a
   join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
   order by a.id;

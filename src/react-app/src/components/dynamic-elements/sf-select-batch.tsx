@@ -1,12 +1,12 @@
 import { memo, useEffect, useState } from "react"
 import { objectToCamel } from "ts-case-convert";
-import { SFNumberInputInfo } from "../form/sf-number-input";
+import { SFTextInputInfo } from "../form/sf-text-input";
 import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
 import BatchListSpec from "../../core/interfaces/specs/list/batch-list-spec";
 import useNotificationStore from "../../core/stores/notification-store";
 
-const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFNumberInputInfo) => {
+const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFTextInputInfo) => {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [batchs, setBatchs] = useState<BatchListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
@@ -45,10 +45,10 @@ const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFNumberInput
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-        <select id={id} value={value} onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined}>
+        <select id={id} value={value} onChange={(e) => onChange ? onChange(e.target.value as string) : undefined}>
           <option value={0}>---</option>
           {batchs.map((option: BatchListSpec) => [
-            <option key={option.id} value={option.id}>{option.name}</option>
+            <option key={option.id} value={option.name}>{option.name}</option>
           ])}
         </select>
       </div>

@@ -18,7 +18,7 @@ export default async function BatchRoute (fastify: FastifyInstance, options: Fas
 
   fastify.post('/batch/upload', async (request, reply) => {
     const data = await request.file();
-    const process = data?.fields?.process as { value: number };
+    const process = data?.fields?.process as { value: string };
 
     if (data != null || data !== undefined) {
       const upload: BatchUploadCommand = { process: process.value, filename: data.filename, file: await data.toBuffer() };

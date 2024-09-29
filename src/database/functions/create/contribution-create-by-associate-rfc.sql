@@ -1,6 +1,6 @@
---drop function process.contribution_create_by_associate_name;
-create or replace function process.contribution_create_by_associate_name(
-  in p_associate_name text,
+--drop function process.contribution_create_by_associate_rfc;
+create or replace function process.contribution_create_by_associate_rfc(
+  in p_associate_rfc text,
   in p_amount numeric,
   in p_applied_at timestamp with time zone,
   out inserted_id integer,
@@ -15,8 +15,8 @@ begin
   success := false;
   message := 'Operación no iniciada.';
 
-  if length(p_associate_name) = 0 then
-    message := 'El nombre del socio no puede estar vacío.';
+  if length(p_associate_rfc) <= 0 then
+    message := 'El rfc del socio no puede estar vacío.';
     return;
   end if;
 
@@ -30,7 +30,7 @@ begin
       s.id
     from process.saving_fund as s
     join catalog.associate as a on s.associate_id = a.id
-    where a.name = trim(upper(p_associate_name))
+    where a.rfc = trim(upper(p_associate_rfc))
   );
 
   if v_saving_fund_id <= 0 then

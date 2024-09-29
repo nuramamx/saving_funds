@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
 import { BinMinusIn, Edit } from 'iconoir-react';
+import { Link } from 'react-router-dom';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
 import AssociateListSpec from '../../../core/interfaces/specs/list/associate-list-spec';
 import SFPagination from '../../../components/dynamic-elements/sf-pagination';
 import StatementReportActionItem from './action-items/statement-report-action-item';
-import { Link } from 'react-router-dom';
 
 export default function AssociateList() {
   const [associates, setAssociates] = useState<AssociateListSpec[]>([]);
@@ -49,12 +49,13 @@ export default function AssociateList() {
             <thead>
               <tr key={1}>
                 <th>Id</th>
+                <th>RFC</th>
                 <th>Nombre</th>
                 <th>Direcci&oacute;n</th>
-                <th>Clave de Dependencia</th>
                 <th>Categor&iacute;a</th>
                 <th>Convenio</th>
-                <th>Salario</th>
+                <th>Sueldo / Pensi&oacute;n</th>
+                <th>Aportaci&oacute;n Frecuente</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -63,12 +64,13 @@ export default function AssociateList() {
                 associates.map((associate: AssociateListSpec) => (
                 <tr key={associate.id}>
                   <td>{associate.id}</td>
+                  <td>{associate.rfc}</td>
                   <td>{associate.name}</td>
                   <td className='truncate-200' title={associate.address}>{associate.address}</td>
-                  <td>{associate.dependencyKey}</td>
                   <td>{associate.category}</td>
                   <td>{associate.agreementName}</td>
                   <td>{ToMoney(associate.salary)}</td>
+                  <td>{ToMoney(associate.frequentContribution)}</td>
                   <td>
                     <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
                     <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;

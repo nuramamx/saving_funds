@@ -8,7 +8,7 @@ type SFFileInfo = SFInputInfo & {
   onChange?: (filename: string, file: File) => void;
 }
 
-export default function SFFileInput({ id, name, readonly = false, accept, issues, onChange,  }: SFFileInfo) {
+export default function SFFileInput({ id, name, readonly = false, accept, issues, onChange }: SFFileInfo) {
   const [filename, setFilename] = useState<string>(undefined!);
 
   const handleChange = (file: File = undefined!) => {

@@ -12,7 +12,7 @@ import useValidationModalStore from "../../../core/stores/validation-modal-store
 
 export default function BatchUpload() {
   const initialState: BatchUploadCommand = {
-    process: 0,
+    process: '',
     file: undefined!,
     filename: '',
   };
@@ -20,9 +20,10 @@ export default function BatchUpload() {
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
-  const [log, setLog] = useState<string>('');
+  const [messages, setMessages] = useState<string[]>([]);
 
   const handleUpload = async () => {
+    setMessages([]);
     if (!handleBatchUploadValidate()) return;
 
     const formData = new FormData();
@@ -37,6 +38,7 @@ export default function BatchUpload() {
       });
 
       const result = await response.json() as CommandResponseInfo;
+      setMessages(result.data.map((name: any) => ( name + '\r\n\r\n' )));
     
       if (!response.ok) {
         return setValidationModal({
@@ -47,9 +49,7 @@ export default function BatchUpload() {
         });
       }
 
-      setLog(result.data);    
-      pushNotification({ message: 'Registro realizado con éxito.', type: 'success' });
-      handleClear();
+      pushNotification({ message: result.message, type: 'success' });
     } catch (err: any) {
       pushNotification({ message: err.message, type: 'danger' });
     }
@@ -70,11 +70,6 @@ export default function BatchUpload() {
     return result.success;
   };
 
-  const handleClear = () => {
-    setIssues([]);
-    setBatchUpload(initialState);
-  }
-
   return (
     <>
       <div className="columns">
@@ -88,18 +83,19 @@ export default function BatchUpload() {
       <div className="columns">
         <div className="column is-full">
           <label style={{ fontWeight: 'bold' }}>Resultados</label>
-          <textarea readOnly={true} style={{ width: '100%', height: '55vh' }}>
-            {log}
-          </textarea>
+          <div style={{ width: '100%', height: '55vh', border: '0.5px solid gray' }}>
+            {messages !== null && messages !== undefined && messages.length > 0 && (
+              messages.map((name: any) => (
+               <p style={{ color: '#ff1212' }}>{name}</p>
+              ))
+            )}
+          </div>
         </div>
       </div>
       <div className="mt-auto">
         <nav className="level">
           <div className="level-left"></div>
           <div className="level-right">
-            <div className="level-item">
-              <button className="button is-light" onClick={() => handleClear()}>Limpiar</button>
-            </div>
             <div className="level-item">
             <button className="button is-primary" onClick={() => handleUpload()}>Subir</button>
             </div>

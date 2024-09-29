@@ -15,15 +15,15 @@ begin
         elem
       from jsonb_array_elements(new.beneficiaries) as elem
     loop
-      if v_element->>'name' is null or trim(v_element->>'name') = '' then
-        raise exception 'Especifique el nombre del beneficiario #%.', v_idx;
-      end if;
-  
-      if v_element->>'percentage' is null or (v_element->>'percentage')::numeric(20,2) <= 0 then
-        raise exception 'Especifique el porcentaje del beneficiario #%.', v_idx;
-      end if;
+--       if v_element->>'name' is null or trim(v_element->>'name') = '' then
+--         raise exception 'Especifique el nombre del beneficiario #%.', v_idx;
+--       end if;
+--
+--       if v_element->>'percentage' is null or (v_element->>'percentage')::numeric(20,2) <= 0 then
+--         raise exception 'Especifique el porcentaje del beneficiario #%.', v_idx;
+--       end if;
 
-      v_percentage_sum := v_percentage_sum + (v_element->>'percentage')::numeric(20,2);
+      v_percentage_sum := v_percentage_sum + coalesce((v_element->>'percentage')::numeric(20,2), 0);
       v_idx := v_idx + 1;
     end loop;
 
@@ -31,9 +31,9 @@ begin
       raise exception 'El total de porcentaje de los beneficiarios sobrepasa el límite del 100%%.';
     end if;
 
-    if v_percentage_sum < 100 then
-      raise exception 'El total de porcentaje de los beneficiarios debe ser del 100%%.';
-    end if;
+--     if v_percentage_sum < 100 then
+--       raise exception 'El total de porcentaje de los beneficiarios debe ser del 100%%.';
+--     end if;
   end if;
 
   return new;

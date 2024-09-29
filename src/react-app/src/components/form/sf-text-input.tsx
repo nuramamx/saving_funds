@@ -37,3 +37,5 @@ export default function SFTextInput({ id, name, value, readonly = false, autofoc
     </div>
   );
 }
+
+export type { SFTextInputInfo }

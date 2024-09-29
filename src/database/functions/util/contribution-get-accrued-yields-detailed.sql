@@ -19,20 +19,23 @@ begin
       ,c.amount
       ,'contribution' as transaction_type
     from process.contribution as c
+    where c.saving_fund_id = p_saving_fund_id
     union all
     select
       w.applied_at as transaction_date
       ,-w.amount
       ,'withdrawal' as transaction_type
     from process.withdrawal as w
-    where w.is_yields = false
+    where w.saving_fund_id = p_saving_fund_id
+    and w.is_yields = false
     union all
     select
       w.applied_at as transaction_date
       ,-w.amount
       ,'withdrawal-yields' as transaction_type
     from process.withdrawal as w
-    where w.is_yields = true
+    where w.saving_fund_id = p_saving_fund_id
+    and w.is_yields = true
   ),
   sorted_transactions as (
     select

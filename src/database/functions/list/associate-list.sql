@@ -12,6 +12,7 @@ returns table (
   category text,
   agreement_name varchar,
   salary numeric(20,6),
+  frequent_contribution numeric(20,6),
   is_active boolean,
   total_rows bigint
 ) as $$
@@ -28,11 +29,12 @@ begin
     ,a.detail->>'category' as category
     ,ag."name" as agreement_name
     ,(a.detail->>'salary')::numeric(20,6) as salary
+    ,(a.detail->>'frequentContribution')::numeric(20,6) as frequent_contribution
     ,a.is_active
     ,count(1) over () as total_rows
   from "catalog".associate as a
   join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
-  order by a.id asc, a.is_active desc
+  order by a.id, a.is_active desc
   limit p_limit offset p_offset;
 end;
 $$ language plpgsql;
