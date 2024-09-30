@@ -74,10 +74,10 @@ export default function SavingFundList() {
               <th>Convenio</th>
               <th>Salario</th>
               <th>Aportaci&oacute;n inicial</th>
-              <th>Balance</th>
-              <th>Rendimientos</th>
               <th>Aportaciones</th>
               <th>Retiros</th>
+              <th>Balance</th>
+              <th>Rendimientos</th>
               <th>Total</th>
               <th>Acciones</th>
             </tr>
@@ -91,10 +91,10 @@ export default function SavingFundList() {
                 <td>{savingFund.agreementName}</td>
                 <td>{ToMoney(savingFund.salary)}</td>
                 <td>{ToMoney(savingFund.openingBalance)}</td>
-                <td>{ToMoney(savingFund.balance)}</td>
-                <td>{ToMoney(savingFund.yields)}</td>
                 <td>{ToMoney(savingFund.contributions)}</td>
                 <td>{ToMoney(savingFund.withdrawals)}</td>
+                <td>{ToMoney(savingFund.balance)}</td>
+                <td>{ToMoney(savingFund.yields)}</td>
                 <td>{ToMoney(savingFund.total)}</td>
                 <td>
                   <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;

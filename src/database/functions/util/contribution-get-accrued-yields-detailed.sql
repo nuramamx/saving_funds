@@ -6,12 +6,13 @@ create or replace function process.contribution_get_accrued_yields_detailed(
   "year" integer,
   transaction_date text,
   amount numeric(20,6),
+  rate numeric(20,6),
   transaction_type text,
   running_balance numeric(20,6),
   partial_yields numeric(20,6)
 ) as $$
 declare
-begin 
+begin
   return query
   with transaction_data as (
     select
@@ -45,16 +46,6 @@ begin
       ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
       ,extract(year from t.transaction_date) as year
     from transaction_data as t
-    where t.transaction_type <> 'withdrawal-yields'
-    union all
-    select
-      t.transaction_date
-      ,t.amount
-      ,t.transaction_type
-      ,sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance
-      ,extract(year from t.transaction_date) as year
-    from transaction_data as t
-    where t.transaction_type = 'withdrawal-yields'
   ),
   yearly_yields_calculation as (
     select
@@ -69,6 +60,7 @@ begin
     select
       s.transaction_date
       ,s.amount
+      ,annual_rate.rate
       ,s.transaction_type
       ,s.running_balance
       ,s."year"
@@ -77,17 +69,25 @@ begin
       ,case
         when s.transaction_type = 'contribution' and extract(year from s.transaction_date) < extract(year from current_date) then
           -- distribute the annual yields proportionally based on the number of contributions in the year
-          (y.end_of_year_balance * 0.11) / y.contribution_count
+          ((y.end_of_year_balance * annual_rate.rate) / 100) / y.contribution_count
         else
           0
       end as partial_yields
     from sorted_transactions as s
     left join yearly_yields_calculation as y on s."year" = y."year"
+    left join lateral (
+      select
+        ar.rate
+      from "system".saving_fund_annual_rate as ar
+      where ar.year = s.year
+      limit 1
+    ) as annual_rate on true
   )
   select
       r."year"::integer
       ,to_char(r.transaction_date, 'YYYY-MM-dd HH24:MI:SS') as transaction_date
       ,r.amount::numeric(20,6)
+      ,r.rate::numeric(20,6)
       ,r.transaction_type::text
       ,r.running_balance::numeric(20,6)
       ,r.partial_yields::numeric(20,6)

@@ -6,6 +6,7 @@ create or replace function process.saving_fund_transaction_list(
   "year" integer,
   transaction_date text,
   amount numeric(20,6),
+  rate numeric(20,6),
   transaction_type text,
   running_balance numeric(20,6),
   partial_yields numeric(20,6)
@@ -14,7 +15,13 @@ declare
 begin 
   return query
   select
-    r.*
+    r."year"
+    ,r.transaction_date
+    ,r.amount
+    ,r.rate
+    ,r.transaction_type
+    ,r.running_balance
+    ,r.partial_yields
   from process.contribution_get_accrued_yields_detailed(p_saving_fund_id, p_year) as r;
 end;
 $$ language plpgsql;

@@ -47,7 +47,7 @@ begin
       ,(coalesce(contribution.amount,0) - coalesce(withdrawal.amount, 0)) as balance
       ,process.contribution_get_accrued_yields(sf.id) as yields
       ,(coalesce(contribution.amount, 0)) as contributions
-      ,(coalesce(withdrawal.amount)) as withdrawals
+      ,-(coalesce(withdrawal.amount)) as withdrawals
     from process.saving_fund as sf
     join "catalog".associate as a on sf.associate_id = a.id
     join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
@@ -62,7 +62,6 @@ begin
         sum(w.amount) as amount
       from process.withdrawal as w
       where sf.id = w.saving_fund_id
-      and w.is_yields = false
     ) as withdrawal on true
   ) as d
   where d.associate_id = p_associate_id;

@@ -84,6 +84,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
               <th>Fecha</th>
               <th>Tipo</th>
               <th>Monto</th>
+              <th>% Inter&eacute;s</th>
               <th>Balance</th>
               <th>Rendimientos</th>
             </tr>
@@ -99,6 +100,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
                 <td>{savingFund.transactionDate}</td>
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
+                <td>{Number(savingFund.rate).toFixed(2)}</td>
                 <td>{ToMoney(savingFund.runningBalance)}</td>
                 <td>{ToMoney(savingFund.partialYields)}</td>
               </tr>
