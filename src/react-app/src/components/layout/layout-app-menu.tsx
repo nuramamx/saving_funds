@@ -1,15 +1,17 @@
-import React, { memo, useLayoutEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Community, Settings, UserCircle, LogOut } from 'iconoir-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../security/auth-context';
 import useLayoutStore from '../../core/stores/layout-store';
 import useCacheStore from '../../core/stores/cache-store';
+import useAuthStore from '../../core/stores/auth-store';
 
 const LayoutAppMenu = memo(() => {
   const { logout } = useAuth();
   const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
   const { reset: resetCache } = useCacheStore();
-  const { reset: resetLayout } = useLayoutStore(); 
+  const { reset: resetLayout } = useLayoutStore();
+  const { reset: resetAuth } = useAuthStore();
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const handleMenuClick = (menu: string) => {
@@ -21,6 +23,7 @@ const LayoutAppMenu = memo(() => {
     logout();
     resetCache();
     resetLayout();
+    resetAuth();
     window.location.href = '/login';
   }
 

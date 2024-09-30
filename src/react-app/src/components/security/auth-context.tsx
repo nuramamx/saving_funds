@@ -20,15 +20,7 @@ const useAuth = () => {
 };
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { token, isAuthenticated, setToken, setIsAuthenticated, reset } = useAuthStore();
-
-  useEffect(() => {
-    if (token !== null && token !== undefined) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, []);
+  const { isAuthenticated, setToken, setIsAuthenticated, reset } = useAuthStore();
 
   const login = (token: string) => {
     setToken(token);
