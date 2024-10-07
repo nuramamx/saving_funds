@@ -68,6 +68,7 @@ begin
     ,b.is_fortnightly 
     ,b.start_at
     ,b.created_at
+  order by b.start_at desc
   limit p_limit offset p_offset;
 end;
 $$ language plpgsql;

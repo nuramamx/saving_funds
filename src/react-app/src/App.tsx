@@ -15,9 +15,18 @@ import './styles/security.css';
 import './styles/content.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import useLayoutStore from './core/stores/layout-store';
 
 function App() {
   const { notifications } = useNotificationStore();
+  const { setSelectedSidebarMenu } = useLayoutStore();
+  const location = useLocation();
+
+  useEffect(() => {
+    setSelectedSidebarMenu(location.pathname);
+  }, [location]);
   
   return (
     <>

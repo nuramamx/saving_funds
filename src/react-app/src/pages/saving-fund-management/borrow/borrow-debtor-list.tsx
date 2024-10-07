@@ -36,8 +36,6 @@ export default function BorrowDebtorList() {
       if (!response.successful) throw new Error(response.message);
 
       const list = objectToCamel(response.data) as BorrowDebtorListSpec[];
-
-      console.log(JSON.stringify(response));
     
       setTotalPages(Math.ceil((response.totalRows ?? 0) / 20));
       setBorrows(list);

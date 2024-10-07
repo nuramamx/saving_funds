@@ -216,8 +216,6 @@ export default function BorrowCreate() {
         </div>
       </nav>
     </div>
-    {JSON.stringify(borrow)}
-    {JSON.stringify(issues)}
     </>
   );
 }

@@ -32,8 +32,8 @@ const LayoutAppSidebar = memo((props: LayoutAppSidebarProps) => {
             {item.children?.map((child: SidebarChildMenu) => (
               <li key={child.key}>
                 <Link to={child.route}
-                  className={`${selectedSidebarMenu === child.key ? 'is-active' : ''}`}
-                  onClick={() => setSelectedSidebarMenu(child.key)}>
+                  className={`${selectedSidebarMenu.includes(child.route) ? 'is-active' : ''}`}
+                  onClick={() => setSelectedSidebarMenu(child.route)}>
                   {child.name}
                 </Link>
               </li>
