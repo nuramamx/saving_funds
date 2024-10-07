@@ -1,11 +1,11 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { fastifyMultipart } from "@fastify/multipart";
+import { fastifyMultipart, MultipartFile } from "@fastify/multipart";
 import { BatchCreateCommand } from '../../../application/use-cases/commands/batch/create/batch-create-command-handler';
 import { BatchUploadCommand } from '../../../application/use-cases/commands/batch/upload/batch-upload-command-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 export default async function BatchRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
-  fastify.register(fastifyMultipart);
+  fastify.register(fastifyMultipart, { attachFieldsToBody: true });
 
   fastify.get('/batch', async (request, reply) => {
     const command = new CommandHandlerMediator();
@@ -16,11 +16,11 @@ export default async function BatchRoute (fastify: FastifyInstance, options: Fas
     return result;
   });
 
-  fastify.post('/batch/upload', async (request, reply) => {
-    const data = await request.file();
-    const process = data?.fields?.process as { value: string };
+  fastify.post<{Body: { file: MultipartFile, process: string }}>('/batch/upload', async (request, reply) => {
+    const data = request.body.file
+    const process = data.fields.process as { value: string };
 
-    if (data != null || data !== undefined) {
+    if (data != null && data !== undefined && process) {
       const upload: BatchUploadCommand = { process: process.value, filename: data.filename, file: await data.toBuffer() };
       const command = new CommandHandlerMediator();
       const result = await command.execute('BatchUploadCommand', upload);

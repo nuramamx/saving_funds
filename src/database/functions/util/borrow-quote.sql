@@ -7,7 +7,7 @@ create or replace function process.borrow_quote(
 )
  returns table (
   payment_number smallint,
-  paymnent numeric,
+  payment numeric,
   payment_toward_capital numeric,
   payment_toward_interests numeric,
   balance numeric

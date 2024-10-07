@@ -1,5 +1,6 @@
 export default interface BorrowDebtorListSpec {
   id: number;
+  fileNumber: string;
   associate_id: number;
   associate_name: string;
   requested_amount: number;

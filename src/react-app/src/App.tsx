@@ -15,15 +15,12 @@ import './styles/security.css';
 import './styles/content.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'animate.css';
-import { useAuth } from './components/security/auth-context';
 
 function App() {
   const { notifications } = useNotificationStore();
-  const { isAuthenticated } = useAuth();
   
   return (
     <>
-      <div className="blocking-div" style={{ display: `${isAuthenticated ? 'none' : 'block' } `}}></div>
       <LayoutAppHeader />
       <div className="notification-container">
         {notifications.map((notification) => (

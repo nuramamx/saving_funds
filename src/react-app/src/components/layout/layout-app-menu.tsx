@@ -24,7 +24,7 @@ const LayoutAppMenu = memo(() => {
     resetCache();
     resetLayout();
     resetAuth();
-    window.location.href = '/login';
+    window.location.href = '/setepidsf/login';
   }
 
   return (

@@ -5,14 +5,14 @@
   "scripts": {
     "build": "tsc",
     "exec": "ts-node src/presenters/api/server.ts",
-    "start": "cross-env TZ='America/Mexico_City' node --watch -r ts-node/register src/presenters/api/server.ts"
+    "start:dev": "cross-env NODE_ENV=development TZ='America/Mexico_City' node --watch -r ts-node/register src/presenters/api/server.ts",
+    "start:prod": "cross-env NODE_ENV=production TZ='America/Mexico_City' node --watch -r ts-node/register src/presenters/api/server.ts"
   },
   "dependencies": {
-    "@automapper/classes": "~8.8.1",
-    "@automapper/core": "~8.8.1",
     "@fastify/cors": "~10.0.1",
     "@fastify/jwt": "~9.0.1",
     "@fastify/multipart": "~9.0.1",
+    "dotenv": "~16.4.5",
     "exceljs": "~4.4.0",
     "fastify": "~5.0.0",
     "node-xlsx": "~0.24.0",

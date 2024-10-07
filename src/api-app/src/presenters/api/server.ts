@@ -1,4 +1,3 @@
-import { customLogger } from "./logger/custom-logger";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
@@ -16,7 +15,15 @@ import ReportRoute from "./routes/report-route";
 import SecurityRoute from "./routes/security-route";
 
 const fastify = Fastify({
-  logger: customLogger['development'] ?? true
+  logger: {
+    transport: process.env.NODE_ENV !== 'production' ? {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',                         
+      }
+    } : undefined
+  }
 });
 
 fastify.register(cors, {

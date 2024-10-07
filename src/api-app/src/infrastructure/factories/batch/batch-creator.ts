@@ -1,4 +1,5 @@
 import AssociateBatchReader from "./reader/associate/associate-batch-reader";
+import BorrowBatchReader from "./reader/borrow/borrow-batch-reader";
 import ContributionBatchReader from "./reader/contribution/contribution-batch-reader";
 import PaymentBatchReader from "./reader/payment/payment-batch-reader";
 import WithdrawalBatchReader from "./reader/withdrawal/withdrawal-batch-reader";
@@ -14,6 +15,8 @@ export default class BatchCreator {
         return new PaymentBatchReader();
       case 'SOCIOS':
         return new AssociateBatchReader();
+      case 'PRÉSTAMOS':
+        return new BorrowBatchReader();
       default:
         throw new Error('Proceso no localizado.');
     }

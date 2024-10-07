@@ -7,7 +7,7 @@ const SFSelectYear = memo(({ id, name, value, onChange }: SFNumberInputInfo) => 
   };
 
   const createYears = () => {
-    const lastAvailableYear = 2020;
+    const lastAvailableYear = 2008;
     const currentYear = getCurrentYear();
     const yearList = [lastAvailableYear];
 

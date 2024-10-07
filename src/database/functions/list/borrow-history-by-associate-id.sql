@@ -4,12 +4,13 @@ create or replace function process.borrow_history_list_by_associate_id(
 )
 returns table (
   id integer,
+  file_number text,
   requested_amount numeric(20,6),
   total_due numeric(20,6),
   total_paid numeric(20,6),
-  number_payments smallint,
-  payments_made smallint,
-  "period" smallint,
+  number_payments integer,
+  payments_made integer,
+  "period" integer,
   is_fortnightly boolean,
   start_at text,
   created_at text,
@@ -19,12 +20,13 @@ declare
 begin
   create temporary table borrow_history_temp (
     id integer,
+    file_number text,
     requested_amount numeric(20,6),
     total_due numeric(20,6),
     total_paid numeric(20,6),
-    number_payments smallint,
-    payments_made smallint,
-    "period" smallint,
+    number_payments integer,
+    payments_made integer,
+    "period" integer,
     is_fortnightly boolean,
     start_at text,
     created_at text,
@@ -34,26 +36,39 @@ begin
   insert into borrow_history_temp
   select
     b.id
-    ,b.requested_amount 
-    ,bd.total_due 
-    ,coalesce(sum(p.paid_amount),0) as total_paid
+    ,b.file_number
+    ,b.requested_amount
+    ,bd.total_due
+    ,payments.total_paid
     ,bd.number_payments
-    ,coalesce(sum(p.id),0) as payments_made
+    ,payments.payments_made
     ,b."period"
-    ,b.is_fortnightly 
-    ,to_char(b.start_at, 'YYYY-MM-dd') as start_at 
-    ,to_char(b.created_at, 'YYYY-MM-dd') as created_at
-    ,case when (bd.number_payments = coalesce(sum(p.id), 0)) then 'LIQUIDADO' else 'NO LIQUIDADO' end
+    ,b.is_fortnightly
+    ,to_char(b.start_at at time zone 'utc', 'YYYY-MM-dd') as start_at
+    ,to_char(b.created_at at time zone 'utc', 'YYYY-MM-dd') as created_at
+    ,case
+      when (bd.total_due = payments.total_paid and b.is_settled) then 'LIQUIDADO'
+      when (bd.total_due > payments.total_paid and b.is_settled) then 'LIQUIDADO (SISTEMA)'
+      else 'NO LIQUIDADO' end
       as resolution
-  from process.borrow as b 
+  from process.borrow as b
   join process.borrow_detail as bd on b.id = bd.borrow_id
-  left join process.payment as p on b.id = p.borrow_id
+  left join lateral (
+    select
+      sum(p.paid_amount)::numeric(20,6) as total_paid
+      ,coalesce(count(p.id),0)::integer as payments_made
+    from process.payment as p
+    where p.borrow_id = b.id
+  ) payments on true
   where b.associate_id = p_associate_id
   group by b.id
-    ,b.requested_amount 
-    ,bd.total_due 
-    ,bd.number_payments 
-    ,b."period" 
+    ,b.file_number
+    ,b.requested_amount
+    ,bd.total_due
+    ,payments.total_paid
+    ,bd.number_payments
+    ,payments.payments_made
+    ,b."period"
     ,b.is_fortnightly
     ,b.created_at
   order by b.id,

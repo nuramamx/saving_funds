@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
+import { Edit } from 'iconoir-react';
+import { Link } from 'react-router-dom';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
@@ -100,6 +102,7 @@ export default function SavingFundList() {
                   <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
                   <WithdrawalCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
                   <SavingFundTransactionListActionButton savingFundId={savingFund.id} />
+                  <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
                 </td>
               </tr>
             ))) : (

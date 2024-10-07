@@ -10,6 +10,7 @@ import AppConstants from "../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../core/interfaces/info/command-response-info";
 import useValidationModalStore from "../../../core/stores/validation-modal-store";
 import useAuthStore from "../../../core/stores/auth-store";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function BatchUpload() {
   const initialState: BatchUploadCommand = {
@@ -18,13 +19,17 @@ export default function BatchUpload() {
     filename: '',
   };
   const [batchUpload, setBatchUpload] = useState<BatchUploadCommand>(initialState);
+  const navigate = useNavigate();
+  const location = useLocation();
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const { token } = useAuthStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [messages, setMessages] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleUpload = async () => {
+    setLoading(true);
     setMessages([]);
     if (!handleBatchUploadValidate()) return;
 
@@ -51,9 +56,12 @@ export default function BatchUpload() {
         });
       }
 
-      pushNotification({ message: result.message, type: 'success' });
+      pushNotification({ message: result.message, type: result.type });
     } catch (err: any) {
       pushNotification({ message: err.message, type: 'danger' });
+    } finally {
+      navigate(location.pathname, { replace: true });
+      setLoading(false);
     }
   };
 
@@ -85,7 +93,7 @@ export default function BatchUpload() {
       <div className="columns">
         <div className="column is-full">
           <label style={{ fontWeight: 'bold' }}>Resultados</label>
-          <div style={{ width: '100%', height: '55vh', border: '0.5px solid gray' }}>
+          <div style={{ width: '100%', height: '55vh', border: '0.5px solid gray', overflow: 'scroll' }}>
             {messages !== null && messages !== undefined && messages.length > 0 && (
               messages.map((name: any) => (
                <p style={{ color: '#ff1212' }}>{name}</p>
@@ -99,7 +107,9 @@ export default function BatchUpload() {
           <div className="level-left"></div>
           <div className="level-right">
             <div className="level-item">
-            <button className="button is-primary" onClick={() => handleUpload()}>Subir</button>
+            <button className="button is-primary" onClick={() => handleUpload()}>
+            {!loading ? 'Subir' : (<div className="loader"></div>)}
+            </button>
             </div>
           </div>
         </nav>

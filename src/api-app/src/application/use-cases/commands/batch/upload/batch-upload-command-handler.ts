@@ -25,8 +25,10 @@ export default class BatchUploadCommandHandler implements CommandHandler<BatchUp
       const batchProcess = new BatchCreator().getBatchProcess(data.process);
       data.reader = await batchProcess.execute(data.file);
 
-      if (data.reader.messages !== null && data.reader.messages !== undefined && data.reader.messages.length > 0)
-        return { successful: true, message: 'Ocurrió error en la carga.', data: data.reader.messages, type: 'danger' } as CommandResponse;
+      if (data.reader.rows.length === 0) {
+        if (data.reader.messages !== null && data.reader.messages !== undefined && data.reader.messages.length > 0)
+          return { successful: true, message: 'Ocurrió error en la carga.', data: data.reader.messages, type: 'danger' } as CommandResponse;
+      }
 
       data.info = processList.find(x => x.name === data.process);
       const result = await repository.save(data);

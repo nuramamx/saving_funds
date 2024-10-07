@@ -4,7 +4,7 @@ class CheckAndAssign {
   }
 
   static checkText(input: string): string {
-    const regex = /^[A-Za-zñÑáéíóúÁÉÍÓÚüÜ\s]+$/;
+    const regex = /^[A-Za-zñÑáéíóúÁÉÍÓÚüÜ.\s]+$/;
     return regex.test(input) ? input : '';
   }
 }

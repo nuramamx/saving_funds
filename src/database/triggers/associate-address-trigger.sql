@@ -26,7 +26,7 @@ begin
         select
           c.id
         from "system".city as c
-        where c.name = upper(trim(new.address->>'city'))
+        where unaccent(c.name) = upper(trim(new.address->>'city'))
         limit 1
       );
 

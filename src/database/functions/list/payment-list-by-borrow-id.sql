@@ -21,7 +21,7 @@ returns table (
 declare
   v_borrow_id integer;
   v_associate_id integer;
-  v_start_at timestamp;
+  v_start_at timestamp with time zone;
   v_requested_amount numeric(20,6);
   v_period integer;
   v_annual_rate numeric(20,6);
@@ -95,7 +95,7 @@ begin
     ,status = case
       when p.paid_amount = cast(bd.payment as numeric(20,2)) and p.applied_at > payment_schedule."date" then 'INCIDENCIA'
       when p.paid_amount = cast(bd.payment as numeric(20,2)) then 'PAGADO'
-      else 'DESCONOCIDO'
+      else 'INCIDENCIA'
     end
     ,resolution = case
       when p.paid_amount < cast(bd.payment as numeric(20,2)) then 'El pago fue registrado con un monto menor.'
@@ -132,7 +132,7 @@ begin
     end;
 
   update payment_schedule
-  set 
+  set
     balance = (
     select q.balance
     from process.borrow_quote(v_requested_amount, v_annual_rate, v_period, v_is_fortnightly) as q
@@ -144,7 +144,7 @@ begin
     ps.id
     ,ps.borrow_id
     ,ps.associate_id
-    ,to_char(ps."date", 'YYYY-MM-dd') as "date"
+    ,to_char(ps."date" at time zone 'utc', 'YYYY-MM-dd') as "date"
     ,ps."year"
     ,ps."month"
     ,ps."number"
@@ -153,8 +153,8 @@ begin
     ,ps.balance
     ,ps.status
     ,ps.resolution
-    ,to_char(ps.applied_at, 'YYYY-MM-dd HH24:MI:SS') as applied_at
-    ,to_char(ps.created_at, 'YYYY-MM-dd HH24:MI:SS') as created_at
+    ,to_char(ps.applied_at at time zone 'utc', 'YYYY-MM-dd HH24:MI:SS') as applied_at
+    ,to_char(ps.created_at at time zone 'utc', 'YYYY-MM-dd HH24:MI:SS') as created_at
   from payment_schedule ps
   order by
     ps."number";

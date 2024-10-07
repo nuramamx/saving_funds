@@ -2,6 +2,7 @@
   "name": "setepid-savingfunds",
   "version": "1.0",
   "private": true,
+  "homepage": "/setepidsf",
   "dependencies": {
     "animate.css": "~4.1.1",
     "bulma": "~1.0.0",
@@ -9,6 +10,7 @@
     "i18next": "~23.14.0",
     "iconoir-react": "~7.7.0",
     "immer": "~10.1.1",
+    "js-sha1": "^0.7.0",
     "react": "~18.3.1",
     "react-datepicker": "~7.3.0",
     "react-dom": "~18.3.1",

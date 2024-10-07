@@ -11,7 +11,8 @@ export default class AssociateListQueryRepository implements QueryRepositoryInfo
       const result = await db.sequelize.query(
         FunctionName.ASSOCIATE_LIST, {
           replacements: {
-            p_limit: 10,
+            p_id: data.associateId,
+            p_limit: 20,
             p_offset: data.offset
           },
           type: QueryTypes.SELECT

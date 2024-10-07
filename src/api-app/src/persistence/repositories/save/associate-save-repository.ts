@@ -12,6 +12,8 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
     const transaction = await db.sequelize.transaction();
     const editMode = (data.id !== null && data.id !== undefined && data.id > 0);
 
+    console.log(`Save => ${JSON.stringify(data)}`);
+
     try
     {
       const [result] = await db.sequelize.query<ProcedureResponseModel>(!editMode ? FunctionName.ASSOCIATE_CREATE : FunctionName.ASSOCIATE_UPDATE, {
@@ -23,7 +25,8 @@ export default class AssociateSaveRepository implements SaveRepositoryInfo<Assoc
           p_detail: JSON.stringify(data.detail),
           p_address: JSON.stringify(data.address),
           p_workplace: JSON.stringify(data.workplace),
-          p_beneficiaries: JSON.stringify(data.beneficiaries)
+          p_beneficiaries: JSON.stringify(data.beneficiaries),
+          p_is_active: data.isActive ?? true
         },
         type: QueryTypes.SELECT,
         transaction

@@ -60,6 +60,7 @@ const useAssociateStore = create<AssociateStore>((set) => ({
   ),
   setStateId: (value: number) => set(
     produce((state: AssociateStore) => {
+      state.associate.address.stateId = value;
       state.stateId = value;
     })
   ),

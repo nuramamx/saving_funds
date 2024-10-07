@@ -8,18 +8,25 @@ import PaymentListActionButton from '../../../components/action-buttons/payment-
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 import BorrowDebtorListSpec from '../../../core/interfaces/specs/list/borrow-debtor-list-spec';
 import useAuthStore from '../../../core/stores/auth-store';
+import SFPagination from '../../../components/dynamic-elements/sf-pagination';
+import BorrowDebtorListQuery from '../../../core/interfaces/query/borrow-debtor-list-query';
 
 export default function BorrowDebtorList() {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [borrows, setBorrows] = useState<BorrowDebtorListSpec[]>([]);
+  const [page] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
 
-  const fetchBorrows = async () => {
+  const fetchBorrows = async (page: number) => {
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/list/debtor`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          page: page
+        } as BorrowDebtorListQuery)
       });
 
       if (!result.ok) throw new Error('Ocurrió un error al realizar la petición.');
@@ -29,7 +36,10 @@ export default function BorrowDebtorList() {
       if (!response.successful) throw new Error(response.message);
 
       const list = objectToCamel(response.data) as BorrowDebtorListSpec[];
+
+      console.log(JSON.stringify(response));
     
+      setTotalPages(Math.ceil((response.totalRows ?? 0) / 20));
       setBorrows(list);
     } catch (err: any) {
       setHasError(true);
@@ -37,8 +47,12 @@ export default function BorrowDebtorList() {
     }
   };
 
+  const handlePagination = async (currentPage: number) => {
+    await fetchBorrows(currentPage);
+  };
+
   const handleReload = () => {
-    if (!hasError) fetchBorrows();
+    if (!hasError) fetchBorrows(page);
   };
 
   useEffect(() => {
@@ -46,12 +60,14 @@ export default function BorrowDebtorList() {
   }, [hasError]);
 
   return (
+    <>
     <div className="columns">
       <div className="column">
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
           <thead>
             <tr>
               <th>Id</th>
+              <th>Folio</th>
               <th>Socio Id</th>
               <th>Socio</th>
               <th>Monto Solicitado</th>
@@ -60,8 +76,7 @@ export default function BorrowDebtorList() {
               <th>Total de Pagos</th>
               <th>Pagos Realizados</th>
               <th>Periodicidad</th>
-              <th>Creado</th>
-              <th>Inicio</th>
+              <th style={{width: '7vh'}}>Inicio</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -70,6 +85,7 @@ export default function BorrowDebtorList() {
               borrows.map((borrow: BorrowDebtorListSpec) => (
                 <tr key={borrow.id}>
                   <td>{borrow.id}</td>
+                  <td>{borrow.fileNumber}</td>
                   <td>{borrow.associateId}</td>
                   <td>{borrow.associateName}</td>
                   <td>{ToMoney(borrow.requestedAmount)}</td>
@@ -78,7 +94,6 @@ export default function BorrowDebtorList() {
                   <td>{borrow.numberPayments}</td>
                   <td>{borrow.paymentsMade}</td>
                   <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
-                  <td>{borrow.createdAt}</td>
                   <td>{borrow.startAt}</td>
                   <td>
                     <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload}/>
@@ -94,5 +109,9 @@ export default function BorrowDebtorList() {
         </table>
       </div>
     </div>
+    <div className="bottom-content-container">
+      <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
+    </div>
+    </>
   )
 }

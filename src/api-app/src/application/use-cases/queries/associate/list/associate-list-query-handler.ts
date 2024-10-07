@@ -4,7 +4,9 @@ import CommandResponse from '../../../../../abstractions/interfaces/command-resp
 import GetTotalRows from '../../../../../infrastructure/util/get-total-rows';
 import AssociateListQueryRepository from '../../../../../persistence/repositories/query/associate-list-query-repository';
 
-type AssociateListQuery = Paginator & { };
+type AssociateListQuery = Paginator & {
+  associateId: number;
+};
 
 export default class AssociateListQueryHandler implements CommandHandler<AssociateListQuery, CommandResponse> {
   async execute(data: AssociateListQuery): Promise<CommandResponse> {

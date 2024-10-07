@@ -4,7 +4,7 @@ import BatchReaderResult from "../../batch-reader-result";
 import EmptyString from "../../../../util/empty-string";
 
 type PaymentBatchReaderInfo = {
-  p_associate_rfc: string;
+  p_file_number: string;
   p_number: number;
   p_amount: number;
   p_applied_at: string;
@@ -20,7 +20,7 @@ export default class PaymentBatchReader implements BatchReaderInfo<BatchReaderRe
     worksheet.forEach((row, index, d) => {
       if (index > 0) { // skiping headers
         if (EmptyString(row[0]) === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna rfc.`);
+          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna folio.`);
         }
 
         if (EmptyString(row[2]) === '') {
@@ -36,7 +36,7 @@ export default class PaymentBatchReader implements BatchReaderInfo<BatchReaderRe
         }
 
         data.push({
-          p_associate_rfc: row[0],
+          p_file_number: row[0],
           p_number: Number(row[2] ?? 0),
           p_amount: Number(row[3] ?? 0),
           p_applied_at: `${row[4]}T00:00:00.000Z`

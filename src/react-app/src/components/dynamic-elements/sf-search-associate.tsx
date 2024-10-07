@@ -50,7 +50,7 @@ const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputPar
       <button className="pagination-next" onClick={() => setShowModal(true)}><Search /></button>
       <ul className="pagination-list">
         <li>
-          <button className="pagination-previous"><Erase onClick={handleEraseAssociate} /></button>
+          <button className="pagination-previous" onClick={handleEraseAssociate}><Erase /></button>
         </li>
       </ul>
     </nav>

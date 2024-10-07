@@ -7,6 +7,7 @@ create or replace function catalog.associate_create(
   in p_address jsonb,
   in p_workplace jsonb,
   in p_beneficiaries jsonb,
+  in p_is_active boolean = true,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -25,7 +26,7 @@ begin
   elseif p_rfc is null or p_rfc = '' then
     message := 'El R.F.C. es requerido.';
     return;
-  elseif length(p_rfc) <> 10 and length(p_rfc) <> 13 then
+  elseif length(p_rfc) <> 10 and length(p_rfc) <> 12 and length(p_rfc) <> 13 then
     message := 'El R.F.C. debe tener 10 o 13 caracteres.';
     return;
   elseif p_gender is null or p_gender = '' then
@@ -56,7 +57,7 @@ begin
   end if;
 
   begin
-    insert into "catalog".associate ("name", rfc, gender, detail, address, workplace, beneficiaries)
+    insert into "catalog".associate ("name", rfc, gender, detail, address, workplace, beneficiaries, is_active)
     values (
       upper(p_name)
       ,upper(p_rfc)
@@ -65,6 +66,7 @@ begin
       ,p_address
       ,p_workplace
       ,p_beneficiaries
+      ,p_is_active
     )
     returning id into inserted_id;
 

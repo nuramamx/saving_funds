@@ -17,9 +17,11 @@ async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginO
     return result;
   });
 
-  fastify.get<{ Querystring: { page: number } }>('/associate/list', async (request, reply) => {
-    const { page } = request.query;
-    const data: AssociateListQuery = { page: page, offset: ((page - 1) * 10) };
+  fastify.post<{ Body: string }>('/associate/list', async (request, reply) => {
+    const data = JSON.parse(request.body) as AssociateListQuery;
+    
+    if (data.page) data.offset = ((data.page - 1) * 20);
+    
     const command = new CommandHandlerMediator();
     const result = await command.execute('AssociateListQuery', data);
 

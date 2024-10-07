@@ -1,10 +1,10 @@
 import { db } from "../../instance";
 import { QueryTypes } from "sequelize";
+import { error } from "console";
 import { BatchUploadCommand } from "../../../application/use-cases/commands/batch/upload/batch-upload-command-handler";
 import SaveRepositoryInfo from "../../interfaces/save-repository-info";
 import ProcedureResponseInfo from "../../interfaces/procedure-response-info";
 import ParseError from "../../util/check-error";
-import { error } from "console";
 
 export default class BatchUploadSaveRepository implements SaveRepositoryInfo<BatchUploadCommand, BatchUploadCommand> {
   async save(data: BatchUploadCommand): Promise<BatchUploadCommand> {
@@ -23,7 +23,7 @@ export default class BatchUploadSaveRepository implements SaveRepositoryInfo<Bat
         });
         
         if (!result.success)
-          messages.push(`Error en línea ${index+1}: ${result.message}`);
+          messages.push(`Error en línea ${index+2}: ${result.message}`);
       }
 
       data.messages = [...messages];

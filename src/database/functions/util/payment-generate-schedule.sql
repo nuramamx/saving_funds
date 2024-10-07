@@ -1,6 +1,6 @@
 -- drop function process.payment_generate_schedule;
 create or replace function process.payment_generate_schedule(
-  in p_start_date timestamp,
+  in p_start_date timestamp with time zone,
   in p_number_payments integer,
   in p_is_fortnightly boolean
 )

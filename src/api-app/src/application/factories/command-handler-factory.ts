@@ -13,7 +13,7 @@ import BatchCreateCommandHandler, { BatchCreateCommand } from '../use-cases/comm
 import BatchListQueryHandler, { BatchListQuery } from '../use-cases/queries/batch/list/batch-list-query-handler';
 import BatchUploadCommandHandler, { BatchUploadCommand } from '../use-cases/commands/batch/upload/batch-upload-command-handler';
 import BorrowAnnualRateListQueryHandler from '../use-cases/queries/borrow/list-annual-rate/borrow-annual-rate-list-query-handler';
-import BorrowDebtorListQueryHandler from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
+import BorrowDebtorListQueryHandler, { BorrowDebtorListQuery } from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
 import BorrowHistoryListQueryHandler, { BorrowHistoryListQuery } from '../use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
 import BorrowListQueryHandler from '../use-cases/queries/borrow/list/borrow-list-query-handler';
 import CityListQueryHandler from '../use-cases/queries/city/list/city-list-query-handler';
@@ -53,7 +53,7 @@ type CommandHandlerTypeMap = {
   'BorrowListQuery': void,
   'BorrowHistoryListQuery': BorrowHistoryListQuery,
   'PaymentListByBorrowIdQuery': PaymentListByBorrowIdQuery,
-  'BorrowDebtorListQuery': void,
+  'BorrowDebtorListQuery': BorrowDebtorListQuery,
   'SavingFundListQuery': SavingFundListQuery,
   'SavingFundTransactionListQuery': SavingFundTransactionListQuery,
   'BatchListQuery': BatchListQuery,

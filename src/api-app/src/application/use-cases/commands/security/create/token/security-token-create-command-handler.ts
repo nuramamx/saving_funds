@@ -2,7 +2,7 @@ import fastify from "fastify";
 import CommandHandler from "../../../../../../abstractions/interfaces/array-buffer-handler";
 import CommandResponse from "../../../../../../abstractions/interfaces/command-response";
 import UserDataByUserAndPasswordQueryRepository from "../../../../../../persistence/repositories/query/user-data-by-user-and-password-query-repository";
-import { UserDataByUserAndPasswordQuery } from "../../../../queries/security/user/data/user-data-by-user-and-password-query";
+import { UserDataByUserAndPasswordQuery } from "../../../../queries/security/user/data/user-data-by-user-and-password-query-command-handler";
 
 type SecurityTokenCreateCommand = {
   user: string;

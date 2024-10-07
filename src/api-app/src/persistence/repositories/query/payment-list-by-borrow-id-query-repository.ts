@@ -1,9 +1,9 @@
 import { db } from "../../instance";
 import { QueryTypes } from "sequelize";
 import { FunctionName } from "../../names/function-name";
+import { PaymentListByBorrowIdQuery } from "../../../application/use-cases/queries/payment/list-by-borrow-id/payment-list-by-borrow-id-query-handler";
 import QueryRepositoryInfo from "../../interfaces/query-repository-info";
 import PaymentListByBorrowIdSpec from "../../specs/list/payment-list-by-borrow-id-spec";
-import { PaymentListByBorrowIdQuery } from "../../../application/use-cases/queries/payment/list-by-borrow-id/payment-list-by-borrow-id-query-handler";
 
 export default class PaymentListByBorrowIdQueryRepository implements QueryRepositoryInfo<PaymentListByBorrowIdQuery, PaymentListByBorrowIdSpec> {
   async all(data: PaymentListByBorrowIdQuery): Promise<PaymentListByBorrowIdSpec[]> {
@@ -16,6 +16,8 @@ export default class PaymentListByBorrowIdQueryRepository implements QueryReposi
           type: QueryTypes.SELECT
         }
       ) as PaymentListByBorrowIdSpec[];
+
+      console.log(result);
 
       return result;
     } catch (err: any) {

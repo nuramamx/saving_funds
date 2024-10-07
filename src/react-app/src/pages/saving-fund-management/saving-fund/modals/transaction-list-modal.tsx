@@ -106,7 +106,7 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
               </tr>
             ))) : (
               <tr>
-                <td colSpan={6} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
+                <td colSpan={7} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
               </tr>
             )}
           </tbody>

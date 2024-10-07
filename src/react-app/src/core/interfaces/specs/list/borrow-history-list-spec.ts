@@ -1,5 +1,6 @@
 export default interface BorrowHistoryListSpec {
   id: number;
+  fileNumber: string;
   requestedAmount: number;
   totalDue: number;
   totalPaid: number;

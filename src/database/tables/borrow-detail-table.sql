@@ -3,7 +3,7 @@ create table if not exists process.borrow_detail
 (
   id integer generated always as identity,
   borrow_id integer not null,
-  number_payments smallint not null,
+  number_payments integer not null,
   interests numeric(20,6) not null,
   total_due numeric(20,6) not null,
   guarantee_fund numeric(20,6) not null,

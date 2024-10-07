@@ -3,6 +3,7 @@ import { BorrowCreateCommand } from '../../../application/use-cases/commands/bor
 import { BorrowHistoryListQuery } from '../../../application/use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 import { BorrowAnnualRateUpdateCommand } from '../../../application/use-cases/commands/borrow/rate/update/borrow-annual-rate-update-command-handler';
+import { BorrowDebtorListQuery } from '../../../application/use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
 
 async function BorrowRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/borrow/rates', async (request, reply) => {
@@ -23,9 +24,13 @@ async function BorrowRoute(fastify: FastifyInstance, options: FastifyPluginOptio
     return result;
   });
 
-  fastify.get('/borrow/list/debtor', async (request, reply) => {
+  fastify.post<{ Body: string }>('/borrow/list/debtor', async (request, reply) => {
+    const data = JSON.parse(request.body) as BorrowDebtorListQuery;
+    
+    if (data.page) data.offset = ((data.page - 1) * 20);
+
     const command = new CommandHandlerMediator();
-    const result = await command.execute('BorrowDebtorListQuery');
+    const result = await command.execute('BorrowDebtorListQuery', data);
 
     if (!result.successful) reply.statusCode = 400;
 

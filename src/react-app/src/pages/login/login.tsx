@@ -3,7 +3,6 @@ import { useAuth } from "../../components/security/auth-context";
 import { ToSHA1 } from "../../core/util/conversions/sha1-conversion";
 import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
-import useAuthStore from "../../core/stores/auth-store";
 
 export default function Login() {
   const [username, setUsername] = useState<string>();
@@ -33,16 +32,16 @@ export default function Login() {
     }
 
     login(responseData.data);
-    window.location.href = '/savingfund';
+    window.location.href = '/setepidsf/savingfund';
   };
 
   useEffect(() => {
     if (isAuthenticated)
-      window.location.href = '/savingfund';
+      window.location.href = '/setepidsf/savingfund';
   }, []);
 
   return (
-    <section className={`hero ${isBlurred ? 'blur-transition blurred' : ''}`}>
+    <section>
       <div className="hero-body">
         <div className="container">
           <div className="columns is-centered">

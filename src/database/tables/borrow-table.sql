@@ -3,8 +3,9 @@ create table if not exists process.borrow
 (
   id integer generated always as identity,
   associate_id integer not null,
+  file_number text not null unique,
   requested_amount numeric(20,6) not null,
-  "period" smallint not null,
+  "period" integer not null,
   annual_rate numeric(20,6) not null,
   is_fortnightly boolean not null,
   is_settled boolean not null default false, 

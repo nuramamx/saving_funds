@@ -1,6 +1,7 @@
 --drop function catalog.associate_list;
 create or replace function "catalog".associate_list(
-  p_limit integer = 10,
+  p_id integer = 0,
+  p_limit integer = 20,
   p_offset integer = 0
 )
 returns table (
@@ -34,6 +35,7 @@ begin
     ,count(1) over () as total_rows
   from "catalog".associate as a
   join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
+  where (p_id = 0 or a.id = p_id)
   order by a.id, a.is_active desc
   limit p_limit offset p_offset;
 end;

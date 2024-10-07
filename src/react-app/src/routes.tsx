@@ -17,7 +17,7 @@ import { AssociateComposer, associateComposerLoader } from './pages/saving-fund-
 
 const Routes = createBrowserRouter([
   {
-    path: 'login',
+    path: '/login',
     element: <Login />,
   },
   {
@@ -26,7 +26,7 @@ const Routes = createBrowserRouter([
     children: [
       {
         path: 'savingfund',
-        element: <SavingFundManagement />,
+        element: <ProtectedRoute><SavingFundManagement /></ProtectedRoute>,
         children: [
           { path: 'list', element: <ProtectedRoute><SavingFundList /></ProtectedRoute> },
           { path: 'associate/composer/:id?', element: <ProtectedRoute><AssociateComposer /></ProtectedRoute>, loader: associateComposerLoader },
@@ -39,7 +39,7 @@ const Routes = createBrowserRouter([
       },
       {
         path: 'system',
-        element: <SystemManagement />,
+        element: <ProtectedRoute><SystemManagement /></ProtectedRoute>,
         children: [
           // { path: 'batch/composer', element: <BatchComposer /> },
           // { path: 'batch/list', element: <BatchList /> },
@@ -54,9 +54,9 @@ const Routes = createBrowserRouter([
       //     { path: 'page', element: <MyAccount /> }
       //   ]
       // },
-    ],
-  },
-]);
+    ]
+  }
+], { basename: '/setepidsf' });
 
 const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'graphs', name: 'Gráficas', location: '/', children: [

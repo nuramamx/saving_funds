@@ -16,6 +16,7 @@ interface AssociateComposerCommand {
   address: AddressInfo;
   workplace: WorkplaceInfo;
   beneficiaries: BeneficiaryInfo[];
+  isActive: boolean;
 }
 
 export default class AssociateCreateCommandHandler implements CommandHandler<AssociateComposerCommand, CommandResponse> {

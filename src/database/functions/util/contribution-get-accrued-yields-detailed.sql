@@ -85,7 +85,7 @@ begin
   )
   select
       r."year"::integer
-      ,to_char(r.transaction_date, 'YYYY-MM-dd HH24:MI:SS') as transaction_date
+      ,to_char(r.transaction_date at time zone 'utc', 'YYYY-MM-dd HH24:MI:SS') as transaction_date
       ,r.amount::numeric(20,6)
       ,r.rate::numeric(20,6)
       ,r.transaction_type::text

@@ -15,7 +15,8 @@ type AssociateBatchReaderInfo = {
   p_detail: string;
   p_address: string;
   p_workplace: string;
-  p_beneficiaries: string; 
+  p_beneficiaries: string;
+  p_is_active: boolean; 
 }
 
 export default class AssociateBatchReader implements BatchReaderInfo<BatchReaderResult> {
@@ -28,15 +29,15 @@ export default class AssociateBatchReader implements BatchReaderInfo<BatchReader
     worksheet.forEach((row, index, d) => {
       if (index > 0) { // skiping headers
         if (EmptyString(row[0]) === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna rfc.`);
+          return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna rfc.`);
         }
 
         if (EmptyString(row[1]) === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna nombre.`);
+          return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna nombre.`);
         }
 
         if (EmptyString(row[2]) === '') {
-          messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna sexo.`);
+          return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna sexo.`);
         }
 
         const detail: AssociateDetailSpec = {
@@ -85,7 +86,8 @@ export default class AssociateBatchReader implements BatchReaderInfo<BatchReader
           p_detail: JSON.stringify(detail),
           p_address: JSON.stringify(address),
           p_workplace: JSON.stringify(workplace),
-          p_beneficiaries: JSON.stringify(beneficiaries)
+          p_beneficiaries: JSON.stringify(beneficiaries),
+          p_is_active: (EmptyString(row[3]) === 'x')
         });
       }
     });

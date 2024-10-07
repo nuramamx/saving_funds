@@ -10,13 +10,9 @@ export default class BorrowAuthorizationReportService implements ReportServiceIn
     const workbook = new Excel.Workbook();
     const buffer = fs.readFileSync('./public/borrow_authorization_report_template.xlsx');
 
-    console.log('hola');
-
     await workbook.xlsx.load(buffer);
 
     const worksheetAuthorization = workbook.getWorksheet('AUTORIZACIÓN');
-
-    console.log(worksheetAuthorization);
 
     if (worksheetAuthorization !== null && worksheetAuthorization !== undefined) this.worksheetAuthorizationChanges(worksheetAuthorization);
 

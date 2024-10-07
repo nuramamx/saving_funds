@@ -85,6 +85,7 @@ export default function BorrowHistoryList() {
           <thead>
             <tr>
               <th>Id</th>
+              <th>Folio</th>
               <th>Monto Solicitado</th>
               <th>Total a Pagar</th>
               <th>Total pagado</th>
@@ -93,8 +94,8 @@ export default function BorrowHistoryList() {
               <th>Periodo</th>
               <th>Periodicidad</th>
               <th>Dictamen</th>
-              <th>Creado</th>
               <th>Inicio</th>
+              <th>Creado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -103,6 +104,7 @@ export default function BorrowHistoryList() {
               borrows.map((borrow: BorrowHistoryListSpec) => (
               <tr key={borrow.id}>
                 <td>{borrow.id}</td>
+                <td>{borrow.fileNumber}</td>
                 <td>{ToMoney(borrow.requestedAmount)}</td>
                 <td>{ToMoney(borrow.totalDue)}</td>
                 <td>{ToMoney(borrow.totalPaid)}</td>
@@ -111,8 +113,8 @@ export default function BorrowHistoryList() {
                 <td>{borrow.period} {borrow.period > 1 ? 'AÑOS' : 'AÑO'}</td>
                 <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
                 <td>{borrow.resolution}</td>
-                <td>{borrow.createdAt}</td>
                 <td>{borrow.startAt}</td>
+                <td>{borrow.createdAt}</td>
                 <td>
                   <BorrowAuthorizationReportActionItem associateName={associateName.toUpperCase()} borrowId={borrow.id} />
                   <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload} />

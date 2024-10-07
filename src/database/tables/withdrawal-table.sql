@@ -5,6 +5,8 @@ create table if not exists process.withdrawal
   saving_fund_id integer not null,
   amount numeric(20,6) not null,
   is_yields boolean not null default false,
+  is_leave boolean not null default false,
+  is_decease boolean not null default false,
   applied_at timestamp with time zone not null default current_timestamp,
   created_at timestamp with time zone not null default current_timestamp,
   updated_at timestamp with time zone not null default current_timestamp,
