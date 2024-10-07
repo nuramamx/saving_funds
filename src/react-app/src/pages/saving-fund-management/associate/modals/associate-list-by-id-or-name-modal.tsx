@@ -79,8 +79,8 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
             <thead>
               <tr>
                 <th>Id</th>
+                <th>RFC</th>
                 <th>Nombre</th>
-                <th>Direcci&oacute;n</th>
                 <th>Convenio</th>
               </tr>
             </thead>
@@ -89,8 +89,8 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
                 <tr key={associate.id} style={{ cursor: 'pointer' }}
                   onClick={() => handleAssociateSelected(associate)}>
                   <td>{associate.id}</td>
+                  <td>{associate.rfc}</td>
                   <td>{associate.name}</td>
-                  <td>{associate.address}</td>
                   <td>{associate.agreementName}</td>
                 </tr>
               ))}

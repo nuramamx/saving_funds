@@ -11,6 +11,8 @@ create or replace function process.borrow_create(
 )
 as $$
 declare
+  v_current_year integer;
+  v_file_number text;
   v_annual_rate numeric(20,6);
   v_borrow process.borrow_type;
 begin
@@ -49,15 +51,19 @@ begin
   -- Get the annual rate based on period.
   select
     ar.rate
-  into
-    v_annual_rate
+  into v_annual_rate
   from "system".borrow_annual_rate as ar
   where ar."period" = p_period;
 
+  -- Create file number.
+  v_current_year := (select extract(year from current_date)::integer);
+  v_file_number := v_current_year || '/' || p_associate_id || '/' || floor(1000 + random() * 9000)::integer || '/' || p_period;
+
   begin
-    insert into process.borrow(associate_id, requested_amount, "period", annual_rate, is_fortnightly, start_at)
+    insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, start_at)
     values (
       p_associate_id,
+      v_file_number,
       p_requested_amount,
       p_period,
       v_annual_rate,

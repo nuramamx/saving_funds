@@ -50,36 +50,31 @@ interface AssociateStore {
   clearAssociate: () => void
 };
 
-const useAssociateStore = create<AssociateStore>((set) => ({
+const useAssociateStore = create<AssociateStore>()((set) => ({
   associate: associateInitialState,
   stateId: 0,
-  setAssociate: (newState: AssociateComposerCommand) => set(
-    produce((state: AssociateStore) => {
+  setAssociate: (newState: AssociateComposerCommand) =>
+    set(produce((state: AssociateStore) => {
       state.associate = newState;
-    })
-  ),
-  setStateId: (value: number) => set(
-    produce((state: AssociateStore) => {
+    })),
+  setStateId: (value: number) =>
+    set(produce((state: AssociateStore) => {
       state.associate.address.stateId = value;
       state.stateId = value;
-    })
-  ),
-  updateBeneficiaryName: (index: number, name: string) => set(
-    produce((state: AssociateStore) => {
+    })),
+  updateBeneficiaryName: (index: number, name: string) =>
+    set(produce((state: AssociateStore) => {
       state.associate.beneficiaries[index].name = name;
-    })
-  ),
-  updateBeneficiaryPercentage: (index: number, percentage: number) => set(
-    produce((state: AssociateStore) => {
+    })),
+  updateBeneficiaryPercentage: (index: number, percentage: number) =>
+    set(produce((state: AssociateStore) => {
       state.associate.beneficiaries[index].percentage = percentage;
-    })
-  ),
-  clearAssociate: () => set(
-    produce((state: AssociateStore) => {
+    })),
+  clearAssociate: () =>
+    set(produce((state: AssociateStore) => {
       state.associate = associateInitialState;
       state.stateId = 0;
-    })
-  )
+    }))
 }));
 
 export default useAssociateStore;

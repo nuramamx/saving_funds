@@ -69,8 +69,8 @@ export default function AssociateList() {
       </div>
       <div className="column"></div>
     </div>
-    <div className="columns content-section">
-      <div className="column table-container">
+    <div className="columns">
+      <div className="column">
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
           <thead>
             <tr key={1}>

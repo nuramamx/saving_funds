@@ -14,8 +14,8 @@ export default function SFTextDisplayInput({ id, name, value, readonly = false, 
             {display}
           </label>
         </span>
-        <div className="control">
-          <input id={id} className="input" type="text" placeholder={name}
+        <div className="control is-expanded">
+          <input id={id} className="input has-text-right" type="text" placeholder={name}
             readOnly={readonly}
             value={value} />
         </div>

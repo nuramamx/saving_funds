@@ -30,14 +30,9 @@ export default class BorrowCreateCommandHandler implements CommandHandler<Borrow
 
       const result = await borrowSaveRepository.save(borrow);
 
-      return { successful: true, message: 'Socio fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
+      return { successful: true, message: 'Registro fue creado con éxito.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
-      return {
-        successful: false,
-        message: 'Socio no pudo ser creado.',
-        data: err.message,
-        type: 'danger'
-      } as CommandResponse;
+      return { successful: false, message: 'Registro no pudo ser creado.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }

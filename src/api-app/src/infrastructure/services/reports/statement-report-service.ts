@@ -53,27 +53,23 @@ export default class StatementReportService implements ReportServiceInfo {
         const rowNumber = index + 17;
         const addedRow = worksheet.insertRow(rowNumber, [
           undefined,
+          undefined,
           row.year,
           Number(row.initial_balance),
           Number(row.contribution_summarized),
           Number(row.annual_interest_rate),
           Number(row.yields),
           Number(row.withdrawals_summarized),
-          Number(row.refund),
           Number(row.net_total)
         ]);
 
-        worksheet.getCell(`C${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`D${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`E${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`F${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`G${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`H${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`I${rowNumber}`).numFmt = '$#,##0.00';
-        worksheet.unMergeCells(`H${rowNumber}`);
-        worksheet.unMergeCells(`I${rowNumber}`);
-        worksheet.unMergeCells(`J${rowNumber}`);
-        worksheet.unMergeCells(`K${rowNumber}`);
+
 
         addedRow.eachCell((cell) => {
           cell.border = {
@@ -84,11 +80,6 @@ export default class StatementReportService implements ReportServiceInfo {
           }
         });
       });
-
-      for (let i = 1; i <= this.list.length; i++) {
-        const cells = i+16;
-        worksheet.mergeCells(`I${cells}:J${cells}`);
-      }
     }
   }
 
@@ -117,27 +108,22 @@ export default class StatementReportService implements ReportServiceInfo {
         const rowNumber = index + 17;
         const addedRow = worksheet.insertRow(rowNumber, [
           undefined,
+          undefined,
           row.year,
           Number(row.initial_balance),
           Number(row.contribution_summarized),
           Number(row.annual_interest_rate),
           Number(row.yields),
           Number(row.withdrawals_summarized),
-          Number(row.refund),
           Number(row.net_total)
         ]);
 
-        worksheet.getCell(`C${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`D${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`E${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`F${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`G${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`H${rowNumber}`).numFmt = '$#,##0.00';
         worksheet.getCell(`I${rowNumber}`).numFmt = '$#,##0.00';
-        worksheet.unMergeCells(`H${rowNumber}`);
-        worksheet.unMergeCells(`I${rowNumber}`);
-        worksheet.unMergeCells(`J${rowNumber}`);
-        worksheet.unMergeCells(`K${rowNumber}`);
 
         addedRow.eachCell((cell) => {
           cell.border = {
@@ -148,11 +134,6 @@ export default class StatementReportService implements ReportServiceInfo {
           }
         });
       });
-
-      for (let i = 1; i <= this.list.length; i++) {
-        const cells = i+16;
-        worksheet.mergeCells(`I${cells}:J${cells}`);
-      }
     }
   }
 }

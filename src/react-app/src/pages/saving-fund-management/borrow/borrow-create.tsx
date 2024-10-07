@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { addDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { ZodIssue } from 'zod';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
 import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
@@ -13,6 +14,10 @@ import useValidationModalStore from '../../../core/stores/validation-modal-store
 import useNotificationStore from '../../../core/stores/notification-store';
 import SFDatePickerInput from '../../../components/form/sf-datepicker-input';
 import useAuthStore from '../../../core/stores/auth-store';
+import IssueTransform from '../../../core/util/transforms/issue-transform';
+import BorrowValidation from '../../../core/validations/borrow-validation';
+import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
+import ToMoney from '../../../core/util/conversions/money-conversion';
 
 export default function BorrowCreate() {
   const { 
@@ -25,16 +30,30 @@ export default function BorrowCreate() {
     updateAmountToDeliver,
     clearBorrow
   } = useBorrowStore();
+  const [periodType, setPeriodType] = useState('-');
+  const [issues, setIssues] = useState<ZodIssue[]>([]);
   const navigate = useNavigate();
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const { annualRates, setAnnualRates } = useCacheStore();
   const { token } = useAuthStore();
-  const [periodType, setPeriodType] = useState('-');
+
+  const fetchAnnualRates = async () => {
+    const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const response = await result.json() as CommandResponseInfo;
+    const list = response.data as AnnualRateInfo[];
+
+    setAnnualRates(list);
+  };
 
   const handleClearBorrow = () => {
     setPeriodType('-');
     clearBorrow();
+    setIssues([]);
   };
 
   const handlePeriodType = (value: string) => {
@@ -52,9 +71,12 @@ export default function BorrowCreate() {
   };
 
   const save = async () => {
+    if (!handleAssociateValidate()) return;
+
     try {
       const response = await fetch(`${AppConstants.apiBorrow}/create`, {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(borrow)
       });
 
@@ -76,6 +98,21 @@ export default function BorrowCreate() {
       pushNotification({ message: err.message, type: 'danger' });
     }
   };
+  
+  const handleAssociateValidate = (): boolean => {
+    const result = BorrowValidation.safeParse(borrow);
+
+    if (!result.success) {
+      pushNotification({
+        message: `Favor de revisar los campos requeridos.`,
+        type: 'danger'
+      });
+
+      setIssues(IssueTransform('borrow', result.error.issues));      
+    }
+
+    return result.success;
+  };
 
   useEffect(() => {
     updateGuaranteeFund();
@@ -84,20 +121,14 @@ export default function BorrowCreate() {
     updateNumberOfPayments();
     updateAmountToDeliver();
 
-    const fetchAnnualRates = async () => {
-      const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      const response = await result.json() as CommandResponseInfo;
-      const list = response.data as AnnualRateInfo[];
-
-      setAnnualRates(list);
-    };
-
     if (annualRates.length <= 0) fetchAnnualRates();
   }, [borrow.requestedAmount, borrow.isFortnightly, borrow.period]);
+
+  useEffect(() => {
+    return () => {
+      handleClearBorrow();
+    };
+  }, []);
 
   return (
     <>
@@ -117,21 +148,25 @@ export default function BorrowCreate() {
     <div className="columns">
       <div className="column">
         <h5 className="title is-5">Datos del pr&eacute;stamo</h5>
-        <SFMoneyInput id="borrow_requested_borrow" name="Cantidad Solicitada"
+        <SFMoneyInput id="borrow-requestedAmount" name="Cantidad Solicitada"
           value={borrow.requestedAmount}
-          onChange={(value) => setBorrow({ ...borrow, requestedAmount: value })} />
-        <SFSelectInput id="borrow_period_type" name="Tipo de Periodo"
+          onChange={(value) => setBorrow({ ...borrow, requestedAmount: value })}
+          issues={issues} />
+        <SFSelectInput id="borrow-periodType" name="Tipo de Periodo"
           value={periodType}
           options={([ { key: "---", value: "-"}, { key: "QUINCENAL", value: "F"}, { key: "MENSUAL", value: "M" }])}
-          onChange={(value) => handlePeriodType(value)} />
-        <SFSelectInput id="borrow_period" name="Duración"
+          onChange={(value) => handlePeriodType(value)}
+          issues={issues} />
+        <SFSelectInput id="borrow-period" name="Duración"
           value={borrow.period}
           options={([ { key: '---', value: '-'}, { key: "1 AÑO", value: 1}, { key: "2 AÑOS", value: 2}, { key: "3 AÑOS", value: 3 } ])}
-          onChange={(value) => handlePeriod(value)} />
+          onChange={(value) => handlePeriod(value)}
+          issues={issues} />
         <SFDatePickerInput params={{
-          id: 'borrow_start_at',
+          id: 'borrow-startAt',
           name: 'Fecha de Inicio',
           value: borrow.startAt,
+          issues: issues,
           onChange: (value) => setBorrow({ ...borrow, startAt: value }),
           minDate: new Date(),
           maxDate: addDays(new Date(), 30)
@@ -139,28 +174,33 @@ export default function BorrowCreate() {
       </div>
       <div className="column">
         <h5 className="title is-5">Cotizaci&oacute;n del pr&eacute;stamo</h5>
-        <SFMoneyInput id="borrow_annual_rate" name="Tasa de Interés"
-          mask="%"
+        <SFTextDisplayInput id="borrow-annualRate" name="Tasa de Interés"
+          display="%"
           readonly={true}
           value={Number(borrow.annualRate).toFixed(2)} />
-        <SFMoneyInput id="borrow_interest_to_pay" name="Intereses"
+        <SFTextDisplayInput id="borrow-interestToPay" name="Intereses"
+          display="!"
           readonly={true}
-          value={borrow.detail.interests.toFixed(2)} />
-        <SFMoneyInput id="borrow_total_due" name="Total a Pagar"
+          value={ToMoney(borrow.detail.interests)} />
+        <SFTextDisplayInput id="borrow-totalDue" name="Total a Pagar"
+          display="!"
           readonly={true}
-          value={borrow.detail.totalDue.toFixed(2)} />
+          value={ToMoney(borrow.detail.totalDue)} />
       </div>
       <div className="column">
         <h5 className="title is-5">&nbsp;</h5>
-        <SFMoneyInput id="borrow_guarantee_fund" name="Fondo de Garantía (2%)"
+        <SFTextDisplayInput id="borrow-guaranteeFund" name="Fondo de Garantía (2%)"
+          display="!"
           readonly={true}
-          value={borrow.detail.guaranteeFund.toFixed(2)} />
-        <SFMoneyInput id="borrow_payment" name="Pago Quincenal o Mensual"
+          value={ToMoney(borrow.detail.guaranteeFund)} />
+        <SFTextDisplayInput id="borrow-payment" name="Pago Quincenal o Mensual"
+          display="!"
           readonly={true}
-          value={borrow.detail.payment.toFixed(2)} />
-        <SFMoneyInput id="borrow_amount_to_deliver" name="Total a Entregar"
+          value={ToMoney(borrow.detail.payment)} />
+        <SFTextDisplayInput id="borrow-amountToDeliver" name="Total a Entregar"
+          display="!"
           readonly={true}
-          value={borrow.detail.amountDelivered.toFixed(2)} />
+          value={ToMoney(borrow.detail.amountDelivered)} />
       </div>
     </div>
     <div className="mt-auto">
@@ -176,6 +216,8 @@ export default function BorrowCreate() {
         </div>
       </nav>
     </div>
+    {JSON.stringify(borrow)}
+    {JSON.stringify(issues)}
     </>
   );
 }
