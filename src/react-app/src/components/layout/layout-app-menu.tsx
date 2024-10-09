@@ -32,8 +32,8 @@ const LayoutAppMenu = memo(() => {
       <div className="navbar-start">
         <div className="navbar-item">
           <div className="buttons">
-            <Link to="/savingfund" className={`button is-light navbar-item ${selectedMenu === 'savingfund' ? 'is-selected' : ''}`}
-              onClick={() => handleMenuClick('savingfund')}>
+            <Link to="/savingfund" className={`button is-light navbar-item ${selectedMenu.includes('savingfund-menu') ? 'is-selected' : ''}`}
+              onClick={() => handleMenuClick('savingfund-menu')}>
               <Community />&nbsp;
               Administraci&oacute;n
             </Link>
@@ -41,8 +41,8 @@ const LayoutAppMenu = memo(() => {
         </div>
         <div className="navbar-item">
           <div className="buttons">
-            <Link to="/system" className={`button is-light navbar-item ${selectedMenu === 'system' ? 'is-selected' : ''}`}
-              onClick={() => handleMenuClick('system')}>
+            <Link to="/system" className={`button is-light navbar-item ${selectedMenu.includes('system-menu') ? 'is-selected' : ''}`}
+              onClick={() => handleMenuClick('system-menu')}>
               <Settings />&nbsp;
               Sistema
             </Link>

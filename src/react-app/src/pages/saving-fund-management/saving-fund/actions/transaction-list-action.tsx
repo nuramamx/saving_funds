@@ -5,9 +5,10 @@ import TransactionListModal from "../modals/transaction-list-modal";
 
 type TransactionListActionButtonParams = {
   savingFundId: number;
+  associateName: string;
 };
 
-export default function TransactionListActionButton({ savingFundId }: TransactionListActionButtonParams) {
+export default function TransactionListActionButton({ savingFundId, associateName }: TransactionListActionButtonParams) {
   const [showModal, setShowModal] = useState(false);
   const [selectedSavingFund, setSelectedSavingFund] = useState<number>(0);
 
@@ -24,7 +25,7 @@ export default function TransactionListActionButton({ savingFundId }: Transactio
       <TaskList />
       <TooltipElement id="transaction-tooltip" text="Transacciones" />
     </button>
-    <TransactionListModal savingFundId={selectedSavingFund} show={showModal} onClose={() => handleClick(0, false)} />
+    <TransactionListModal savingFundId={selectedSavingFund} associateName={associateName} show={showModal} onClose={() => handleClick(0, false)} />
     </>
   )
 }

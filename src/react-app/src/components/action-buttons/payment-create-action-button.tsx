@@ -14,14 +14,16 @@ export default function PaymentCreateActionButton({ borrowId, onClose }: Payment
   const handleClick = (borrowId: number, show: boolean) => {
     setSelectedBorrow(borrowId);
     setShowModal(show);
-    
+  };
+
+  const handleClose = () => {
     if (onClose) onClose();
-  }
+  };
 
   return (
     <>
     <button title="Registrar pago" onClick={() => handleClick(borrowId, true)}><MoneySquare /></button>&nbsp;&nbsp;
-    <PaymentCreateModal borrowId={selectedBorrow} show={showModal} onClose={() => handleClick(0, false)} />
+    <PaymentCreateModal borrowId={selectedBorrow} show={showModal} onClose={handleClose} />
     </>
   )
 }

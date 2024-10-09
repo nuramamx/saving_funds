@@ -11,11 +11,12 @@ import useAuthStore from '../../../../core/stores/auth-store';
 
 type TransactionListModalParams = {
   savingFundId: number;
+  associateName: string;
   show: boolean;
   onClose: () => void;
 };
 
-export default function TransactionListModal({ savingFundId, show, onClose}: TransactionListModalParams) {
+export default function TransactionListModal({ savingFundId, associateName, show, onClose}: TransactionListModalParams) {
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
@@ -73,7 +74,10 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
     <div className="modal-background"></div>
     <div className="modal-card" style={{width: '60%'}}>
       <header className="modal-card-head">
-        <p className="modal-card-title">Transacciones</p>
+        <p className="modal-card-title">
+          Transacciones<br />
+          <label style={{ fontSize: '12px'}}>{associateName}</label>
+        </p>
         <button className="delete" aria-label="close" onClick={handleClose}></button>
       </header>
       <section className="modal-card-body" style={{fontSize: '12px'}}>
@@ -114,10 +118,18 @@ export default function TransactionListModal({ savingFundId, show, onClose}: Tra
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>
-        <label style={{ fontSize: '2vh' }}>Rendimientos del a&ntilde;o:</label>&nbsp;&nbsp;
-        <label style={{ fontWeight: 'bold', fontSize: '2vh' }}>
-          {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
-        </label>
+          <label style={{ fontSize: '1vh' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+            {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+          </label><br />
+          <label style={{ fontSize: '1vh' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+            {ToMoney(transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+          </label><br />
+          <label style={{ fontSize: '1vh' }}>Rendimientos {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+            {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
+          </label>
         </div>
         <div className='is-pulled-right'>
           <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />

@@ -16,10 +16,13 @@ export default function BorrowDebtorList() {
   const [borrows, setBorrows] = useState<BorrowDebtorListSpec[]>([]);
   const [page] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
 
   const fetchBorrows = async (page: number) => {
+    setLoading(true);
+
     try {
       const result = await fetch(`${AppConstants.apiBorrow}/list/debtor`, {
         method: 'POST',
@@ -42,6 +45,8 @@ export default function BorrowDebtorList() {
     } catch (err: any) {
       setHasError(true);
       pushNotification({ message: err.message, type: 'danger' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,32 +83,34 @@ export default function BorrowDebtorList() {
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            {borrows !== undefined && borrows?.length > 0 ? (
-              borrows.map((borrow: BorrowDebtorListSpec) => (
-                <tr key={borrow.id}>
-                  <td>{borrow.id}</td>
-                  <td>{borrow.fileNumber}</td>
-                  <td>{borrow.associateId}</td>
-                  <td>{borrow.associateName}</td>
-                  <td>{ToMoney(borrow.requestedAmount)}</td>
-                  <td>{ToMoney(borrow.totalDue)}</td>
-                  <td>{ToMoney(borrow.totalPaid)}</td>
-                  <td>{borrow.numberPayments}</td>
-                  <td>{borrow.paymentsMade}</td>
-                  <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
-                  <td>{borrow.startAt}</td>
-                  <td>
-                    <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload}/>
-                    <PaymentListActionButton borrowId={borrow.id} />
-                  </td>
-                </tr>
-              ))) : (
-                <tr>
-                  <td colSpan={12} style={{textAlign: 'center'}}>No hay ning&uacute;n prestamo atrasado.</td>
-                </tr>
-              )}
-          </tbody>
+          {!loading ? (
+            <tbody>
+              {borrows !== undefined && borrows?.length > 0 ? (
+                borrows.map((borrow: BorrowDebtorListSpec) => (
+                  <tr key={borrow.id}>
+                    <td>{borrow.id}</td>
+                    <td>{borrow.fileNumber}</td>
+                    <td>{borrow.associateId}</td>
+                    <td>{borrow.associateName}</td>
+                    <td>{ToMoney(borrow.requestedAmount)}</td>
+                    <td>{ToMoney(borrow.totalDue)}</td>
+                    <td>{ToMoney(borrow.totalPaid)}</td>
+                    <td>{borrow.numberPayments}</td>
+                    <td>{borrow.paymentsMade}</td>
+                    <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
+                    <td>{borrow.startAt}</td>
+                    <td>
+                      <PaymentCreateActionButton borrowId={borrow.id} onClose={() => handleReload()}/>
+                      <PaymentListActionButton borrowId={borrow.id} />
+                    </td>
+                  </tr>
+                ))) : (
+                  <tr>
+                    <td colSpan={12} style={{textAlign: 'center'}}>No hay ning&uacute;n prestamo atrasado.</td>
+                  </tr>
+                )}
+            </tbody>
+          ) : <tbody><tr><td colSpan={12} style={{textAlign: 'center'}}>Cargando...</td></tr></tbody>}
         </table>
       </div>
     </div>

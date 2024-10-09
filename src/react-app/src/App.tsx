@@ -21,10 +21,13 @@ import useLayoutStore from './core/stores/layout-store';
 
 function App() {
   const { notifications } = useNotificationStore();
-  const { setSelectedSidebarMenu } = useLayoutStore();
+  const { setSelectedMenu, setSelectedSidebarMenu } = useLayoutStore();
   const location = useLocation();
 
   useEffect(() => {
+    if (location.pathname.includes('savingfund')) setSelectedMenu('savingfund-menu');
+    if (location.pathname.includes('system')) setSelectedMenu('system-menu');
+    
     setSelectedSidebarMenu(location.pathname);
   }, [location]);
   

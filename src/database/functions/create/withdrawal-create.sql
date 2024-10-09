@@ -46,14 +46,15 @@ begin
     coalesce(c.amount, 0)
   into v_first_contribution_amount
   from process.contribution as c
-  order by c.applied_at desc
+  where c.saving_fund_id = p_saving_fund_id
+  order by c.applied_at
   limit 1;
 
   -- Amount to withhold.
   if (v_associate_agreement = 'ISS') then
-    v_amount_to_withhold := v_first_contribution_amount * 300;
+    v_amount_to_withhold := v_first_contribution_amount * 3;
   else
-    v_amount_to_withhold := v_first_contribution_amount * 150;
+    v_amount_to_withhold := v_first_contribution_amount * 6;
   end if;
 
   -- Get the current balance from contributions.
@@ -74,9 +75,9 @@ begin
   -- Subtract withdrawals and amount to withhold from current balance.
   v_available_balance := v_available_balance - v_withdrawal_sum_amount - v_amount_to_withhold;
 
-  if v_available_balance < 0 then
-    v_available_balance := 0;
-  end if;
+--   if v_available_balance < 0 then
+--     v_available_balance := 0;
+--   end if;
 
   -- Check if withdrawal amount is not greater than balance (without consider yields).
   if p_amount > v_available_balance and p_is_yields = false then

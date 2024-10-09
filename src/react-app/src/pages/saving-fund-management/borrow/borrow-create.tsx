@@ -1,10 +1,12 @@
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { addDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { ZodIssue } from 'zod';
+import { WarningCircle } from 'iconoir-react';
 import SFMoneyInput from '../../../components/form/sf-money-input';
 import SFSelectInput from '../../../components/form/sf-select-input';
-import SearchAssociate from '../../../components/dynamic-elements/sf-search-associate';
+import SearchAssociate, { SearchAssociateForwardedMethods } from '../../../components/dynamic-elements/sf-search-associate';
 import useBorrowStore from '../../../core/stores/borrow-store';
 import useCacheStore from '../../../core/stores/cache-store';
 import AnnualRateInfo from '../../../core/interfaces/info/annual-rates-info';
@@ -18,6 +20,7 @@ import IssueTransform from '../../../core/util/transforms/issue-transform';
 import BorrowValidation from '../../../core/validations/borrow-validation';
 import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
 import ToMoney from '../../../core/util/conversions/money-conversion';
+import AssociateListByIdOrNameSpec from '../../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
 
 export default function BorrowCreate() {
   const { 
@@ -30,6 +33,7 @@ export default function BorrowCreate() {
     updateAmountToDeliver,
     clearBorrow
   } = useBorrowStore();
+  const [associate, setAssociate] = useState<AssociateListByIdOrNameSpec>();
   const [periodType, setPeriodType] = useState('-');
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const navigate = useNavigate();
@@ -37,6 +41,7 @@ export default function BorrowCreate() {
   const { setValidationModal } = useValidationModalStore();
   const { annualRates, setAnnualRates } = useCacheStore();
   const { token } = useAuthStore();
+  const searchAssociateRef = useRef<SearchAssociateForwardedMethods>(null);
 
   const fetchAnnualRates = async () => {
     const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
@@ -50,10 +55,18 @@ export default function BorrowCreate() {
     setAnnualRates(list);
   };
 
+  const handleAssociate = (value: number, name: string, data: AssociateListByIdOrNameSpec) => {
+    setBorrow({ ...borrow, associateId: value });
+    setAssociate(data);
+  };
+
   const handleClearBorrow = () => {
     setPeriodType('-');
     clearBorrow();
+    setAssociate(undefined!)
     setIssues([]);
+
+    if (searchAssociateRef.current) searchAssociateRef.current.clear();
   };
 
   const handlePeriodType = (value: string) => {
@@ -122,7 +135,7 @@ export default function BorrowCreate() {
     updateAmountToDeliver();
 
     if (annualRates.length <= 0) fetchAnnualRates();
-  }, [borrow.requestedAmount, borrow.isFortnightly, borrow.period]);
+  }, [borrow.requestedAmount, borrow.isFortnightly, borrow.period, setAssociate]);
 
   useEffect(() => {
     return () => {
@@ -136,14 +149,21 @@ export default function BorrowCreate() {
       <div className="column"></div>
       <div className="column">
         <SearchAssociate
+          ref={searchAssociateRef}
           id="borrow_associate_name"
           name="Socio"
           value={borrow.associateId}
           readonly={true}
-          onChange={(value) => setBorrow({ ...borrow, associateId: value })} />
+          onChange={(id, name, data) => handleAssociate(id, name, data)} />
       </div>
       <div className="column"></div>
     </div>
+    <div className="has-text-centered">
+      {associate?.hasActiveBorrows ? (
+          <label style={{ color: '#C0392B' }}><WarningCircle style={{ color: '#C0392B' }} />&nbsp;&nbsp;El socio tiene uno o varios pr&eacute;stamos sin liquidar.</label>
+        ) : '' }
+    </div>
+    <div className="columns">&nbsp;</div>
     <div className="columns">&nbsp;</div>
     <div className="columns">
       <div className="column">

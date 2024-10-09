@@ -3,4 +3,5 @@ export default interface AssociateListByIdOrNameSpec {
   name: string;
   rfc: string;
   agreement_name: string;
+  has_active_borrows: boolean;
 }

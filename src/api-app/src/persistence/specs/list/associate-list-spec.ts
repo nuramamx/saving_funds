@@ -9,5 +9,6 @@ export default interface AssociateListSpec {
   salary: number;
   frequent_contribution: number;
   address: string;
+  is_active: boolean;
   total_rows: number;
 }

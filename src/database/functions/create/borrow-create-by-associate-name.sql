@@ -7,7 +7,6 @@ create or replace function process.borrow_create_by_associate_name(
   in p_annual_rate numeric,
   in p_start_at timestamp with time zone,
   in p_is_fortnightly boolean default false,
-  in p_is_settled boolean default false,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -46,7 +45,6 @@ begin
 --     select 1
 --     from process.borrow as b
 --     where b.name = p_associate_name
---     and b.is_settled = false
 --     for update skip locked
 --   ) then
 --     message := 'El socio tiene un préstamo no liquidado.';
@@ -75,7 +73,7 @@ begin
 --   where ar."period" = p_period;
 
   begin
-    insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, is_settled, start_at)
+    insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, start_at)
     values (
       v_associate_id,
       p_file_number,
@@ -83,7 +81,6 @@ begin
       p_period,
       p_annual_rate,
       p_is_fortnightly,
-      p_is_settled,
       p_start_at
     )
     returning id into inserted_id;

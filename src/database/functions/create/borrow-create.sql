@@ -37,13 +37,7 @@ begin
   end if;
 
   -- Check if associate has a not settled borrow.
-  if exists (
-    select 1
-    from process.borrow as b
-    where b.associate_id = p_associate_id
-    and b.is_settled = false
-    for update skip locked
-  ) then
+  if process.validate_associate_unpaid_borrows(p_associate_id) then
     message := 'El socio tiene un préstamo no liquidado.';
     return;
   end if;

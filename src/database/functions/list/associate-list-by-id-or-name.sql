@@ -7,7 +7,8 @@ returns table (
   id integer,
   rfc text,
   "name" text,
-  agreement_name varchar(50)
+  agreement_name varchar(50),
+  has_active_borrows boolean
 ) as $$
 declare
 begin
@@ -21,6 +22,7 @@ begin
     ,a.rfc::text as rfc
     ,a."name"::text as "name"
     ,ag."name" AS agreement_name
+    ,process.validate_associate_unpaid_borrows(a.id) as has_active_borrow
   from "catalog".associate as a
   join "system".agreement as ag
     on (a.detail->>'agreementId')::integer = ag.id

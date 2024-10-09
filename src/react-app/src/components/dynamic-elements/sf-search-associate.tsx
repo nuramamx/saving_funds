@@ -1,34 +1,46 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Erase, InfoCircle, Search } from 'iconoir-react';
-import SearchAssociateSpec from '../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
+import { Erase, Refresh, Search } from 'iconoir-react';
+import AssociateListByIdOrNameSpec from '../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
 import AssociateListByIdOrNameModal from '../../pages/saving-fund-management/associate/modals/associate-list-by-id-or-name-modal';
 import { SFInputInfo } from '../form/interfaces/sf-input-info';
+import React from 'react';
 
 type SearchAssociateInputParams = SFInputInfo & {
   value: number;
-  onChange: (id: number, name: string) => void;
+  onChange: (id: number, name: string, data: AssociateListByIdOrNameSpec) => void;
 }
 
-const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputParams) => {
+type SearchAssociateForwardedMethods = {
+  clear: () => void
+}
+
+const SearchAssociateInternal = ({id, name, readonly, onChange}: SearchAssociateInputParams, ref: React.Ref<SearchAssociateForwardedMethods> | undefined) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedAssociate, setSelectedAssociate] = useState<SearchAssociateSpec>();
+  const [selectedAssociate, setSelectedAssociate] = useState<AssociateListByIdOrNameSpec>();
+
+  React.useImperativeHandle(ref, () => ({
+    clear() {
+      handleEraseAssociate();
+    }
+  }));
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setShowModal(false);
     if (e.key === 'F6') setShowModal(true);
   }, []);
 
-  const handleSelectedAssociate = (value: SearchAssociateSpec) => {
+  const handleSelectedAssociate = (value: AssociateListByIdOrNameSpec) => {
+    console.log(value);
     setSelectedAssociate(value);
 
     if (onChange)
-      onChange(value.id, value.name);
+      onChange(value.id, value.name, value);
   };
 
   const handleEraseAssociate = () => {
-    setSelectedAssociate({} as SearchAssociateSpec);
+    setSelectedAssociate({} as AssociateListByIdOrNameSpec);
     if (onChange)
-      onChange(0, '');
+      onChange(0, '', {} as AssociateListByIdOrNameSpec);
   };
 
   useEffect(() => {
@@ -51,6 +63,7 @@ const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputPar
       <ul className="pagination-list">
         <li>
           <button className="pagination-previous" onClick={handleEraseAssociate}><Erase /></button>
+          <button className="pagination-previous" onClick={() => handleSelectedAssociate(selectedAssociate!)}><Refresh /></button>
         </li>
       </ul>
     </nav>
@@ -62,4 +75,7 @@ const SearchAssociate = ({id, name, readonly, onChange}: SearchAssociateInputPar
   )
 };
 
+const SearchAssociate = React.forwardRef(SearchAssociateInternal);
+
+export type { SearchAssociateForwardedMethods }
 export default SearchAssociate;

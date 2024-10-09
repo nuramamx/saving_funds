@@ -7,7 +7,7 @@ create or replace function process.payment_create(
   out success boolean,
   out message text
 )
-returns RECORD as $$
+returns record as $$
 declare
   v_amount_to_pay numeric(20,2);
   v_payment_type integer;
@@ -34,9 +34,9 @@ begin
   where bd.borrow_id = p_borrow_id;
 
   if not exists (
-    select 1 from process.borrow as b where b.id = p_borrow_id and b.is_settled = false
+    select 1 from process.borrow as b where b.id = p_borrow_id
   ) then
-    message := 'El préstamo asignado no existe o ya está liquidado.';
+    message := 'El préstamo asignado no existe.';
     return;
   end if;
 
@@ -46,7 +46,7 @@ begin
   end if;
 
   if (p_paid_amount < v_amount_to_pay) then
-    message := 'El pago del préstamo es menor al indicado. ';
+    message := 'El pago del préstamo es menor al indicado.';
     return;
   end if;
 

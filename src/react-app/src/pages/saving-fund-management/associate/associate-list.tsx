@@ -82,6 +82,7 @@ export default function AssociateList() {
               <th>Convenio</th>
               <th>Sueldo / Pensi&oacute;n</th>
               <th>Aportaci&oacute;n Frecuente</th>
+              <th>Estatus</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -97,6 +98,7 @@ export default function AssociateList() {
                 <td>{associate.agreementName}</td>
                 <td>{ToMoney(associate.salary)}</td>
                 <td>{ToMoney(associate.frequentContribution)}</td>
+                <td>{associate.isActive ? 'ACTIVO' : 'INACTIVO'}</td>
                 <td>
                   <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
                   <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;

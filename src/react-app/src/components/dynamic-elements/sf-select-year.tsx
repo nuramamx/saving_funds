@@ -28,6 +28,7 @@ const SFSelectYear = memo(({ id, name, value, onChange }: SFNumberInputInfo) => 
           {createYears().map((year) => (
             <option key={year} defaultValue={getCurrentYear()} value={year}>{year}</option>
           ))}
+          <option key={0} defaultValue={getCurrentYear()} value={0}>Todos</option>
         </select>
       </div>
     </div>

@@ -11,7 +11,6 @@ type BorrowBatchReaderInfo = {
   p_annual_rate: number;
   p_start_at: string;
   p_is_fortnightly: boolean;
-  p_is_settled: boolean;
 }
 
 export default class BorrowBatchReader implements BatchReaderInfo<BatchReaderResult> {
@@ -54,8 +53,7 @@ export default class BorrowBatchReader implements BatchReaderInfo<BatchReaderRes
           p_period: Number(row[3]),
           p_annual_rate: Number(row[4]),
           p_start_at: `${row[5]}T00:00:00.000Z`,
-          p_is_fortnightly: !(EmptyString(row[6]) === ''),
-          p_is_settled: !(EmptyString(row[7]) === '')
+          p_is_fortnightly: !(EmptyString(row[6]) === '')
         });
       }
     });

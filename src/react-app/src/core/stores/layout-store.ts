@@ -13,7 +13,7 @@ type LayoutStore = {
 };
 
 const useLayoutStore = create(persist<LayoutStore>((set) => ({
-  selectedMenu: '',
+  selectedMenu: 'savingfund',
   selectedSidebarMenu: '',
   setSelectedMenu: (menu: string) => set(({ selectedMenu: menu })),
   setSelectedSidebarMenu: (menu: string) => set(({ selectedSidebarMenu: menu })),

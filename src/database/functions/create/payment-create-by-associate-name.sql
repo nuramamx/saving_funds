@@ -48,20 +48,20 @@ begin
   from process.borrow_detail as bd
   where bd.borrow_id = v_borrow_id;
 
---   if not exists (
---     select 1 from process.borrow as b where b.id = v_borrow_id and b.is_settled = false
---   ) then
---     message := 'El préstamo asignado no existe o ya está liquidado.';
---     return;
---   end if;
---
+  if not exists (
+    select 1 from process.borrow as b where b.id = v_borrow_id
+  ) then
+    message := 'El préstamo asignado no existe.';
+    return;
+  end if;
+
 --   if cast(p_amount as numeric(20,2)) > cast(v_amount_to_pay as numeric(20,2)) then
 --     message := 'El pago del préstamo es mayor al indicado. El monto a pagar es de $' || v_amount_to_pay || '.';
 --     return;
 --   end if;
 --
 --   if (p_amount < v_amount_to_pay) then
---     message := 'El pago del préstamo es menor al indicado. ';
+--     message := 'El pago del préstamo es menor al indicado.';
 --     return;
 --   end if;
 --

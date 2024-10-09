@@ -49,6 +49,7 @@ export default function BorrowHistoryList() {
   const handleAssociateChange = (id: number, name: string) => {
     setAssociate(id);
     setAssociateName(name);
+    handleReload();
   }
 
   const handleReload = () => {

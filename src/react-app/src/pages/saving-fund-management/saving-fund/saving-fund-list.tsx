@@ -13,6 +13,7 @@ import SearchAssociate from '../../../components/dynamic-elements/sf-search-asso
 import SavingFundListQuery from '../../../core/interfaces/query/saving-fund-list-query';
 import useNotificationStore from '../../../core/stores/notification-store';
 import useAuthStore from '../../../core/stores/auth-store';
+import StatementReportActionItem from '../associate/action-items/statement-report-action-item';
 
 export default function SavingFundList() {
   const [savingFunds, setSavingFunds] = useState<SavingFundListSpec[]>([]);
@@ -99,9 +100,10 @@ export default function SavingFundList() {
                 <td>{ToMoney(savingFund.yields)}</td>
                 <td>{ToMoney(savingFund.total)}</td>
                 <td>
+                  <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
                   <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
                   <WithdrawalCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
-                  <SavingFundTransactionListActionButton savingFundId={savingFund.id} />
+                  <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={savingFund.associateName} />&nbsp;
                   <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
                 </td>
               </tr>

@@ -4,6 +4,7 @@ import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
 import useValidationModalStore from "../../../../core/stores/validation-modal-store";
 import useAuthStore from "../../../../core/stores/auth-store";
+import TooltipElement from "../../../../components/elements/tooltip-element";
 
 type StatementReportActionItemParams = {
   associateName: string;
@@ -63,7 +64,10 @@ export default function StatementReportActionItem({ associateName, associateId }
     <>
     <div className={`dropdown is-right ${isActive ? 'is-active': ''}`}>
       <div className="dropdown-trigger">
-        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu"><DownloadSquare /></button>&nbsp;&nbsp;
+        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu" data-tooltip-id="reports-tooltip" >
+          <DownloadSquare />
+          <TooltipElement id="reports-tooltip" text="Reportes" />
+        </button>&nbsp;&nbsp;
       </div>
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">
