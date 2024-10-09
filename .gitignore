@@ -10,6 +10,7 @@ yarn-error.log*
 .vscode
 
 # No bundled stuff in git
+build
 dist
 lib
 
