@@ -30,7 +30,6 @@ const SearchAssociateInternal = ({id, name, readonly, onChange}: SearchAssociate
   }, []);
 
   const handleSelectedAssociate = (value: AssociateListByIdOrNameSpec) => {
-    console.log(value);
     setSelectedAssociate(value);
 
     if (onChange)
