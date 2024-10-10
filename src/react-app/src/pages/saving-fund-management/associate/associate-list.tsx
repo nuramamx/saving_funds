@@ -107,7 +107,7 @@ export default function AssociateList() {
               </tr>
             ))) : (
               <tr>
-                <td colSpan={8} style={{textAlign: 'center'}}>No hay socios disponibles</td>
+                <td colSpan={10} style={{textAlign: 'center'}}>No hay socios disponibles</td>
               </tr>
             )}
           </tbody>

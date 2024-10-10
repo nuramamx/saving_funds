@@ -1,10 +1,12 @@
-import { BorrowAuthorizationReportGenerateQuery } from "../generate/borrow-authorization-report-generate-query-handler";
 import CommandHandler from "../../../../../../abstractions/interfaces/command-handler";
 import CommandResponse from "../../../../../../abstractions/interfaces/command-response";
 import BorrowAuthorizationReportDataQueryRepository from "../../../../../../persistence/repositories/query/borrow-authorization-report-data-query-repository";
+import { BorrowAuthorizationReportGenerateQuery } from "../generate/borrow-authorization-report-generate-query-handler";
 
-export default class BorrowAuthorizationReportDataQueryHandler implements CommandHandler<BorrowAuthorizationReportGenerateQuery, CommandResponse> {
-  async execute(data: BorrowAuthorizationReportGenerateQuery): Promise<CommandResponse> {
+type BorrowAuthorizationReportDataQuery = BorrowAuthorizationReportGenerateQuery & {}
+
+export default class BorrowAuthorizationReportDataQueryHandler implements CommandHandler<BorrowAuthorizationReportDataQuery, CommandResponse> {
+  async execute(data: BorrowAuthorizationReportDataQuery): Promise<CommandResponse> {
     try {
       const repository = new BorrowAuthorizationReportDataQueryRepository();
       const result = await repository.all(data);
@@ -15,3 +17,5 @@ export default class BorrowAuthorizationReportDataQueryHandler implements Comman
     }
   }
 }
+
+export type { BorrowAuthorizationReportDataQuery }

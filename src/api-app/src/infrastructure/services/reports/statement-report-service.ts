@@ -8,6 +8,14 @@ export default class StatementReportService implements ReportServiceInfo {
   constructor(
     readonly data: StatementReportDataSpec,
     readonly list: StatementReportListSpec[]) {}
+  
+  async createXLSX(): Promise<Excel.Buffer> {
+    throw new Error("Method not implemented.");
+  }
+  
+  async createPDF(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 
   async create(): Promise<Excel.Buffer> {
     const workbook = new Excel.Workbook();

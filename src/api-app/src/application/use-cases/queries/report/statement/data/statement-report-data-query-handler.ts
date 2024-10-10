@@ -1,7 +1,9 @@
 import CommandHandler from "../../../../../../abstractions/interfaces/command-handler";
 import CommandResponse from "../../../../../../abstractions/interfaces/command-response";
 import StatementReportDataQueryRepository from "../../../../../../persistence/repositories/query/statement-report-data-query-repository";
-import { StatementReportDataQuery } from "../list/statement-report-list-query-handler";
+import { StatementReportGenerateQuery } from "../generate/statement-report-generate-query-handler";
+
+type StatementReportDataQuery = StatementReportGenerateQuery & {}
 
 export default class StatementReportDataQueryHandler implements CommandHandler<StatementReportDataQuery, CommandResponse> {
   async execute(data: StatementReportDataQuery): Promise<CommandResponse> {

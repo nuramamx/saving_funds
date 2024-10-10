@@ -32,15 +32,11 @@ begin
     ,report.date_range
     ,report.frequent_contribution
     ,report.amount_to_withhold
-    ,report.amount_available_to_withdrawal
-    ,report.amount_available_to_withdrawal_rounded
-    ,(report.net_balance - report.amount_available_to_withdrawal_rounded - report.amount_to_withhold)
+    ,coalesce(report.amount_available_to_withdrawal, 0) as amount_available_to_withdrawal
+    ,coalesce(report.amount_available_to_withdrawal_rounded, 0) as amount_available_to_withdrawal_rounded
+    ,coalesce((report.net_balance - report.amount_available_to_withdrawal_rounded - report.amount_to_withhold), 0)
       as net_balance_for_current_year
-    ,((report.net_balance
-         - report.amount_available_to_withdrawal_rounded
-         - report.amount_to_withhold)
-        + report.amount_to_withhold)
-      as net_balance
+    ,report.net_balance
   from (
     select
       v_current_year as current_year
@@ -83,7 +79,7 @@ begin
           select
             case when rs.net_total < 0 then 0 else rs.net_total end as net_total
           from process.statement_report_list(p_associate_id) as rs
-          where rs."year" = v_current_year
+          order by rs.year desc
           limit 1
         ) as net_balance
       from catalog.associate as a

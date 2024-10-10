@@ -5,6 +5,14 @@ import BorrowAuthorizationReportDataSpec from "../../../persistence/specs/data/b
 
 export default class BorrowAuthorizationReportService implements ReportServiceInfo {
   constructor(readonly data: BorrowAuthorizationReportDataSpec) {}
+  
+  async createXLSX(): Promise<Excel.Buffer> {
+    throw new Error("Method not implemented.");
+  }
+  
+  async createPDF(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 
   async create(): Promise<Excel.Buffer> {
     const workbook = new Excel.Workbook();

@@ -29,6 +29,9 @@ import BorrowAuthorizationReportGenerateQueryHandler, { BorrowAuthorizationRepor
 import UserDataByUserAndPasswordQueryHandler, { UserDataByUserAndPasswordQuery } from '../use-cases/queries/security/user/data/user-data-by-user-and-password-query-command-handler';
 import AssociateDataByIdQueryHandler, { AssociateDataByIdQuery } from '../use-cases/queries/associate/data/byId/associate-data-by-id-query-handler';
 import AssociateUpdateCommandHandler from '../use-cases/commands/associate/update/associate-update-command-handler';
+import StatementReportDataQueryHandler, { StatementReportDataQuery } from '../use-cases/queries/report/statement/data/statement-report-data-query-handler';
+import BorrowAuthorizationReportDataQueryHandler, { BorrowAuthorizationReportDataQuery } from '../use-cases/queries/report/borrow-authorization/data/borrow-authorization-report-data-query-handler';
+import StatementReportListQueryHandler from '../use-cases/queries/report/statement/list/statement-report-list-query-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -59,6 +62,9 @@ type CommandHandlerTypeMap = {
   'BatchListQuery': BatchListQuery,
   'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQuery,
   'AssociateDataByIdQuery': AssociateDataByIdQuery,
+  'StatementReportDataQuery': StatementReportDataQuery,
+  'StatementReportListQuery': StatementReportDataQuery,
+  'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQuery
   // Reports
   'StatementReport': StatementReportGenerateQuery,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
@@ -95,6 +101,9 @@ const commandConstructors: {
   'BatchListQuery': BatchListQueryHandler,
   'UserDataByUserAndPasswordQuery': UserDataByUserAndPasswordQueryHandler,
   'AssociateDataByIdQuery': AssociateDataByIdQueryHandler,
+  'StatementReportDataQuery': StatementReportDataQueryHandler,
+  'StatementReportListQuery': StatementReportListQueryHandler,
+  'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQueryHandler,
   // Reports
   'StatementReport': StatementReportGenerateQueryHandler,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler

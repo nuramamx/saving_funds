@@ -1,10 +1,17 @@
 import { DownloadSquare, GridPlus, Page } from "iconoir-react";
 import { useCallback, useEffect, useState } from "react";
+import { pdf } from "@react-pdf/renderer";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
 import useValidationModalStore from "../../../../core/stores/validation-modal-store";
 import useAuthStore from "../../../../core/stores/auth-store";
 import TooltipElement from "../../../../components/elements/tooltip-element";
+import StatementReportPDF from "../reports/statement-report-pdf";
+import { saveAs } from "file-saver";
+import { objectToCamel } from "ts-case-convert";
+import StatementReportDataSpec from "../../../../core/interfaces/specs/base/statement-report-data-spec";
+import StatementReportListSpec from "../../../../core/interfaces/specs/list/statement-report-list-spec";
+import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 
 type StatementReportActionItemParams = {
   associateName: string;
@@ -14,12 +21,43 @@ type StatementReportActionItemParams = {
 export default function StatementReportActionItem({ associateName, associateId }: StatementReportActionItemParams) {
   const [isActive, setIsActive] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
-  const { setValidationModal } = useValidationModalStore();
   const { token } = useAuthStore();
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);
   }, []);
+
+  const fetchStatementReportData = async () => {
+    const result = await fetch(`${AppConstants.apiReport}/statement/data/${associateId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!result.ok)
+      pushNotification({ message: result.statusText, type: 'danger' });
+
+    const response = await result.json() as CommandResponseInfo;
+    const responseData = objectToCamel(response.data) as StatementReportDataSpec[];
+    
+    if (response.successful) return responseData;
+    else throw new Error(response.message);
+  };
+
+  const fetchStatementReportList = async () => {
+    const result = await fetch(`${AppConstants.apiReport}/statement/list/${associateId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!result.ok)
+      pushNotification({ message: result.statusText, type: 'danger' });
+
+    const response = await result.json() as CommandResponseInfo;
+    const responseData = objectToCamel(response.data) as StatementReportListSpec[];
+
+    if (response.successful) return responseData;
+    else throw new Error(response.message);
+  };
 
   const handleDownloadExcel = async () => {
     try {
@@ -32,8 +70,6 @@ export default function StatementReportActionItem({ associateName, associateId }
         throw new Error(response.statusText);
 
       const buffer = await response.arrayBuffer();
-
-      console.log(buffer);
 
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);
@@ -51,8 +87,20 @@ export default function StatementReportActionItem({ associateName, associateId }
     }
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
+    Promise.all([fetchStatementReportData, fetchStatementReportList])
+      .then(async ([data, list]) => {
+        const statementData = await data();
+        const statementList = await list();
 
+        if (statementData && statementList && statementList.length > 0) {
+          const blob = await pdf(<StatementReportPDF data={statementData?.[0]} list={statementList} />).toBlob();
+          saveAs(blob, `Estado de cuenta - ${statementData?.[0].associateName}.pdf`);
+        }
+      })
+      .catch (err => {
+        pushNotification({ message: 'No se pudo generar el estado de cuenta en PDF.', type: 'danger' });
+      });
   };
 
   useEffect(() => {
@@ -82,6 +130,7 @@ export default function StatementReportActionItem({ associateName, associateId }
         </div>
       </div>
     </div>
+    
     </>
   )
 }

@@ -1,28 +1,17 @@
 import CommandHandler from "../../../../../../abstractions/interfaces/command-handler";
-import StatementReportService from "../../../../../../infrastructure/services/reports/statement-report-service";
-import Excel from "exceljs";
 import StatementReportListQueryRepository from "../../../../../../persistence/repositories/query/statement-report-list-query-repository";
-import StatementReportDataQueryRepository from "../../../../../../persistence/repositories/query/statement-report-data-query-repository";
+import CommandResponse from "../../../../../../abstractions/interfaces/command-response";
+import { StatementReportDataQuery } from "../data/statement-report-data-query-handler";
 
-type StatementReportDataQuery = {
-  associateId: number;
-};
-
-export default class StatementReportListQueryHandler implements CommandHandler<StatementReportDataQuery, Excel.Buffer> {
-  async execute(data: StatementReportDataQuery): Promise<Excel.Buffer> {
+export default class StatementReportListQueryHandler implements CommandHandler<StatementReportDataQuery, CommandResponse> {
+  async execute(data: StatementReportDataQuery): Promise<CommandResponse> {
     try {
       const repository = new StatementReportListQueryRepository();
-      const repositoryData = new StatementReportDataQueryRepository();
       const result = await repository.all(data);
-      const resultData = await repositoryData.all(data);
-      const excelReport = new StatementReportService(resultData[0], result);
-      const buffer = await excelReport.create();
 
-      return buffer
+      return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;
     } catch (err: any) {
-      throw err;
+      return { successful: false, message: 'Registros no localizados.', data: err.message, type: 'danger' } as CommandResponse;
     }
   }
 }
-
-export type { StatementReportDataQuery };
