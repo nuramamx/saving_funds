@@ -9,7 +9,8 @@ export default function SavingFundManagement() {
   return (
     <>
     {route === location.pathname ? (
-      <div>
+      <div style={{ textAlign: 'center' }}>
+        <img src={`${process.env.PUBLIC_URL}/setepid-logo.jpg`} />
       </div>
     ) : null}
     <Outlet></Outlet>
