@@ -3,6 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
 import useAuthStore from "../../../../core/stores/auth-store";
+import BorrowAuthorizationReportDataSpec from "../../../../core/interfaces/specs/base/borrow-authorization-report-data-spec";
+import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
+import { objectToCamel } from "ts-case-convert";
+import saveAs from "file-saver";
+import BorrowAuthorizationReportPDF from "../reports/borrow-authorization-report-pdf";
+import { pdf } from "@react-pdf/renderer";
 
 type BorrowAuthorizationReportActionItemParams = {
   associateName: string;
@@ -13,6 +19,22 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
   const [isActive, setIsActive] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
+
+  const fetchBorrowAuthorizationReportData = async () => {
+    const result = await fetch(`${AppConstants.apiReport}/borrow_authorization/data/${borrowId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!result.ok)
+      pushNotification({ message: result.statusText, type: 'danger' });
+
+    const response = await result.json() as CommandResponseInfo;
+    const responseData = objectToCamel(response.data) as BorrowAuthorizationReportDataSpec[];
+    
+    if (response.successful) return responseData;
+    else throw new Error(response.message);
+  };
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);
@@ -49,7 +71,18 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
   };
 
   const handleDownloadPDF = () => {
+    Promise.all([fetchBorrowAuthorizationReportData])
+      .then(async ([data]) => {
+        const borrowAuthorizationData = await data();
 
+        if (borrowAuthorizationData) {
+          const blob = await pdf(<BorrowAuthorizationReportPDF data={borrowAuthorizationData?.[0]} />).toBlob();
+          saveAs(blob, `Estado de cuenta - ${borrowAuthorizationData?.[0].associateName}.pdf`);
+        }
+      })
+      .catch (err => {
+        pushNotification({ message: 'No se pudo generar el estado de cuenta en PDF.', type: 'danger' });
+      });
   };
 
   useEffect(() => {

@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
     flex: 8,
     padding: 0
   },
+  cellTitle: {
+    flex: 8,
+    padding: 0,
+    fontFamily: 'Helvetica-Bold',
+  },
   table: {
     flexDirection: 'row',
     borderTop: '1px solid black',
@@ -47,6 +52,7 @@ const styles = StyleSheet.create({
     borderLeft: '1px solid black'
   },
   tableHeader: {
+    fontFamily: 'Helvetica-Bold',
     fontWeight: 'bold',
     flex: 1,
     padding: 4,
@@ -135,12 +141,12 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
         <View style={styles.padding}></View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO:</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountToWithhold)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>CANTIDAD QUE PUEDE RETIRAR DURANTE EL 2024:</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR DURANTE EL 2024:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawal)}</Text>
         </View>
 
@@ -237,22 +243,22 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
         <View style={styles.padding}></View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>CANTIDAD DISPONIBLE QUE PUEDE RETIRAR:</Text>
+          <Text style={styles.cellTitle}>CANTIDAD DISPONIBLE QUE PUEDE RETIRAR:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawal)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>CANTIDAD QUE RECIBE REDONDEADA:</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE RECIBE REDONDEADA:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawalRounded)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO (POR REGLAMENTO):</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO (POR REGLAMENTO):</Text>
           <Text style={styles.cell}>{ToMoney(data.amountToWithhold)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cell}>TOTAL EN FONDO DE AHORRO:</Text>
+          <Text style={styles.cellTitle}>TOTAL EN FONDO DE AHORRO:</Text>
           <Text style={styles.cell}>{ToMoney(data.netBalance)}</Text>
         </View>
 
