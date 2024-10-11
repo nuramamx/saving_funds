@@ -6,6 +6,8 @@ create or replace function process.withdrawal_create_by_associate_name(
   in p_is_yields boolean default false,
   in p_is_leave boolean default false,
   in p_is_decease boolean default false,
+  in p_disable_rules boolean default false,
+  in p_validation_only boolean default false,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -47,87 +49,91 @@ begin
     return;
   end if;
 
---   -- Get the yields (all years passed).
---   v_available_interest_balance := (select * from process.contribution_get_accrued_yields(v_saving_fund_id));
---
---   if p_is_yields and p_amount > v_available_interest_balance then
---     message := 'El monto de retiro de rendimientos excede de los disponibles.';
---     return;
---   end if;
---
---   -- Get associate agreement.
---   select
---     ag."name"::text
---   into v_associate_agreement
---   from catalog.associate as a
---   join "system".agreement as ag
---     on (a.detail->>'agreementId')::integer = ag.id
---   limit 1;
---
---   -- Get the first contribution.
---   select
---     coalesce(c.amount, 0)
---   into v_first_contribution_amount
---   from process.contribution as c
---   where c.saving_fund_id = v_saving_fund_id
---   order by c.applied_at desc
---   limit 1;
---
---   -- Amount to withhold.
---   if (v_associate_agreement = 'ISS') then
---     v_amount_to_withhold := v_first_contribution_amount * 3;
---   else
---     v_amount_to_withhold := v_first_contribution_amount * 6;
---   end if;
---
---   -- Get the current balance from contributions.
---   select
---     sum(coalesce(c.amount, 0))
---   into v_available_balance
---   from process.contribution as c
---   where c.saving_fund_id = v_saving_fund_id;
---
---   -- Get all withdrawals registered.
---   select
---     sum(coalesce(w.amount, 0))
---   into v_withdrawal_sum_amount
---   from process.withdrawal as w
---   where w.saving_fund_id = v_saving_fund_id
---   and w.is_yields = false;
---
---   -- Subtract withdrawals and amount to withhold from current balance.
---   v_available_balance := v_available_balance - v_withdrawal_sum_amount - v_amount_to_withhold;
---
---   if v_available_balance < 0 then
---     v_available_balance := 0;
---   end if;
---
---   -- Check if withdrawal amount is not greater than balance (without consider yields).
---   if p_amount > v_available_balance and p_is_yields = false then
---     message := 'El monto del retiro es superior al balance actual ($' || v_available_balance::numeric(20,2) || ') ' ||
---                'del fondo de ahorro. Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
---     return;
---   end if;
---
---   -- Check if withdrawal amount is not greater than balance + yields.
---   if p_amount > v_available_balance then
---     message := 'El monto del retiro es superior al balance actual con rendimientos ' ||
---                '($' || v_available_balance::numeric(20,2) || ') del fondo de ahorro. ' ||
---                'Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
---     return;
---   end if;
+  if p_disable_rules = false then
+    -- Get the yields (all years passed).
+    v_available_interest_balance := (select * from process.contribution_get_accrued_yields(v_saving_fund_id));
+
+    if p_is_yields and p_amount > v_available_interest_balance then
+      message := 'El monto de retiro de rendimientos excede de los disponibles.';
+      return;
+    end if;
+
+    -- Get associate agreement.
+    select
+      ag."name"::text
+    into v_associate_agreement
+    from catalog.associate as a
+    join "system".agreement as ag
+      on (a.detail->>'agreementId')::integer = ag.id
+    limit 1;
+
+    -- Get the first contribution.
+    select
+      coalesce(c.amount, 0)
+    into v_first_contribution_amount
+    from process.contribution as c
+    where c.saving_fund_id = v_saving_fund_id
+    order by c.applied_at desc
+    limit 1;
+
+    -- Amount to withhold.
+    if (v_associate_agreement = 'ISS') then
+      v_amount_to_withhold := v_first_contribution_amount * 3;
+    else
+      v_amount_to_withhold := v_first_contribution_amount * 6;
+    end if;
+
+    -- Get the current balance from contributions.
+    select
+      sum(coalesce(c.amount, 0))
+    into v_available_balance
+    from process.contribution as c
+    where c.saving_fund_id = v_saving_fund_id;
+
+    -- Get all withdrawals registered.
+    select
+      sum(coalesce(w.amount, 0))
+    into v_withdrawal_sum_amount
+    from process.withdrawal as w
+    where w.saving_fund_id = v_saving_fund_id
+    and w.is_yields = false;
+
+    -- Subtract withdrawals and amount to withhold from current balance.
+    v_available_balance := v_available_balance - v_withdrawal_sum_amount - v_amount_to_withhold;
+
+    if v_available_balance < 0 then
+      v_available_balance := 0;
+    end if;
+
+    -- Check if withdrawal amount is not greater than balance (without consider yields).
+    if p_amount > v_available_balance and p_is_yields = false then
+      message := 'El monto del retiro es superior al balance actual ($' || v_available_balance::numeric(20,2) || ') ' ||
+                 'del fondo de ahorro. Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
+      return;
+    end if;
+
+    -- Check if withdrawal amount is not greater than balance + yields.
+    if p_amount > v_available_balance then
+      message := 'El monto del retiro es superior al balance actual con rendimientos ' ||
+                 '($' || v_available_balance::numeric(20,2) || ') del fondo de ahorro. ' ||
+                 'Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
+      return;
+    end if;
+  end if;
 
   begin
-    insert into process.withdrawal(saving_fund_id, amount, applied_at, is_yields, is_decease, is_leave)
-    values (
-      v_saving_fund_id
-      ,p_amount
-      ,p_applied_at
-      ,p_is_yields
-      ,p_is_decease
-      ,p_is_leave
-    )
-    returning id into inserted_id;
+    if p_validation_only = false then
+      insert into process.withdrawal(saving_fund_id, amount, applied_at, is_yields, is_decease, is_leave)
+      values (
+        v_saving_fund_id
+        ,p_amount
+        ,p_applied_at
+        ,p_is_yields
+        ,p_is_decease
+        ,p_is_leave
+      )
+      returning id into inserted_id;
+    end if;
 
     success := true;
     message := 'Se realizó la transacción satisfactoriamente.';

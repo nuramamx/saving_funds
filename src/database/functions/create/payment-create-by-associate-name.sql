@@ -4,11 +4,13 @@ create or replace function process.payment_create_by_file_number(
   in p_number integer,
   in p_amount numeric(20,2),
   in p_applied_at timestamp with time zone,
+  in p_disable_rules boolean default false,
+  in p_validation_only boolean default false,
   out inserted_id integer,
   out success boolean,
   out message text
 )
-returns RECORD as $$
+returns record as $$
 declare
   v_borrow_id integer;
   v_amount_to_pay numeric(20,2);
@@ -22,9 +24,6 @@ begin
     return;
   elseif p_amount <= 0 then
     message := 'El monto del pago no tiene un valor aceptado.';
-    return;
-  elseif p_number = 0 or p_number < 0 then
-    message := 'El número de pago no es correcto.';
     return;
   end if;
 
@@ -41,13 +40,6 @@ begin
     return;
   end if;
 
-  -- Set amount to pay
-  select
-    cast(bd.payment as numeric(20,2))
-  into v_amount_to_pay
-  from process.borrow_detail as bd
-  where bd.borrow_id = v_borrow_id;
-
   if not exists (
     select 1 from process.borrow as b where b.id = v_borrow_id
   ) then
@@ -55,32 +47,48 @@ begin
     return;
   end if;
 
---   if cast(p_amount as numeric(20,2)) > cast(v_amount_to_pay as numeric(20,2)) then
---     message := 'El pago del préstamo es mayor al indicado. El monto a pagar es de $' || v_amount_to_pay || '.';
---     return;
---   end if;
---
---   if (p_amount < v_amount_to_pay) then
---     message := 'El pago del préstamo es menor al indicado.';
---     return;
---   end if;
---
---   if exists (
---     select 1 from process.payment as p where p.borrow_id = v_borrow_id and p."number" = p_number
---   ) then
---     message := 'El préstamo ya tiene un pago asignado a ese número de pago.';
---     return;
---   end if;
+  if p_disable_rules = false then
+    if p_number = 0 or p_number < 0 then
+      message := 'El número de pago no es correcto.';
+      return;
+    end if;
+
+    -- Set amount to pay
+    select
+      cast(bd.payment as numeric(20,2))
+    into v_amount_to_pay
+    from process.borrow_detail as bd
+    where bd.borrow_id = v_borrow_id;
+
+    if cast(p_amount as numeric(20,2)) > cast(v_amount_to_pay as numeric(20,2)) then
+      message := 'El pago del préstamo es mayor al indicado. El monto a pagar es de $' || v_amount_to_pay || '.';
+      return;
+    end if;
+
+    if (p_amount < v_amount_to_pay) then
+      message := 'El pago del préstamo es menor al indicado.';
+      return;
+    end if;
+
+    if exists (
+      select 1 from process.payment as p where p.borrow_id = v_borrow_id and p."number" = p_number
+    ) then
+      message := 'El préstamo ya tiene un pago asignado a ese número de pago.';
+      return;
+    end if;
+  end if;
 
   begin
-    insert into process.payment(borrow_id, "number", paid_amount, applied_at)
-    values (
-      v_borrow_id
-      ,p_number
-      ,p_amount
-      ,p_applied_at
-    )
-    returning id into inserted_id;
+    if p_validation_only = false then
+      insert into process.payment(borrow_id, "number", paid_amount, applied_at)
+      values (
+        v_borrow_id
+        ,p_number
+        ,p_amount
+        ,p_applied_at
+      )
+      returning id into inserted_id;
+    end if;
   
     success := true;
     message := 'Se realizó la transacción satisfactoriamente.';

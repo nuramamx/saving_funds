@@ -17,7 +17,9 @@ export default class BatchUploadSaveRepository implements SaveRepositoryInfo<Bat
       for (const [index, row] of data.reader.rows.entries()) {
         const [result] = await db.sequelize.query<ProcedureResponseInfo>(data.info!.batch_function, {
           replacements: {
-            ...row
+            ...row,
+            p_disable_rules: data.disableRules,
+            p_validation_only: data.validationOnly
           },
           type: QueryTypes.SELECT
         });

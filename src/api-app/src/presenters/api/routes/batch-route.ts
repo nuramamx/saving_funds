@@ -16,12 +16,20 @@ export default async function BatchRoute (fastify: FastifyInstance, options: Fas
     return result;
   });
 
-  fastify.post<{Body: { file: MultipartFile, process: string }}>('/batch/upload', async (request, reply) => {
+  fastify.post<{Body: { file: MultipartFile, process: string, disableRules: string, validationOnly: string }}>('/batch/upload', async (request, reply) => {
     const data = request.body.file
     const process = data.fields.process as { value: string };
+    const disableRules = data.fields.disableRules as { value: string };
+    const validationOnly = data.fields.validationOnly as { value: string };
 
     if (data != null && data !== undefined && process) {
-      const upload: BatchUploadCommand = { process: process.value, filename: data.filename, file: await data.toBuffer() };
+      const upload: BatchUploadCommand = {
+        process: process.value,
+        filename: data.filename,
+        file: await data.toBuffer(),
+        disableRules: disableRules.value === 'x',
+        validationOnly: validationOnly.value === 'x'
+      };
       const command = new CommandHandlerMediator();
       const result = await command.execute('BatchUploadCommand', upload);
 

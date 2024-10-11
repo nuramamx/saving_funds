@@ -10,6 +10,8 @@ type BatchUploadCommand = {
   process: string;
   filename: string;
   file: Buffer;
+  disableRules: boolean;
+  validationOnly: boolean;
   reader?: BatchReaderResult;
   messages?: string[];
   info?: BatchListSpec;

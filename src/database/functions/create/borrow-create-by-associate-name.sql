@@ -7,6 +7,8 @@ create or replace function process.borrow_create_by_associate_name(
   in p_annual_rate numeric,
   in p_start_at timestamp with time zone,
   in p_is_fortnightly boolean default false,
+  in p_disable_rules boolean default false,
+  in p_validation_only boolean default false,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -32,24 +34,7 @@ begin
   elseif p_period not in (1,2,3) then
     message := 'El periodo no está en el rango requerido (1, 2, 3).';
     return;
---   elseif p_start_at < current_date then
---     message := 'La fecha de inicio no puede ser antes del día de la fecha de inscripción del préstamo.';
---     return;
---   elseif p_start_at > (current_date + interval '30 days') then
---     message := 'La fecha de inicio no puede ser mayor a 30 días a partir de la fecha de inscripción del préstamo.';
---     return;
   end if;
-
-  -- Check if associate has a not settled borrow.
---   if exists (
---     select 1
---     from process.borrow as b
---     where b.name = p_associate_name
---     for update skip locked
---   ) then
---     message := 'El socio tiene un préstamo no liquidado.';
---     return;
---   end if;
 
   v_associate_id := (
     select
@@ -64,46 +49,60 @@ begin
     return;
   end if;
 
-  -- Get the annual rate based on period.
---   select
---     ar.rate
---   into
---     v_annual_rate
---   from "system".borrow_annual_rate as ar
---   where ar."period" = p_period;
+  if p_disable_rules = false then
+    -- Check dates
+    if p_start_at < current_date then
+      message := 'La fecha de inicio no puede ser antes del día de la fecha de inscripción del préstamo.';
+      return;
+    end if;
+
+    -- Check interval
+    if p_start_at > (current_date + interval '30 days') then
+      message := 'La fecha de inicio no puede ser mayor a 30 días a partir de la fecha de inscripción del préstamo.';
+      return;
+    end if;
+
+    -- Check if associate has a not settled borrow.
+    if exists (
+      select 1
+      from process.borrow as b
+      where b.name = p_associate_name
+      for update skip locked
+    ) then
+      message := 'El socio tiene un préstamo no liquidado.';
+      return;
+    end if;
+  end if;
 
   begin
-    insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, start_at)
-    values (
-      v_associate_id,
-      p_file_number,
-      p_requested_amount,
-      p_period,
-      p_annual_rate,
-      p_is_fortnightly,
-      p_start_at
-    )
-    returning id into inserted_id;
+    if p_validation_only = false then
+      insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, start_at)
+      values (
+        v_associate_id,
+        p_file_number,
+        p_requested_amount,
+        p_period,
+        p_annual_rate,
+        p_is_fortnightly,
+        p_start_at
+      )
+      returning id into inserted_id;
 
-    RAISE NOTICE 'borrow_calculate called with: %', p_requested_amount;
+      -- Get borrow calculations
+      v_borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
 
-    -- Get borrow calculations
-    v_borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
-
-    RAISE NOTICE 'borrow_calculate returns: %, %', v_borrow.total_due, v_borrow.payment;
-
-
-    -- Create detail
-    insert into process.borrow_detail(borrow_id,number_payments,interests,total_due,guarantee_fund,payment,amount_delivered)
-    values (
-      inserted_id
-      ,v_borrow.number_payments
-      ,v_borrow.interests
-      ,v_borrow.total_due
-      ,v_borrow.guarantee_fund
-      ,v_borrow.payment
-      ,p_requested_amount
-    );
+      -- Create detail
+      insert into process.borrow_detail(borrow_id,number_payments,interests,total_due,guarantee_fund,payment,amount_delivered)
+      values (
+        inserted_id
+        ,v_borrow.number_payments
+        ,v_borrow.interests
+        ,v_borrow.total_due
+        ,v_borrow.guarantee_fund
+        ,v_borrow.payment
+        ,p_requested_amount
+      );
+    end if;
 
     success := true;
     message := 'Se realizó la transacción satisfactoriamente.';

@@ -17,6 +17,8 @@ export default function BatchUpload() {
     process: '',
     file: undefined!,
     filename: '',
+    disableRules: false,
+    validationOnly: false
   };
   const [batchUpload, setBatchUpload] = useState<BatchUploadCommand>(initialState);
   const navigate = useNavigate();
@@ -36,6 +38,8 @@ export default function BatchUpload() {
     const formData = new FormData();
     formData.append('file', batchUpload.file);
     formData.append('process', batchUpload.process.toString());
+    formData.append('disableRules', batchUpload.disableRules ? 'x' : '');
+    formData.append('validationOnly', batchUpload.validationOnly ? 'x' : '');
 
     try {
       const response = await fetch(`${AppConstants.apiBatch}/upload`, {
@@ -89,6 +93,21 @@ export default function BatchUpload() {
         <div className="column is-3">
           <SFSelectBatch id="batch-upload-process" name="Proceso" value={batchUpload.process} onChange={(v) => setBatchUpload({ ...batchUpload, process: v })} issues={issues} />
         </div>
+        {batchUpload.process !== 'APORTACIONES' && batchUpload.process !== 'SOCIOS' && (
+          <div className="column is-4">
+            <div className="checkboxes" style={{ padding: '20px' }}>
+              <label className="checkbox">
+                <input type="checkbox" checked={batchUpload.disableRules} onChange={() => setBatchUpload({ ...batchUpload, disableRules: !batchUpload.disableRules })} />
+                &nbsp;Deshabilitar reglas
+              </label>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <label className="checkbox">
+                <input type="checkbox" checked={batchUpload.validationOnly} onChange={() => setBatchUpload({ ...batchUpload, validationOnly: !batchUpload.validationOnly })} />
+                &nbsp;Solo validaci&oacute;n
+              </label>
+            </div>
+          </div>
+        )}
       </div>
       <div className="columns">
         <div className="column is-full">
