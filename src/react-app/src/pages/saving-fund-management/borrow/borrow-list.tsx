@@ -12,7 +12,6 @@ import BorrowAuthorizationReportActionItem from './action-items/borrow-authoriza
 import useAuthStore from '../../../core/stores/auth-store';
 import BorrowListSpec from '../../../core/interfaces/specs/list/borrow-list-spec';
 import BorrowListQuery from '../../../core/interfaces/query/borrow-list-query';
-import { Refresh } from 'iconoir-react';
 import RefreshActionButton from '../../../components/action-buttons/refresh-action-button';
 
 export default function BorrowList() {
@@ -50,7 +49,6 @@ export default function BorrowList() {
   const handleAssociateChange = (id: number, name: string) => {
     setAssociate(id);
     setAssociateName(name);
-    handleReload();
   }
 
   const handleReload = () => {
