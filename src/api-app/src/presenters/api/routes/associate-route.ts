@@ -4,6 +4,7 @@ import { AssociateListQuery } from '../../../application/use-cases/queries/assoc
 import { AssociateDataByIdQuery } from '../../../application/use-cases/queries/associate/data/byId/associate-data-by-id-query-handler';
 import { AssociateComposerCommand } from '../../../application/use-cases/commands/associate/create/associate-create-command-handler';
 import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
+import { AssociateDeleteCommand } from '../../../application/use-cases/commands/associate/delete/associate-delete-command-handler';
 
 async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get<{ Params: { id: number } }>('/associate/:id', async (request, reply) => {
@@ -54,6 +55,17 @@ async function AssociateRoute (fastify: FastifyInstance, options: FastifyPluginO
     const data: AssociateListByIdOrNameQuery = JSON.parse(request.body);
     const command = new CommandHandlerMediator();    
     const result = await command.execute('AssociateListByIdOrNameQuery', data);
+
+    if (!result.successful) reply.statusCode = 400;
+
+    return result;
+  });
+
+  fastify.delete<{ Params: { id: number } }>('/associate/:id', async (request, reply) => {
+    const { id } = request.params;
+    const data: AssociateDeleteCommand = { id: id };
+    const command = new CommandHandlerMediator();    
+    const result = await command.execute('AssociateDeleteCommand', data);
 
     if (!result.successful) reply.statusCode = 400;
 

@@ -8,11 +8,9 @@ import ParseError from '../../util/check-error';
 import { AssociateComposerCommand } from '../../../application/use-cases/commands/associate/create/associate-create-command-handler';
 
 export default class AssociateSaveRepository implements SaveRepositoryInfo<AssociateComposerCommand, boolean> {
-  save = async (data: AssociateComposerCommand): Promise<boolean> => {
+  async save(data: AssociateComposerCommand): Promise<boolean> {
     const transaction = await db.sequelize.transaction();
     const editMode = (data.id !== null && data.id !== undefined && data.id > 0);
-
-    console.log(`Save => ${JSON.stringify(data)}`);
 
     try
     {

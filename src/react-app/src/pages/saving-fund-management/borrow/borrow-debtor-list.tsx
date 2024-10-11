@@ -10,11 +10,12 @@ import BorrowDebtorListSpec from '../../../core/interfaces/specs/list/borrow-deb
 import useAuthStore from '../../../core/stores/auth-store';
 import SFPagination from '../../../components/dynamic-elements/sf-pagination';
 import BorrowDebtorListQuery from '../../../core/interfaces/query/borrow-debtor-list-query';
+import RefreshActionButton from '../../../components/action-buttons/refresh-action-button';
 
 export default function BorrowDebtorList() {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [borrows, setBorrows] = useState<BorrowDebtorListSpec[]>([]);
-  const [page] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
@@ -51,6 +52,7 @@ export default function BorrowDebtorList() {
   };
 
   const handlePagination = async (currentPage: number) => {
+    setPage(currentPage);
     await fetchBorrows(currentPage);
   };
 
@@ -64,58 +66,63 @@ export default function BorrowDebtorList() {
 
   return (
     <>
-    <div className="columns">
-      <div className="column">
-        <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Folio</th>
-              <th>Socio Id</th>
-              <th>Socio</th>
-              <th>Monto Solicitado</th>
-              <th>Total a Pagar</th>
-              <th>Total pagado</th>
-              <th>Total de Pagos</th>
-              <th>Pagos Realizados</th>
-              <th>Periodicidad</th>
-              <th style={{width: '7vh'}}>Inicio</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          {!loading ? (
-            <tbody>
-              {borrows !== undefined && borrows?.length > 0 ? (
-                borrows.map((borrow: BorrowDebtorListSpec) => (
-                  <tr key={borrow.id}>
-                    <td>{borrow.id}</td>
-                    <td>{borrow.fileNumber}</td>
-                    <td>{borrow.associateId}</td>
-                    <td>{borrow.associateName}</td>
-                    <td>{ToMoney(borrow.requestedAmount)}</td>
-                    <td>{ToMoney(borrow.totalDue)}</td>
-                    <td>{ToMoney(borrow.totalPaid)}</td>
-                    <td>{borrow.numberPayments}</td>
-                    <td>{borrow.paymentsMade}</td>
-                    <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
-                    <td>{borrow.startAt}</td>
-                    <td>
-                      <PaymentCreateActionButton borrowId={borrow.id} onClose={() => handleReload()}/>
-                      <PaymentListActionButton borrowId={borrow.id} />
-                    </td>
-                  </tr>
-                ))) : (
-                  <tr>
-                    <td colSpan={12} style={{textAlign: 'center'}}>No hay ning&uacute;n prestamo atrasado.</td>
-                  </tr>
-                )}
-            </tbody>
-          ) : <tbody><tr><td colSpan={12} style={{textAlign: 'center'}}>Cargando...</td></tr></tbody>}
-        </table>
+    <div className='is-flex is-flex-direction-column' style={{ height: '80vh'}}>
+      <div className="columns">
+        <div className="column">
+          <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Folio</th>
+                <th>Socio Id</th>
+                <th>Socio</th>
+                <th>Monto Solicitado</th>
+                <th>Total a Pagar</th>
+                <th>Total pagado</th>
+                <th>Total de Pagos</th>
+                <th>Pagos Realizados</th>
+                <th>Periodicidad</th>
+                <th style={{width: '7vh'}}>Inicio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            {!loading ? (
+              <tbody>
+                {borrows !== undefined && borrows?.length > 0 ? (
+                  borrows.map((borrow: BorrowDebtorListSpec) => (
+                    <tr key={borrow.id}>
+                      <td>{borrow.id}</td>
+                      <td>{borrow.fileNumber}</td>
+                      <td>{borrow.associateId}</td>
+                      <td>{borrow.associateName}</td>
+                      <td>{ToMoney(borrow.requestedAmount)}</td>
+                      <td>{ToMoney(borrow.totalDue)}</td>
+                      <td>{ToMoney(borrow.totalPaid)}</td>
+                      <td>{borrow.numberPayments}</td>
+                      <td>{borrow.paymentsMade}</td>
+                      <td>{borrow.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}</td>
+                      <td>{borrow.startAt}</td>
+                      <td>
+                        <PaymentCreateActionButton borrowId={borrow.id} onClose={() => handleReload()}/>
+                        <PaymentListActionButton borrowId={borrow.id} />
+                      </td>
+                    </tr>
+                  ))) : (
+                    <tr>
+                      <td colSpan={12} style={{textAlign: 'center'}}>No hay ning&uacute;n prestamo atrasado.</td>
+                    </tr>
+                  )}
+              </tbody>
+            ) : <tbody><tr><td colSpan={12} style={{textAlign: 'center'}}>Cargando...</td></tr></tbody>}
+          </table>
+        </div>
       </div>
-    </div>
-    <div className="bottom-content-container">
-      <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
+      <div className="bottom-content-container">
+        <SFPagination currentPage={page} totalPages={totalPages} onChange={(v) => handlePagination(v)} />
+      </div>
+      <div className="bottom-content-container">
+        <RefreshActionButton onClick={() => handlePagination(page)} />
+      </div>
     </div>
     </>
   )

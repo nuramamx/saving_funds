@@ -4,11 +4,11 @@ import { AssociateComposer, associateComposerLoader } from './pages/saving-fund-
 import App from './App';
 import SavingFundList from './pages/saving-fund-management/saving-fund/saving-fund-list';
 import AssociateList from './pages/saving-fund-management/associate/associate-list';
-import BorrowHistoryList from './pages/saving-fund-management/borrow/borrow-history-list';
 import BorrowDebtorList from './pages/saving-fund-management/borrow/borrow-debtor-list';
 import SavingFundManagement from './pages/saving-fund-management/saving-fund-management';
 import SystemManagement from './pages/system-management/system-management';
 import BorrowCreate from './pages/saving-fund-management/borrow/borrow-create';
+import BorrowList from './pages/saving-fund-management/borrow/borrow-list';
 import BatchUpload from './pages/saving-fund-management/batch/batch-upload';
 import SavingFundAnnualRateList from './pages/system-management/saving-fund-annual-rate/saving-fund-annual-rate-list';
 import BorrowAnnualRateList from './pages/system-management/borrow-annual-rate/borrow-annual-rate-list';
@@ -32,7 +32,7 @@ const Routes = createBrowserRouter([
           { path: 'associate/composer/:id?', element: <ProtectedRoute><AssociateComposer /></ProtectedRoute>, loader: associateComposerLoader },
           { path: 'associate/list', element: <ProtectedRoute><AssociateList /></ProtectedRoute> },
           { path: 'borrow/create', element: <ProtectedRoute><BorrowCreate /></ProtectedRoute> },
-          { path: 'borrow/list', element: <ProtectedRoute><BorrowHistoryList /></ProtectedRoute> },
+          { path: 'borrow/list', element: <ProtectedRoute><BorrowList /></ProtectedRoute> },
           { path: 'borrow/debtor', element: <ProtectedRoute><BorrowDebtorList /></ProtectedRoute> },
           { path: 'batch/upload', element: <ProtectedRoute><BatchUpload /></ProtectedRoute> },
         ]
@@ -59,7 +59,7 @@ const SidebarRoutes: SidebarParentMenu[] = [
   ] },
   { key: 'borrowing', name: 'Préstamos', location: '/savingfund', children: [
     { key: 'borrow-create', route: '/savingfund/borrow/create', name: 'Inscribir Préstamo' },
-    { key: 'borrow-history-list', route: '/savingfund/borrow/list', name: 'Gestión de Préstamos' },
+    { key: 'borrow-list', route: '/savingfund/borrow/list', name: 'Gestión de Préstamos' },
     { key: 'borrow-debtor-list', route: '/savingfund/borrow/debtor', name: 'Socios Deudores' }
   ] },
   { key: 'util', name: 'Utilidades', location: '/savingfund', children: [

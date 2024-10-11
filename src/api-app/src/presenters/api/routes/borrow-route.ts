@@ -1,23 +1,14 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { BorrowCreateCommand } from '../../../application/use-cases/commands/borrow/create/borrow-create-command-handler';
-import { BorrowHistoryListQuery } from '../../../application/use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
-import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
+import { BorrowListQuery } from '../../../application/use-cases/queries/borrow/list/borrow-list-query-handler';
 import { BorrowAnnualRateUpdateCommand } from '../../../application/use-cases/commands/borrow/rate/update/borrow-annual-rate-update-command-handler';
 import { BorrowDebtorListQuery } from '../../../application/use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
+import CommandHandlerMediator from '../../../application/mediators/command-handler-mediator';
 
 async function BorrowRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get('/borrow/rates', async (request, reply) => {
     const command = new CommandHandlerMediator();
     const result = await command.execute('BorrowAnnualRateListQuery');
-
-    if (!result.successful) reply.statusCode = 400;
-
-    return result;
-  });
-
-  fastify.get('/borrow/list', async (request, reply) => {
-    const command = new CommandHandlerMediator();
-    const result = await command.execute('BorrowListQuery');
 
     if (!result.successful) reply.statusCode = 400;
 
@@ -37,10 +28,10 @@ async function BorrowRoute(fastify: FastifyInstance, options: FastifyPluginOptio
     return result;
   });
 
-  fastify.post<{ Body: string }>('/borrow/list/history', async (request, reply) => {
-    const data: BorrowHistoryListQuery = JSON.parse(request.body);
+  fastify.post<{ Body: string }>('/borrow/list', async (request, reply) => {
+    const data: BorrowListQuery = JSON.parse(request.body);
     const command = new CommandHandlerMediator();
-    const result = await command.execute('BorrowHistoryListQuery', data);
+    const result = await command.execute('BorrowListQuery', data);
 
     if (!result.successful) reply.statusCode = 400;
 

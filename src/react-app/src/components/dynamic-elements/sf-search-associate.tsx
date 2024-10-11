@@ -62,7 +62,6 @@ const SearchAssociateInternal = ({id, name, readonly, onChange}: SearchAssociate
       <ul className="pagination-list">
         <li>
           <button className="pagination-previous" onClick={handleEraseAssociate}><Erase /></button>
-          <button className="pagination-previous" onClick={() => handleSelectedAssociate(selectedAssociate!)}><Refresh /></button>
         </li>
       </ul>
     </nav>

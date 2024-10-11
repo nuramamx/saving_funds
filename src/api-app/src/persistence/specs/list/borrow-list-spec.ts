@@ -1,12 +1,14 @@
 export default interface BorrowListSpec {
   id: number;
-  associate_id: number;
-  associate_name: string;
-  requested_amount: number;
-  total_due: number;
-  total_paid: number;
+  fileNumber: string;
+  requestedAmount: number;
+  totalDue: number;
+  totalPaid: number;
+  numberPayments: number;
+  paymentsMade: number;
   period: number;
-  is_fortnightly: boolean;
-  created_at: string;
-  start_at: string;
+  isFortnightly: boolean;
+  resolution: string;
+  startAt: string;
+  createdAt: string;
 }

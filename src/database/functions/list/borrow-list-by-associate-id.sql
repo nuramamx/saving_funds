@@ -1,5 +1,5 @@
---drop function process.borrow_history_list_by_associate_id;
-create or replace function process.borrow_history_list_by_associate_id(
+--drop function process.borrow_list_by_associate_id;
+create or replace function process.borrow_list_by_associate_id(
   in p_associate_id integer
 )
 returns table (

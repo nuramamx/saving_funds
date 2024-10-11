@@ -2,11 +2,15 @@ import CommandHandler from "../../../../../abstractions/interfaces/command-handl
 import CommandResponse from "../../../../../abstractions/interfaces/command-response";
 import BorrowListQueryRepository from "../../../../../persistence/repositories/query/borrow-list-query-repository";
 
-export default class BorrowListQueryHandler implements CommandHandler<void, CommandResponse> {
-  async execute(): Promise<CommandResponse> {
+type BorrowListQuery = {
+  associateId: number;
+};
+
+export default class BorrowListQueryHandler implements CommandHandler<BorrowListQuery, CommandResponse> {
+  async execute(data: BorrowListQuery): Promise<CommandResponse> {
     try {
       const repository = new BorrowListQueryRepository();
-      const result = await repository.all();
+      const result = await repository.all(data);
 
       return { successful: true, message: 'Busqueda exitosa.', data: result, type: 'success' } as CommandResponse;;
     } catch (err: any) {
@@ -19,3 +23,5 @@ export default class BorrowListQueryHandler implements CommandHandler<void, Comm
     }
   }
 }
+
+export type { BorrowListQuery };

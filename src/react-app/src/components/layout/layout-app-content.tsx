@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import LayoutAppSidebar from "./layout-app-sidebar";
 import { SidebarRoutes } from "../../routes";
+import { Refresh } from "iconoir-react";
 
 export default function LayoutAppContent() {
   const location = useLocation();

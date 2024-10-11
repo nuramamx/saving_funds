@@ -14,6 +14,7 @@ import SavingFundListQuery from '../../../core/interfaces/query/saving-fund-list
 import useNotificationStore from '../../../core/stores/notification-store';
 import useAuthStore from '../../../core/stores/auth-store';
 import StatementReportActionItem from '../associate/action-items/statement-report-action-item';
+import RefreshActionButton from '../../../components/action-buttons/refresh-action-button';
 
 export default function SavingFundList() {
   const [savingFunds, setSavingFunds] = useState<SavingFundListSpec[]>([]);
@@ -55,65 +56,70 @@ export default function SavingFundList() {
 
   return (
     <>
-    <div className="columns">
-      <div className="column"></div>
-      <div className="column">
-        <SearchAssociate
-          id="borrow_associate_name"
-          name="Socio"
-          value={associate}
-          readonly={true}
-          onChange={(value) => setAssociate(value)} />
+    <div className='is-flex is-flex-direction-column' style={{ height: '80vh'}}>
+      <div className="columns">
+        <div className="column"></div>
+        <div className="column">
+          <SearchAssociate
+            id="borrow_associate_name"
+            name="Socio"
+            value={associate}
+            readonly={true}
+            onChange={(value) => setAssociate(value)} />
+        </div>
+        <div className="column"></div>
       </div>
-      <div className="column"></div>
-    </div>
-    <div className="columns">
-      <div className="column">
-        <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
-          <thead>
-            <tr key={1}>
-              <th>Id</th>
-              <th>Socio</th>
-              <th>Convenio</th>
-              <th>Salario</th>
-              <th>Aportaci&oacute;n inicial</th>
-              <th>Aportaciones</th>
-              <th>Retiros</th>
-              <th>Balance</th>
-              <th>Rendimientos</th>
-              <th>Total</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {savingFunds !== undefined && savingFunds?.length > 0 ? (
-              savingFunds.map((savingFund: SavingFundListSpec) => (
-              <tr key={savingFund.id}>
-                <td>{savingFund.id}</td>
-                <td>{savingFund.associateName}</td>
-                <td>{savingFund.agreementName}</td>
-                <td>{ToMoney(savingFund.salary)}</td>
-                <td>{ToMoney(savingFund.openingBalance)}</td>
-                <td>{ToMoney(savingFund.contributions)}</td>
-                <td>{ToMoney(savingFund.withdrawals)}</td>
-                <td>{ToMoney(savingFund.balance)}</td>
-                <td>{ToMoney(savingFund.yields)}</td>
-                <td>{ToMoney(savingFund.total)}</td>
-                <td>
-                  <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
-                  <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
-                  <WithdrawalCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
-                  <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={savingFund.associateName} />&nbsp;
-                  <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
-                </td>
+      <div className="columns">
+        <div className="column">
+          <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
+            <thead>
+              <tr key={1}>
+                <th>Id</th>
+                <th>Socio</th>
+                <th>Convenio</th>
+                <th>Salario</th>
+                <th>Aportaci&oacute;n inicial</th>
+                <th>Aportaciones</th>
+                <th>Retiros</th>
+                <th>Balance</th>
+                <th>Rendimientos</th>
+                <th>Total</th>
+                <th>Acciones</th>
               </tr>
-            ))) : (
-              <tr>
-                <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {savingFunds !== undefined && savingFunds?.length > 0 ? (
+                savingFunds.map((savingFund: SavingFundListSpec) => (
+                <tr key={savingFund.id}>
+                  <td>{savingFund.id}</td>
+                  <td>{savingFund.associateName}</td>
+                  <td>{savingFund.agreementName}</td>
+                  <td>{ToMoney(savingFund.salary)}</td>
+                  <td>{ToMoney(savingFund.openingBalance)}</td>
+                  <td>{ToMoney(savingFund.contributions)}</td>
+                  <td>{ToMoney(savingFund.withdrawals)}</td>
+                  <td>{ToMoney(savingFund.balance)}</td>
+                  <td>{ToMoney(savingFund.yields)}</td>
+                  <td>{ToMoney(savingFund.total)}</td>
+                  <td>
+                    <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
+                    <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
+                    <WithdrawalCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
+                    <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={savingFund.associateName} />&nbsp;
+                    <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
+                  </td>
+                </tr>
+              ))) : (
+                <tr>
+                  <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="bottom-content-container">
+        <RefreshActionButton onClick={() => handleReload()} />
       </div>
     </div>
     </>

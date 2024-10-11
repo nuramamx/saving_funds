@@ -14,8 +14,6 @@ import BatchListQueryHandler, { BatchListQuery } from '../use-cases/queries/batc
 import BatchUploadCommandHandler, { BatchUploadCommand } from '../use-cases/commands/batch/upload/batch-upload-command-handler';
 import BorrowAnnualRateListQueryHandler from '../use-cases/queries/borrow/list-annual-rate/borrow-annual-rate-list-query-handler';
 import BorrowDebtorListQueryHandler, { BorrowDebtorListQuery } from '../use-cases/queries/borrow/list-debtor/borrow-debtor-list-query-handler';
-import BorrowHistoryListQueryHandler, { BorrowHistoryListQuery } from '../use-cases/queries/borrow/list-history/borrow-history-list-query-handler';
-import BorrowListQueryHandler from '../use-cases/queries/borrow/list/borrow-list-query-handler';
 import CityListQueryHandler from '../use-cases/queries/city/list/city-list-query-handler';
 import PaymentListByBorrowIdQueryHandler, { PaymentListByBorrowIdQuery } from '../use-cases/queries/payment/list-by-borrow-id/payment-list-by-borrow-id-query-handler';
 import SavingFundAnnualRateListQueryHandler from '../use-cases/queries/saving-fund/list-annual-rate/saving-fund-annual-rate-list-query-handler';
@@ -32,6 +30,8 @@ import AssociateUpdateCommandHandler from '../use-cases/commands/associate/updat
 import StatementReportDataQueryHandler, { StatementReportDataQuery } from '../use-cases/queries/report/statement/data/statement-report-data-query-handler';
 import BorrowAuthorizationReportDataQueryHandler, { BorrowAuthorizationReportDataQuery } from '../use-cases/queries/report/borrow-authorization/data/borrow-authorization-report-data-query-handler';
 import StatementReportListQueryHandler from '../use-cases/queries/report/statement/list/statement-report-list-query-handler';
+import AssociateDeleteCommandHandler, { AssociateDeleteCommand } from '../use-cases/commands/associate/delete/associate-delete-command-handler';
+import BorrowListQueryHandler, { BorrowListQuery } from '../use-cases/queries/borrow/list/borrow-list-query-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -45,6 +45,7 @@ type CommandHandlerTypeMap = {
   'BatchUploadCommand': BatchUploadCommand,
   'SavingFundAnnualRateUpdateCommand': SavingFundAnnualRateUpdateCommand,
   'BorrowAnnualRateUpdateCommand': BorrowAnnualRateUpdateCommand,
+  'AssociateDeleteCommand': AssociateDeleteCommand,
   // Queries
   'CityListQuery': void,
   'StateListQuery': void,
@@ -53,8 +54,7 @@ type CommandHandlerTypeMap = {
   'SavingFundAnnualRateListQuery': void,
   'AssociateListByIdOrNameQuery': AssociateListByIdOrNameQuery,
   'AssociateListQuery': AssociateListQuery,
-  'BorrowListQuery': void,
-  'BorrowHistoryListQuery': BorrowHistoryListQuery,
+  'BorrowListQuery': BorrowListQuery,
   'PaymentListByBorrowIdQuery': PaymentListByBorrowIdQuery,
   'BorrowDebtorListQuery': BorrowDebtorListQuery,
   'SavingFundListQuery': SavingFundListQuery,
@@ -84,6 +84,7 @@ const commandConstructors: {
   'BatchUploadCommand': BatchUploadCommandHandler,
   'SavingFundAnnualRateUpdateCommand': SavingFundAnnualRateUpdateCommandHandler,
   'BorrowAnnualRateUpdateCommand': BorrowAnnualRateUpdateCommandHandler,
+  'AssociateDeleteCommand': AssociateDeleteCommandHandler,
   // Queries
   'CityListQuery': CityListQueryHandler,
   'StateListQuery': StateListQueryHandler,
@@ -93,7 +94,6 @@ const commandConstructors: {
   'AssociateListByIdOrNameQuery': AssociateListByIdOrNameQueryHandler,
   'AssociateListQuery': AssociateListQueryHandler,
   'BorrowListQuery': BorrowListQueryHandler,
-  'BorrowHistoryListQuery': BorrowHistoryListQueryHandler,
   'PaymentListByBorrowIdQuery': PaymentListByBorrowIdQueryHandler,
   'BorrowDebtorListQuery': BorrowDebtorListQueryHandler,
   'SavingFundListQuery': SavingFundListQueryHandler,
