@@ -67,7 +67,7 @@ export default function BorrowList() {
 
   return (
     <>
-    <div className='is-flex is-flex-direction-column' style={{ height: '80vh'}}>
+    <div className='is-flex is-flex-direction-column' style={{ height: 'auto' }}>
       <div className="columns">
         <div className="column"></div>
         <div className="column">

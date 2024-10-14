@@ -66,7 +66,7 @@ export default function BorrowDebtorList() {
 
   return (
     <>
-    <div className='is-flex is-flex-direction-column' style={{ height: '80vh'}}>
+    <div className='is-flex is-flex-direction-column' style={{ height: 'auto'}}>
       <div className="columns">
         <div className="column">
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>

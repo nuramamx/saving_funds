@@ -38,6 +38,7 @@ const SearchAssociateInternal = ({id, name, readonly, onChange}: SearchAssociate
 
   const handleEraseAssociate = () => {
     setSelectedAssociate({} as AssociateListByIdOrNameSpec);
+    
     if (onChange)
       onChange(0, '', {} as AssociateListByIdOrNameSpec);
   };
