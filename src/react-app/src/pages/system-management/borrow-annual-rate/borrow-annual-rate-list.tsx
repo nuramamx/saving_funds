@@ -32,8 +32,6 @@ export default function BorrowAnnualRateList() {
 
       const list = objectToCamel(response.data) as BorrowAnnualRateListSpec[];
 
-      console.log(list);
-
       setAnnualRates(list);
     } catch (err: any) {
       setHasError(true);
