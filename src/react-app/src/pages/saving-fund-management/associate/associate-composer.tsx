@@ -144,7 +144,7 @@ export function AssociateComposer() {
   return (
     <>
     <SFTabs options={tabsOptions}>
-      <div id="associate">
+      <div id="associate" data-tg-tour="Datos generales del socio.">
         <div className="columns">
           <div className="column">
             <SFTextInput id="associate-name" name="Nombre"
@@ -182,7 +182,7 @@ export function AssociateComposer() {
               value={associate.detail.socialContribution}
               onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, socialContribution: value }})}
               issues={issues} />
-            <SFMoneyInput id="associate-detail-fortnightlyContribution" name="Aportación Quincenal"
+            <SFMoneyInput id="associate-detail-fortnightlyContribution" name="Aportación Frecuente"
               value={associate.detail.frequentContribution}
               onChange={(value) => setAssociate({ ...associate, detail: { ...associate.detail, frequentContribution: value }})}
               issues={issues} />
@@ -196,7 +196,7 @@ export function AssociateComposer() {
           </div>
         </div>
       </div>
-      <div id="address">
+      <div id="address" data-tg-tour="Datos de localización del socio.">
         <div className="columns">
           <div className="column">
             <SFTextInput id="associate-address-street" name="Calle y N&uacute;mero"
@@ -240,7 +240,7 @@ export function AssociateComposer() {
           </div>
         </div>
       </div>
-      <div id="workplace">
+      <div id="workplace" data-tg-tour="Datos del lugar de trabajo del socio.">
         <div className="columns">
           <div className="column">
             <SFTextInput id="associate-workplace-key" name="Clave de Centro de Trabajo"
@@ -259,7 +259,7 @@ export function AssociateComposer() {
           <div className="column"></div>
         </div>
       </div>
-      <div id="beneficiary">
+      <div id="beneficiary" data-tg-tour="Datos de los beneficiarios del socio.">
         <div className="columns">
           <div className="column is-four-fifths">
             {associate.beneficiaries.map((beneficiary, index) => (
@@ -269,7 +269,7 @@ export function AssociateComposer() {
                 issues={issues} />
             ))}
           </div>
-          <div className="column">
+          <div className="column" data-tg-tour="El porcentaje debe cumplir el 100%.">
             {associate.beneficiaries.map((beneficiary, index) => (
               <SFPercentageInput key={index} id={`associate-beneficiaries-${index}-percentage`} name="Porcentaje"
                 value={beneficiary.percentage}

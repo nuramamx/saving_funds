@@ -7,7 +7,7 @@ type RefreshActionButtonParams = {
 
 export default function RefreshActionButton({ onClick }: RefreshActionButtonParams) {
   return (
-    <button className="button" style={{ fontSize: '11px', height: '27px' }} onClick={() => { if (onClick) onClick() }}><Refresh style={{ height: '11px' }} /></button>
+    <button data-tg-tour="Refrescador de la página, realiza recarga de información." className="button" style={{ fontSize: '11px', height: '27px' }} onClick={() => { if (onClick) onClick() }}><Refresh style={{ height: '11px' }} /></button>
   )
 }
 

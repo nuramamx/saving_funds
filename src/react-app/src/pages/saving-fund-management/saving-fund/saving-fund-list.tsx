@@ -70,7 +70,7 @@ export default function SavingFundList() {
         <div className="column"></div>
       </div>
       <div className="columns">
-        <div className="column">
+        <div className="column" data-tg-tour="Listado de fondos de ahorro disponibles en el sistema previamente filtrados por el socio.">
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
             <thead>
               <tr key={1}>
@@ -79,12 +79,12 @@ export default function SavingFundList() {
                 <th>Convenio</th>
                 <th>Salario</th>
                 <th>Aportaci&oacute;n inicial</th>
-                <th>Aportaciones</th>
-                <th>Retiros</th>
-                <th>Balance</th>
-                <th>Rendimientos</th>
-                <th>Total</th>
-                <th>Acciones</th>
+                <th data-tg-tour="Son las aportaciones durante toda la estadía del socio.">Aportaciones</th>
+                <th data-tg-tour="Son todos los retiros realizados por el socio.">Retiros</th>
+                <th data-tg-tour="Es el resultado entre: Aportaciones - Retiros.">Balance</th>
+                <th data-tg-tour="Son todos los rendimientos generados durante toda la estadía del socio.">Rendimientos</th>
+                <th data-tg-tour="Es el resultado entre: Aportaciones - Retiros + Rendimientos.">Total</th>
+                <th data-tg-tour="Acciones disponibles: Estado de cuenta, Registrar contribución, Registrar retiro, Listado de transaciones, Editar socio.">Acciones</th>
               </tr>
             </thead>
             <tbody>

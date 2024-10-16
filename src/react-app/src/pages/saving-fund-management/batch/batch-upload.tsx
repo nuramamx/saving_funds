@@ -87,21 +87,21 @@ export default function BatchUpload() {
   return (
     <>
       <div className="columns">
-        <div className="column is-3">
+        <div className="column is-3" data-tg-tour="Archivo con los registros a cargar en el sistema.">
           <SFFileInput id="batch-upload-file" name="Archivo" onChange={(v1, v2) => setBatchUpload({ ... batchUpload, filename: v1, file: v2 })} accept=".xls,.xlsx" issues={issues} />
         </div>
-        <div className="column is-3">
+        <div className="column is-3" data-tg-tour="Tipo de proceso a realizar: APORTACIONES, PAGOS, RETIROS, SOCIOS y PRÉSTAMOS.">
           <SFSelectBatch id="batch-upload-process" name="Proceso" value={batchUpload.process} onChange={(v) => setBatchUpload({ ...batchUpload, process: v })} issues={issues} />
         </div>
         {batchUpload.process !== 'APORTACIONES' && batchUpload.process !== 'SOCIOS' && (
           <div className="column is-4">
             <div className="checkboxes" style={{ padding: '20px' }}>
-              <label className="checkbox">
+              <label className="checkbox" data-tg-tour="Nos deshabilita las reglas de negocio, permitiendo ingresar información en bruto sin validar.">
                 <input type="checkbox" checked={batchUpload.disableRules} onChange={() => setBatchUpload({ ...batchUpload, disableRules: !batchUpload.disableRules })} />
                 &nbsp;Deshabilitar reglas
               </label>
               &nbsp;&nbsp;&nbsp;&nbsp;
-              <label className="checkbox">
+              <label className="checkbox" data-tg-tour="Nos deshabilita la inserción de información en la base de datos, permitiendo comprobar que la información esté correcta.">
                 <input type="checkbox" checked={batchUpload.validationOnly} onChange={() => setBatchUpload({ ...batchUpload, validationOnly: !batchUpload.validationOnly })} />
                 &nbsp;Solo validaci&oacute;n
               </label>
@@ -109,7 +109,7 @@ export default function BatchUpload() {
           </div>
         )}
       </div>
-      <div className="columns">
+      <div className="columns" data-tg-tour="Apartado de resultados, se nos informará aquí los registros que no pudieron ser ingresados al sistema.">
         <div className="column is-full">
           <label style={{ fontWeight: 'bold' }}>Resultados</label>
           <div style={{ width: '100%', height: '55vh', border: '0.5px solid gray', overflow: 'scroll' }}>

@@ -7,7 +7,7 @@ type SFMoneyInputInfo = SFInputInfo & {
   onChange?: (value: number) => void;
 }
 
-export default function SFMoneyInput({ id, name, value, mask = '$', readonly, issues, onChange }: SFMoneyInputInfo) {
+export default function SFMoneyInput({ id, name, value, mask = '$', readonly, issues, tour, onChange }: SFMoneyInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +47,7 @@ export default function SFMoneyInput({ id, name, value, mask = '$', readonly, is
   }, [value]);
   
   return (
-    <div className="field">
+    <div className="field" data-tg-tour={tour}>
       <label htmlFor={id} className="label">{name}</label>
       <div className="field has-addons" style={{ marginBottom: 0 }}>
         <span className="control">

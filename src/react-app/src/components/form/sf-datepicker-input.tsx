@@ -17,7 +17,7 @@ type DatePickerInput = {
 
 export default function SFDatePickerInput({ params }: DatePickerInput) {
   return (
-    <div className="field">
+    <div className="field" data-tg-tour={params.tour}>
       <label htmlFor={params.id} className="label">{params.name}</label>
       <div className="control">
         <DatePicker id={params.id} className="input" showIcon icon={<Calendar />} placeholderText={params.name}

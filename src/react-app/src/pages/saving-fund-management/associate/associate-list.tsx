@@ -74,7 +74,7 @@ export default function AssociateList() {
         <div className="column"></div>
       </div>
       <div className="columns">
-        <div className="column">
+        <div className="column" data-tg-tour="Listado de socios actuales en el sistema.">
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
             <thead>
               <tr key={1}>
@@ -85,9 +85,9 @@ export default function AssociateList() {
                 <th>Categor&iacute;a</th>
                 <th>Convenio</th>
                 <th>Sueldo / Pensi&oacute;n</th>
-                <th>Aportaci&oacute;n Frecuente</th>
+                <th data-tg-tour="Es la aportación que realiza el socio a su fondo de ahorro, puede ser quincenal o mensual.">Aportaci&oacute;n Frecuente</th>
                 <th>Estatus</th>
-                <th>Acciones</th>
+                <th data-tg-tour="Acciones a realizar: Estado de cuenta, Editar o Inactivar socio.">Acciones</th>
               </tr>
             </thead>
             <tbody>

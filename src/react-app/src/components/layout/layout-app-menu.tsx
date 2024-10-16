@@ -1,10 +1,17 @@
 import React, { memo, useState } from 'react';
-import { Community, Settings, UserCircle, LogOut } from 'iconoir-react';
+import { Community, Settings, UserCircle, LogOut, LightBulbOn } from 'iconoir-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../security/auth-context';
+import { TourGuideClient } from '@sjmc11/tourguidejs';
 import useLayoutStore from '../../core/stores/layout-store';
 import useCacheStore from '../../core/stores/cache-store';
 import useAuthStore from '../../core/stores/auth-store';
+
+const tg = new TourGuideClient({
+  prevLabel: '<',
+  nextLabel: '>',
+  finishLabel: 'x'
+});
 
 const LayoutAppMenu = memo(() => {
   const { logout } = useAuth();
@@ -13,6 +20,10 @@ const LayoutAppMenu = memo(() => {
   const { reset: resetLayout } = useLayoutStore();
   const { reset: resetAuth } = useAuthStore();
   const [isActive, setIsActive] = useState<boolean>(false);
+
+  const handleHelp = () => {
+    tg.start();
+  };
 
   const handleMenuClick = (menu: string) => {
     setSelectedMenu(menu);
@@ -53,6 +64,7 @@ const LayoutAppMenu = memo(() => {
       <div className="navbar-end">
         <div className="navbar-item">
           <div className="buttons">
+          <button className="button is-light" onClick={handleHelp}><LightBulbOn />&nbsp;Ayuda</button>
             <div className={`dropdown is-right ${isActive ? 'is-active': ''}`}>
               <div className="dropdown-trigger">
                 <button className="button is-light" onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu"><UserCircle />&nbsp;Mi cuenta</button>&nbsp;&nbsp;

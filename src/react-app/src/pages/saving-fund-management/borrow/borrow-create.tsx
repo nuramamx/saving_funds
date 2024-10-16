@@ -169,20 +169,24 @@ export default function BorrowCreate() {
       <div className="column">
         <h5 className="title is-5">Datos del pr&eacute;stamo</h5>
         <SFMoneyInput id="borrow-requestedAmount" name="Cantidad Solicitada"
+          tour="<label>La cantidad que el socio desea solicitar.</label>"
           value={borrow.requestedAmount}
           onChange={(value) => setBorrow({ ...borrow, requestedAmount: value })}
           issues={issues} />
         <SFSelectInput id="borrow-periodType" name="Tipo de Periodo"
+          tour="Periodo quincenal o mensual."
           value={periodType}
           options={([ { key: "---", value: "-"}, { key: "QUINCENAL", value: "F"}, { key: "MENSUAL", value: "M" }])}
           onChange={(value) => handlePeriodType(value)}
           issues={issues} />
         <SFSelectInput id="borrow-period" name="Duración"
+          tour="Duración del préstamo, de uno a tres años."
           value={borrow.period}
           options={([ { key: '---', value: '-'}, { key: "1 AÑO", value: 1}, { key: "2 AÑOS", value: 2}, { key: "3 AÑOS", value: 3 } ])}
           onChange={(value) => handlePeriod(value)}
           issues={issues} />
         <SFDatePickerInput params={{
+          tour: "Fecha de inicio del préstamo.",
           id: 'borrow-startAt',
           name: 'Fecha de Inicio',
           value: borrow.startAt,

@@ -49,28 +49,28 @@ const SearchAssociateInternal = ({id, name, readonly, onChange}: SearchAssociate
   }, []);
 
   return (
-    <>
-    <div className="field">
-      <label htmlFor={id} className="label">{name}</label>
-      <div className="control">
-        <input id={id} className="input" type="text" placeholder={name} style={{fontSize: '13px'}}
-          value={`${selectedAssociate?.id ?? ''}|${selectedAssociate?.name ?? ''}`}
-          readOnly={readonly} />
+    <div data-tg-tour="Realice la busqueda de un socio por su nombre, RFC o id.">
+      <div className="field" >
+        <label htmlFor={id} className="label">{name}</label>
+        <div className="control">
+          <input id={id} className="input" type="text" placeholder={name} style={{fontSize: '13px'}}
+            value={`${selectedAssociate?.id ?? ''}|${selectedAssociate?.name ?? ''}`}
+            readOnly={readonly} />
+        </div>
       </div>
+      <nav className="pagination" role="navigation" aria-label="pagination">
+        <button className="pagination-next" onClick={() => setShowModal(true)}><Search /></button>
+        <ul className="pagination-list">
+          <li>
+            <button className="pagination-previous" onClick={handleEraseAssociate}><Erase /></button>
+          </li>
+        </ul>
+      </nav>
+      <AssociateListByIdOrNameModal
+        show={showModal}
+        onSelectedAssociate={(value) => handleSelectedAssociate(value)}
+        onClose={() => setShowModal(false)} />
     </div>
-    <nav className="pagination" role="navigation" aria-label="pagination">
-      <button className="pagination-next" onClick={() => setShowModal(true)}><Search /></button>
-      <ul className="pagination-list">
-        <li>
-          <button className="pagination-previous" onClick={handleEraseAssociate}><Erase /></button>
-        </li>
-      </ul>
-    </nav>
-    <AssociateListByIdOrNameModal
-      show={showModal}
-      onSelectedAssociate={(value) => handleSelectedAssociate(value)}
-      onClose={() => setShowModal(false)} />
-    </>
   )
 };
 

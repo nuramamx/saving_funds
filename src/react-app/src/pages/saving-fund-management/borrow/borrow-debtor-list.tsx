@@ -68,7 +68,7 @@ export default function BorrowDebtorList() {
     <>
     <div className='is-flex is-flex-direction-column' style={{ height: 'auto'}}>
       <div className="columns">
-        <div className="column">
+        <div className="column" data-tg-tour="Listado de socios morosos en el sistema.">
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
             <thead>
               <tr>
@@ -83,7 +83,7 @@ export default function BorrowDebtorList() {
                 <th>Pagos Realizados</th>
                 <th>Periodicidad</th>
                 <th style={{width: '7vh'}}>Inicio</th>
-                <th>Acciones</th>
+                <th data-tg-tour="Acciones disponibles: Registrar pago y Listado de pagos.">Acciones</th>
               </tr>
             </thead>
             {!loading ? (

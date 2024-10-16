@@ -81,23 +81,23 @@ export default function BorrowList() {
         <div className="column"></div>
       </div>
       <div className="columns">
-        <div className="column">
+        <div className="column" data-tg-tour="Listado de todos los préstamos generados en el sistema.">
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
             <thead>
               <tr>
                 <th>Id</th>
                 <th>Folio</th>
-                <th>Monto Solicitado</th>
-                <th>Total a Pagar</th>
-                <th>Total pagado</th>
-                <th>Pagos a realizar</th>
-                <th>Pagos realizados</th>
-                <th>Periodo</th>
-                <th>Periodicidad</th>
-                <th>Dictamen</th>
-                <th>Inicio</th>
-                <th>Creado</th>
-                <th>Acciones</th>
+                <th data-tg-tour="Monto solicitado por el socio.">Monto Solicitado</th>
+                <th data-tg-tour="Es el total a pagar calculado por el sistema.">Total a Pagar</th>
+                <th data-tg-tour="Son los pagos que ha realizado el socio.">Total pagado</th>
+                <th data-tg-tour="Número de pagos totales a realizar calculados por el sistema.">Pagos a realizar</th>
+                <th data-tg-tour="Número de pagos realizados por el socio.">Pagos realizados</th>
+                <th data-tg-tour="Periodo en años en que fue registrado el préstamo.">Periodo</th>
+                <th data-tg-tour="Periodicidad quincenal o mensual.">Periodicidad</th>
+                <th data-tg-tour="Dictamen del sistema en cuanto a estatus del préstamo.">Dictamen</th>
+                <th data-tg-tour="Fecha en que el préstamo empezará a ser válido.">Inicio</th>
+                <th data-tg-tour="Fecha de creación del préstamo.">Creado</th>
+                <th data-tg-tour="Acciones disponibles: Reporte de autorización del préstamo, Registrar pago y Listado de pagos realizados.">Acciones</th>
               </tr>
             </thead>
             <tbody>

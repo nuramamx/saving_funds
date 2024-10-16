@@ -1,8 +1,8 @@
 import { SFSelectInfo, SFSelectOptionInfo } from "./interfaces/sf-select-info";
 
-export default function SFSelectInput({ id, name, value, options, onChange, issues }: SFSelectInfo) {
+export default function SFSelectInput({ id, name, value, options, onChange, issues, tour }: SFSelectInfo) {
   return (
-    <div className="field">
+    <div className="field" data-tg-tour={tour}>
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
         <select id={id} value={value} onChange={(e) => onChange ? onChange(e.target.value) : undefined}>

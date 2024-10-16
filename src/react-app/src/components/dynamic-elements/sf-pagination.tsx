@@ -53,7 +53,7 @@ export default function SFPagination({ currentPage, totalPages, onChange}: SFPag
   };
 
   return (
-    <nav className="pagination" style={{ fontSize: '11px' }} role="navigation" aria-label="pagination">
+    <nav className="pagination" style={{ fontSize: '11px' }} role="navigation" aria-label="pagination" data-tg-tour="Paginador con el que podemos desplazarnos entre distintas páginas.">
       <button className="pagination-previous" disabled={page === 1} onClick={handlePreviousFivePages}><FastArrowLeft /></button>
       <button className="pagination-previous" disabled={page === 1} onClick={handlePreviousPage}><ArrowLeft /></button>
       <button className="pagination-next" disabled={page === totalPages} onClick={handleNextPage}><ArrowRight /></button>

@@ -11,6 +11,7 @@ type SFInputInfo = {
   onModal?: boolean;
   isSmallInput?: boolean;
   style?: CSSProperties;
+  tour?: string;
   onEnter?: () => void;
 }
 
