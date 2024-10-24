@@ -17,8 +17,6 @@ export default class PaymentListByBorrowIdQueryRepository implements QueryReposi
         }
       ) as PaymentListByBorrowIdSpec[];
 
-      console.log(result);
-
       return result;
     } catch (err: any) {
       throw new Error(`[E-200]: ${err}`);

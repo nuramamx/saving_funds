@@ -17,8 +17,6 @@ export default class AssociateDataByIdQueryRepository implements QueryRepository
         }
       ) as AssociateDataByIdSpec[];
 
-      console.log(JSON.stringify(result));
-
       return result;
     } catch (err: any) {
       throw new Error(`[E-200]: ${err}`);

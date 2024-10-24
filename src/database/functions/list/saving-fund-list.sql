@@ -11,6 +11,7 @@ returns table (
   annual_rate numeric(20,6),
   opening_balance numeric(20,6),
   is_fortnightly boolean,
+  has_active_borrow boolean,
   balance numeric(20,6),
   yields numeric(20,6),
   total numeric(20,6),
@@ -29,6 +30,7 @@ begin
     ,d.annual_rate
     ,d.opening_balance
     ,d.is_fortnightly
+    ,d.has_active_borrow
     ,d.balance
     ,d.yields
     ,d.balance + d.yields as total
@@ -44,6 +46,7 @@ begin
       ,sf.opening_balance
       ,sf.annual_rate
       ,sf.is_fortnightly
+      ,process.validate_associate_unpaid_borrows(a.id) as has_active_borrow
       ,(coalesce(contribution.amount,0) - coalesce(withdrawal.amount, 0)) as balance
       ,process.contribution_get_accrued_yields(sf.id) as yields
       ,(coalesce(contribution.amount, 0)) as contributions

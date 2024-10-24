@@ -9,8 +9,6 @@ type BorrowDebtorListQuery = Paginator & {};
 export default class BorrowDebtorListQueryHandler implements CommandHandler<BorrowDebtorListQuery, CommandResponse> {
   async execute(data: BorrowDebtorListQuery): Promise<CommandResponse> {
     try {
-    console.log(`test => ${JSON.stringify(data)}`);
-      
       const repository = new BorrowDebtorListQueryRepository();
       const result = await repository.all(data);
 

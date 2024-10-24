@@ -36,7 +36,7 @@ begin
     ,coalesce(report.amount_available_to_withdrawal_rounded, 0) as amount_available_to_withdrawal_rounded
     ,coalesce((report.net_balance - report.amount_available_to_withdrawal_rounded - report.amount_to_withhold), 0)
       as net_balance_for_current_year
-    ,report.net_balance
+    ,(report.net_balance - report.amount_available_to_withdrawal_rounded) as net_balance
   from (
     select
       v_current_year as current_year
@@ -53,7 +53,11 @@ begin
       end as amount_available_to_withdrawal
       ,case when (r.amount_available_to_withdrawal - r.amount_to_withhold) < 0
         then 0
-        else (floor((r.amount_available_to_withdrawal - r.amount_to_withhold) / 1000) * 1000)
+        else (floor((r.amount_available_to_withdrawal - r.amount_to_withhold) / 100) * 100)
+--         else case when (r.amount_available_to_withdrawal - r.amount_to_withhold) % 100 < 50
+--           then (floor((r.amount_available_to_withdrawal - r.amount_to_withhold) / 100) * 100)
+--           else (ceil(((r.amount_available_to_withdrawal - r.amount_to_withhold) / 100)) * 100)
+--         end
       end as amount_available_to_withdrawal_rounded
       ,r.net_balance
     from (

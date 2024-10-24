@@ -74,7 +74,7 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
 
         if (borrowAuthorizationData) {
           const blob = await pdf(<BorrowAuthorizationReportPDF data={borrowAuthorizationData?.[0]} />).toBlob();
-          saveAs(blob, `Estado de cuenta - ${borrowAuthorizationData?.[0].associateName}.pdf`);
+          saveAs(blob, `Autorización de descuento por crédito - ${borrowAuthorizationData?.[0].associateName}.pdf`);
         }
       })
       .catch (err => {

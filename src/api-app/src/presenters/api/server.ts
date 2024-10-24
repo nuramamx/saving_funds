@@ -67,8 +67,6 @@ fastify.register(SecurityRoute);
 fastify.addHook('onRequest', async (request, reply) => {
   const publicRoutes = ['/security/token'];
 
-  console.log(request.raw.url);
-
   if (!publicRoutes.includes(request.raw.url!)) {
     try {
       await request.jwtVerify();

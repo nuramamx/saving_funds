@@ -11,4 +11,5 @@ export default interface SavingFundListSpec {
   total: number;
   withdrawals: number;
   isFortnightly: boolean;
+  hasActiveBorrow: boolean
 }

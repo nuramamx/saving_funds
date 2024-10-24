@@ -43,8 +43,6 @@ export default function WithdrawalLoader(): Promise<void> {
       });
     });
 
-    console.log(JSON.stringify(list));
-
     const worksheetWriter = workbookWriter.addWorksheet('contributions');
     worksheetWriter.addRow(["NOMBRE", "MONTO", "APLICADO EN", "¿RENDIMIENTOS?", "¿BAJA?", "¿MUERTE?"]);
 

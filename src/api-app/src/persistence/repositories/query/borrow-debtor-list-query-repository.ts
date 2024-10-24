@@ -7,7 +7,6 @@ import BorrowListSpec from '../../specs/list/borrow-list-spec';
 
 export default class BorrowDebtorListQueryRepository implements QueryRepositoryInfo<BorrowDebtorListQuery, BorrowListSpec> {
   async all(data: BorrowDebtorListQuery): Promise<BorrowListSpec[]> {
-    console.log(`test => ${JSON.stringify(data)}`);
     try {
       const result = await db.sequelize.query(
         FunctionName.BORROW_DEBTOR_LIST, {
