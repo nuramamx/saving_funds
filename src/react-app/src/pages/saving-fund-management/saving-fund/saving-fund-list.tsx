@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
 import { Edit } from 'iconoir-react';
 import { Link } from 'react-router-dom';
+import { v4 as uuid } from "uuid";
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
@@ -90,7 +91,7 @@ export default function SavingFundList() {
             <tbody>
               {savingFunds !== undefined && savingFunds?.length > 0 ? (
                 savingFunds.map((savingFund: SavingFundListSpec) => (
-                <tr key={savingFund.id}>
+                <tr key={`${uuid()}`}>
                   <td>{savingFund.id}</td>
                   <td>{savingFund.associateName}</td>
                   <td>{savingFund.agreementName}</td>
@@ -104,7 +105,7 @@ export default function SavingFundList() {
                   <td>
                     <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
                     <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
-                    <WithdrawalCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;
+                    <WithdrawalCreateActionButton savingFundId={savingFund.id} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />&nbsp;
                     <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={savingFund.associateName} />&nbsp;
                     <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
                   </td>

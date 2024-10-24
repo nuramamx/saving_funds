@@ -21,8 +21,6 @@ const useAssociateDraftStore = create<AssociateDraftStore>((set) => ({
         associate.commandId = uuid();
 
       state.associates.push(associate);
-
-      console.log(JSON.stringify(state.associates));
     })
   ),
   removeAssociateDraft: (commandId: string) => set(

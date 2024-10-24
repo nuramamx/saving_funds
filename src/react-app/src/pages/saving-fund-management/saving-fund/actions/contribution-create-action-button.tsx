@@ -16,7 +16,7 @@ export default function ContributionCreateActionButton({ savingFundId, onClose }
     setSelectedSavingFund(savingFundId);
     setShowModal(show);
 
-    if (onClose) onClose();
+    if (!show && onClose) onClose();
   }
 
   return (

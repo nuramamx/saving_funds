@@ -98,14 +98,12 @@ export default function BatchComposer() {
       setBatchDetails(produce(draft => {
         const index = draft.findIndex(x => x.parameter === batchParameter);
         if (index !== -1) {
-          console.log(batchDetail);
           draft[index] = batchDetail
         };
       }));
       setBatchDetail(batchDetailSpecInitialState);
       setBatchDetailEdit(false);
     } else {
-      console.log(batchDetail);
       setBatchDetails((draft) => [...draft, batchDetail]);
       setBatchDetail(batchDetailSpecInitialState);
     }
