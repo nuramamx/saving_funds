@@ -9,6 +9,7 @@ import { objectToCamel } from "ts-case-convert";
 import saveAs from "file-saver";
 import BorrowAuthorizationReportPDF from "../reports/borrow-authorization-report-pdf";
 import { pdf } from "@react-pdf/renderer";
+import TooltipElement from "../../../../components/elements/tooltip-element";
 
 type BorrowAuthorizationReportActionItemParams = {
   associateName: string;
@@ -91,7 +92,10 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
     <>
     <div className={`dropdown is-right ${isActive ? 'is-active': ''}`}>
       <div className="dropdown-trigger">
-        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu"><DownloadSquare /></button>
+        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu" data-tooltip-id="reports-tooltip">
+          <DownloadSquare />
+          <TooltipElement id="reports-tooltip" text="Reportes" />
+        </button>
       </div>
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">

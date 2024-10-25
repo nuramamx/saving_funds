@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NumberedListLeft } from "iconoir-react";
 import PaymentListModal from "../../pages/saving-fund-management/borrow/modals/payment-list-modal";
+import TooltipElement from "../elements/tooltip-element";
 
 type PaymentListActionButtonParams = {
   borrowId: number;
@@ -17,7 +18,12 @@ export default function PaymentListActionButton({ borrowId }: PaymentListActionB
 
   return (
     <>
-    <button title="Ver pagos" onClick={() => handleClick(borrowId, true)}><NumberedListLeft /></button>&nbsp;&nbsp;
+    <button title="Ver pagos"
+      data-tooltip-id="payment-list-tooltip"
+      onClick={() => handleClick(borrowId, true)}>
+      <NumberedListLeft />
+      <TooltipElement id="payment-list-tooltip" text="Listado de pagos" />
+    </button>
     <PaymentListModal borrowId={selectedBorrow} show={showModal} onClose={() => handleClick(0, false)} />
     </>
   )

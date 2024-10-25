@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MoneySquare } from "iconoir-react";
 import PaymentCreateModal from "../../pages/saving-fund-management/borrow/modals/payment-create-modal";
 import useAuthStore from "../../core/stores/auth-store";
+import TooltipElement from "../elements/tooltip-element";
 
 type PaymentCreateActionButtonParams = {
   borrowId: number;
@@ -24,7 +25,12 @@ export default function PaymentCreateActionButton({ borrowId, onClose }: Payment
     <>
     {user.role === 'ADMIN' && (
       <>
-        <button title="Registrar pago" onClick={() => handleClick(borrowId, true)}><MoneySquare /></button>
+        <button title="Registrar pago"
+          data-tooltip-id="payment-tooltip" 
+          onClick={() => handleClick(borrowId, true)}>
+          <MoneySquare />
+          <TooltipElement id="payment-tooltip" text="Pago" />
+        </button>
         <PaymentCreateModal borrowId={selectedBorrow} show={showModal} onClose={() => handleClick(0, false)} />
       </>
     )}
