@@ -6,9 +6,9 @@ import CommandResponseInfo from "../../core/interfaces/info/command-response-inf
 import StateInfo from "../../core/interfaces/info/state-info";
 import useAuthStore from "../../core/stores/auth-store";
 
-const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) => {
+const SFSelectState = memo(({ id, name, value, readonly, onChange }: SFNumberInputInfo) => {
   const { states, setStates } = useCacheStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -30,7 +30,11 @@ const SFSelectState = memo(({ id, name, value, onChange }: SFNumberInputInfo) =>
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-        <select id={id} value={value} onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined}>
+        <select
+          id={id}
+          value={value}
+          disabled={user.role !== 'ADMIN' ? true : readonly}
+          onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined}>
           <option value={0}>---</option>
           {states.map((option: StateInfo) => [
             <option key={option.id} value={option.id}>{option.name}</option>

@@ -11,9 +11,9 @@ interface SFSelectCityParams extends SFNumberInputInfo {
   stateId: number;
 }
 
-const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSelectCityParams) => {
+const SFSelectCity = memo(({ id, name, value, stateId, readonly, issues, onChange }: SFSelectCityParams) => {
   const { cities, setCities } = useCacheStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -35,7 +35,11 @@ const SFSelectCity = memo(({ id, name, value, stateId, issues, onChange }: SFSel
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-      <select id={id} value={value} onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined}>
+      <select
+        id={id}
+        value={value}
+        disabled={user.role !== 'ADMIN' ? true : readonly}
+        onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined}>
         <option value={0}>---</option>
         {cities.filter((city: CityInfo) => city.stateId == stateId).map((option: CityInfo) => [
           <option key={option.id} value={option.id}>{option.name}</option>

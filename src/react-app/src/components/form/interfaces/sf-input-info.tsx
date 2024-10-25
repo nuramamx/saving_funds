@@ -6,6 +6,7 @@ type SFInputInfo = {
   name: string;
   display?: string;
   readonly?: boolean;
+  forceUse?: boolean;
   autofocus?: boolean;
   issues?: ZodIssue[];
   onModal?: boolean;

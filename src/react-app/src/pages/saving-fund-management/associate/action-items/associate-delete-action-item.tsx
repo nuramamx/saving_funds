@@ -14,7 +14,7 @@ type AssociateDeleteActionItemParams = {
 export default function AssociateDeleteActionItem({ associateId, onComplete }: AssociateDeleteActionItemParams) {
   const [showModal, setShowModal] = useState(false);
   const { pushNotification } = useNotificationStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
 
   const fetchAssociateDelete = async () => {
     try {
@@ -47,13 +47,17 @@ export default function AssociateDeleteActionItem({ associateId, onComplete }: A
 
   return (
     <>
-    <button title="Abonar" 
-      data-tooltip-id="associate-delete-tooltip" 
-      onClick={() => handleClick()}>
-      <BinMinusIn />
-      <TooltipElement id="associate-delete-tooltip" text="Inactivar" />
-    </button>
-    <ConfirmModal show={showModal} title="Confirmar" message="¿Desea inactivar al socio?" onResponse={(v) => handleResponse(v)} />
+    {user.role === 'ADMIN' && (
+      <>
+        <button title="Abonar" 
+          data-tooltip-id="associate-delete-tooltip" 
+          onClick={() => handleClick()}>
+          <BinMinusIn />
+          <TooltipElement id="associate-delete-tooltip" text="Inactivar" />
+        </button>
+        <ConfirmModal show={showModal} title="Confirmar" message="¿Desea inactivar al socio?" onResponse={(v) => handleResponse(v)} />
+      </>
+    )}
     </>
   )
 }

@@ -40,7 +40,7 @@ export default function BorrowCreate() {
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
   const { annualRates, setAnnualRates } = useCacheStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const searchAssociateRef = useRef<SearchAssociateForwardedMethods>(null);
 
   const fetchAnnualRates = async () => {
@@ -191,6 +191,7 @@ export default function BorrowCreate() {
           name: 'Fecha de Inicio',
           value: borrow.startAt,
           issues: issues,
+          readonly: user.role === 'ADMIN' ? false : true,
           onChange: (value) => setBorrow({ ...borrow, startAt: value }),
           minDate: new Date(),
           maxDate: addDays(new Date(), 30)
@@ -227,7 +228,7 @@ export default function BorrowCreate() {
           value={ToMoney(borrow.detail.amountDelivered)} />
       </div>
     </div>
-    <div className="mt-auto">
+    <div className="mt-auto" style={{ display: user.role === 'ADMIN' ? 'block' : 'none'}}>
       <nav className="level">
         <div className="level-left"></div>
         <div className="level-right">

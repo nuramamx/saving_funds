@@ -70,6 +70,8 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
         </header>
         <section className="modal-card-body">
           <SFTextInput id="search-associate-name" name="Nombre del Asociado"
+            forceUse={true}
+            readonly={false}
             autofocus={true}
             onModal={show}
             value={associateInfo}

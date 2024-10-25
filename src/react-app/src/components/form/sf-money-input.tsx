@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SFInputInfo } from "./interfaces/sf-input-info";
+import useAuthStore from "../../core/stores/auth-store";
 
 type SFMoneyInputInfo = SFInputInfo & {
   value: number | string;
@@ -9,6 +10,7 @@ type SFMoneyInputInfo = SFInputInfo & {
 
 export default function SFMoneyInput({ id, name, value, mask = '$', readonly, issues, tour, onChange }: SFMoneyInputInfo) {
   const [inputValue, setInputValue] = useState<string>(value.toString());
+  const { user } = useAuthStore();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -57,7 +59,7 @@ export default function SFMoneyInput({ id, name, value, mask = '$', readonly, is
         </span>
         <div className="control is-expanded">
           <input id={id} className="input has-text-right" type="text" placeholder={name}
-            readOnly={readonly}
+            readOnly={user.role !== 'ADMIN' ? true : readonly}
             value={inputValue}
             onClick={handleClick}
             onBlur={handleBlur}

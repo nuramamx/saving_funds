@@ -3,13 +3,14 @@ import { useAuth } from "../../components/security/auth-context";
 import { ToSHA1 } from "../../core/util/conversions/sha1-conversion";
 import AppConstants from "../../core/constants/app-constants";
 import CommandResponseInfo from "../../core/interfaces/info/command-response-info";
+import UserDataByUserAndPasswordSpec from "../../core/interfaces/specs/base/user-data-by-user-and-password-spec";
 
 export default function Login() {
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [isBlurred, setIsBlurred] = useState(false);
+  const [, setIsBlurred] = useState(false);
   const { login, isAuthenticated } = useAuth();
 
   const handleLogin = async () => {
@@ -25,13 +26,15 @@ export default function Login() {
     });
 
     const responseData = await response.json() as CommandResponseInfo;
+    const user = responseData.data as UserDataByUserAndPasswordSpec;
+
     setLoading(false);
 
     if (!response.ok) {
       return setError(responseData.message);
     }
 
-    login(responseData.data);
+    login(user);
     window.location.href = '/setepidsf/savingfund';
   };
 

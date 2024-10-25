@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef } from "react";
 import { SFInputInfo } from "./interfaces/sf-input-info";
+import useAuthStore from "../../core/stores/auth-store";
 
 type SFTextInputInfo = SFInputInfo & {
   value: string;
   onChange: (value: string) => void;
 }
 
-export default function SFTextInput({ id, name, value, readonly = false, autofocus = false, onEnter, onChange, issues, onModal }: SFTextInputInfo) {
+export default function SFTextInput({ id, name, value, readonly = false, forceUse = false, autofocus = false, onEnter, onChange, issues, onModal }: SFTextInputInfo) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuthStore();
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && onEnter) onEnter();
@@ -28,7 +30,7 @@ export default function SFTextInput({ id, name, value, readonly = false, autofoc
       <label htmlFor={id} className="label">{name}</label>
       <div className="control">
         <input ref={inputRef} id={id} className="input" type="text" placeholder={name}
-          readOnly={readonly}
+          readOnly={user.role !== 'ADMIN' ? (forceUse ? false : true) : readonly}
           value={value}
           onKeyDown={handleKeyDown}
           onChange={(e) => onChange ? onChange(e.target.value) : undefined} />

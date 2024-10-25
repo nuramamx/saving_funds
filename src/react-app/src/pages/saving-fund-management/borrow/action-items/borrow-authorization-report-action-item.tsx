@@ -91,7 +91,7 @@ export default function BorrowAuthorizationReportActionItem({ associateName, bor
     <>
     <div className={`dropdown is-right ${isActive ? 'is-active': ''}`}>
       <div className="dropdown-trigger">
-        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu"><DownloadSquare /></button>&nbsp;&nbsp;
+        <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu"><DownloadSquare /></button>
       </div>
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">

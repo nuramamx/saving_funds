@@ -115,7 +115,7 @@ export default function StatementReportActionItem({ associateName, associateId }
         <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu" data-tooltip-id="reports-tooltip" >
           <DownloadSquare />
           <TooltipElement id="reports-tooltip" text="Reportes" />
-        </button>&nbsp;&nbsp;
+        </button>
       </div>
       <div className="dropdown-menu" id="dropdown-menu" role="menu">
         <div className="dropdown-content">
@@ -130,7 +130,6 @@ export default function StatementReportActionItem({ associateName, associateId }
         </div>
       </div>
     </div>
-    
     </>
   )
 }

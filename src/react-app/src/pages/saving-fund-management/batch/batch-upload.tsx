@@ -25,10 +25,10 @@ export default function BatchUpload() {
   const location = useLocation();
   const { pushNotification } = useNotificationStore();
   const { setValidationModal } = useValidationModalStore();
-  const { token } = useAuthStore();
   const [issues, setIssues] = useState<ZodIssue[]>([]);
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { token, user } = useAuthStore();
 
   const handleUpload = async () => {
     setLoading(true);
@@ -121,7 +121,7 @@ export default function BatchUpload() {
           </div>
         </div>
       </div>
-      <div className="mt-auto">
+      <div className="mt-auto" style={{ display: user.role === 'ADMIN' ? 'block' : 'none'}}>
         <nav className="level">
           <div className="level-left"></div>
           <div className="level-right">

@@ -21,6 +21,7 @@ export default function SFDatePickerInput({ params }: DatePickerInput) {
       <label htmlFor={params.id} className="label">{params.name}</label>
       <div className="control">
         <DatePicker id={params.id} className="input" showIcon icon={<Calendar />} placeholderText={params.name}
+          readOnly={params.readonly}
           minDate={params.minDate}
           maxDate={params.maxDate}
           selected={params.value}

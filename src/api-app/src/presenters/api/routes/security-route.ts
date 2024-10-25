@@ -24,8 +24,9 @@ export default async function SecurityRoute(fastify: FastifyInstance, options: F
     }, {
       expiresIn: undefined
     });
+    userData.token = token;
 
-    const response: CommandResponse = { successful: true, data: token, message: 'Token obtenido con éxito.', type: 'success', errors: [] };
+    const response: CommandResponse = { successful: true, data: userData, message: 'Usuario obtenido con éxito.', type: 'success', errors: [] };
 
     return response;
   });

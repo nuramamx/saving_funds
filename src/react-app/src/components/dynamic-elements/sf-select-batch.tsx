@@ -7,11 +7,11 @@ import BatchListSpec from "../../core/interfaces/specs/list/batch-list-spec";
 import useNotificationStore from "../../core/stores/notification-store";
 import useAuthStore from "../../core/stores/auth-store";
 
-const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFTextInputInfo) => {
+const SFSelectBatch = memo(({ id, name, value, issues, readonly, onChange }: SFTextInputInfo) => {
   const [hasError, setHasError] = useState<Boolean>(false);
   const [batchs, setBatchs] = useState<BatchListSpec[]>([]);
   const { pushNotification } = useNotificationStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
 
   const fetchBatchs = async () => {
     try {
@@ -47,7 +47,11 @@ const SFSelectBatch = memo(({ id, name, value, issues, onChange }: SFTextInputIn
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-        <select id={id} value={value} onChange={(e) => onChange ? onChange(e.target.value as string) : undefined}>
+        <select
+          id={id}
+          value={value}
+          disabled={user.role !== 'ADMIN' ? true : readonly}
+          onChange={(e) => onChange ? onChange(e.target.value as string) : undefined}>
           <option value={0}>---</option>
           {batchs.map((option: BatchListSpec) => [
             <option key={option.id} value={option.name}>{option.name}</option>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
-import { BinMinusIn, Edit, Refresh } from 'iconoir-react';
+import { Edit } from 'iconoir-react';
 import { Link } from 'react-router-dom';
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
@@ -105,7 +105,7 @@ export default function AssociateList() {
                   <td>{associate.isActive ? 'ACTIVO' : 'INACTIVO'}</td>
                   <td>
                     <StatementReportActionItem associateName={associate.name.toUpperCase()} associateId={associate.id} />
-                    <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>&nbsp;&nbsp;
+                    <Link to={`/savingfund/associate/composer/${associate.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
                     <AssociateDeleteActionItem associateId={associate.id} onComplete={() => handleReload()} />
                   </td>
                 </tr>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SFInputInfo } from "./interfaces/sf-input-info";
 import { Page } from "iconoir-react";
 import TooltipElement from "../elements/tooltip-element";
+import useAuthStore from "../../core/stores/auth-store";
 
 type SFFileInfo = SFInputInfo & {
   accept: string;
@@ -10,6 +11,7 @@ type SFFileInfo = SFInputInfo & {
 
 export default function SFFileInput({ id, name, readonly = false, accept, issues, onChange }: SFFileInfo) {
   const [filename, setFilename] = useState<string>(undefined!);
+  const { user } = useAuthStore();
 
   const handleChange = (file: File = undefined!) => {
     if (file !== undefined && file !== null) {
@@ -25,6 +27,7 @@ export default function SFFileInput({ id, name, readonly = false, accept, issues
       <label className="file-label">
         <input id={id} className="file-input" type="file"
           accept={accept}
+          readOnly={user.role !== 'ADMIN' ? true : readonly}
           onChange={(e) => handleChange(e.target.files![0])} />
         <span className="file-cta">
           <span className="file-label"><Page /></span>

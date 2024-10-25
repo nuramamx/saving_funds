@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import useAuthStore from '../../core/stores/auth-store';
+import UserDataByUserAndPasswordSpec from '../../core/interfaces/specs/base/user-data-by-user-and-password-spec';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (user: UserDataByUserAndPasswordSpec) => void;
   logout: () => void;
 }
 
@@ -20,10 +21,11 @@ const useAuth = () => {
 };
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, setToken, setIsAuthenticated, reset } = useAuthStore();
+  const { isAuthenticated, setToken, setIsAuthenticated, reset, setUser } = useAuthStore();
 
-  const login = (token: string) => {
-    setToken(token);
+  const login = (user: UserDataByUserAndPasswordSpec) => {
+    setUser(user);
+    setToken(user.token);
     setIsAuthenticated(true);
   };
 

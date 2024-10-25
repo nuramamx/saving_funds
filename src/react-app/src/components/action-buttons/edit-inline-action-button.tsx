@@ -1,5 +1,6 @@
 import { Edit, FloppyDisk, Xmark, XmarkCircle } from "iconoir-react";
 import { useState } from "react";
+import useAuthStore from "../../core/stores/auth-store";
 
 type EditInlineActionButtonParams = {
   rowId: number;
@@ -9,6 +10,7 @@ type EditInlineActionButtonParams = {
 
 export default function EditInlineActionButton({ rowId, onSaveClick, onEditMode }: EditInlineActionButtonParams) {
   const [editMode, setEditMode] = useState<boolean>(false);
+  const { user} = useAuthStore();
 
   const handleEdit = (id: number) => {
     setEditMode(true);
@@ -27,16 +29,20 @@ export default function EditInlineActionButton({ rowId, onSaveClick, onEditMode 
 
   return (
     <>
-    {editMode ? (
-      <>
-      <button onClick={() => handleSave(rowId)}><FloppyDisk /></button>&nbsp;&nbsp;
-      <button onClick={() => handleCancel(rowId)}><XmarkCircle /></button>&nbsp;&nbsp;
-      </>
-    ) : (
-      <>
-      <button onClick={() => handleEdit(rowId)}><Edit /></button>&nbsp;&nbsp;
-      </>
-    )}
+      {user.role === 'ADMIN' && (
+        <>
+          {editMode ? (
+            <>
+            <button onClick={() => handleSave(rowId)}><FloppyDisk /></button>&nbsp;&nbsp;
+            <button onClick={() => handleCancel(rowId)}><XmarkCircle /></button>&nbsp;&nbsp;
+            </>
+          ) : (
+            <>
+            <button onClick={() => handleEdit(rowId)}><Edit /></button>&nbsp;&nbsp;
+            </>
+          )}
+        </>
+      )}
     </>
   )
 }

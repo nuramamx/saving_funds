@@ -6,9 +6,9 @@ import AppConstants from "../../core/constants/app-constants";
 import AgreementInfo from "../../core/interfaces/info/agreement-info";
 import useAuthStore from "../../core/stores/auth-store";
 
-const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberInputInfo) => {
+const SFSelectAgreement = memo(({ id, name, value, readonly, issues, onChange }: SFNumberInputInfo) => {
   const { agreements, setAgreements } = useCacheStore();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
 
   useEffect(() => {
     const fetchAgreements = async () => {
@@ -30,7 +30,11 @@ const SFSelectAgreement = memo(({ id, name, value, issues, onChange }: SFNumberI
     <div className="field">
       <label htmlFor={id} className="label">{name}</label>
       <div className="select" style={{display: "grid"}}>
-      <select id={id} value={value} onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined }>
+      <select
+        id={id}
+        value={value}
+        disabled={user.role !== 'ADMIN' ? true : readonly}
+        onChange={(e) => onChange ? onChange(parseInt(e.target.value)) : undefined }>
         <option value={0}>---</option>
         {agreements.map((option: AgreementInfo) => [
           <option key={option.id} value={option.id}>{option.name}</option>
