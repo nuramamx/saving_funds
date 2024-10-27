@@ -17,25 +17,31 @@ export default function Login() {
     setLoading(true);
     setIsBlurred(true);
 
-    const response = await fetch(`${AppConstants.apiSecurity}/token`, {
-      method: 'POST',
-      body: JSON.stringify({
-        user: username,
-        password: await ToSHA1(password!)
-      })
-    });
+    try {
+      const response = await fetch(`${AppConstants.apiSecurity}/token`, {
+        method: 'POST',
+        body: JSON.stringify({
+          user: username,
+          password: await ToSHA1(password!)
+        })
+      });
 
-    const responseData = await response.json() as CommandResponseInfo;
-    const user = responseData.data as UserDataByUserAndPasswordSpec;
+      const responseData = await response.json() as CommandResponseInfo;
+      const user = responseData.data as UserDataByUserAndPasswordSpec;
 
-    setLoading(false);
+      setLoading(false);
 
-    if (!response.ok) {
-      return setError(responseData.message);
+      if (!response.ok) {
+        return setError(responseData.message);
+      }
+
+      login(user);
+      window.location.href = '/setepidsf/savingfund';
+    } catch (err: any) {
+      setError('No se pudo iniciar sesión, verifique la conexión con el servidor.');
+    } finally {
+      setLoading(false);
     }
-
-    login(user);
-    window.location.href = '/setepidsf/savingfund';
   };
 
   useEffect(() => {

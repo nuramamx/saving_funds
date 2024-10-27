@@ -28,19 +28,14 @@ const fastify = Fastify({
 
 fastify.register(cors, {
   origin: (origin, cb) => {
-    const url = origin || "";
+    const url = origin || '';
 
-    if (url === "") {
+    if (url === '') {
       cb(new Error(`URL Empty ${origin} => Not allowed`), false);
       return;
     }
 
     const hostname = new URL(url).hostname;
-
-    // if (hostname !== "localhost" || hostname !== 'setepidsf.ngrok.io') {
-    //   cb(new Error(`${hostname} => Not allowed`), false);
-    //   return;
-    // }
 
     cb(null, true);
     return;
