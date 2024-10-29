@@ -62,10 +62,10 @@ export default function BatchUpload() {
 
       pushNotification({ message: result.message, type: result.type });
     } catch (err: any) {
-      pushNotification({ message: err.message, type: 'danger' });
+      pushNotification({ message: err.message + ' - Revise formato de fechas (AAAA-MM-DD).', type: 'danger' });
     } finally {
-      navigate(location.pathname, { replace: true });
       setLoading(false);
+      navigate(location.pathname, { replace: true });
     }
   };
 
@@ -93,7 +93,7 @@ export default function BatchUpload() {
         <div className="column is-3" data-tg-tour="Tipo de proceso a realizar: APORTACIONES, PAGOS, RETIROS, SOCIOS y PRÉSTAMOS.">
           <SFSelectBatch id="batch-upload-process" name="Proceso" value={batchUpload.process} onChange={(v) => setBatchUpload({ ...batchUpload, process: v })} issues={issues} />
         </div>
-        {batchUpload.process !== 'APORTACIONES' && batchUpload.process !== 'SOCIOS' && (
+        {batchUpload.process !== 'SOCIOS' && (
           <div className="column is-4">
             <div className="checkboxes" style={{ padding: '20px' }}>
               <label className="checkbox" data-tg-tour="Nos deshabilita las reglas de negocio, permitiendo ingresar información en bruto sin validar.">

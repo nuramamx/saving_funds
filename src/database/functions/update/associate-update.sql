@@ -26,8 +26,8 @@ begin
   elseif p_rfc is null or p_rfc = '' then
     message := 'El R.F.C. es requerido.';
     return;
-  elseif length(p_rfc) <> 10 and length(p_rfc) <> 13 then
-    message := 'El R.F.C. debe tener 10 o 13 caracteres.';
+  elseif length(p_rfc) <> 10 and length(p_rfc) <> 12 and length(p_rfc) <> 13 then
+    message := 'El R.F.C. debe tener 10, 12 o 13 caracteres.';
     return;
   elseif p_gender is null or p_gender = '' then
     message := 'El género es requerido.';

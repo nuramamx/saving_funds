@@ -91,7 +91,7 @@ export function AssociateComposer() {
         });
       }
 
-      pushNotification({ message: 'Socio creado con éxito.', type: 'success' });
+      pushNotification({ message: `Socio ${!editMode ? 'creado' : 'actualizado'} con éxito.`, type: 'success' });
       navigate('/savingfund/associate/list');
     } catch (error: any) {
       pushNotification({ message: error.message, type: 'danger' });

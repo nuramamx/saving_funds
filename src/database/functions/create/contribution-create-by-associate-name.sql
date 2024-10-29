@@ -3,6 +3,8 @@ create or replace function process.contribution_create_by_associate_name(
   in p_associate_name text,
   in p_amount numeric,
   in p_applied_at timestamp with time zone,
+  in p_disable_rules boolean default false,
+  in p_validation_only boolean default false,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -40,12 +42,14 @@ begin
   end if;
 
   begin
-    insert into process.contribution(saving_fund_id, amount, applied_at)
-    values (
-      v_saving_fund_id
-      ,p_amount
-      ,p_applied_at
-    ) returning id into inserted_id;
+    if p_validation_only = false then
+      insert into process.contribution(saving_fund_id, amount, applied_at)
+      values (
+        v_saving_fund_id
+        ,p_amount
+        ,p_applied_at
+      ) returning id into inserted_id;
+    end if;
 
     success := true;
     message := 'Se realizó la transacción satisfactoriamente.';
