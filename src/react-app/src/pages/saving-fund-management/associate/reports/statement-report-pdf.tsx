@@ -131,7 +131,7 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
             <Text style={styles.tableCell}>{row.year}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.initialBalance)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.contributionSummarized)}</Text>
-            <Text style={styles.tableCell}>{ToMoney(row.annualInterestRate)}</Text>
+            <Text style={styles.tableCell}>{row.annualInterestRate}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.yields)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.withdrawalsSummarized)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>
@@ -232,7 +232,7 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
             <Text style={styles.tableCell}>{row.year}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.initialBalance)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.contributionSummarized)}</Text>
-            <Text style={styles.tableCell}>{ToMoney(row.annualInterestRate)}</Text>
+            <Text style={styles.tableCell}>{row.annualInterestRate}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.yields)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.withdrawalsSummarized)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>

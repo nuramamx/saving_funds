@@ -110,6 +110,32 @@ begin
     where temp_report_statement."year" = v_year_iterated;
   end loop;
 
+  -- Check if temp table has data in the past year, if not, copy last year with data.
+  if (select count(1) from temp_report_statement as t where t.year = (v_current_year - 1)) = 0 then
+    insert into temp_report_statement (
+      year,
+      initial_balance,
+      contribution_summarized,
+      annual_interest_rate,
+      yields,
+      withdrawals_summarized,
+      refund,
+      net_total
+    )
+    select
+      (v_current_year - 1)
+      ,t.initial_balance
+      ,t.contribution_summarized
+      ,t.annual_interest_rate
+      ,t.yields
+      ,t.withdrawals_summarized
+      ,t.refund
+      ,t.net_total
+    from temp_report_statement as t
+    order by t.year desc
+    limit 1;
+  end if;
+
   return query
   select
     t.year
