@@ -16,6 +16,7 @@ declare
   v_saving_fund_id integer;
   v_current_year integer;
   v_year_first_contribution integer;
+  v_year_last_contribution integer;
   v_year_iterated integer;
 begin
   -- Get the saving fund related to the associate,
@@ -110,30 +111,37 @@ begin
     where temp_report_statement."year" = v_year_iterated;
   end loop;
 
+  -- Check last contribution year
+  v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
+
   -- Check if temp table has data in the past year, if not, copy last year with data.
   if (select count(1) from temp_report_statement as t where t.year = (v_current_year - 1)) = 0 then
-    insert into temp_report_statement (
-      year,
-      initial_balance,
-      contribution_summarized,
-      annual_interest_rate,
-      yields,
-      withdrawals_summarized,
-      refund,
-      net_total
-    )
-    select
-      (v_current_year - 1)
-      ,t.initial_balance
-      ,t.contribution_summarized
-      ,t.annual_interest_rate
-      ,t.yields
-      ,t.withdrawals_summarized
-      ,t.refund
-      ,t.net_total
-    from temp_report_statement as t
-    order by t.year desc
-    limit 1;
+    -- Check last contribution year
+    v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
+
+    for v_year_iterated in v_year_last_contribution..(v_current_year-1) loop
+      insert into temp_report_statement (
+        year,
+        initial_balance,
+        contribution_summarized,
+        annual_interest_rate,
+        yields,
+        withdrawals_summarized,
+        refund,
+        net_total
+      )
+      select
+        (v_year_iterated+1)
+        ,t.initial_balance
+        ,0 -- no contributions because is auto-generated
+        ,t.annual_interest_rate
+        ,0 -- no yields because is auto-generated
+        ,0 -- no withdrawals because is auto-generated
+        ,t.refund
+        ,t.net_total
+      from temp_report_statement as t
+      where t.year = v_year_iterated;
+    end loop;
   end if;
 
   return query
