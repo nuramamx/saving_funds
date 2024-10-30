@@ -106,7 +106,7 @@ export default function SavingFundList() {
                     <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
                     <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
                     <WithdrawalCreateActionButton savingFundId={savingFund.id} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
-                    <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={savingFund.associateName} />
+                    <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} />
                     <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
                   </td>
                 </tr>

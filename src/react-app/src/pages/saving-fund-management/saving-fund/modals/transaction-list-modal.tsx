@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { v4 as uuid } from "uuid";
-import useNotificationStore from '../../../../core/stores/notification-store';
 import AppConstants from '../../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
 import ToMoney from '../../../../core/util/conversions/money-conversion';
@@ -17,15 +16,14 @@ type TransactionListModalParams = {
 };
 
 export default function TransactionListModal({ savingFundId, associateName, show, onClose}: TransactionListModalParams) {
-  const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(0);
   const [transactions, setTransactions] = useState<SavingFundTransactionListSpec[]>([]);
 
   const handleClose = () => {
     if (onClose) {
-      setYear(new Date().getFullYear());
+      setYear(0);
       setTransactions([]);
       onClose();
     }
@@ -133,6 +131,20 @@ export default function TransactionListModal({ savingFundId, associateName, show
             {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
           </label>
         </div>
+        <div>
+          <label style={{ fontSize: '2vh' }}>Total:</label>&nbsp;&nbsp;
+          <label style={{ fontSize: '2vh', fontWeight: 'bold' }}>
+            {
+              ToMoney(
+                transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0) +
+                transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0) +
+                transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0)
+              )
+            }
+          </label>
+        </div>
+        <div></div>
+        <div></div>
         <div className='is-pulled-right'>
           <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
         </div>
