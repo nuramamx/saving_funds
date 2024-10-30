@@ -13,7 +13,7 @@ const LayoutAppHeader = memo(() => {
               width="30"
               height="20"
             />&nbsp;
-            <strong>S.E.T.E.P.I.D. | Sistema de Fondo de Ahorro</strong>
+            <strong>SETEPID | Sistema de Fondo de Ahorro</strong>
           </div>
         </div>
         <LayoutAppMenu />
