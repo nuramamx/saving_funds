@@ -36,7 +36,7 @@ begin
   from "catalog".associate as a
   join "system".agreement as ag on (a.detail->>'agreementId')::integer = ag.id
   where (p_id = 0 or a.id = p_id)
-  order by a.id, a.is_active desc
+  order by a.is_active desc, a.id
   limit p_limit offset p_offset;
 end;
 $$ language plpgsql;

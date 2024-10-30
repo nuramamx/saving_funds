@@ -115,7 +115,7 @@ begin
   v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
 
   -- Check if temp table has data in the past year, if not, copy last year with data.
-  if (select count(1) from temp_report_statement as t where t.year = (v_current_year - 1)) = 0 then
+  if (select count(1) from temp_report_statement as t where t.year = v_current_year) = 0 then
     -- Check last contribution year
     v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
 

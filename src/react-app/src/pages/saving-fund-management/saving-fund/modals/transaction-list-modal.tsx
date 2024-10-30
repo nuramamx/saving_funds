@@ -84,33 +84,35 @@ export default function TransactionListModal({ savingFundId, associateName, show
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
           <thead>
             <tr key={1}>
+              <th>#</th>
               <th>A&ntilde;o</th>
               <th>Fecha</th>
               <th>Tipo</th>
               <th>Monto</th>
               <th>% Inter&eacute;s</th>
               <th>Balance</th>
-              <th>Rendimientos</th>
+              <th>Balance + Rendimientos</th>
             </tr>
           </thead>
           <tbody>
             {transactions !== undefined && transactions?.length > 0 ? (
-              transactions.map((savingFund: SavingFundTransactionListSpec) => (
+              transactions.map((savingFund: SavingFundTransactionListSpec, index) => (
               <tr key={`${uuid()}`}
                 style={{ 
                   backgroundColor: (savingFund.transactionType.includes('withdrawal')) ? '#f2d7d5' : 'default'
                 }}>
+                <td>{index+1}</td>
                 <td>{savingFund.year}</td>
                 <td>{savingFund.transactionDate}</td>
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{Number(savingFund.rate).toFixed(2)}</td>
                 <td>{ToMoney(savingFund.runningBalance)}</td>
-                <td>{ToMoney(savingFund.partialYields)}</td>
+                <td>{ToMoney(savingFund.netBalance)}</td>
               </tr>
             ))) : (
               <tr>
-                <td colSpan={7} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
+                <td colSpan={8} style={{textAlign: 'center'}}>No hay transacciones disponibles en el {year}</td>
               </tr>
             )}
           </tbody>

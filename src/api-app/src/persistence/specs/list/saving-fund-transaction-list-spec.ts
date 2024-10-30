@@ -5,5 +5,6 @@ export default interface SavingFundTransactionListSpec {
   amount: number;
   rate: number;
   runningBalance: number;
+  net_balance: number;
   partialYields: number;
 }
