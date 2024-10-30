@@ -59,8 +59,8 @@ begin
   begin
     insert into "catalog".associate ("name", rfc, gender, detail, address, workplace, beneficiaries, is_active)
     values (
-      upper(p_name)
-      ,upper(p_rfc)
+      upper(trim(p_name))
+      ,upper(trim(p_rfc))
       ,upper(p_gender)
       ,p_detail
       ,p_address

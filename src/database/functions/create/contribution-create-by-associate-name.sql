@@ -33,6 +33,7 @@ begin
     from process.saving_fund as s
     join catalog.associate as a on s.associate_id = a.id
     where a.name = trim(upper(p_associate_name))
+    and a.is_active = true
     limit 1
   );
 
