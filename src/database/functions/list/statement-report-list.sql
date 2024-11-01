@@ -111,6 +111,16 @@ begin
     where temp_report_statement."year" = v_year_iterated;
   end loop;
 
+  -- Format data
+  update temp_report_statement
+    set
+      initial_balance = coalesce(temp_report_statement.initial_balance, 0)
+      ,contribution_summarized = coalesce(temp_report_statement.contribution_summarized, 0)
+      ,annual_interest_rate = coalesce(temp_report_statement.annual_interest_rate, 0)
+      ,yields = coalesce(temp_report_statement.yields, 0)
+      ,withdrawals_summarized = coalesce(temp_report_statement.withdrawals_summarized, 0)
+      ,net_total = coalesce(coalesce(temp_report_statement.initial_balance, 0) + coalesce(temp_report_statement.net_total, 0), 0);
+
   -- Check last contribution year
   v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
 
@@ -118,6 +128,8 @@ begin
   if (select count(1) from temp_report_statement as t where t.year = v_current_year) = 0 then
     -- Check last contribution year
     v_year_last_contribution := (select t.year from temp_report_statement as t order by t.year desc limit 1);
+
+    raise notice 'last year: %', v_year_last_contribution;
 
     for v_year_iterated in v_year_last_contribution..(v_current_year-1) loop
       insert into temp_report_statement (
@@ -132,7 +144,7 @@ begin
       )
       select
         (v_year_iterated+1)
-        ,t.initial_balance
+        ,t.net_total
         ,0 -- no contributions because is auto-generated
         ,t.annual_interest_rate
         ,0 -- no yields because is auto-generated
@@ -140,20 +152,23 @@ begin
         ,t.refund
         ,t.net_total
       from temp_report_statement as t
-      where t.year = v_year_iterated;
+      where t.year = v_year_last_contribution
+      limit 1;
+
+      raise notice 'net total => %', (select t.net_total from temp_report_statement as t where t.year = 2012 limit 1);
     end loop;
   end if;
 
   return query
   select
     t.year
-    ,coalesce(t.initial_balance, 0)
-    ,coalesce(t.contribution_summarized, 0)
-    ,coalesce(t.annual_interest_rate, 0)
-    ,coalesce(t.yields, 0)
-    ,coalesce(t.withdrawals_summarized, 0)
-    ,coalesce(t.refund, 0)
-    ,coalesce(coalesce(t.initial_balance, 0) + t.net_total, 0)
+    ,t.initial_balance
+    ,t.contribution_summarized
+    ,t.annual_interest_rate
+    ,t.yields
+    ,t.withdrawals_summarized
+    ,t.refund
+    ,t.net_total
   from temp_report_statement as t;
 end;
 $$ language plpgsql;

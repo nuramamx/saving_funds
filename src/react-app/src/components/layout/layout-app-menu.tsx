@@ -15,7 +15,7 @@ const tg = new TourGuideClient({
 
 const LayoutAppMenu = memo(() => {
   const { logout } = useAuth();
-  const { selectedMenu, setSelectedMenu, restoreMenu, restoreSidebarMenu } = useLayoutStore();
+  const { selectedMenu, setSelectedMenu, restoreSidebarMenu } = useLayoutStore();
   const { reset: resetCache } = useCacheStore();
   const { reset: resetLayout } = useLayoutStore();
   const { reset: resetAuth } = useAuthStore();
