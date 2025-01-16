@@ -14,11 +14,6 @@ begin
   success := false;
   message := 'Operación no iniciada.';
 
-  if p_amount <= 0 then
-    message := 'El monto de la aportación debe ser mayor a cero.';
-    return;
-  end if;
-
   v_server_datetime := (p_applied_at::date + current_time::time);
 
   begin

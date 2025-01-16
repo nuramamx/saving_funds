@@ -7,6 +7,8 @@ import AppConstants from "../../../../core/constants/app-constants";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 import WithdrawalCreateCommand from "../../../../core/interfaces/commands/withdrawal-create-command";
 import useAuthStore from "../../../../core/stores/auth-store";
+import SFDatePickerInput from "../../../../components/form/sf-datepicker-input";
+import { addDays } from "date-fns";
 
 interface WithdrawalCreateModalParams extends SFModalInfo {
   savingFundId: number;
@@ -16,7 +18,8 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   const initialState = {
     savingFundId: undefined!,
     amount: 0,
-    isYields: false
+    isYields: false,
+    appliedAt: undefined!
   };
   const [withdrawal, setWithdrawal] = useState<WithdrawalCreateCommand>(initialState);
   const { pushNotification } = useNotificationStore();
@@ -71,7 +74,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   return (
     <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
     <div className="modal-background"></div>
-    <div className="modal-card" style={{width: '30%'}}>
+    <div className="modal-card"  style={{width: '30%', height: '75%'}}>
       <header className="modal-card-head">
         <p className="modal-card-title">Registrar Retiro</p>
         <button className="delete" aria-label="close" onClick={handleClose}></button>
@@ -80,16 +83,18 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
         <div className="columns">
           <div className="column is-1"></div>
           <div className="column">
+          <SFDatePickerInput params={{
+              id: 'withdrawal_applied_date',
+              name: 'Fecha de Aplicación',
+              value: withdrawal.appliedAt,
+              onChange: (value) => setWithdrawal({ ...withdrawal, appliedAt: value }),
+              minDate: new Date(2008, 0),
+              maxDate: addDays(new Date(), 0),
+              showYear: true
+            }} />
             <SFMoneyInput id={`${uuid()}_withdrawal_amount`} name="Monto de retiro"
               value={withdrawal.amount}
               onChange={(value) => setWithdrawal({ ...withdrawal, amount: value })} />
-            <label className="checkbox">
-              <input type="checkbox"
-                id={`${uuid()}_withdrawal_is_interest`}
-                checked={withdrawal.isYields}
-                onChange={() => setWithdrawal({ ...withdrawal, isYields: !withdrawal.isYields })} />
-              &nbsp;Retiro de Rendimientos
-            </label>
           </div>
           <div className="column is-1"></div>
         </div>

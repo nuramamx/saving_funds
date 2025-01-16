@@ -15,6 +15,7 @@ returns table (
 declare
   v_saving_fund_id integer;
   v_current_year integer;
+  v_id_first_contribution integer;
   v_year_first_contribution integer;
   v_year_last_contribution integer;
   v_year_iterated integer;
@@ -32,8 +33,11 @@ begin
 
   -- Get the year of first contribution.
   select
-    extract(year from c.applied_at)::integer
-  into v_year_first_contribution
+    c.id
+    ,extract(year from c.applied_at)::integer
+  into
+    v_id_first_contribution
+    ,v_year_first_contribution
   from process.contribution as c
   where c.saving_fund_id = v_saving_fund_id
   order by c.applied_at
@@ -62,12 +66,26 @@ begin
   -- Iterate through years to get the summarized data.
   for v_year_iterated in v_year_first_contribution..v_current_year loop
     insert into temp_report_statement ("year", contribution_summarized, yields, withdrawals_summarized)
+    with pre_processed_contributions as (
+      select
+        r.year::integer as "year"
+        ,r.id
+        ,r.transaction_type
+        ,r.amount
+        ,r.partial_yields
+        ,case
+          when v_id_first_contribution = r.id
+          then 0
+          else r.partial_yields
+        end as calculated_yields
+      from process.contribution_get_accrued_yields_detailed(v_saving_fund_id, v_year_iterated) as r
+    )
     select
       r.year::integer as "year"
       ,sum(case when r.transaction_type = 'contribution' then r.amount else 0 end) as contribution_summarized
-      ,sum(r.partial_yields) as yields_summarized
+      ,sum(r.calculated_yields) as yields_summarized
       ,sum(case when r.transaction_type like '%withdrawal%' then r.amount else 0 end) as withdrawals_summarized
-    from process.contribution_get_accrued_yields_detailed(v_saving_fund_id, v_year_iterated) as r
+    from pre_processed_contributions as r
     group by
       r.year;
   end loop;

@@ -48,7 +48,7 @@ begin
     ,to_char(b.created_at at time zone 'utc', 'YYYY-MM-dd') as created_at
     ,case
       when (payments.total_paid >= bd.total_due) then 'LIQUIDADO'
-      when (payments.payments_made >= bd.number_payments) then 'LIQUIDADO'
+      when (payments.payments_made >= bd.number_payments and payments.total_paid >= bd.total_due) then 'LIQUIDADO'
       else 'NO LIQUIDADO' end
       as resolution
   from process.borrow as b

@@ -28,12 +28,6 @@ begin
   elseif p_period not in (1,2,3) then
     message := 'El periodo no está en el rango requerido (1, 2, 3).';
     return;
-  elseif p_start_at < current_date then
-    message := 'La fecha de inicio no puede ser antes del día de la fecha de inscripción del préstamo.';
-    return;
-  elseif p_start_at > (current_date + interval '30 days') then
-    message := 'La fecha de inicio no puede ser mayor a 30 días a partir de la fecha de inscripción del préstamo.';
-    return;
   end if;
 
   -- Check if associate has a not settled borrow.

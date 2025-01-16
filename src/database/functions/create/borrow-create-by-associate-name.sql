@@ -45,7 +45,7 @@ begin
   );
 
   if v_associate_id is null then
-    message := 'Socio no pudo ser localizado con el nombre especificado.';
+    message := 'Socio no pudo ser localizado con el nombre especificado: ' || p_associate_name;
     return;
   end if;
 

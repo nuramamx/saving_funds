@@ -14,8 +14,6 @@ begin
   success := false;
   message := 'Operación no iniciada.';
 
-  
-
   if p_amount <= 0 then
     message := 'El monto de la aportación debe ser mayor a cero.';
     return;

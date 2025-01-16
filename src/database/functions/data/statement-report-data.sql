@@ -68,10 +68,23 @@ begin
         ,case when ag.name = 'ISS' then 12 else 24 end as count_frequency
         ,to_char(current_date, 'DD-MM-YYYY') as date_range
         ,(a.detail->>'frequentContribution')::numeric(20,6) as frequent_contribution
-        ,case when ag.name = 'ISS'
-          then (a.detail->>'socialContribution')::numeric(20,6) * 3 -- ISS is pension
-          else (a.detail->>'socialContribution')::numeric(20,6) * 6 -- Any other
-        end as amount_to_withhold
+        ,(
+          select
+            case
+              when ag.name = 'ISS' then (sum(to_withhold.amount) * 3)
+              else sum(to_withhold.amount) * 6
+            end
+          from (
+            select
+              c.amount
+            from process.contribution as c
+            join process.saving_fund as s
+              on s.id = c.saving_fund_id
+            where s.associate_id = p_associate_id
+            order by c.applied_at
+            limit 1
+          ) as to_withhold
+        ) as amount_to_withhold
         ,(
           select
             case when rs.net_total < 0 then 0 else rs.net_total end as net_total

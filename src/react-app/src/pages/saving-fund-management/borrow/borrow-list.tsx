@@ -88,6 +88,7 @@ export default function BorrowList() {
                 <th>Id</th>
                 <th>Folio</th>
                 <th data-tg-tour="Monto solicitado por el socio.">Monto Solicitado</th>
+                <th data-tg-tour="Pago frecuente requerido.">Pago</th>
                 <th data-tg-tour="Es el total a pagar calculado por el sistema.">Total a Pagar</th>
                 <th data-tg-tour="Son los pagos que ha realizado el socio.">Total pagado</th>
                 <th data-tg-tour="Número de pagos totales a realizar calculados por el sistema.">Pagos a realizar</th>
@@ -107,6 +108,7 @@ export default function BorrowList() {
                   <td>{borrow.id}</td>
                   <td>{borrow.fileNumber}</td>
                   <td>{ToMoney(borrow.requestedAmount)}</td>
+                  <td>{ToMoney(borrow.totalDue / borrow.numberPayments)}</td>
                   <td>{ToMoney(borrow.totalDue)}</td>
                   <td>{ToMoney(borrow.totalPaid)}</td>
                   <td>{borrow.numberPayments}</td>

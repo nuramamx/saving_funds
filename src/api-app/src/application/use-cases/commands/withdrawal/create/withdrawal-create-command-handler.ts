@@ -6,7 +6,8 @@ import WithdrawalSaveRepository from "../../../../../persistence/repositories/sa
 type WithdrawalCreateCommand = {
   savingFundId: number;
   amount: number;
-  isYields: boolean
+  isYields: boolean;
+  appliedAt: Date;
 };
 
 class WithdrawalCreateCommandHandler implements CommandHandler<WithdrawalCreateCommand, CommandResponse> {
@@ -17,7 +18,8 @@ class WithdrawalCreateCommandHandler implements CommandHandler<WithdrawalCreateC
       const entity = new Withdrawal(
         data.savingFundId,
         data.amount,
-        data.isYields
+        data.isYields,
+        data.appliedAt
       );
 
       const result = await repository.save(entity);

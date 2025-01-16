@@ -27,10 +27,11 @@ enum FunctionName {
   SAVING_FUND_LIST = 'select * from process.saving_fund_list(:p_associate_id);',
   SAVING_FUND_TRANSACTION_LIST = 'select * from process.saving_fund_transaction_list(:p_saving_fund_id, :p_year);',
   CONTRIBUTION_CREATE = 'select * from process.contribution_create(:p_saving_fund_id, :p_amount, :p_applied_at);',
-  WITHDRAWAL_CREATE = 'select * from process.withdrawal_create(:p_saving_fund_id, :p_amount, :p_is_yields);',
+  WITHDRAWAL_CREATE = 'select * from process.withdrawal_create(:p_saving_fund_id, :p_amount, :p_applied_at, :p_is_yields);',
   STATEMENT_REPORT_LIST = 'select * from process.statement_report_list(:p_associate_id);',
   STATEMENT_REPORT_DATA = 'select * from process.statement_report_data(:p_associate_id);',
   BORROW_AUTHORIZATION_REPORT_DATA = 'select * from process.borrow_authorization_report_data(:p_borrow_id);',
+  BORROW_QUOTE_REPORT_DATA = 'select * from process.borrow_quote_report_data(:p_borrow_id);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:p_user_id, :p_previous_data, :p_new_data)'
 }

@@ -19,6 +19,7 @@ declare
   v_first_contribution_amount numeric(20,2);
   v_amount_to_withhold numeric(20,2);
   v_available_balance numeric(20,2);
+  v_available_balance_with_yields numeric(20,2);
   v_withdrawal_sum_amount numeric(20,2);
   v_available_interest_balance numeric(20,2);
 begin
@@ -41,23 +42,17 @@ begin
     from process.saving_fund as s
     join catalog.associate as a on s.associate_id = a.id
     where a.name = trim(upper(p_associate_name))
-    and a.is_active = true
     limit 1
   );
 
   if v_saving_fund_id is null then
-    message := 'Fondo de ahorro no pudo ser localizado con el nombre del socio especificado.';
+    message := 'Fondo de ahorro no pudo ser localizado con el nombre del socio especificado: ' || p_associate_name;
     return;
   end if;
 
   if p_disable_rules = false then
     -- Get the yields (all years passed).
     v_available_interest_balance := (select * from process.contribution_get_accrued_yields(v_saving_fund_id));
-
-    if p_is_yields and p_amount > v_available_interest_balance then
-      message := 'El monto de retiro de rendimientos excede de los disponibles.';
-      return;
-    end if;
 
     -- Get associate agreement.
     select
@@ -70,18 +65,22 @@ begin
 
     -- Get the first contribution.
     select
-      coalesce(c.amount, 0)
+      sum(to_withhold.amount)
     into v_first_contribution_amount
-    from process.contribution as c
-    where c.saving_fund_id = v_saving_fund_id
-    order by c.applied_at desc
-    limit 1;
-
+    from (
+      select
+        c.amount
+      from process.contribution as c
+      where c.saving_fund_id = p_saving_fund_id
+      order by c.applied_at
+      limit 1
+    ) as to_withhold;
+  
     -- Amount to withhold.
     if (v_associate_agreement = 'ISS') then
-      v_amount_to_withhold := v_first_contribution_amount * 3;
+      v_amount_to_withhold := ((v_first_contribution_amount * 3));
     else
-      v_amount_to_withhold := v_first_contribution_amount * 6;
+      v_amount_to_withhold := (v_first_contribution_amount * 6);
     end if;
 
     -- Get the current balance from contributions.
@@ -106,17 +105,13 @@ begin
       v_available_balance := 0;
     end if;
 
-    -- Check if withdrawal amount is not greater than balance (without consider yields).
-    if p_amount > v_available_balance and p_is_yields = false then
-      message := 'El monto del retiro es superior al balance actual ($' || v_available_balance::numeric(20,2) || ') ' ||
-                 'del fondo de ahorro. Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
-      return;
-    end if;
+    -- Sum balance + yields.
+    v_available_balance_with_yields := v_available_balance + v_available_interest_balance;
 
     -- Check if withdrawal amount is not greater than balance + yields.
-    if p_amount > v_available_balance then
+    if p_amount > v_available_balance_with_yields then
       message := 'El monto del retiro es superior al balance actual con rendimientos ' ||
-                 '($' || v_available_balance::numeric(20,2) || ') del fondo de ahorro. ' ||
+                 '($' || v_available_balance_with_yields::numeric(20,2) || ') del fondo de ahorro. ' ||
                  'Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
       return;
     end if;

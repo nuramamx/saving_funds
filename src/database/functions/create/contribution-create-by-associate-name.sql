@@ -22,10 +22,10 @@ begin
     return;
   end if;
 
-  if p_amount <= 0 then
-    message := 'El monto de la aportación debe ser mayor a cero.';
-    return;
-  end if;
+--   if p_amount <= 0 then
+--     message := 'El monto de la aportación debe ser mayor a cero.';
+--     return;
+--   end if;
 
   v_saving_fund_id := (
     select
@@ -33,12 +33,11 @@ begin
     from process.saving_fund as s
     join catalog.associate as a on s.associate_id = a.id
     where a.name = trim(upper(p_associate_name))
-    and a.is_active = true
     limit 1
   );
 
   if v_saving_fund_id is null then
-    message := 'Fondo de ahorro no pudo ser localizado con el nombre del socio especificado.';
+    message := 'Fondo de ahorro no pudo ser localizado con el nombre del socio especificado: ' || p_associate_name;
     return;
   end if;
 

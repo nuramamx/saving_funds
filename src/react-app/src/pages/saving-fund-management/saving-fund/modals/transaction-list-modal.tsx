@@ -37,6 +37,8 @@ export default function TransactionListModal({ savingFundId, associateName, show
         return 'Retiro';
       case 'withdrawal-yields':
         return 'Retiro de Intereses';
+        case 'fix':
+          return 'Corrección';
       default:
         return 'No identificado';
     }
@@ -87,9 +89,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
               <th>Fecha</th>
               <th>Tipo</th>
               <th>Monto</th>
-              <th>% Inter&eacute;s</th>
               <th>Balance</th>
-              <th>Balance + Rendimientos</th>
             </tr>
           </thead>
           <tbody>
@@ -97,16 +97,14 @@ export default function TransactionListModal({ savingFundId, associateName, show
               transactions.map((savingFund: SavingFundTransactionListSpec, index) => (
               <tr key={`${uuid()}`}
                 style={{ 
-                  backgroundColor: (savingFund.transactionType.includes('withdrawal')) ? '#f2d7d5' : 'default'
+                  backgroundColor: (savingFund.transactionType.includes('withdrawal') || savingFund.transactionType.includes('fix')) ? '#f2d7d5' : 'default'
                 }}>
                 <td>{index+1}</td>
                 <td>{savingFund.year}</td>
                 <td>{savingFund.transactionDate}</td>
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
-                <td>{Number(savingFund.rate).toFixed(2)}</td>
                 <td>{ToMoney(savingFund.runningBalance)}</td>
-                <td>{ToMoney(savingFund.netBalance)}</td>
               </tr>
             ))) : (
               <tr>
@@ -118,22 +116,22 @@ export default function TransactionListModal({ savingFundId, associateName, show
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>
-          <label style={{ fontSize: '1vh' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+          <label style={{ fontSize: '1.2em' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
             {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
           </label><br />
-          <label style={{ fontSize: '1vh' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+          <label style={{ fontSize: '1.2em' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
             {ToMoney(transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
           </label><br />
-          <label style={{ fontSize: '1vh' }}>Rendimientos {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1vh' }}>
+          <label style={{ fontSize: '1.2em' }}>Rendimientos {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
             {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
           </label>
         </div>
         <div>
-          <label style={{ fontSize: '2vh' }}>Total:</label>&nbsp;&nbsp;
-          <label style={{ fontSize: '2vh', fontWeight: 'bold' }}>
+          <label style={{ fontSize: '2em' }}>Total:</label>&nbsp;&nbsp;
+          <label style={{ fontSize: '2em', fontWeight: 'bold' }}>
             {
               ToMoney(
                 transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0) +

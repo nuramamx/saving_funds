@@ -75,8 +75,6 @@ export default function SavingFundList() {
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
             <thead>
               <tr key={1}>
-                <th>Id</th>
-                <th>Socio</th>
                 <th>Convenio</th>
                 <th>Salario</th>
                 <th>Aportaci&oacute;n inicial</th>
@@ -92,8 +90,6 @@ export default function SavingFundList() {
               {savingFunds !== undefined && savingFunds?.length > 0 ? (
                 savingFunds.map((savingFund: SavingFundListSpec) => (
                 <tr key={`${uuid()}`}>
-                  <td>{savingFund.id}</td>
-                  <td>{savingFund.associateName}</td>
                   <td>{savingFund.agreementName}</td>
                   <td>{ToMoney(savingFund.salary)}</td>
                   <td>{ToMoney(savingFund.openingBalance)}</td>

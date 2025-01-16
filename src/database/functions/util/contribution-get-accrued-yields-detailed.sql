@@ -3,6 +3,7 @@ create or replace function process.contribution_get_accrued_yields_detailed(
   in p_saving_fund_id integer,
   in p_year integer default 0
 ) returns table (
+  id integer,
   "year" integer,
   transaction_date text,
   amount numeric(20,6),
@@ -13,18 +14,34 @@ create or replace function process.contribution_get_accrued_yields_detailed(
   partial_yields numeric(20,6)
 ) as $$
 declare
+  v_id_first_contribution integer;
 begin
+  -- Get the year of first contribution.
+  select
+    c.id
+  into
+    v_id_first_contribution
+  from process.contribution as c
+  where c.saving_fund_id = p_saving_fund_id
+  order by c.applied_at
+  limit 1;
+
   return query
   with transaction_data as (
     -- Collect all contributions and withdrawals
     select
+      c.id,
       c.applied_at as transaction_date,
       c.amount,
-      'contribution' as transaction_type
+      case
+        when c.amount > 0 then 'contribution'
+        else 'fix'
+      end as transaction_type
     from process.contribution as c
     where c.saving_fund_id = p_saving_fund_id
     union all
     select
+      w.id,
       w.applied_at as transaction_date,
       -w.amount,
       'withdrawal' as transaction_type
@@ -32,6 +49,7 @@ begin
     where w.saving_fund_id = p_saving_fund_id and w.is_yields = false
     union all
     select
+      w.id,
       w.applied_at as transaction_date,
       -w.amount,
       'withdrawal-yields' as transaction_type
@@ -41,6 +59,7 @@ begin
   sorted_transactions as (
     -- Calculate running balance and year for each transaction
     select
+      t.id,
       t.transaction_date,
       t.amount,
       t.transaction_type,
@@ -53,7 +72,7 @@ begin
     select
       s.year,
       max(s.running_balance) as end_of_year_balance,
-      sum(case when s.transaction_type = 'contribution' then s.amount else 0 end) as yearly_contributions
+      sum(case when s.transaction_type = 'contribution' and s.id <> v_id_first_contribution then s.amount else 0 end) as yearly_contributions
     from sorted_transactions as s
     group by s.year
   ),
@@ -71,10 +90,7 @@ begin
       yt.year,
       yt.end_of_year_balance,
       yt.yearly_contributions,
-      case when (yt.yearly_contributions - yearly_withdrawals.amount) > 0
-        then (((yt.yearly_contributions - yearly_withdrawals.amount) * ar.rate) / 100)
-        else 0
-      end as yearly_yields,
+      ((yt.yearly_contributions * ar.rate) / 100) yearly_yields,
       ar.rate
     from yearly_totals yt
     join annual_rates ar on yt.year = ar.year
@@ -96,24 +112,38 @@ begin
   yields_distribution as (
     -- Join transaction data with yearly yields and cumulative yields
     select
+      st.id,
       st.transaction_date,
       st.amount,
-      yy.rate,
+      case
+        when st.transaction_type = 'contribution'
+          then yy.rate
+          else 0
+      end as rate,
       st.transaction_type,
       st.running_balance,
-      st.running_balance + coalesce(cy.previous_yields, 0) as net_balance,
+      st.running_balance + coalesce(yields.amount, 0) as net_balance,
       st.year,
       case
         when st.transaction_type = 'contribution' and st.year < extract(year from current_date)
-        then yy.yearly_yields / (select count(*) from sorted_transactions as s where s.year = st.year and s.transaction_type = 'contribution')
-        else 0
+          then yy.yearly_yields / (select count(*) from sorted_transactions as s where s.year = st.year and s.transaction_type = 'contribution')
+          else 0
       end as partial_yields
     from sorted_transactions st
     left join yearly_yields yy on st.year = yy.year
     left join cumulative_yields cy on st.year = cy.year
+    left join lateral (
+      select
+        case
+        when st.transaction_type = 'contribution' and st.year < extract(year from current_date)
+        then yy.yearly_yields / (select count(*) from sorted_transactions as s where s.year = st.year and s.transaction_type = 'contribution')
+        else 0
+      end as amount
+    ) as yields on true
   )
   select
-    r."year"::integer
+    r.id::integer
+    ,r."year"::integer
     ,to_char(r.transaction_date at time zone 'utc', 'YYYY-MM-dd HH24:MI:SS') as transaction_date
     ,r.amount::numeric(20,6)
     ,r.rate::numeric(20,6)

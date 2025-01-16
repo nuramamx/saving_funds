@@ -146,7 +146,7 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR DURANTE EL 2024:</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawal)}</Text>
         </View>
 
@@ -235,7 +235,11 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
             <Text style={styles.tableCell}>{row.annualInterestRate}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.yields)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.withdrawalsSummarized)}</Text>
-            <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>
+            {index === list.length-1 ? (
+              <Text style={styles.tableCell}>{ToMoney(data.netBalance)}</Text>
+            ) : (
+              <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>
+            )}
           </View>
         ))}
 

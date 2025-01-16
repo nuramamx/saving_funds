@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { ZodIssue } from 'zod';
 import { WarningCircle } from 'iconoir-react';
@@ -21,6 +21,9 @@ import BorrowValidation from '../../../core/validations/borrow-validation';
 import SFTextDisplayInput from '../../../components/form/sf-text-display-input';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import AssociateListByIdOrNameSpec from '../../../core/interfaces/specs/list/associate-list-by-id-or-name-spec';
+import saveAs from 'file-saver';
+import { pdf } from '@react-pdf/renderer';
+import BorrowQuoteReportPDF from './reports/borrow-quote-report-pdf';
 
 export default function BorrowCreate() {
   const { 
@@ -70,8 +73,14 @@ export default function BorrowCreate() {
   };
 
   const handlePeriodType = (value: string) => {
-    setPeriodType(value)
-    setBorrow({ ...borrow, isFortnightly: value === 'F' });
+    if (value === '-') {
+      setPeriodType(undefined!);
+      setBorrow({ ...borrow, isFortnightly: undefined! });
+    }
+    else {
+      setPeriodType(value)
+      setBorrow({ ...borrow, isFortnightly: value === 'F' });
+    }
   };
 
   const handlePeriod = (value: string) => {
@@ -81,6 +90,26 @@ export default function BorrowCreate() {
       period: parseInt(value),
       annualRate: annualRates.find(x => x.period === period)?.rate ?? 0
     });
+  };
+
+  const print = async () => {
+    if (!handleAssociateValidate()) return;
+
+    const blob = await pdf(<BorrowQuoteReportPDF data={{
+      currentYear: new Date().getFullYear(),
+      associateName: associate?.name!,
+      period: borrow.period === 1 ? borrow.period + ' Año' : borrow.period + ' Años',
+      isFortnightly: borrow.isFortnightly,
+      requestedAmount: borrow.requestedAmount,
+      numberPayments: borrow.detail.numberPayments,
+      totalWithInterests: (borrow.detail.totalDue - borrow.detail.guaranteeFund),
+      guaranteeFund: borrow.detail.guaranteeFund,
+      totalDue: borrow.detail.totalDue,
+      payment: borrow.detail.payment,
+      startAt: format(borrow.startAt, 'yyyy-MM-dd'),
+    }} />).toBlob();
+
+    saveAs(blob, `Autorización de descuento por crédito - ${associate?.name}.pdf`);
   };
 
   const save = async () => {
@@ -162,6 +191,9 @@ export default function BorrowCreate() {
       {associate?.hasActiveBorrows ? (
           <label style={{ color: '#C0392B' }}><WarningCircle style={{ color: '#C0392B' }} />&nbsp;&nbsp;El socio tiene uno o varios pr&eacute;stamos sin liquidar.</label>
         ) : '' }
+      {issues.find(x => x.path.includes('associateId')) ? (
+          <label style={{ color: '#C0392B' }}><WarningCircle style={{ color: '#C0392B' }} />&nbsp;&nbsp;Debe seleccionar el socio.</label>
+        ) : '' }
     </div>
     <div className="columns">&nbsp;</div>
     <div className="columns">&nbsp;</div>
@@ -173,16 +205,16 @@ export default function BorrowCreate() {
           value={borrow.requestedAmount}
           onChange={(value) => setBorrow({ ...borrow, requestedAmount: value })}
           issues={issues} />
-        <SFSelectInput id="borrow-periodType" name="Tipo de Periodo"
+        <SFSelectInput id="borrow-isFortnightly" name="Tipo de Periodo"
           tour="Periodo quincenal o mensual."
           value={periodType}
-          options={([ { key: "---", value: "-"}, { key: "QUINCENAL", value: "F"}, { key: "MENSUAL", value: "M" }])}
+          options={([ { key: '---', value: '-' }, { key: 'QUINCENAL', value: 'F' }, { key: 'MENSUAL', value: 'M' }])}
           onChange={(value) => handlePeriodType(value)}
           issues={issues} />
         <SFSelectInput id="borrow-period" name="Duración"
           tour="Duración del préstamo, de uno a tres años."
           value={borrow.period}
-          options={([ { key: '---', value: '-'}, { key: "1 AÑO", value: 1}, { key: "2 AÑOS", value: 2}, { key: "3 AÑOS", value: 3 } ])}
+          options={([ { key: '---', value: '-' }, { key: '1 AÑO', value: 1 }, { key: '2 AÑOS', value: 2}, { key: '3 AÑOS', value: 3 } ])}
           onChange={(value) => handlePeriod(value)}
           issues={issues} />
         <SFDatePickerInput params={{
@@ -193,7 +225,6 @@ export default function BorrowCreate() {
           issues: issues,
           readonly: user.role === 'ADMIN' ? false : true,
           onChange: (value) => setBorrow({ ...borrow, startAt: value }),
-          minDate: new Date(),
           maxDate: addDays(new Date(), 30)
         }} />
       </div>
@@ -236,7 +267,10 @@ export default function BorrowCreate() {
             <button className="button is-light" onClick={() => handleClearBorrow()}>Limpiar</button>
           </div>
           <div className="level-item">
-          <button className="button is-primary" onClick={save}>Guardar</button>
+            <button className="button is-light" onClick={print}>Imprimir</button>
+          </div>
+          <div className="level-item">
+            <button className="button is-primary" onClick={save}>Guardar</button>
           </div>
         </div>
       </nav>

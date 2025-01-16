@@ -32,6 +32,7 @@ import BorrowAuthorizationReportDataQueryHandler, { BorrowAuthorizationReportDat
 import StatementReportListQueryHandler from '../use-cases/queries/report/statement/list/statement-report-list-query-handler';
 import AssociateDeleteCommandHandler, { AssociateDeleteCommand } from '../use-cases/commands/associate/delete/associate-delete-command-handler';
 import BorrowListQueryHandler, { BorrowListQuery } from '../use-cases/queries/borrow/list/borrow-list-query-handler';
+import BorrowQuoteReportGenerateQueryHandler, { BorrowQuoteReportGenerateQuery } from '../use-cases/queries/report/borrow-quote/generate/borrow-quote-report-generate-query-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -67,7 +68,8 @@ type CommandHandlerTypeMap = {
   'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQuery
   // Reports
   'StatementReport': StatementReportGenerateQuery,
-  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery,
+  'BorrowQuoteReportDataQuery': BorrowQuoteReportGenerateQuery
 };
 
 const commandConstructors: {
@@ -106,7 +108,8 @@ const commandConstructors: {
   'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQueryHandler,
   // Reports
   'StatementReport': StatementReportGenerateQueryHandler,
-  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler,
+  'BorrowQuoteReportDataQuery': BorrowQuoteReportGenerateQueryHandler
 };
 
 class CommandHandlerFactory {

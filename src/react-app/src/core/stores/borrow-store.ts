@@ -8,7 +8,7 @@ const borrowInitialState: BorrowCreateCommand = {
   requestedAmount: 0,
   period: 0,
   annualRate: 0,
-  isFortnightly: false,
+  isFortnightly: undefined!,
   requestDate: undefined!,
   startAt: undefined!,
   detail: {

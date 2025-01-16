@@ -8,6 +8,7 @@ type DatePickerInputParams = SFInputInfo & {
   value: Date;
   minDate?: Date;
   maxDate?: Date;
+  showYear?: boolean;
   onChange: (date: Date) => void;
 }
 
@@ -26,6 +27,8 @@ export default function SFDatePickerInput({ params }: DatePickerInput) {
           maxDate={params.maxDate}
           selected={params.value}
           dateFormat="YYYY-MM-dd"
+          showYearDropdown={params.showYear}
+          dropdownMode="select"
           onChange={(e) => params.onChange ? params.onChange(e ?? new Date()) : new Date()} />
       </div>
       <span className="has-text-danger" style={{ fontSize: '13px' }}>{params.issues?.find(x => `${x.path.join('-')}` === params.id)?.message}</span>

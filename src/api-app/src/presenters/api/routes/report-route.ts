@@ -4,6 +4,7 @@ import { BorrowAuthorizationReportDataQuery } from "../../../application/use-cas
 import { StatementReportDataQuery } from "../../../application/use-cases/queries/report/statement/data/statement-report-data-query-handler";
 import { StatementReportGenerateQuery } from "../../../application/use-cases/queries/report/statement/generate/statement-report-generate-query-handler";
 import { BorrowAuthorizationReportGenerateQuery } from "../../../application/use-cases/queries/report/borrow-authorization/generate/borrow-authorization-report-generate-query-handler";
+import { BorrowQuoteReportDataQuery } from "../../../application/use-cases/queries/report/borrow-quote/data/borrow-quote-report-data-query-handler";
 
 async function ReportRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
   fastify.get<{ Params: { id: number }}>('/report/statement/data/:id', async (request, reply) => {
@@ -55,6 +56,17 @@ async function ReportRoute(fastify: FastifyInstance, options: FastifyPluginOptio
     const data: BorrowAuthorizationReportDataQuery = { borrowId: id };
     const command = new CommandHandlerMediator();
     const result = await command.execute('BorrowAuthorizationReportDataQuery', data);
+
+    if (!result) reply.statusCode = 400;
+
+    return result;
+  });
+
+  fastify.get<{ Params: { id: number }}>('/report/borrow_quote/data/:id', async (request, reply) => {
+    const { id } = request.params;
+    const data: BorrowQuoteReportDataQuery = { borrowId: id };
+    const command = new CommandHandlerMediator();
+    const result = await command.execute('BorrowQuoteReportDataQuery', data);
 
     if (!result) reply.statusCode = 400;
 

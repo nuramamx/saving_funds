@@ -15,6 +15,7 @@ export default class WithdrawalSaveRepository  implements SaveRepositoryInfo<Wit
         replacements: {
           p_saving_fund_id: data.savingFundId,
           p_amount: data.amount,
+          p_applied_at: data.appliedAt,
           p_is_yields: data.isYields
         },
         type: QueryTypes.SELECT

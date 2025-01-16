@@ -73,7 +73,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
   return (
     <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
     <div className="modal-background"></div>
-    <div className="modal-card" style={{width: '30%', height: '58%'}}>
+    <div className="modal-card" style={{width: '30%', height: '65%'}}>
       <header className="modal-card-head">
         <p className="modal-card-title">Registrar Aportaci&oacute;n</p>
         <button className="delete" aria-label="close" onClick={handleClose}></button>
@@ -86,9 +86,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
               id: 'contribution_applied_date',
               name: 'Fecha de Aplicación',
               value: contribution.appliedAt,
-              onChange: (value) => setContribution({ ...contribution, appliedAt: value }),
-              minDate: addDays(new Date(), -90),
-              maxDate: addDays(new Date(), 90),
+              onChange: (value) => setContribution({ ...contribution, appliedAt: value })
 
             }} />
             <SFMoneyInput id={`${uuid()}_contribution_amount`} name="Monto de aportación"
