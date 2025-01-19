@@ -5,9 +5,10 @@ import TooltipElement from "../elements/tooltip-element";
 
 type PaymentListActionButtonParams = {
   borrowId: number;
+  associateName: string;
 };
 
-export default function PaymentListActionButton({ borrowId }: PaymentListActionButtonParams) {
+export default function PaymentListActionButton({ borrowId, associateName }: PaymentListActionButtonParams) {
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
 
@@ -24,7 +25,7 @@ export default function PaymentListActionButton({ borrowId }: PaymentListActionB
       <NumberedListLeft />
       <TooltipElement id="payment-list-tooltip" text="Listado de pagos" />
     </button>
-    <PaymentListModal borrowId={selectedBorrow} show={showModal} onClose={() => handleClick(0, false)} />
+    <PaymentListModal borrowId={selectedBorrow} associateName={associateName} show={showModal} onClose={() => handleClick(0, false)} />
     </>
   )
 }

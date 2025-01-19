@@ -121,7 +121,7 @@ export default function BorrowList() {
                   <td>
                     <BorrowAuthorizationReportActionItem associateName={associateName.toUpperCase()} borrowId={borrow.id} />
                     <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload} />
-                    <PaymentListActionButton borrowId={borrow.id} />
+                    <PaymentListActionButton borrowId={borrow.id} associateName={`${associate} - ${associateName}`} />
                   </td>
                 </tr>
               ))) : (
@@ -137,7 +137,6 @@ export default function BorrowList() {
         <RefreshActionButton onClick={() => handleReload()} />
       </div>
     </div>
-    <PaymentListModal borrowId={selectedBorrow} show={showPaymentList} onClose={() => handleListPaymentClick(0, false)} />
     </>
   );
 }

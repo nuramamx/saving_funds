@@ -13,21 +13,24 @@ import useAuthStore from '../../../../core/stores/auth-store';
 
 type PaymentListModalParams = {
   borrowId: number;
+  associateName: string;
   show: boolean;
   onClose: () => void;
 };
 
-export default function PaymentListModal({ borrowId, show, onClose}: PaymentListModalParams) {
+export default function PaymentListModal({ borrowId, associateName, show, onClose}: PaymentListModalParams) {
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
+  const [error, setError] = useState('');
 
   const handleClose = () => {
     if (onClose) {
       setPayments([]);
       setChunkedPayments([]);
+      setError('');
       onClose();
     }
   };
@@ -52,6 +55,25 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
     }
   };
 
+  const handlePayment = async (number: number) => {
+    setError('');
+
+    try {
+      const result = await fetch(`${AppConstants.apiPayment}/pay/${borrowId}/${number}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (!result.ok) {
+        const error = await result.json() as CommandResponseInfo;
+        setError(`${error.message}${error.data ? ' ' + error.data : ''}`);
+        return;
+      }
+    } catch (err: any) {
+      pushNotification({ message: err.message, type: 'danger' });
+    }
+  };
+
   useEffect(() => {
     setShowModal(show);
 
@@ -63,7 +85,10 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
     <div className="modal-background"></div>
     <div className="modal-card" style={{width: '60%'}}>
       <header className="modal-card-head">
-        <p className="modal-card-title">Listado de Pagos</p>
+        <p className="modal-card-title">
+          Listado de Pagos<br />
+          <label style={{ fontSize: '12px'}}>{associateName}</label>
+        </p>
         <button className="delete" aria-label="close" onClick={handleClose}></button>
       </header>
       <section className="modal-card-body" style={{fontSize: '12px'}}>
@@ -71,7 +96,9 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
           <div className="card" key={`card-${index}`}>
             <footer className="card-footer">
               {chunk.map((item) => (
-                <button data-tooltip-id={`item-${item.number}-${index}`} className="card-footer-item" key={`item-${item.number}-${index}`}>
+                <button data-tooltip-id={`item-${item.number}-${index}`} className="card-footer-item" key={`item-${item.number}-${index}`}
+                  style={{cursor: item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? 'pointer' : 'default'}}
+                  onClick={() => item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? handlePayment(item.number) : () => {}}>
                   <SFPaymentMark type={item.status} />&nbsp;&nbsp;&nbsp;
                   {item.number}
                   <Tooltip border={'1px solid #85929E'} opacity={100} style={{
@@ -81,6 +108,7 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
                     fontSize: '14px',
                     zIndex: '999999999' }}
                     id={`item-${item.number}-${index}`}>
+                    {(item.status !== 'PAGADO' && item.status !== 'INCIDENCIA') && (<><strong style={{color: '#C0392B'}}>Al dar click se marcar&aacute; como pagado</strong><br /><br /></>)}
                     <strong>Pagar en</strong>: {item.date}<br /><br />
                     <strong>A pagar</strong>: {ToMoney(item.paymentAmount)}<br />
                     <strong>Pagado</strong>: {ToMoney(item.paidAmount)}<br />
@@ -119,6 +147,11 @@ export default function PaymentListModal({ borrowId, show, onClose}: PaymentList
               <Circle />&nbsp;Pendiente
             </div>
           </div>
+        </div>
+        <div className="columns">
+          <div className="column is-1"></div>
+          <div className="column" style={{ color: '#C0392B', textAlign: 'center' }}><label>{error}</label></div>
+          <div className="column is-1"></div>
         </div>
       </section>
       <footer className="modal-card-foot">

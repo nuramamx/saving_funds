@@ -104,7 +104,7 @@ export default function BorrowDebtorList() {
                       <td>{borrow.startAt}</td>
                       <td>
                         <PaymentCreateActionButton borrowId={borrow.id} onClose={() => handleReload()}/>
-                        <PaymentListActionButton borrowId={borrow.id} />
+                        <PaymentListActionButton borrowId={borrow.id} associateName={''} />
                       </td>
                     </tr>
                   ))) : (

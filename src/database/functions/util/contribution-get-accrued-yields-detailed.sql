@@ -7,152 +7,254 @@ create or replace function process.contribution_get_accrued_yields_detailed(
   "year" integer,
   transaction_date text,
   amount numeric(20,6),
-  rate numeric(20,6),
   transaction_type text,
   running_balance numeric(20,6),
   net_balance numeric(20,6),
   partial_yields numeric(20,6)
 ) as $$
 declare
-  v_id_first_contribution integer;
+  v_last_year integer := null;
+  v_running_balance numeric(20,6) := 0;
+  v_withdrawals_current_year numeric(20,6) := 0;
+  v_contributions_previous_year numeric(20,6) := 0;
+  v_contributions_previous_year_without_withdrawals numeric(20,6) := 0;
+  v_running_net_balance numeric(20,6) := 0;
+  v_last_net_balance numeric(20,6) := 0;
+  v_last_net_balance_previous_year numeric(20,6) := 0;
+  v_yields_year numeric(20,6) := 0;
+  v_annual_rate numeric(20,6);
+  v_first_contribution boolean := false;
+  v_first_transaction boolean := false;
+  v_current_year_transactions integer := 0;
+  r record;
 begin
-  -- Get the year of first contribution.
-  select
-    c.id
-  into
-    v_id_first_contribution
-  from process.contribution as c
-  where c.saving_fund_id = p_saving_fund_id
-  order by c.applied_at
-  limit 1;
+  -- Create a temporary table to store results before returning them
+  drop table if exists temp_transactions_data;
+  create temp table temp_transactions_data (
+    id integer,
+    year integer,
+    transaction_date text,
+    applied_at timestamp with time zone,
+    amount numeric(20,6),
+    transaction_type text,
+    running_balance numeric(20,6) default 0,
+    net_balance numeric(20,6) default 0,
+    partial_yields numeric(20,6) default 0
+  ) on commit drop;
 
-  return query
-  with transaction_data as (
-    -- Collect all contributions and withdrawals
+  drop table if exists temp_yields_year;
+  create temp table temp_yields_year (
+    year integer,
+    yields numeric(20,6) default 0
+  ) on commit drop;
+
+  v_current_year_transactions := (
     select
-      c.id,
-      c.applied_at as transaction_date,
-      c.amount,
-      case
-        when c.amount > 0 then 'contribution'
-        else 'fix'
-      end as transaction_type
+      count(1)
+    from process.contribution as c
+    where extract(year from c.applied_at) = extract(year from current_date)
+  );
+
+  -- Cursor to process transactions year by year
+  for r in (
+    select
+      c.id as id
+      ,extract(year from c.applied_at) as year
+      ,to_char(c.applied_at, 'YYYY-MM-DD') as transaction_date
+      ,c.applied_at as applied_at
+      ,c.amount as amount
+      ,'contribution' as transaction_type
     from process.contribution as c
     where c.saving_fund_id = p_saving_fund_id
     union all
     select
-      w.id,
-      w.applied_at as transaction_date,
-      -w.amount,
-      'withdrawal' as transaction_type
+      w.id as id
+      ,extract(year from w.applied_at) as year
+      ,to_char(w.applied_at, 'YYYY-MM-DD') as transaction_date
+      ,w.applied_at as applied_at
+      ,-w.amount as amount
+      ,'withdrawal' as transaction_type
     from process.withdrawal as w
     where w.saving_fund_id = p_saving_fund_id and w.is_yields = false
     union all
     select
-      w.id,
-      w.applied_at as transaction_date,
-      -w.amount,
-      'withdrawal-yields' as transaction_type
-    from process.withdrawal as w
-    where w.saving_fund_id = p_saving_fund_id and w.is_yields = true
-  ),
-  sorted_transactions as (
-    -- Calculate running balance and year for each transaction
+      -1
+      ,extract(year from current_date)
+      ,to_char(current_date, 'YYYY-MM-DD')
+      ,current_date
+      ,0
+      ,''
+    from (select v_current_year_transactions > 0) as x
+    order by applied_at
+  ) loop
+    if v_last_year is null then
+      v_first_contribution := true;
+    end if;
+
+    -- Check if we're in a new year
+    if r.year <> v_last_year then
+      -- Get the annual rate for the previous year
+      select rt.rate into v_annual_rate
+      from "system".saving_fund_annual_rate rt
+      where rt.year = v_last_year
+      limit 1;
+
+      -- Get all contributions from previous year and calculate yields
+      if v_first_contribution then
+        v_yields_year := 0;
+        v_first_contribution := false;
+      else
+        v_withdrawals_current_year := (
+          select
+            coalesce(sum(abs(w.amount)), 0)
+          from process.withdrawal as w
+          where extract(year from w.applied_at) = r.year
+          and w.saving_fund_id = p_saving_fund_id
+          and is_yields = false
+        );
+
+        v_contributions_previous_year := (
+          select
+            coalesce(sum(c.amount), 0)
+          from temp_transactions_data as c
+          where c.year = v_last_year
+          and c.transaction_type = 'contribution'
+          and c.net_balance > 0
+        );
+
+        v_contributions_previous_year_without_withdrawals := (
+          select
+            c.total - v_withdrawals_current_year
+          from (
+            select
+              coalesce(c.net_balance, 0) as total
+            from temp_transactions_data as c
+            where c.year = r.year
+            and c.transaction_type = 'contribution'
+            order by c.applied_at, c.id desc
+            limit 1
+          ) as c
+        );
+
+        v_last_net_balance := (
+          select
+            c.net_balance
+          from temp_transactions_data as c
+          where c.year = r.year
+          and c.transaction_type = 'contribution'
+          order by c.id desc
+          limit 1
+        );
+
+        v_last_net_balance_previous_year := (
+          select
+            c.net_balance
+          from temp_transactions_data as c
+          where c.year = v_last_year
+          and c.transaction_type = 'contribution'
+          order by c.applied_at desc
+          limit 1
+        );
+
+        raise notice 'Year % had % as net balance (% as running balance), year % comes with % withdrawals and has % as net balance'
+          ,v_last_year
+          ,v_last_net_balance_previous_year
+          ,v_running_balance
+          ,r.year
+          ,v_withdrawals_current_year
+          ,v_running_net_balance;
+
+        -- Check if withdrawals exceed the last net balance from previous year and has negative running net balance cause withdrawals
+        if v_withdrawals_current_year > v_last_net_balance_previous_year and v_last_net_balance_previous_year < 0 then
+          v_yields_year := 0;
+          raise notice 'Year % does not generate yields', v_last_year;
+        elseif v_running_net_balance <= 0 then
+          v_yields_year := 0;
+          raise notice 'Year % does not generate yields', v_last_year;
+        else
+          v_yields_year := greatest(((v_contributions_previous_year * v_annual_rate) / 100), 0);
+          raise notice 'Year % generates % yields (at % percent)', v_last_year, v_yields_year, v_annual_rate;
+        end if;
+
+        insert into temp_yields_year (year, yields)
+        values (
+          v_last_year
+          ,v_yields_year
+        );
+
+        raise notice 'new year % comes from % with yields %', r.year, v_last_year, v_yields_year;
+      end if;
+
+      v_first_transaction := true;
+    end if;
+
+    -- Calculate yearly yields
+    if r.transaction_type = 'contribution' then
+      v_running_balance := v_running_balance + r.amount;
+
+      if v_first_transaction = true then
+        -- Update net balance to integrate yields
+        v_running_net_balance := v_running_net_balance + r.amount + v_yields_year;
+        v_yields_year := 0;
+        v_first_transaction := false;
+      else
+        v_running_net_balance := v_running_net_balance + r.amount;
+      end if;
+    end if;
+
+    if r.transaction_type = 'withdrawal' then
+      v_running_balance := v_running_balance + r.amount;
+      v_running_net_balance := v_running_net_balance + r.amount;
+    end if;
+
+    --insert
+    insert into temp_transactions_data (id, year, transaction_date, applied_at, amount, transaction_type, running_balance, net_balance, partial_yields)
+    values (
+      r.id
+      ,r.year
+      ,r.transaction_date
+      ,r.applied_at
+      ,r.amount
+      ,r.transaction_type
+      ,v_running_balance
+      ,v_running_net_balance
+      ,0
+    );
+
+    -- Update last year for the next loop iteration
+    v_last_year := r.year;
+  end loop;
+
+  -- Update partial yields
+  update temp_transactions_data
+    set
+      partial_yields = tyy.yields
+  from temp_yields_year as tyy
+  where temp_transactions_data.year = tyy.year
+  and temp_transactions_data.id = (
     select
-      t.id,
-      t.transaction_date,
-      t.amount,
-      t.transaction_type,
-      sum(t.amount) over (order by t.transaction_date rows between unbounded preceding and current row) as running_balance,
-      extract(year from t.transaction_date) as "year"
-    from transaction_data as t
-  ),
-  yearly_totals as (
-    -- Calculate yearly end balance, contributions, and yields
-    select
-      s.year,
-      max(s.running_balance) as end_of_year_balance,
-      sum(case when s.transaction_type = 'contribution' and s.id <> v_id_first_contribution then s.amount else 0 end) as yearly_contributions
-    from sorted_transactions as s
-    group by s.year
-  ),
-  annual_rates as (
-    -- Join annual rates for each year
-    select
-      r.year,
-      r.rate
-    from "system".saving_fund_annual_rate as r
-    where r.year in (select distinct s.year from sorted_transactions as s)
-  ),
-  yearly_yields as (
-    -- Calculate yearly yields based on end_of_year_balance and rate
-    select
-      yt.year,
-      yt.end_of_year_balance,
-      yt.yearly_contributions,
-      ((yt.yearly_contributions * ar.rate) / 100) yearly_yields,
-      ar.rate
-    from yearly_totals yt
-    join annual_rates ar on yt.year = ar.year
-    left join lateral (
-      select
-        -coalesce(sum(s.amount),0) as amount
-      from sorted_transactions as s
-      where s.transaction_type = 'withdrawal'
-      and s.year = yt.year
-    ) as yearly_withdrawals on true
-  ),
-  cumulative_yields as (
-    -- Calculate cumulative yields up to each year
-    select
-      yy.year,
-      sum(yy.yearly_yields) over (order by yy.year) as previous_yields
-    from yearly_yields as yy
-  ),
-  yields_distribution as (
-    -- Join transaction data with yearly yields and cumulative yields
-    select
-      st.id,
-      st.transaction_date,
-      st.amount,
-      case
-        when st.transaction_type = 'contribution'
-          then yy.rate
-          else 0
-      end as rate,
-      st.transaction_type,
-      st.running_balance,
-      st.running_balance + coalesce(yields.amount, 0) as net_balance,
-      st.year,
-      case
-        when st.transaction_type = 'contribution' and st.year < extract(year from current_date)
-          then yy.yearly_yields / (select count(*) from sorted_transactions as s where s.year = st.year and s.transaction_type = 'contribution')
-          else 0
-      end as partial_yields
-    from sorted_transactions st
-    left join yearly_yields yy on st.year = yy.year
-    left join cumulative_yields cy on st.year = cy.year
-    left join lateral (
-      select
-        case
-        when st.transaction_type = 'contribution' and st.year < extract(year from current_date)
-        then yy.yearly_yields / (select count(*) from sorted_transactions as s where s.year = st.year and s.transaction_type = 'contribution')
-        else 0
-      end as amount
-    ) as yields on true
-  )
+      ttd.id
+    from temp_transactions_data as ttd
+    where ttd.year = tyy.year
+    order by ttd.applied_at
+    limit 1
+  );
+
+  delete from temp_transactions_data as t where t.id = -1;
+
+  -- Return results
+  return query
   select
-    r.id::integer
-    ,r."year"::integer
-    ,to_char(r.transaction_date at time zone 'utc', 'YYYY-MM-dd HH24:MI:SS') as transaction_date
-    ,r.amount::numeric(20,6)
-    ,r.rate::numeric(20,6)
-    ,r.transaction_type::text
-    ,r.running_balance::numeric(20,6)
-    ,r.net_balance::numeric(20,6)
-    ,r.partial_yields::numeric(20,6)
-  from yields_distribution as r
-  where (p_year = 0 or r.year = p_year)
-  order by r.transaction_date;
-end;
+    res.id
+    ,res.year
+    ,res.transaction_date
+    ,res.amount
+    ,res.transaction_type
+    ,res.running_balance
+    ,res.net_balance
+    ,res.partial_yields
+  from temp_transactions_data as res
+  where (p_year = 0 or res.year = p_year)
+  order by res.applied_at, res.net_balance;
+end
 $$ language plpgsql;

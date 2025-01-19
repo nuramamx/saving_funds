@@ -7,6 +7,7 @@ import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SavingFundTransactionListSpec from '../../../../core/interfaces/specs/list/saving-fund-transaction-list-spec';
 import SFSelectYear from '../../../../components/dynamic-elements/sf-select-year';
 import useAuthStore from '../../../../core/stores/auth-store';
+import { Printer, XmarkCircle } from 'iconoir-react';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -76,7 +77,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
       <header className="modal-card-head">
         <p className="modal-card-title">
           Transacciones<br />
-          <label style={{ fontSize: '12px'}}>{associateName}</label>
+          <label style={{ fontSize: '12px'}}>{associateName}</label><br />
         </p>
         <button className="delete" aria-label="close" onClick={handleClose}></button>
       </header>
@@ -84,12 +85,12 @@ export default function TransactionListModal({ savingFundId, associateName, show
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
           <thead>
             <tr key={1}>
-              <th>#</th>
               <th>A&ntilde;o</th>
               <th>Fecha</th>
               <th>Tipo</th>
               <th>Monto</th>
-              <th>Balance</th>
+              <th>Total</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -99,12 +100,15 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 style={{ 
                   backgroundColor: (savingFund.transactionType.includes('withdrawal') || savingFund.transactionType.includes('fix')) ? '#f2d7d5' : 'default'
                 }}>
-                <td>{index+1}</td>
                 <td>{savingFund.year}</td>
-                <td>{savingFund.transactionDate}</td>
+                <td>{savingFund.transactionDate.replace(' 00:00:00', '')}</td>
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
-                <td>{ToMoney(savingFund.runningBalance)}</td>
+                <td>{ToMoney(savingFund.netBalance)}</td>
+                <td>
+                  <Printer />
+                  <XmarkCircle />
+                </td>
               </tr>
             ))) : (
               <tr>
@@ -116,35 +120,56 @@ export default function TransactionListModal({ savingFundId, associateName, show
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>
+          <label style={{ fontSize: '1.2em' }}># Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+            {transactions.filter(x => x.transactionType === 'contribution').length}
+          </label><br />
           <label style={{ fontSize: '1.2em' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
           <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
             {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+          </label><br />
+          <label style={{ fontSize: '1.2em' }}># Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+            {transactions.filter(x => x.transactionType === 'withdrawal').length}
           </label><br />
           <label style={{ fontSize: '1.2em' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
           <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
             {ToMoney(transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
           </label><br />
-          <label style={{ fontSize: '1.2em' }}>Rendimientos {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
-          </label>
+          {year !== 0 && (
+            <>
+            <label style={{ fontSize: '1.2em' }}>Rendimientos del año:</label>&nbsp;&nbsp;
+            <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+              {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
+            </label>
+            </>
+          )}
         </div>
         <div>
           <label style={{ fontSize: '2em' }}>Total:</label>&nbsp;&nbsp;
           <label style={{ fontSize: '2em', fontWeight: 'bold' }}>
-            {
+            {year !== 0 ? (
               ToMoney(
-                transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0) +
-                transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0) +
-                transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0)
+                !isNaN(
+                  Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                  Number(transactions.filter(x => x.year === year).at(0)?.partialYields)
+                ) ? Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                Number(transactions.filter(x => x.year === year).at(0)?.partialYields) : 0
               )
-            }
+            ) : (
+              ToMoney(
+                Number(transactions.at(-1)?.netBalance) +
+                Number(transactions.filter(x => x.year === new Date().getFullYear() - 1).at(0)?.partialYields ?? 0
+              )
+            )
+            )}
           </label>
         </div>
         <div></div>
         <div></div>
         <div className='is-pulled-right'>
           <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
+          <button className='button' style={{width:'100%'}}><Printer /></button>
         </div>
       </footer>
     </div>
