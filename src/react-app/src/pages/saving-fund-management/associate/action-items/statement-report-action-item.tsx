@@ -1,14 +1,13 @@
 import { DownloadSquare, GridPlus, Page } from "iconoir-react";
 import { useCallback, useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
+import { objectToCamel } from "ts-case-convert";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
-import useValidationModalStore from "../../../../core/stores/validation-modal-store";
 import useAuthStore from "../../../../core/stores/auth-store";
 import TooltipElement from "../../../../components/elements/tooltip-element";
 import StatementReportPDF from "../reports/statement-report-pdf";
-import { saveAs } from "file-saver";
-import { objectToCamel } from "ts-case-convert";
 import StatementReportDataSpec from "../../../../core/interfaces/specs/base/statement-report-data-spec";
 import StatementReportListSpec from "../../../../core/interfaces/specs/list/statement-report-list-spec";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
@@ -22,6 +21,7 @@ export default function StatementReportActionItem({ associateName, associateId }
   const [isActive, setIsActive] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
+  const [loading, setLoading] = useState<boolean>(false);
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);
@@ -60,6 +60,8 @@ export default function StatementReportActionItem({ associateName, associateId }
   };
 
   const handleDownloadExcel = async () => {
+    setLoading(true);
+
     try {
       const response = await fetch(`${AppConstants.apiReport}/statement/${associateId}`, {
         method: 'GET',
@@ -85,9 +87,13 @@ export default function StatementReportActionItem({ associateName, associateId }
     } catch (err: any) {
       pushNotification({ message: err.message, type: 'danger' });
     }
+    finally {
+      setLoading(false);
+    }
   };
 
   const handleDownloadPDF = async () => {
+    setLoading(true);
     Promise.all([fetchStatementReportData, fetchStatementReportList])
       .then(async ([data, list]) => {
         const statementData = await data();
@@ -100,6 +106,9 @@ export default function StatementReportActionItem({ associateName, associateId }
       })
       .catch (err => {
         pushNotification({ message: 'No se pudo generar el estado de cuenta en PDF.', type: 'danger' });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -127,6 +136,14 @@ export default function StatementReportActionItem({ associateName, associateId }
           <hr className="dropdown-divider" />
           <button className="dropdown-item" onClick={handleDownloadExcel}><GridPlus />&nbsp;&nbsp;Formato Excel</button>
           <button className="dropdown-item" onClick={handleDownloadPDF}><Page />&nbsp;&nbsp;Formato PDF</button>
+          <span className="dropdown-item" style={{ fontSize: '11px'}}>
+            {loading && (
+              <>
+              <span className="loader" style={{ display: 'inline-block'}}></span>&nbsp;&nbsp;
+              Generando reporte...
+              </>
+            )}
+          </span>
         </div>
       </div>
     </div>

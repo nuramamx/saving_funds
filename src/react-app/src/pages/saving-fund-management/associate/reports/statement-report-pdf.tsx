@@ -146,8 +146,8 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR:</Text>
-          <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawal)}</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR DEL {data.currentYear-1}:</Text>
+          <Text style={styles.cell}>{data.netBalanceForCurrentYear > 0 ? ToMoney(data.amountAvailableToWithdrawal) : ToMoney(0)}</Text>
         </View>
 
         <View style={styles.padding}></View>
@@ -235,11 +235,7 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
             <Text style={styles.tableCell}>{row.annualInterestRate}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.yields)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.withdrawalsSummarized)}</Text>
-            {index === list.length-1 ? (
-              <Text style={styles.tableCell}>{ToMoney(data.netBalance)}</Text>
-            ) : (
-              <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>
-            )}
+            <Text style={styles.tableCell}>{ToMoney(row.netTotal)}</Text>
           </View>
         ))}
 
@@ -247,23 +243,23 @@ const StatementReportPDF = ({ data, list }: StatementReportPDFParams) => (
         <View style={styles.padding}></View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>CANTIDAD DISPONIBLE QUE PUEDE RETIRAR:</Text>
-          <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawal)}</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE PUEDE RETIRAR DEL {data.currentYear-1}:</Text>
+          <Text style={styles.cell}>{data.netBalanceForCurrentYear > 0 ? ToMoney(data.amountAvailableToWithdrawal) : ToMoney(0)}</Text>
         </View>
 
         <View style={styles.section}>
           <Text style={styles.cellTitle}>CANTIDAD QUE RECIBE REDONDEADA:</Text>
-          <Text style={styles.cell}>{ToMoney(data.amountAvailableToWithdrawalRounded)}</Text>
+          <Text style={styles.cell}>{data.netBalanceForCurrentYear > 0 ? ToMoney(data.amountAvailableToWithdrawalRounded) : ToMoney(0)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO (POR REGLAMENTO):</Text>
+          <Text style={styles.cellTitle}>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO:</Text>
           <Text style={styles.cell}>{ToMoney(data.amountToWithhold)}</Text>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>TOTAL EN FONDO DE AHORRO:</Text>
-          <Text style={styles.cell}>{ToMoney(data.netBalance)}</Text>
+          <Text style={styles.cellTitle}>NUEVO SALDO EN FONDO DE AHORRO PARA EL {data.currentYear}:</Text>
+          <Text style={styles.cell}>{data.netBalanceForCurrentYear > 0 ? ToMoney(data.netBalance) : ToMoney(list.at(-1)?.netTotal ?? 0)}</Text>
         </View>
 
         <View style={styles.padding}></View>

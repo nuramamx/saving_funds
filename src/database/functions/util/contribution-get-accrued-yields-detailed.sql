@@ -6,6 +6,7 @@ create or replace function process.contribution_get_accrued_yields_detailed(
   id integer,
   "year" integer,
   transaction_date text,
+  applied_at timestamp with time zone,
   amount numeric(20,6),
   transaction_type text,
   running_balance numeric(20,6),
@@ -106,6 +107,7 @@ begin
         v_yields_year := 0;
         v_first_contribution := false;
       else
+        -- Get the withdrawals of current year
         v_withdrawals_current_year := (
           select
             coalesce(sum(abs(w.amount)), 0)
@@ -115,6 +117,7 @@ begin
           and is_yields = false
         );
 
+        -- Get all contributions from previous year
         v_contributions_previous_year := (
           select
             coalesce(sum(c.amount), 0)
@@ -124,6 +127,7 @@ begin
           and c.net_balance > 0
         );
 
+        -- Calculate previous year contributions - current withdrawals
         v_contributions_previous_year_without_withdrawals := (
           select
             c.total - v_withdrawals_current_year
@@ -138,6 +142,7 @@ begin
           ) as c
         );
 
+        -- Get the last net balance (current year)
         v_last_net_balance := (
           select
             c.net_balance
@@ -148,6 +153,7 @@ begin
           limit 1
         );
 
+        -- Get the last net balance from previous year
         v_last_net_balance_previous_year := (
           select
             c.net_balance
@@ -158,33 +164,23 @@ begin
           limit 1
         );
 
-        raise notice 'Year % had % as net balance (% as running balance), year % comes with % withdrawals and has % as net balance'
-          ,v_last_year
-          ,v_last_net_balance_previous_year
-          ,v_running_balance
-          ,r.year
-          ,v_withdrawals_current_year
-          ,v_running_net_balance;
-
         -- Check if withdrawals exceed the last net balance from previous year and has negative running net balance cause withdrawals
         if v_withdrawals_current_year > v_last_net_balance_previous_year and v_last_net_balance_previous_year < 0 then
           v_yields_year := 0;
-          raise notice 'Year % does not generate yields', v_last_year;
+        -- If running balance is 0 or negative, does not calculate yields
         elseif v_running_net_balance <= 0 then
           v_yields_year := 0;
-          raise notice 'Year % does not generate yields', v_last_year;
         else
+          -- Calculate yields of previous year
           v_yields_year := greatest(((v_contributions_previous_year * v_annual_rate) / 100), 0);
-          raise notice 'Year % generates % yields (at % percent)', v_last_year, v_yields_year, v_annual_rate;
         end if;
 
+        -- Save calculated yields
         insert into temp_yields_year (year, yields)
         values (
           v_last_year
           ,v_yields_year
         );
-
-        raise notice 'new year % comes from % with yields %', r.year, v_last_year, v_yields_year;
       end if;
 
       v_first_transaction := true;
@@ -209,7 +205,7 @@ begin
       v_running_net_balance := v_running_net_balance + r.amount;
     end if;
 
-    --insert
+    --insert transaction
     insert into temp_transactions_data (id, year, transaction_date, applied_at, amount, transaction_type, running_balance, net_balance, partial_yields)
     values (
       r.id
@@ -242,6 +238,8 @@ begin
     limit 1
   );
 
+  -- Delete last simulated transaction, this is only when associate does not have contribution or withdrawal in
+  -- current year so that causes previous year does not generate yields.
   delete from temp_transactions_data as t where t.id = -1;
 
   -- Return results
@@ -250,6 +248,7 @@ begin
     res.id
     ,res.year
     ,res.transaction_date
+    ,res.applied_at
     ,res.amount
     ,res.transaction_type
     ,res.running_balance
@@ -257,6 +256,6 @@ begin
     ,res.partial_yields
   from temp_transactions_data as res
   where (p_year = 0 or res.year = p_year)
-  order by res.applied_at, res.net_balance;
+  order by res.applied_at;
 end
 $$ language plpgsql;

@@ -122,9 +122,18 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
         </div>
         <div className="column">
           <div className="column" style={{ fontSize: '13px'}}>
-            <strong>Cantidad disponible que puede retirar</strong>: {ToMoney(statement?.amountAvailableToWithdrawal ?? 0)}<br />
-            <strong>Cantidad a retener</strong>: {ToMoney(statement?.amountToWithhold ?? 0)}<br />
-            <strong>Cantidad que recibe redondeada</strong>: {ToMoney(statement?.amountAvailableToWithdrawalRounded ?? 0)}
+            <table className="table">
+              <tbody>
+                <tr style={{ clipPath: 'xywh(0 0 100% 100% round 0.5em)' }}>
+                  <td><strong>Cantidad a retener</strong></td>
+                  <td>{ToMoney(statement?.amountToWithhold ?? 0)}</td>
+                </tr>
+                <tr style={{ background: '#d1f2eb', clipPath: 'xywh(0 0 100% 100% round 0.5em)' }}>
+                  <td><strong>Cantidad recomendada para retirar</strong></td>
+                  <td><strong>{ToMoney(statement?.amountAvailableToWithdrawalRounded ?? 0)}</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
         <div className="columns">

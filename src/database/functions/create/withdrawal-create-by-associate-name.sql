@@ -110,6 +110,8 @@ begin
     -- Sum balance + yields.
     v_available_balance_with_yields := v_available_balance + v_available_interest_balance;
 
+    raise notice 'balance %, yields % = %', v_available_balance, v_available_interest_balance, v_available_balance_with_yields;
+
     -- Check if withdrawal amount is not greater than balance + yields.
     if p_amount > v_available_balance_with_yields then
       message := 'El monto del retiro es superior al balance actual con rendimientos ' ||

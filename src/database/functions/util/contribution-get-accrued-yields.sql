@@ -15,7 +15,8 @@ begin
   into v_cummulated_withdrawal_yields
   from process.withdrawal as w
   where w.saving_fund_id = p_saving_fund_id
-  and w.is_yields = true;
+  and w.is_yields = true
+  and w.is_active = true;
 
   return v_accrued_yields - v_cummulated_withdrawal_yields;
 end;
