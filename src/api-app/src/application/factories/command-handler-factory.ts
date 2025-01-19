@@ -33,6 +33,8 @@ import StatementReportListQueryHandler from '../use-cases/queries/report/stateme
 import AssociateDeleteCommandHandler, { AssociateDeleteCommand } from '../use-cases/commands/associate/delete/associate-delete-command-handler';
 import BorrowListQueryHandler, { BorrowListQuery } from '../use-cases/queries/borrow/list/borrow-list-query-handler';
 import BorrowQuoteReportGenerateQueryHandler, { BorrowQuoteReportGenerateQuery } from '../use-cases/queries/report/borrow-quote/generate/borrow-quote-report-generate-query-handler';
+import ContributionDeleteCommandHandler, { ContributionDeleteCommand } from '../use-cases/commands/contribution/delete/contribution-delete-command-handler';
+import WithdrawalDeleteCommandHandler, { WithdrawalDeleteCommand } from '../use-cases/commands/withdrawal/delete/withdrawal-delete-command-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -47,6 +49,8 @@ type CommandHandlerTypeMap = {
   'SavingFundAnnualRateUpdateCommand': SavingFundAnnualRateUpdateCommand,
   'BorrowAnnualRateUpdateCommand': BorrowAnnualRateUpdateCommand,
   'AssociateDeleteCommand': AssociateDeleteCommand,
+  'ContributionDeleteCommand': ContributionDeleteCommand,
+  'WithdrawalDeleteCommand': WithdrawalDeleteCommand,
   // Queries
   'CityListQuery': void,
   'StateListQuery': void,
@@ -87,6 +91,8 @@ const commandConstructors: {
   'SavingFundAnnualRateUpdateCommand': SavingFundAnnualRateUpdateCommandHandler,
   'BorrowAnnualRateUpdateCommand': BorrowAnnualRateUpdateCommandHandler,
   'AssociateDeleteCommand': AssociateDeleteCommandHandler,
+  'ContributionDeleteCommand': ContributionDeleteCommandHandler,
+  'WithdrawalDeleteCommand': WithdrawalDeleteCommandHandler,
   // Queries
   'CityListQuery': CityListQueryHandler,
   'StateListQuery': StateListQueryHandler,

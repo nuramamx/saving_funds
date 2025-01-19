@@ -1,4 +1,5 @@
 export default interface SavingFundTransactionListSpec {
+  id: number;
   year: number;
   transactionDate: string;
   transactionType: string;

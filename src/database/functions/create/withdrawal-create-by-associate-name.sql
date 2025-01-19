@@ -88,7 +88,8 @@ begin
       sum(coalesce(c.amount, 0))
     into v_available_balance
     from process.contribution as c
-    where c.saving_fund_id = v_saving_fund_id;
+    where c.saving_fund_id = v_saving_fund_id
+    and c.is_active = true;
 
     -- Get all withdrawals registered.
     select
@@ -96,7 +97,8 @@ begin
     into v_withdrawal_sum_amount
     from process.withdrawal as w
     where w.saving_fund_id = v_saving_fund_id
-    and w.is_yields = false;
+    and w.is_yields = false
+    and w.is_active = true;
 
     -- Subtract withdrawals and amount to withhold from current balance.
     v_available_balance := v_available_balance - v_withdrawal_sum_amount - v_amount_to_withhold;

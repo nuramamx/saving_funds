@@ -3,6 +3,7 @@ create or replace function process.saving_fund_transaction_list(
   in p_saving_fund_id integer,
   in p_year integer default null
 ) returns table (
+  id integer,
   "year" integer,
   transaction_date text,
   amount numeric(20,6),
@@ -15,7 +16,8 @@ declare
 begin 
   return query
   select
-    r."year"
+    r.id
+    ,r."year"
     ,r.transaction_date
     ,r.amount
     ,r.transaction_type

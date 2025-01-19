@@ -66,6 +66,7 @@ begin
       ,'contribution' as transaction_type
     from process.contribution as c
     where c.saving_fund_id = p_saving_fund_id
+    and c.is_active = true
     union all
     select
       w.id as id
@@ -76,6 +77,7 @@ begin
       ,'withdrawal' as transaction_type
     from process.withdrawal as w
     where w.saving_fund_id = p_saving_fund_id and w.is_yields = false
+    and w.is_active = true
     union all
     select
       -1

@@ -58,13 +58,15 @@ begin
       select
         sum(c.amount) as amount
       from process.contribution as c
-      where sf.id = c.saving_fund_id 
+      where sf.id = c.saving_fund_id
+      and c.is_active = true
     ) as contribution on true
     left join lateral (
       select
         sum(w.amount) as amount
       from process.withdrawal as w
       where sf.id = w.saving_fund_id
+      and w.is_active = true
     ) as withdrawal on true
   ) as d
   where d.associate_id = p_associate_id;

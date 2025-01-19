@@ -2,16 +2,16 @@
 import { db } from '../../instance';
 import { QueryTypes } from 'sequelize';
 import { FunctionName } from '../../names/function-name';
-import { AssociateDeleteCommand } from '../../../application/use-cases/commands/associate/delete/associate-delete-command-handler';
+import { ContributionDeleteCommand } from '../../../application/use-cases/commands/contribution/delete/contribution-delete-command-handler';
 import ProcedureResponseModel from '../../interfaces/procedure-response-info';
 import ParseError from '../../util/check-error';
 import DeleteRepositoryInfo from '../../interfaces/delete-repository-info';
 
-export default class AssociateDeleteRepository implements DeleteRepositoryInfo<AssociateDeleteCommand, boolean> {
-  async delete(data: AssociateDeleteCommand): Promise<boolean> {
+export default class ContributionDeleteRepository implements DeleteRepositoryInfo<ContributionDeleteCommand, boolean> {
+  async delete(data: ContributionDeleteCommand): Promise<boolean> {
     try
     {
-      const [result] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.ASSOCIATE_DELETE, {
+      const [result] = await db.sequelize.query<ProcedureResponseModel>(FunctionName.CONTRIBUTION_DELETE, {
         replacements: {
           p_id: data.id
         },

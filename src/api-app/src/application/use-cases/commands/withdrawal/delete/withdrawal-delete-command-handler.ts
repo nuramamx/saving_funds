@@ -1,14 +1,14 @@
 import CommandHandler from "../../../../../abstractions/interfaces/command-handler";
 import CommandResponse from "../../../../../abstractions/interfaces/command-response";
-import AssociateDeleteRepository from "../../../../../persistence/repositories/delete/associate-delete-repository";
+import WithdrawalDeleteRepository from "../../../../../persistence/repositories/delete/withdrawal-delete-repository";
 
-type AssociateDeleteCommand = {
+type WithdrawalDeleteCommand = {
   id: number;
 }
 
-export default class AssociateDeleteCommandHandler implements CommandHandler<AssociateDeleteCommand, CommandResponse> {
-  async execute(data: AssociateDeleteCommand): Promise<CommandResponse> {
-    const repository = new AssociateDeleteRepository();
+export default class WithdrawalDeleteCommandHandler implements CommandHandler<WithdrawalDeleteCommand, CommandResponse> {
+  async execute(data: WithdrawalDeleteCommand): Promise<CommandResponse> {
+    const repository = new WithdrawalDeleteRepository();
 
     try { 
       const result = await repository.delete(data);
@@ -20,4 +20,4 @@ export default class AssociateDeleteCommandHandler implements CommandHandler<Ass
   }
 }
 
-export type { AssociateDeleteCommand };
+export type { WithdrawalDeleteCommand };

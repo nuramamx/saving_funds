@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { v4 as uuid } from "uuid";
+import { Printer } from 'iconoir-react';
 import AppConstants from '../../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SavingFundTransactionListSpec from '../../../../core/interfaces/specs/list/saving-fund-transaction-list-spec';
 import SFSelectYear from '../../../../components/dynamic-elements/sf-select-year';
 import useAuthStore from '../../../../core/stores/auth-store';
-import { Printer, XmarkCircle } from 'iconoir-react';
+import TransactionDeleteActionButton from '../actions/transaction-delete-action-button';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -17,7 +18,7 @@ type TransactionListModalParams = {
 };
 
 export default function TransactionListModal({ savingFundId, associateName, show, onClose}: TransactionListModalParams) {
-  const { token } = useAuthStore();
+  const { user, token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [year, setYear] = useState(0);
   const [transactions, setTransactions] = useState<SavingFundTransactionListSpec[]>([]);
@@ -90,7 +91,9 @@ export default function TransactionListModal({ savingFundId, associateName, show
               <th>Tipo</th>
               <th>Monto</th>
               <th>Total</th>
-              <th>Acciones</th>
+              {user.role === 'ADMIN' && (
+                <th>Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -105,10 +108,11 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.netBalance)}</td>
-                <td>
-                  <Printer />
-                  <XmarkCircle />
-                </td>
+                {user.role === 'ADMIN' && (
+                  <td>
+                    <TransactionDeleteActionButton id={savingFund.id} type={savingFund.transactionType} onComplete={fetchPayments} />
+                  </td>
+                )}
               </tr>
             ))) : (
               <tr>
@@ -159,10 +163,9 @@ export default function TransactionListModal({ savingFundId, associateName, show
             ) : (
               ToMoney(
                 Number(transactions.at(-1)?.netBalance) +
-                Number(transactions.filter(x => x.year === new Date().getFullYear() - 1).at(0)?.partialYields ?? 0
+                Number(transactions.filter(x => x.year === (transactions.at(-2)?.year)).at(0)?.partialYields ?? 0
               )
-            )
-            )}
+            ))}
           </label>
         </div>
         <div></div>

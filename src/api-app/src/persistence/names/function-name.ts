@@ -32,6 +32,8 @@ enum FunctionName {
   STATEMENT_REPORT_DATA = 'select * from process.statement_report_data(:p_associate_id);',
   BORROW_AUTHORIZATION_REPORT_DATA = 'select * from process.borrow_authorization_report_data(:p_borrow_id);',
   BORROW_QUOTE_REPORT_DATA = 'select * from process.borrow_quote_report_data(:p_borrow_id);',
+  CONTRIBUTION_DELETE = 'select * from process.contribution_delete(:p_id);',
+  WITHDRAWAL_DELETE = 'select * from process.withdrawal_delete(:p_id);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:p_user_id, :p_previous_data, :p_new_data)'
 }

@@ -9,12 +9,16 @@ import WithdrawalCreateCommand from "../../../../core/interfaces/commands/withdr
 import useAuthStore from "../../../../core/stores/auth-store";
 import SFDatePickerInput from "../../../../components/form/sf-datepicker-input";
 import { addDays } from "date-fns";
+import { objectToCamel } from "ts-case-convert";
+import StatementReportDataSpec from "../../../../core/interfaces/specs/base/statement-report-data-spec";
+import ToMoney from "../../../../core/util/conversions/money-conversion";
 
 interface WithdrawalCreateModalParams extends SFModalInfo {
+  associateId: number;
   savingFundId: number;
 };
 
-export default function WithdrawalCreateModal({ savingFundId, show, onClose }: WithdrawalCreateModalParams) {
+export default function WithdrawalCreateModal({ associateId, savingFundId, show, onClose }: WithdrawalCreateModalParams) {
   const initialState = {
     savingFundId: undefined!,
     amount: 0,
@@ -27,6 +31,23 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [statement, setSatement] = useState<StatementReportDataSpec>();
+
+  const fetchStatementReportData = async () => {
+    const result = await fetch(`${AppConstants.apiReport}/statement/data/${associateId}`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!result.ok)
+      pushNotification({ message: result.statusText, type: 'danger' });
+
+    const response = await result.json() as CommandResponseInfo;
+    const responseData = objectToCamel(response.data) as StatementReportDataSpec[];
+    
+    if (response.successful) return setSatement(responseData[0]);
+    else throw new Error(response.message);
+  };
 
   const handleClick = async () => {
     setError('');
@@ -69,6 +90,7 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
   useEffect(() => {
     setWithdrawal({ ...withdrawal, savingFundId: savingFundId });
     setShowModal(show);
+    fetchStatementReportData();
   }, [show]);
   
   return (
@@ -97,6 +119,13 @@ export default function WithdrawalCreateModal({ savingFundId, show, onClose }: W
               onChange={(value) => setWithdrawal({ ...withdrawal, amount: value })} />
           </div>
           <div className="column is-1"></div>
+        </div>
+        <div className="column">
+          <div className="column" style={{ fontSize: '13px'}}>
+            <strong>Cantidad disponible que puede retirar</strong>: {ToMoney(statement?.amountAvailableToWithdrawal ?? 0)}<br />
+            <strong>Cantidad a retener</strong>: {ToMoney(statement?.amountToWithhold ?? 0)}<br />
+            <strong>Cantidad que recibe redondeada</strong>: {ToMoney(statement?.amountAvailableToWithdrawalRounded ?? 0)}
+          </div>
         </div>
         <div className="columns">
           <div className="column is-1"></div>

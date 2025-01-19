@@ -35,7 +35,7 @@ export default function WithdrawalCreateActionButton({ savingFundId, hasActiveBo
           <ReceiveDollars />
           <TooltipElement id="withdrawal-tooltip" text="Retirar" errorText={hasActiveBorrow ? 'No se pueden realizar retiros con préstamo activo.' : undefined} />
         </button>
-        <WithdrawalCreateModal savingFundId={selectedSavingFund} show={showModal} onClose={() => handleClick(0, false)} />
+        <WithdrawalCreateModal savingFundId={selectedSavingFund} associateId={selectedSavingFund} show={showModal} onClose={() => handleClick(0, false)} />
       </>
       )}
     </>
