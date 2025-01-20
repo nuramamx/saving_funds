@@ -28,8 +28,8 @@ export default function AssociateListByIdOrNameModal ({ show, onSelectedAssociat
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({
-          associate_id: CheckAndAssign.checkNumber(associateInfo),
-          name: CheckAndAssign.checkText(associateInfo)
+          associate_id: CheckAndAssign.checkNumber(associateInfo.trim()),
+          name: CheckAndAssign.checkText(associateInfo.trim())
         } as AssociateListByIdOrNameQuery)
       });
 

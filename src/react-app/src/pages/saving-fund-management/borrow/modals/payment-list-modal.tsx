@@ -1,5 +1,5 @@
 import { CheckCircle, Circle, WarningCircle, XmarkCircle } from 'iconoir-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { Tooltip } from 'react-tooltip';
 import { chunkArray } from '../../../../core/util/array-util';
@@ -10,6 +10,7 @@ import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SFPaymentMark from '../../../../components/dynamic-elements/sf-payment-mark';
 import PaymentListByBorrowIdSpec from '../../../../core/interfaces/specs/list/payment-list-by-borrow-id-spec';
 import useAuthStore from '../../../../core/stores/auth-store';
+import usePaymentStore from '../../../../core/stores/payment-store';
 
 type PaymentListModalParams = {
   borrowId: number;
@@ -25,6 +26,8 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
   const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
   const [error, setError] = useState('');
+  const [refetching, setRefetching] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleClose = () => {
     if (onClose) {
@@ -55,13 +58,19 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
     }
   };
 
-  const handlePayment = async (number: number) => {
+  const handlePayment = async (number: number, paidAmount: number) => {
     setError('');
+    setLoading(true);
 
     try {
-      const result = await fetch(`${AppConstants.apiPayment}/pay/${borrowId}/${number}`, {
-        method: 'PUT',
-        headers: { 'Authorization': `Bearer ${token}` }
+      const result = await fetch(`${AppConstants.apiPayment}/create`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          borrowId: borrowId,
+          number: number,
+          paidAmount: paidAmount
+        })
       });
 
       if (!result.ok) {
@@ -69,16 +78,24 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
         setError(`${error.message}${error.data ? ' ' + error.data : ''}`);
         return;
       }
+
+      setRefetching((p) => p + 1);
     } catch (err: any) {
-      pushNotification({ message: err.message, type: 'danger' });
+      setError(`${err}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     setShowModal(show);
 
-    if (borrowId > 0 && chunkedPayments.length === 0) fetchPayments();
-  }, [show, borrowId, chunkedPayments]);
+    console.log('here 1...');
+    if ((borrowId > 0 && chunkedPayments.length === 0) || refetching) {
+      console.log('here 2...');
+      fetchPayments();
+    }
+  }, [show, borrowId, refetching, chunkedPayments]);
 
   return (
   <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
@@ -98,8 +115,16 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
               {chunk.map((item) => (
                 <button data-tooltip-id={`item-${item.number}-${index}`} className="card-footer-item" key={`item-${item.number}-${index}`}
                   style={{cursor: item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? 'pointer' : 'default'}}
-                  onClick={() => item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? handlePayment(item.number) : () => {}}>
-                  <SFPaymentMark type={item.status} />&nbsp;&nbsp;&nbsp;
+                  onClick={() => item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? handlePayment(item.number, item.paymentAmount) : () => {}}>
+                  {!loading ? (
+                    <>
+                    <SFPaymentMark type={item.status} />&nbsp;&nbsp;&nbsp;
+                    </>
+                  ) : (
+                    <>
+                    <span className="loader" style={{ display: 'inline-block'}}></span>&nbsp;&nbsp;&nbsp;
+                    </>
+                  )}
                   {item.number}
                   <Tooltip border={'1px solid #85929E'} opacity={100} style={{
                     backgroundColor: "white",

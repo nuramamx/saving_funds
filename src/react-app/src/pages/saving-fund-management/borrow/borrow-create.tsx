@@ -109,7 +109,7 @@ export default function BorrowCreate() {
       startAt: format(borrow.startAt, 'yyyy-MM-dd'),
     }} />).toBlob();
 
-    saveAs(blob, `Autorización de descuento por crédito - ${associate?.name}.pdf`);
+    saveAs(blob, `Cotización de descuento por crédito - ${associate?.name}.pdf`);
   };
 
   const save = async () => {

@@ -32,7 +32,6 @@ import BorrowAuthorizationReportDataQueryHandler, { BorrowAuthorizationReportDat
 import StatementReportListQueryHandler from '../use-cases/queries/report/statement/list/statement-report-list-query-handler';
 import AssociateDeleteCommandHandler, { AssociateDeleteCommand } from '../use-cases/commands/associate/delete/associate-delete-command-handler';
 import BorrowListQueryHandler, { BorrowListQuery } from '../use-cases/queries/borrow/list/borrow-list-query-handler';
-import BorrowQuoteReportGenerateQueryHandler, { BorrowQuoteReportGenerateQuery } from '../use-cases/queries/report/borrow-quote/generate/borrow-quote-report-generate-query-handler';
 import ContributionDeleteCommandHandler, { ContributionDeleteCommand } from '../use-cases/commands/contribution/delete/contribution-delete-command-handler';
 import WithdrawalDeleteCommandHandler, { WithdrawalDeleteCommand } from '../use-cases/commands/withdrawal/delete/withdrawal-delete-command-handler';
 
@@ -72,8 +71,7 @@ type CommandHandlerTypeMap = {
   'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQuery
   // Reports
   'StatementReport': StatementReportGenerateQuery,
-  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery,
-  'BorrowQuoteReportDataQuery': BorrowQuoteReportGenerateQuery
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery
 };
 
 const commandConstructors: {
@@ -114,8 +112,7 @@ const commandConstructors: {
   'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQueryHandler,
   // Reports
   'StatementReport': StatementReportGenerateQueryHandler,
-  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler,
-  'BorrowQuoteReportDataQuery': BorrowQuoteReportGenerateQueryHandler
+  'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQueryHandler
 };
 
 class CommandHandlerFactory {

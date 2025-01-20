@@ -29,12 +29,12 @@ export default class StatementReportService implements ReportServiceInfo {
     if (worksheetInformative !== null && worksheetInformative !== undefined) this.worksheetInformativeChanges(worksheetInformative);
 
     // Add rounded amount to withdrawal to current year withdrawals (only for delivery)
-    this.list.map((x) => {
-      if (x.year === new Date().getFullYear()) {
-        x.withdrawals_summarized = Number(x.withdrawals_summarized) - Number(this.data.amount_available_to_withdrawal_rounded);
-        x.net_total = Number(x.net_total) - Number(this.data.amount_available_to_withdrawal_rounded);
-      }
-    })
+    // this.list.map((x) => {
+    //   if (x.year === new Date().getFullYear()) {
+    //     x.withdrawals_summarized = Number(x.withdrawals_summarized) - Number(this.data.amount_available_to_withdrawal_rounded);
+    //     x.net_total = Number(x.net_total) - Number(this.data.amount_available_to_withdrawal_rounded);
+    //   }
+    // });
 
     if (worksheetDelivery !== null && worksheetDelivery !== undefined) this.worksheetDeliveryChanges(worksheetDelivery);
     
@@ -54,7 +54,7 @@ export default class StatementReportService implements ReportServiceInfo {
       worksheet.getCell('H18').numFmt = '$#,##0.00';
       worksheet.getCell('H19').value = Number(this.data.amount_available_to_withdrawal);
       worksheet.getCell('H19').numFmt = '$#,##0.00';
-      worksheet.getCell('A19').value = worksheet.getCell('A19').value?.toString().replace('{{CURRENT_YEAR}}', this.data.current_year.toString())
+      worksheet.getCell('A19').value = worksheet.getCell('A19').value?.toString().replace('{{CURRENT_YEAR}}', (this.data.current_year-1).toString());
       
 
       this.list.forEach((row: StatementReportListSpec, index) => {
@@ -103,14 +103,13 @@ export default class StatementReportService implements ReportServiceInfo {
       worksheet.getCell('H18').value = Number(this.data.amount_available_to_withdrawal);
       worksheet.getCell('H18').numFmt = '$#,##0.00';
       worksheet.getCell('H19').value = Number(this.data.amount_available_to_withdrawal_rounded);
-      worksheet.getCell('H19').numFmt = '$#,##0.00';
-      worksheet.getCell('H20').value = Number(this.data.net_balance_for_current_year);
       worksheet.getCell('H20').numFmt = '$#,##0.00';
-      worksheet.getCell('H21').value = Number(this.data.amount_to_withhold);
+      worksheet.getCell('H20').value = Number(this.data.amount_to_withhold);
+      worksheet.getCell('H20').numFmt = '$#,##0.00';
+      worksheet.getCell('H21').value = Number(this.data.net_balance_for_current_year > 0 ? this.data.net_balance : this.list.at(-1)?.net_total ?? 0);
       worksheet.getCell('H21').numFmt = '$#,##0.00';
-      worksheet.getCell('H22').value = Number(this.data.net_balance);
-      worksheet.getCell('H22').numFmt = '$#,##0.00';
-      worksheet.getCell('A20').value = worksheet.getCell('A20').value?.toString().replace('{{CURRENT_YEAR}}', this.data.current_year.toString())
+      worksheet.getCell('A18').value = worksheet.getCell('A18').value?.toString().replace('{{CURRENT_YEAR}}', (this.data.current_year-1).toString());
+      worksheet.getCell('A21').value = worksheet.getCell('A21').value?.toString().replace('{{CURRENT_YEAR}}', (this.data.current_year).toString());
 
       this.list.forEach((row: StatementReportListSpec, index) => {
         const rowNumber = index + 17;
