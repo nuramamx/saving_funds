@@ -108,7 +108,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.netBalance)}</td>
-                {user.role === 'ADMIN' && (
+                {user.role === 'ADMIN' && index !== 0 && (
                   <td>
                     <TransactionDeleteActionButton id={savingFund.id} type={savingFund.transactionType} onComplete={fetchPayments} />
                   </td>

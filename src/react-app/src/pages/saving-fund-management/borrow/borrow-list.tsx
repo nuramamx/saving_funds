@@ -121,7 +121,7 @@ export default function BorrowList() {
                   <td>
                     <BorrowAuthorizationReportActionItem associateName={associateName.toUpperCase()} borrowId={borrow.id} />
                     <PaymentCreateActionButton borrowId={borrow.id} onClose={handleReload} />
-                    <PaymentListActionButton borrowId={borrow.id} associateName={`${associate} - ${associateName}`} />
+                    <PaymentListActionButton borrowId={borrow.id} associateName={`${associate} - ${associateName}`} onClose={handleReload} />
                   </td>
                 </tr>
               ))) : (

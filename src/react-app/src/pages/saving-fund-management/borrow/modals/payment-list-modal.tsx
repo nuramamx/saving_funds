@@ -1,16 +1,14 @@
 import { CheckCircle, Circle, WarningCircle, XmarkCircle } from 'iconoir-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { objectToCamel } from 'ts-case-convert';
 import { Tooltip } from 'react-tooltip';
 import { chunkArray } from '../../../../core/util/array-util';
-import useNotificationStore from '../../../../core/stores/notification-store';
 import AppConstants from '../../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../../core/interfaces/info/command-response-info';
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SFPaymentMark from '../../../../components/dynamic-elements/sf-payment-mark';
 import PaymentListByBorrowIdSpec from '../../../../core/interfaces/specs/list/payment-list-by-borrow-id-spec';
 import useAuthStore from '../../../../core/stores/auth-store';
-import usePaymentStore from '../../../../core/stores/payment-store';
 
 type PaymentListModalParams = {
   borrowId: number;
@@ -20,8 +18,7 @@ type PaymentListModalParams = {
 };
 
 export default function PaymentListModal({ borrowId, associateName, show, onClose}: PaymentListModalParams) {
-  const { pushNotification } = useNotificationStore();
-  const { token } = useAuthStore();
+  const { user, token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
@@ -59,6 +56,8 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
   };
 
   const handlePayment = async (number: number, paidAmount: number) => {
+    if (user.role !== 'ADMIN') return alert('No tienes permiso para realizar esta acción.');
+    
     setError('');
     setLoading(true);
 

@@ -6,15 +6,18 @@ import TooltipElement from "../elements/tooltip-element";
 type PaymentListActionButtonParams = {
   borrowId: number;
   associateName: string;
+  onClose: () => void;
 };
 
-export default function PaymentListActionButton({ borrowId, associateName }: PaymentListActionButtonParams) {
+export default function PaymentListActionButton({ borrowId, associateName, onClose }: PaymentListActionButtonParams) {
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrow, setSelectedBorrow] = useState<number>(0);
 
   const handleClick = (borrowId: number, show: boolean) => {
     setSelectedBorrow(borrowId);
     setShowModal(show);
+
+    if (onClose) onClose();
   }
 
   return (

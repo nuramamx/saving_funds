@@ -86,6 +86,9 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
               id: 'contribution_applied_date',
               name: 'Fecha de Aplicación',
               value: contribution.appliedAt,
+              minDate: new Date(2008, 0),
+              maxDate: addDays(new Date(), 0),
+              showYear: true,
               onChange: (value) => setContribution({ ...contribution, appliedAt: value })
 
             }} />
