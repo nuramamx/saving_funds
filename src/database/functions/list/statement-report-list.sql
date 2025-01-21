@@ -160,62 +160,6 @@ begin
       ,withdrawals_summarized = coalesce(temp_report_statement.withdrawals_summarized, 0)
       ,net_total = coalesce(coalesce(temp_report_statement.initial_balance, 0) + coalesce(temp_report_statement.net_total, 0), 0);
 
-
---   raise notice 'at least year: %', (select r.year+1 from temp_report_statement as r order by r.year desc offset 1 limit 1);
---   raise notice 'last year: %', (select r.year-1 from temp_report_statement as r order by r.year desc offset 0 limit 1);
---
---   -- Find the last available year before the gap starts
---   SELECT MAX(t.year)
---   INTO v_year_last_contribution
---   FROM temp_report_statement AS t
---   WHERE t.year <= v_year_start;
---
---   -- Create not found years
---   SELECT MIN(t.year) + 1, MAX(t.year) - 1 INTO v_year_start, v_year_end FROM temp_report_statement as t;
---   for v_year_iterated in select generate_series(v_year_start, v_year_end) loop
---     raise notice 'year created %', v_year_iterated;
---
---     insert into temp_report_statement (
---       year,
---       initial_balance,
---       contribution_summarized,
---       annual_interest_rate,
---       yields,
---       withdrawals_summarized,
---       refund,
---       net_total
---     )
---     select
---       v_year_iterated
---       ,t.net_total
---       ,0 -- no contributions because is auto-generated
---       ,t.annual_interest_rate
---       ,0 -- no yields because is auto-generated
---       ,0 -- no withdrawals because is auto-generated
---       ,t.refund
---       ,t.net_total
---     from temp_report_statement as t
---     where t.year = v_year_last_contribution
---     limit 1;
---   end loop;
-
-  -- Fix the initial balance to the last year
---   update temp_report_statement
---     set initial_balance = (
---       select
---         q.net_total
---       from temp_report_statement as q
---       order by q.year desc
---       offset 1
---       limit 1
---     )
---   where temp_report_statement.year = v_current_year;
---
---   -- Fix the net total to the last year
---   update temp_report_statement
---     set net_total = temp_report_statement.initial_balance + temp_report_statement.net_total
---   where temp_report_statement.year = v_current_year;
-
   return query
   select
     t.year

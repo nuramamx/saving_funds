@@ -1,4 +1,4 @@
---drop function process.contribution;
+--drop function process.contribution_delete;
 create or replace function "process".contribution_delete(
   in p_id integer,
   out inserted_id integer,

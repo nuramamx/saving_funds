@@ -12,7 +12,6 @@ returns RECORD as $$
 declare
   v_amount_to_withhold numeric(20,2);
   v_available_balance numeric(20,2);
-  v_available_balance_with_yields numeric(20,2);
   v_amount_available_to_withdrawal numeric(20,2);
 begin
   success := false;
@@ -48,7 +47,7 @@ begin
                '($' || v_amount_available_to_withdrawal::numeric(20,2) || ') del fondo de ahorro. ' ||
                'Considere los $' || v_amount_to_withhold::numeric(20,2) || ' que son retenidos.';
     return;
-  end if;  
+  end if;
 
   begin
     insert into process.withdrawal(saving_fund_id, amount, is_yields, applied_at)
