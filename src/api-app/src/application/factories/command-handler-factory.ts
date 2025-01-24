@@ -34,6 +34,7 @@ import AssociateDeleteCommandHandler, { AssociateDeleteCommand } from '../use-ca
 import BorrowListQueryHandler, { BorrowListQuery } from '../use-cases/queries/borrow/list/borrow-list-query-handler';
 import ContributionDeleteCommandHandler, { ContributionDeleteCommand } from '../use-cases/commands/contribution/delete/contribution-delete-command-handler';
 import WithdrawalDeleteCommandHandler, { WithdrawalDeleteCommand } from '../use-cases/commands/withdrawal/delete/withdrawal-delete-command-handler';
+import PaymentDeleteCommandHandler, { PaymentDeleteCommand } from '../use-cases/commands/payment/delete/payment-delete-command-handler';
 
 type CommandHandlerTypeMap = {
   // Commands
@@ -50,6 +51,7 @@ type CommandHandlerTypeMap = {
   'AssociateDeleteCommand': AssociateDeleteCommand,
   'ContributionDeleteCommand': ContributionDeleteCommand,
   'WithdrawalDeleteCommand': WithdrawalDeleteCommand,
+  'PaymentDeleteCommand': PaymentDeleteCommand
   // Queries
   'CityListQuery': void,
   'StateListQuery': void,
@@ -91,6 +93,7 @@ const commandConstructors: {
   'AssociateDeleteCommand': AssociateDeleteCommandHandler,
   'ContributionDeleteCommand': ContributionDeleteCommandHandler,
   'WithdrawalDeleteCommand': WithdrawalDeleteCommandHandler,
+  'PaymentDeleteCommand': PaymentDeleteCommandHandler,
   // Queries
   'CityListQuery': CityListQueryHandler,
   'StateListQuery': StateListQueryHandler,

@@ -164,7 +164,7 @@ export default function BorrowCreate() {
     updateAmountToDeliver();
 
     if (annualRates.length <= 0) fetchAnnualRates();
-  }, [borrow.requestedAmount, borrow.isFortnightly, borrow.period, setAssociate]);
+  }, [borrow.requestedAmount, borrow.isFortnightly, borrow.period, borrow.annualRate, setAssociate]);
 
   useEffect(() => {
     return () => {
@@ -214,7 +214,7 @@ export default function BorrowCreate() {
         <SFSelectInput id="borrow-period" name="Duración"
           tour="Duración del préstamo, de uno a tres años."
           value={borrow.period}
-          options={([ { key: '---', value: '-' }, { key: '1 AÑO', value: 1 }, { key: '2 AÑOS', value: 2}, { key: '3 AÑOS', value: 3 } ])}
+          options={([{ key: '---', value: '-' }, { key: '1 AÑO', value: 1 }, { key: '2 AÑOS', value: 2}, { key: '3 AÑOS', value: 3 } ])}
           onChange={(value) => handlePeriod(value)}
           issues={issues} />
         <SFDatePickerInput params={{
@@ -230,10 +230,11 @@ export default function BorrowCreate() {
       </div>
       <div className="column">
         <h5 className="title is-5">Cotizaci&oacute;n del pr&eacute;stamo</h5>
-        <SFTextDisplayInput id="borrow-annualRate" name="Tasa de Interés"
+        <SFMoneyInput id="borrow-annualRate" name="Tasa de Interés"
           display="%"
-          readonly={true}
-          value={Number(borrow.annualRate).toFixed(2)} />
+          value={borrow.annualRate}
+          onChange={(value) => setBorrow({ ...borrow, annualRate: value })}
+          issues={issues} />
         <SFTextDisplayInput id="borrow-interestToPay" name="Intereses"
           display="!"
           readonly={true}

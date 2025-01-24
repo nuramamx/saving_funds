@@ -23,7 +23,7 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
   const [payments, setPayments] = useState<PaymentListByBorrowIdSpec[]>([]);
   const [chunkedPayments, setChunkedPayments] = useState<PaymentListByBorrowIdSpec[][]>([]);
   const [error, setError] = useState('');
-  const [refetching, setRefetching] = useState<number>(0);
+  const [refetching, setRefetching] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClose = () => {
@@ -49,9 +49,11 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
       const list = objectToCamel(response.data) as PaymentListByBorrowIdSpec[];
       
       setPayments(list);
-      setChunkedPayments(chunkArray(payments, 10));
+      setChunkedPayments(chunkArray(list, 10));
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setRefetching(false);
     }
   };
 
@@ -78,7 +80,36 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
         return;
       }
 
-      setRefetching((p) => p + 1);
+      setRefetching(true);
+    } catch (err: any) {
+      setError(`${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeletePayment = async (id: number) => {
+    if (user.role !== 'ADMIN') return alert('No tienes permiso para realizar esta acción.');
+    
+    setError('');
+    setLoading(true);
+
+    try {
+      const result = await fetch(`${AppConstants.apiPayment}/delete`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          id: id
+        })
+      });
+
+      if (!result.ok) {
+        const error = await result.json() as CommandResponseInfo;
+        setError(`${error.message}${error.data ? ' ' + error.data : ''}`);
+        return;
+      }
+
+      setRefetching(true);
     } catch (err: any) {
       setError(`${err}`);
     } finally {
@@ -89,12 +120,10 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
   useEffect(() => {
     setShowModal(show);
 
-    console.log('here 1...');
-    if ((borrowId > 0 && chunkedPayments.length === 0) || refetching) {
-      console.log('here 2...');
+    if (refetching || (borrowId > 0 && payments.length === 0)) {
       fetchPayments();
     }
-  }, [show, borrowId, refetching, chunkedPayments]);
+  }, [show, borrowId, refetching]);
 
   return (
   <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
@@ -113,8 +142,7 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
             <footer className="card-footer">
               {chunk.map((item) => (
                 <button data-tooltip-id={`item-${item.number}-${index}`} className="card-footer-item" key={`item-${item.number}-${index}`}
-                  style={{cursor: item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? 'pointer' : 'default'}}
-                  onClick={() => item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? handlePayment(item.number, item.paymentAmount) : () => {}}>
+                  onClick={() => item.status !== 'PAGADO' && item.status !== 'INCIDENCIA' ? handlePayment(item.number, item.paymentAmount) : handleDeletePayment(item.id)}>
                   {!loading ? (
                     <>
                     <SFPaymentMark type={item.status} />&nbsp;&nbsp;&nbsp;
@@ -132,7 +160,9 @@ export default function PaymentListModal({ borrowId, associateName, show, onClos
                     fontSize: '14px',
                     zIndex: '999999999' }}
                     id={`item-${item.number}-${index}`}>
-                    {(item.status !== 'PAGADO' && item.status !== 'INCIDENCIA') && (<><strong style={{color: '#C0392B'}}>Al dar click se marcar&aacute; como pagado</strong><br /><br /></>)}
+                    {(item.status !== 'PAGADO' && item.status !== 'INCIDENCIA') ?
+                      (<><strong style={{color: '#C0392B'}}>Al dar click se marcar&aacute; como pagado</strong><br /><br /></>)
+                      : (<><strong style={{color: '#C0392B'}}>Al dar click se eliminar&aacute; el pago {item.id}</strong><br /><br /></>)}
                     <strong>Pagar en</strong>: {item.date}<br /><br />
                     <strong>A pagar</strong>: {ToMoney(item.paymentAmount)}<br />
                     <strong>Pagado</strong>: {ToMoney(item.paidAmount)}<br />

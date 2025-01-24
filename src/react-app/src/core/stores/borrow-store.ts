@@ -58,6 +58,7 @@ const useBorrowStore = create<BorrowStore>()((set) => ({
           state.borrow.detail.interests = interests[0] + interests[1];
           break;
         case 3:
+          debugger;
           const second_year_balance = (state.borrow.requestedAmount - (state.borrow.requestedAmount / 3));
           interests[0] = (state.borrow.requestedAmount * rate) / 100;
           interests[1] = (second_year_balance * rate) / 100;

@@ -108,7 +108,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.netBalance)}</td>
-                {user.role === 'ADMIN' && index !== 0 && (
+                {user.role === 'ADMIN' && (
                   <td>
                     <TransactionDeleteActionButton id={savingFund.id} type={savingFund.transactionType} onComplete={fetchPayments} />
                   </td>
@@ -121,6 +121,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
             )}
           </tbody>
         </table>
+        {year}
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>

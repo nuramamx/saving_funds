@@ -18,7 +18,7 @@ enum FunctionName {
   ASSOCIATE_DATA_BY_ID = 'select * from catalog.associate_data_by_id(:p_id);',
   ASSOCIATE_DELETE = 'select * from catalog.associate_delete(:p_id);',
   // Process
-  BORROW_CREATE = 'select * from process.borrow_create(:p_associate_id, :p_requested_amount::numeric, :p_period, :p_is_fortnightly, :p_start_at::timestamp);',
+  BORROW_CREATE = 'select * from process.borrow_create(:p_associate_id, :p_requested_amount::numeric, :p_period, :p_is_fortnightly, :p_start_at::timestamp, :p_annual_rate);',
   BORROW_LIST_BY_ASSOCIATE_ID = 'select * from process.borrow_list_by_associate_id(:p_associate_id);',
   BORROW_DEBTOR_LIST = 'select * from process.borrow_debtor_list(:p_limit, :p_offset);',
   PAYMENT_LIST_BY_BORROW_ID = 'select * from process.payment_list_by_borrow_id(:p_borrow_id);',
@@ -34,6 +34,7 @@ enum FunctionName {
   BORROW_QUOTE_REPORT_DATA = 'select * from process.borrow_quote_report_data(:p_borrow_id);',
   CONTRIBUTION_DELETE = 'select * from process.contribution_delete(:p_id);',
   WITHDRAWAL_DELETE = 'select * from process.withdrawal_delete(:p_id);',
+  PAYMENT_DELETE = 'select * from process.payment_delete(:p_id);',
   // Log
   AUDIT_CREATE = 'select * from log.audit_create(:p_user_id, :p_previous_data, :p_new_data)'
 }

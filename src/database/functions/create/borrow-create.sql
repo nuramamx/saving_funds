@@ -5,6 +5,7 @@ create or replace function process.borrow_create(
   in p_period integer,
   in p_is_fortnightly boolean,
   in p_start_at timestamp,
+  in p_annual_rate numeric default 0,
   out inserted_id integer,
   out success boolean,
   out message text
@@ -13,7 +14,6 @@ as $$
 declare
   v_current_year integer;
   v_file_number text;
-  v_annual_rate numeric(20,6);
   v_borrow process.borrow_type;
 begin
   success := false;
@@ -28,6 +28,9 @@ begin
   elseif p_period not in (1,2,3) then
     message := 'El periodo no está en el rango requerido (1, 2, 3).';
     return;
+  elseif p_annual_rate <= 0 then
+    message := 'La tasa anual no puede ser 0 o menor.';
+    return;
   end if;
 
   -- Check if associate has a not settled borrow.
@@ -35,13 +38,6 @@ begin
     message := 'El socio tiene un préstamo no liquidado.';
     return;
   end if;
-
-  -- Get the annual rate based on period.
-  select
-    ar.rate
-  into v_annual_rate
-  from "system".borrow_annual_rate as ar
-  where ar."period" = p_period;
 
   -- Create file number.
   v_current_year := (select extract(year from current_date)::integer);
@@ -54,14 +50,14 @@ begin
       v_file_number,
       p_requested_amount,
       p_period,
-      v_annual_rate,
+      p_annual_rate,
       p_is_fortnightly,
       p_start_at
     )
     returning id into inserted_id;
 
     -- Get borrow calculations
-    v_borrow := process.borrow_calculate(p_requested_amount, v_annual_rate, p_period, p_is_fortnightly);
+    v_borrow := process.borrow_calculate(p_requested_amount, p_annual_rate, p_period, p_is_fortnightly);
 
     -- Create detail
     insert into process.borrow_detail(borrow_id,number_payments,interests,total_due,guarantee_fund,payment,amount_delivered)

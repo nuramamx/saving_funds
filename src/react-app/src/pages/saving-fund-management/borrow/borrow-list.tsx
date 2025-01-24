@@ -91,8 +91,8 @@ export default function BorrowList() {
                 <th data-tg-tour="Pago frecuente requerido.">Pago</th>
                 <th data-tg-tour="Es el total a pagar calculado por el sistema.">Total a Pagar</th>
                 <th data-tg-tour="Son los pagos que ha realizado el socio.">Total pagado</th>
-                <th data-tg-tour="Número de pagos totales a realizar calculados por el sistema.">Pagos a realizar</th>
-                <th data-tg-tour="Número de pagos realizados por el socio.">Pagos realizados</th>
+                <th data-tg-tour="Número de pagos totales a realizar calculados por el sistema."># Pagos</th>
+                <th data-tg-tour="Número de pagos realizados por el socio.">Realizados</th>
                 <th data-tg-tour="Periodo en años en que fue registrado el préstamo.">Periodo</th>
                 <th data-tg-tour="Periodicidad quincenal o mensual.">Periodicidad</th>
                 <th data-tg-tour="Dictamen del sistema en cuanto a estatus del préstamo.">Dictamen</th>

@@ -17,7 +17,8 @@ export default class BorrowSaveRepository implements SaveRepositoryInfo<Borrow, 
           p_requested_amount: data.requestedAmount.toFixed(6),
           p_period: data.period,
           p_is_fortnightly: data.isFortnightly,
-          p_start_at: data.startAt
+          p_start_at: data.startAt,
+          p_annual_rate: data.annualRate
         },
         type: QueryTypes.SELECT
       });
