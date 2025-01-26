@@ -15,6 +15,7 @@ const sequelize = new Sequelize(
     host: String(process.env.DB_HOST),
     port: Number(process.env.DB_PORT) || 5432,
     dialect: 'postgres',
+    dialectModule: require('pg'),
     timezone: '+00:00',
     retry: {
       match: [/Deadlock/i],

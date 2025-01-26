@@ -4,7 +4,7 @@
   "main": "./dist/presenters/api/server.js",
   "scripts": {
     "build": "tsc",
-    "exec": "ts-node src/presenters/api/server.ts",
+    "exe": "pkg dist/presenters/api/server.js --targets win-x64",
     "start:dev": "cross-env NODE_ENV=development TZ='America/Mexico_City' node --watch -r ts-node/register src/presenters/api/server.ts",
     "start:prod": "cross-env NODE_ENV=production TZ='America/Mexico_City' node --watch -r ts-node/register src/presenters/api/server.ts"
   },
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/node": "~20.12.12",
     "@types/uuid": "~9.0.8",
+    "@yao-pkg/pkg": "^6.2.0",
     "cross-env": "~7.0.3",
     "pino-pretty": "~11.1.0",
     "ts-node": "~10.9.2",

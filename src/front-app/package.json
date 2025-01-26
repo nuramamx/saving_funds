@@ -1,0 +1,26 @@
+{
+  "name": "setepid-savingfunds-front-app",
+  "version": "1.0.0",
+  "main": "./dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start:dev": "cross-env NODE_ENV=development TZ='America/Mexico_City' node --watch -r ts-node/register src/server.ts",
+    "start:prod": "cross-env NODE_ENV=production TZ='America/Mexico_City' node --watch -r ts-node/register src/server.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "~10.0.1",
+    "@fastify/jwt": "~9.0.1",
+    "@fastify/multipart": "~9.0.1",
+    "@fastify/static": "~8.0.4",
+    "dotenv": "~16.4.5",
+    "fastify": "~5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "~20.12.12",
+    "@yao-pkg/pkg": "^6.2.0",
+    "cross-env": "~7.0.3",
+    "pino-pretty": "~11.1.0",
+    "ts-node": "~10.9.2",
+    "typescript": "~5.4.5"
+  }
+}

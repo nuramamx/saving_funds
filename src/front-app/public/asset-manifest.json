@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/setepidsf/static/css/main.71c8e667.css",
+    "main.js": "/setepidsf/static/js/main.352992fc.js",
+    "static/js/453.2f6ee36e.chunk.js": "/setepidsf/static/js/453.2f6ee36e.chunk.js",
+    "index.html": "/setepidsf/index.html",
+    "main.71c8e667.css.map": "/setepidsf/static/css/main.71c8e667.css.map",
+    "main.352992fc.js.map": "/setepidsf/static/js/main.352992fc.js.map",
+    "453.2f6ee36e.chunk.js.map": "/setepidsf/static/js/453.2f6ee36e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.71c8e667.css",
+    "static/js/main.352992fc.js"
+  ]
+}
