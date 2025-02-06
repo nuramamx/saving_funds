@@ -121,7 +121,6 @@ export default function TransactionListModal({ savingFundId, associateName, show
             )}
           </tbody>
         </table>
-        {year}
       </section>
       <footer className="modal-card-foot  is-flex is-justify-content-space-between">
         <div>
@@ -162,11 +161,8 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 Number(transactions.filter(x => x.year === year).at(0)?.partialYields) : 0
               )
             ) : (
-              ToMoney(
-                Number(transactions.at(-1)?.netBalance) +
-                Number(transactions.filter(x => x.year === (transactions.at(-2)?.year)).at(0)?.partialYields ?? 0
-              )
-            ))}
+              ToMoney(Number(transactions.at(-1)?.netBalance))
+            )}
           </label>
         </div>
         <div></div>

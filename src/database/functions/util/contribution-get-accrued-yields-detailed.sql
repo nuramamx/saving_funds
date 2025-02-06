@@ -114,7 +114,8 @@ begin
           from process.withdrawal as w
           where extract(year from w.applied_at) = r.year
           and w.saving_fund_id = p_saving_fund_id
-          and is_yields = false
+          and w.is_yields = false
+          and w.is_active = true
         );
 
         -- Get all contributions from previous year
@@ -202,7 +203,7 @@ begin
 
     if r.transaction_type = 'withdrawal' then
       v_running_balance := v_running_balance + r.amount;
-      v_running_net_balance := v_running_net_balance + r.amount;
+      v_running_net_balance := v_running_net_balance + v_yields_year + r.amount;
     end if;
 
     --insert transaction
@@ -256,6 +257,6 @@ begin
     ,res.partial_yields
   from temp_transactions_data as res
   where (p_year = 0 or res.year = p_year)
-  order by res.applied_at;
+  order by res.applied_at, res.net_balance;
 end
 $$ language plpgsql;

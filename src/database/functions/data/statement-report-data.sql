@@ -79,7 +79,7 @@ begin
               on s.id = c.saving_fund_id
             where s.associate_id = p_associate_id
             and c.is_active = true
-            order by c.applied_at
+            order by c.applied_at desc
             limit 1
           ) as to_withhold
         ) as amount_to_withhold

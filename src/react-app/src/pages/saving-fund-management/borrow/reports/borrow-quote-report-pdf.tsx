@@ -118,7 +118,7 @@ const BorrowQuoteReportPDF = ({ data }: BorrowQuoteReportPDFParams) => (
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.cellTitle}>DESCUENTO QUINCENAL:</Text>
+          <Text style={styles.cellTitle}>DESCUENTO {data.isFortnightly ? 'QUINCENAL' : 'MENSUAL'}:</Text>
           <Text style={styles.cell}>{ToMoney(data.payment)}</Text>
         </View>
 

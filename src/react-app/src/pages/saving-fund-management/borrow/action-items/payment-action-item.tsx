@@ -3,10 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
 import useAuthStore from "../../../../core/stores/auth-store";
-import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
-import { objectToCamel } from "ts-case-convert";
-import saveAs from "file-saver";
-import { pdf } from "@react-pdf/renderer";
 import TooltipElement from "../../../../components/elements/tooltip-element";
 
 type PaymentActionItemParams = {
@@ -18,22 +14,6 @@ export default function PaymentActionActionItem({ associateName, borrowId }: Pay
   const [isActive, setIsActive] = useState<boolean>(false);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
-
-  const fetchPaymentActionData = async () => {
-    // const result = await fetch(`${AppConstants.apiReport}/borrow_authorization/data/${borrowId}`, {
-    //   method: 'GET',
-    //   headers: { 'Authorization': `Bearer ${token}` }
-    // });
-
-    // if (!result.ok)
-    //   pushNotification({ message: result.statusText, type: 'danger' });
-
-    // const response = await result.json() as CommandResponseInfo;
-    // const responseData = objectToCamel(response.data) as PaymentActionDataSpec[];
-    
-    // if (response.successful) return responseData;
-    // else throw new Error(response.message);
-  };
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);

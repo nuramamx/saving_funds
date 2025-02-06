@@ -30,10 +30,14 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
   const { token } = useAuthStore();
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
+  const [loadingStatementData, setLoadingloadingStatementData] = useState(false);
   const [error, setError] = useState('');
   const [statement, setSatement] = useState<StatementReportDataSpec>();
 
   const fetchStatementReportData = async () => {
+    setLoadingloadingStatementData(true);
+
+    try {
     const result = await fetch(`${AppConstants.apiReport}/statement/data/${associateId}`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
@@ -47,6 +51,11 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
     
     if (response.successful) return setSatement(responseData[0]);
     else throw new Error(response.message);
+    } catch (err: any) {
+
+    } finally {
+      setLoadingloadingStatementData(false);
+    }
   };
 
   const handleClick = async () => {
@@ -124,6 +133,9 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
           <div className="column" style={{ fontSize: '13px'}}>
             <table className="table">
               <tbody>
+                <tr>
+                  <td colSpan={2}>{loadingStatementData && (<><span className="loader" style={{ display: 'inline-block'}}></span>&nbsp;Cargando la informaci&oacute;n requerida...</>)}</td>
+                </tr>
                 <tr style={{ clipPath: 'xywh(0 0 100% 100% round 0.5em)' }}>
                   <td><strong>Cantidad a retener</strong></td>
                   <td>{ToMoney(statement?.amountToWithhold ?? 0)}</td>
