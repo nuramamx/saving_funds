@@ -26,7 +26,9 @@ declare
   v_annual_rate numeric(20,6);
   v_first_contribution boolean := false;
   v_first_transaction boolean := false;
+  v_last_year_contribution integer := 0;
   v_current_year_transactions integer := 0;
+  v_is_new_associate boolean := false;
   r record;
 begin
   -- Create a temporary table to store results before returning them
@@ -49,11 +51,32 @@ begin
     yields numeric(20,6) default 0
   ) on commit drop;
 
+  v_is_new_associate := (
+    select
+      true
+    from catalog.associate as a
+    where a.id = p_saving_fund_id
+    and extract(year from a.created_at) >= 2025
+    limit 1
+  );
+
+  v_last_year_contribution := (
+    select
+      extract(year from c.applied_at)
+    from process.contribution as c
+    where c.saving_fund_id = p_saving_fund_id
+    and c.is_active = true
+    order by c.applied_at
+    limit 1
+  );
+
   v_current_year_transactions := (
     select
       count(1)
     from process.contribution as c
-    where extract(year from c.applied_at) = extract(year from current_date)
+    where c.saving_fund_id = p_saving_fund_id
+    and c.is_active = true
+    and extract(year from c.applied_at) = extract(year from current_date)
   );
 
   -- Cursor to process transactions year by year
@@ -79,6 +102,15 @@ begin
     from process.withdrawal as w
     where w.saving_fund_id = p_saving_fund_id and w.is_yields = false
     and w.is_active = true
+    union all
+    select
+      -2
+      ,(v_last_year_contribution-1)
+      ,to_char(make_date(v_last_year_contribution-1, 1, 1), 'YYYY-MM-DD')
+      ,make_date(v_last_year_contribution, 1, 1)
+      ,0.0001
+      ,''
+    from (select v_is_new_associate = true) as t
     union all
     select
       -1
@@ -242,6 +274,7 @@ begin
   -- Delete last simulated transaction, this is only when associate does not have contribution or withdrawal in
   -- current year so that causes previous year does not generate yields.
   delete from temp_transactions_data as t where t.id = -1;
+  delete from temp_transactions_data as t where t.id = -2;
 
   -- Return results
   return query

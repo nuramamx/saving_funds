@@ -7,6 +7,7 @@ const associateInitialState: AssociateComposerCommand = {
   rfc: '',
   gender: '',
   detail: {
+    agreement: '',
     agreementId: 0,
     dependencyKey: '',
     category: '',

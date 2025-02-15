@@ -1,4 +1,5 @@
 export default interface AssociateDetailSpec {
+  agreement: string;
   agreementId: number;
   dependencyKey: string;
   category: string;

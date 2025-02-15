@@ -18,8 +18,12 @@ declare
   v_id_first_contribution integer;
   v_year_first_contribution integer;
   v_year_iterated integer;
+  v_row_iterated integer;
   v_first_row integer;
   v_last_row integer;
+  v_first_year_row integer;
+  v_last_year_row integer;
+  v_is_new_associate boolean := false;
 begin
   -- Get the saving fund related to the associate,
   select
@@ -31,6 +35,18 @@ begin
   if v_saving_fund_id is null or v_saving_fund_id <= 0 then
     raise exception 'No existe fondo de ahorro para el socio.';
   end if;
+
+  -- Workaround for associates registered on 2025 and above
+  v_is_new_associate := (
+    select
+      true
+    from catalog.associate as a
+    where a.id = p_associate_id
+    and extract(year from a.created_at) >= 2025
+    limit 1
+  );
+
+  raise notice 'v_is_new_associate %', v_is_new_associate;
 
   -- Get the year of first contribution.
   select
@@ -64,12 +80,13 @@ begin
     withdrawals_summarized numeric(20,2) default 0,
     refund numeric(20,2) default 0,
     net_total numeric(20,2) default 0,
-    first_contribution boolean default false
+    first_contribution boolean default false,
+    is_new_associate boolean default false
   );
 
   -- Iterate through years to get the summarized data.
   for v_year_iterated in v_year_first_contribution..v_current_year loop
-    insert into temp_report_statement ("year", contribution_summarized, yields, withdrawals_summarized, first_contribution)
+    insert into temp_report_statement ("year", contribution_summarized, yields, withdrawals_summarized, first_contribution, is_new_associate)
     with pre_processed_contributions as (
       select
         r.year::integer as "year"
@@ -78,15 +95,14 @@ begin
         ,r.amount
         ,r.partial_yields
         ,case
-          when v_id_first_contribution = r.id
-          then 0
+          when not v_is_new_associate and v_id_first_contribution = r.id then 0
           else r.partial_yields
         end as calculated_yields
         ,case
-          when v_id_first_contribution = r.id
-          then true
+          when not v_is_new_associate and v_id_first_contribution = r.id then true
           else false
         end as first_contribution
+        ,v_is_new_associate as is_new_associate
       from process.contribution_get_accrued_yields_detailed(v_saving_fund_id, v_year_iterated) as r
     )
     select
@@ -94,53 +110,57 @@ begin
       ,sum(case when r.transaction_type = 'contribution' then r.amount else 0 end) as contribution_summarized
       ,sum(r.calculated_yields) as yields_summarized
       ,sum(case when r.transaction_type like '%withdrawal%' then r.amount else 0 end) as withdrawals_summarized
-      ,first_contribution
+      ,r.first_contribution
+      ,r.is_new_associate
     from pre_processed_contributions as r
     group by
       r.year
-      ,r.first_contribution;
+      ,r.first_contribution
+      ,r.is_new_associate;
   end loop;
 
-  select min(id) from temp_report_statement into v_first_row;
-  select max(id) from temp_report_statement into v_last_row;
+  select min(r.id) from temp_report_statement as r into v_first_row;
+  select max(r.id) from temp_report_statement as r into v_last_row;
+  select min(r.year) from temp_report_statement as r into v_first_year_row;
+  select max(r.year) from temp_report_statement as r into v_last_year_row;
 
   -- Assign the annual interest rate by year.
-  for v_year_iterated in v_first_row..v_last_row loop
+  for v_year_iterated in v_first_year_row..v_last_year_row loop
     update temp_report_statement
       set annual_interest_rate = (
           select
             ar.rate
           from "system".saving_fund_annual_rate as ar
-          where ar.id = v_year_iterated
+          where ar.year = v_year_iterated
           limit 1
         )
-    where temp_report_statement.id = v_year_iterated;
+    where temp_report_statement.year = v_year_iterated;
   end loop;
 
   -- Assign the net total by year.
-  for v_year_iterated in v_first_row..v_last_row loop
+  for v_row_iterated in v_first_row..v_last_row loop
     update temp_report_statement
       set net_total = (
           select
             coalesce((trs.contribution_summarized + trs.yields - abs(trs.withdrawals_summarized)), 0)
           from temp_report_statement as trs
-          where trs.id = v_year_iterated
+          where trs.id = v_row_iterated
           limit 1
         )
-    where temp_report_statement.id = v_year_iterated;
+    where temp_report_statement.id = v_row_iterated;
   end loop;
 
   -- Assign the initial balance by year, it is the net_total from past year.
-  for v_year_iterated in v_first_row..v_last_row loop
+  for v_row_iterated in v_first_row..v_last_row loop
     update temp_report_statement
       set initial_balance = (
           select
             (coalesce(trs.initial_balance, 0) + coalesce(trs.net_total, 0))
           from temp_report_statement as trs
-          where trs.id = (v_year_iterated - 1)
+          where trs.id = (v_row_iterated - 1)
           limit 1
         )
-    where temp_report_statement.id = v_year_iterated;
+    where temp_report_statement.id = v_row_iterated;
   end loop;
 
   -- Format data
@@ -183,7 +203,6 @@ begin
     ,t.refund
     ,t.net_total
   from temp_report_statement as t
-  where t.first_contribution = false
   order by t.year;
 end;
 $$ language plpgsql;

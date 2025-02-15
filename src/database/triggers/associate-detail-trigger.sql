@@ -2,20 +2,20 @@
 create or replace function "catalog".associate_detail_validate()
 returns trigger as $$
 declare
-  v_agreement_id integer;
+  v_agreement_name text;
 begin
   if not (tg_op = 'DELETE') then
-    if (trim(new.detail->>'agreement') <> '') then
-      v_agreement_id := (
+    if (coalesce((new.detail->>'agreementId')::integer, 0) <> 0) then
+      v_agreement_name := (
         select
-          ag.id
+          ag.name
         from "system".agreement as ag
-        where ag.name = upper(trim(new.detail->>'agreement'))
+        where ag.id = (trim(new.detail->>'agreementId'))::integer
         limit 1
       );
 
-      if v_agreement_id is not null then
-        new.detail := jsonb_set(new.detail, '{agreementId}', to_jsonb(v_agreement_id))::jsonb;
+      if v_agreement_name is not null then
+        new.detail := jsonb_set(new.detail, '{agreement}', to_jsonb(v_agreement_name))::jsonb;
       end if;
     end if;
 

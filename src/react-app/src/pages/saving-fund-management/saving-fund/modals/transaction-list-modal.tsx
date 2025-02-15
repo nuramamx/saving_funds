@@ -9,6 +9,9 @@ import SavingFundTransactionListSpec from '../../../../core/interfaces/specs/lis
 import SFSelectYear from '../../../../components/dynamic-elements/sf-select-year';
 import useAuthStore from '../../../../core/stores/auth-store';
 import TransactionDeleteActionButton from '../actions/transaction-delete-action-button';
+import { pdf } from '@react-pdf/renderer';
+import saveAs from 'file-saver';
+import SavingFundTransactionsReportPDF from '../reports/savingfund-transaction-report-pdf';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -29,6 +32,11 @@ export default function TransactionListModal({ savingFundId, associateName, show
       setTransactions([]);
       onClose();
     }
+  };
+  const handlePrintTransaction = async () => {
+    const blob = await pdf(<SavingFundTransactionsReportPDF associateName={associateName} list={transactions} />).toBlob();
+
+    saveAs(blob, `Cotización de descuento por crédito - ${associateName}.pdf`);
   };
 
   const parseTransactionType = (transactionType: string) => {
@@ -169,7 +177,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
         <div></div>
         <div className='is-pulled-right'>
           <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
-          <button className='button' style={{width:'100%'}}><Printer /></button>
+          <button className='button' style={{width:'100%'}} onClick={handlePrintTransaction}><Printer /></button>
         </div>
       </footer>
     </div>
