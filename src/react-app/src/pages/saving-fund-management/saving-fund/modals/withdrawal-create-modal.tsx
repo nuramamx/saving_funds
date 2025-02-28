@@ -23,7 +23,9 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
     savingFundId: undefined!,
     amount: 0,
     isYields: false,
-    appliedAt: undefined!
+    appliedAt: undefined!,
+    isLeave: false,
+    isDecease: false
   };
   const [withdrawal, setWithdrawal] = useState<WithdrawalCreateCommand>(initialState);
   const { pushNotification } = useNotificationStore();
@@ -48,6 +50,8 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
 
     const response = await result.json() as CommandResponseInfo;
     const responseData = objectToCamel(response.data) as StatementReportDataSpec[];
+
+    console.log(responseData);
     
     if (response.successful) return setSatement(responseData[0]);
     else throw new Error(response.message);
@@ -121,11 +125,22 @@ export default function WithdrawalCreateModal({ associateId, savingFundId, show,
               onChange: (value) => setWithdrawal({ ...withdrawal, appliedAt: value }),
               minDate: new Date(2008, 0),
               maxDate: addDays(new Date(), 0),
-              showYear: true
+              showYear: true,
+              readonly: withdrawal.isLeave || withdrawal.isDecease
             }} />
             <SFMoneyInput id={`${uuid()}_withdrawal_amount`} name="Monto de retiro"
+              readonly={withdrawal.isLeave || withdrawal.isDecease}
               value={withdrawal.amount}
               onChange={(value) => setWithdrawal({ ...withdrawal, amount: value })} />
+              
+            <input id="withdrawal_isLeave" type="checkbox"
+              disabled={withdrawal.isDecease}
+              checked={withdrawal.isLeave}
+              onChange={() => setWithdrawal({ ...withdrawal, isLeave: !withdrawal.isLeave })} />&nbsp;Retirar todo el saldo por baja.<br />
+            <input id="withdrawal_isDecease" type="checkbox"
+              disabled={withdrawal.isLeave}
+              checked={withdrawal.isDecease}
+              onChange={() => setWithdrawal({ ...withdrawal, isDecease: !withdrawal.isDecease })} />&nbsp;Retirar todo el saldo por fallecimiento.
           </div>
           <div className="column is-1"></div>
         </div>

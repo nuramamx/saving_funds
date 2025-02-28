@@ -20,6 +20,7 @@ async function ReportRoute(fastify: FastifyInstance, options: FastifyPluginOptio
   fastify.get<{ Params: { id: number }}>('/report/statement/list/:id', async (request, reply) => {
     const { id } = request.params;
     const data: StatementReportDataQuery = { associateId: id };
+    
     const command = new CommandHandlerMediator();
     const result = await command.execute('StatementReportListQuery', data);
 

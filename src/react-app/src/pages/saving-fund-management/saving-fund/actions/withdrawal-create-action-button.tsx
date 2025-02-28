@@ -6,11 +6,12 @@ import useAuthStore from "../../../../core/stores/auth-store";
 
 type WithdrawalCreateActionButtonParams = {
   savingFundId: number;
+  associateId: number;
   hasActiveBorrow: boolean;
   onClose: () => void;
 };
 
-export default function WithdrawalCreateActionButton({ savingFundId, hasActiveBorrow, onClose }: WithdrawalCreateActionButtonParams) {
+export default function WithdrawalCreateActionButton({ savingFundId, associateId, hasActiveBorrow, onClose }: WithdrawalCreateActionButtonParams) {
   const [showModal, setShowModal] = useState(false);
   const [selectedSavingFund, setSelectedSavingFund] = useState<number>(0);
   const { user } = useAuthStore();
@@ -35,7 +36,7 @@ export default function WithdrawalCreateActionButton({ savingFundId, hasActiveBo
           <ReceiveDollars />
           <TooltipElement id="withdrawal-tooltip" text="Retirar" errorText={hasActiveBorrow ? 'No se pueden realizar retiros con préstamo activo.' : undefined} />
         </button>
-        <WithdrawalCreateModal savingFundId={selectedSavingFund} associateId={selectedSavingFund} show={showModal} onClose={() => handleClick(0, false)} />
+        <WithdrawalCreateModal savingFundId={selectedSavingFund} associateId={associateId} show={showModal} onClose={() => handleClick(0, false)} />
       </>
       )}
     </>

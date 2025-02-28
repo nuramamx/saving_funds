@@ -99,9 +99,13 @@ export default function SavingFundList() {
                   <td>{ToMoney(savingFund.yields)}</td>
                   <td>{ToMoney(savingFund.total)}</td>
                   <td>
-                    <StatementReportActionItem associateName={savingFund.associateName} associateId={savingFund.id} />
-                    <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
-                    <WithdrawalCreateActionButton savingFundId={savingFund.id} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
+                    <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />
+                    {savingFund.total > 0 && (
+                      <>
+                      <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
+                      <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
+                      </>
+                    )}
                     <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
                     <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
                   </td>

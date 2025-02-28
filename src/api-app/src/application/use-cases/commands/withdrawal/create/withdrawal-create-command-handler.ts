@@ -8,6 +8,8 @@ type WithdrawalCreateCommand = {
   amount: number;
   isYields: boolean;
   appliedAt: Date;
+  isLeave: boolean;
+  isDecease: boolean;
 };
 
 class WithdrawalCreateCommandHandler implements CommandHandler<WithdrawalCreateCommand, CommandResponse> {
@@ -19,7 +21,9 @@ class WithdrawalCreateCommandHandler implements CommandHandler<WithdrawalCreateC
         data.savingFundId,
         data.amount,
         data.isYields,
-        data.appliedAt
+        data.appliedAt,
+        data.isLeave,
+        data.isDecease
       );
 
       const result = await repository.save(entity);

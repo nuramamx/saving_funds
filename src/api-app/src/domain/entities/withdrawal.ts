@@ -5,6 +5,8 @@ export default class Withdrawal implements WithdrawalInfo {
     readonly savingFundId: number,
     readonly amount: number,
     readonly isYields: boolean,
-    readonly appliedAt: Date
+    readonly appliedAt: Date,
+    readonly isLeave: boolean,
+    readonly isDecease: boolean
   ) {}
 }

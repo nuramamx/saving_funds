@@ -9,14 +9,17 @@ import ParseError from "../../util/check-error";
 export default class WithdrawalSaveRepository  implements SaveRepositoryInfo<Withdrawal, boolean> {
   async save(data: Withdrawal): Promise<boolean> {
     const transaction = await db.sequelize.transaction();
+    console.log(JSON.stringify(data));
     
     try {
       const [result] = await db.sequelize.query<ProcedureResponseInfo>(FunctionName.WITHDRAWAL_CREATE, {
         replacements: {
           p_saving_fund_id: data.savingFundId,
           p_amount: data.amount,
-          p_applied_at: data.appliedAt,
-          p_is_yields: data.isYields
+          p_applied_at: data.isLeave || data.isDecease ? new Date() : data.appliedAt,
+          p_is_yields: data.isYields,
+          p_is_leave: data.isLeave,
+          p_is_decease: data.isDecease
         },
         type: QueryTypes.SELECT
       });

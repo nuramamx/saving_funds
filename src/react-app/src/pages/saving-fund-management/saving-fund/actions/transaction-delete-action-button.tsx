@@ -14,7 +14,7 @@ export default function TransactionDeleteActionButton({ id, type, onComplete }: 
 
   const handleClick = async () => {
     try {
-      const response = await fetch(`${AppConstants.api}/${type.toLowerCase()}/${id}`, {
+      const response = await fetch(`${AppConstants.api}/${type.toLowerCase().replace('-leave', '').replace('-decease', '')}/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${user.token}` }
       });

@@ -98,7 +98,11 @@ begin
       ,to_char(w.applied_at, 'YYYY-MM-DD') as transaction_date
       ,w.applied_at as applied_at
       ,-w.amount as amount
-      ,'withdrawal' as transaction_type
+      ,case
+        when w.is_leave then 'withdrawal-leave'
+        when w.is_decease then 'withdrawal-decease'
+        else 'withdrawal'
+      end as transaction_type
     from process.withdrawal as w
     where w.saving_fund_id = p_saving_fund_id and w.is_yields = false
     and w.is_active = true
@@ -233,7 +237,7 @@ begin
       end if;
     end if;
 
-    if r.transaction_type = 'withdrawal' then
+    if r.transaction_type like 'withdrawal%' then
       v_running_balance := v_running_balance + r.amount;
       v_running_net_balance := v_running_net_balance + v_yields_year + r.amount;
     end if;

@@ -3,4 +3,6 @@ export default interface WithdrawalInfo {
   amount: number;
   isYields: boolean;
   appliedAt: Date;
+  isLeave: boolean;
+  isDecease: boolean;
 }

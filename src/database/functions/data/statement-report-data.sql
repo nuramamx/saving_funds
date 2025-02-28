@@ -48,13 +48,13 @@ begin
       ,r.date_range
       ,r.frequent_contribution
       ,r.amount_to_withhold
-      ,case when (r.amount_available_to_withdrawal - r.amount_to_withhold - withdrawals_current_year) < 0
+      ,case when (r.amount_available_to_withdrawal - r.amount_to_withhold - withdrawals_current_year) <= 0
         then 0
         else (r.amount_available_to_withdrawal - r.amount_to_withhold - withdrawals_current_year)
       end as amount_available_to_withdrawal
-      ,case when (r.amount_available_to_withdrawal - r.amount_to_withhold) < 0
+      ,case when (r.amount_available_to_withdrawal - r.amount_to_withhold - withdrawals_current_year) <= 0
         then 0
-        else (floor((r.amount_available_to_withdrawal - r.amount_to_withhold) / 100) * 100)
+        else (floor((r.amount_available_to_withdrawal - r.amount_to_withhold - withdrawals_current_year) / 100) * 100)
       end as amount_available_to_withdrawal_rounded
       ,r.net_balance
     from (
@@ -93,7 +93,7 @@ begin
         ,(
           select
             abs(rs.withdrawals_summarized) as amount
-          from process.statement_report_list(1) as rs
+          from process.statement_report_list(p_associate_id) as rs
           where rs."year" = v_current_year
           limit 1
         ) as withdrawals_current_year

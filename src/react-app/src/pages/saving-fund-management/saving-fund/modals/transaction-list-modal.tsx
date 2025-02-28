@@ -45,10 +45,10 @@ export default function TransactionListModal({ savingFundId, associateName, show
         return 'Aportación';
       case 'withdrawal':
         return 'Retiro';
-      case 'withdrawal-yields':
-        return 'Retiro de Intereses';
-        case 'fix':
-          return 'Corrección';
+        case 'withdrawal-leave':
+          return 'Retiro por baja';
+      case 'withdrawal-decease':
+        return 'Retiro por fallecimiento';
       default:
         return 'No identificado';
     }
@@ -142,11 +142,11 @@ export default function TransactionListModal({ savingFundId, associateName, show
           </label><br />
           <label style={{ fontSize: '1.2em' }}># Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
           <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {transactions.filter(x => x.transactionType === 'withdrawal').length}
+            {transactions.filter(x => x.transactionType.includes('withdrawal')).length}
           </label><br />
           <label style={{ fontSize: '1.2em' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
           <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {ToMoney(transactions.filter(x => x.transactionType === 'withdrawal').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+            {ToMoney(transactions.filter(x => x.transactionType.includes('withdrawal')).reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
           </label><br />
           {year !== 0 && (
             <>
