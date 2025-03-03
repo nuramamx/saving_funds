@@ -1,13 +1,16 @@
-import { Page, Text, View, Document, Image, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, Image, StyleSheet, Font } from '@react-pdf/renderer';
 import React from 'react';
 import ToMoney from '../../../../core/util/conversions/money-conversion';
 import SavingFundTransactionListSpec from '../../../../core/interfaces/specs/list/saving-fund-transaction-list-spec';
 import { format } from 'date-fns';
 
+Font.register({ family: 'Courier', src: `${process.env.PUBLIC_URL}/resources/courier.ttf`, fontStyle: 'normal', fontWeight: 'normal' });
+
 // Create styles
 const styles = StyleSheet.create({
   page: {
     padding: 20,
+    paddingBottom: 35
   },
   container: {
     width: '100%',
@@ -34,40 +37,45 @@ const styles = StyleSheet.create({
     margin: 2
   },
   cellSmall: {
+    fontFamily: 'Courier',
     flex: 2
   },
   cell: {
+    fontFamily: 'Courier',
     flex: 8,
     padding: 0
   },
   cellTitle: {
     flex: 8,
     padding: 0,
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Courier-Bold',
   },
   table: {
+    fontFamily: 'Courier',
     flexDirection: 'row',
-    borderTop: '1px solid black',
-    borderBottom: '1px solid black',
-    borderLeft: '1px solid black'
+    borderTop: 'none',
+    borderBottom: 'none',
+    borderLeft: 'none'
   },
   tableHeader: {
-    fontFamily: 'Helvetica-Bold',
+    fontFamily: 'Courier-Bold',
     fontWeight: 'bold',
     flex: 1,
     padding: 4,
-    borderRight: '1px solid black',
+    borderRight: 'none',
     textAlign: 'center'
   },
   tableRow: {
+    fontFamily: 'Courier',
     flexDirection: 'row',
-    borderBottom: '1px solid black',
-    borderLeft: '1px solid black',
+    borderBottom: '0.5px solid black',
+    borderLeft: 'none',
   },
   tableCell: {
+    fontFamily: 'Courier',
     flex: 1,
     padding: 4,
-    borderRight: '1px solid black',
+    borderRight: 'none',
     textAlign: 'center'
   },
 });
@@ -77,6 +85,23 @@ type SavingFundTransactionsReportPDFParams = {
   list: SavingFundTransactionListSpec[];
 };
 
+const parseTransactionType = (transactionType: string) => {
+  switch (transactionType) {
+    case 'contribution':
+      return 'Aportación';
+    case 'yields':
+      return 'Rendimientos';
+    case 'withdrawal':
+      return 'Retiro';
+      case 'withdrawal-leave':
+        return 'Retiro por baja';
+    case 'withdrawal-decease':
+      return 'Retiro por fallecimiento';
+    default:
+      return 'No identificado';
+  }
+};
+
 // Create Document Component
 const SavingFundTransactionsReportPDF = ({ associateName, list }: SavingFundTransactionsReportPDFParams) => (
   <Document>
@@ -84,7 +109,7 @@ const SavingFundTransactionsReportPDF = ({ associateName, list }: SavingFundTran
       <View style={styles.container}>
         <View style={styles.section} fixed>
           <Image src={`${process.env.PUBLIC_URL}/logo.png`} style={{ width: '100px', height: '100px' }} />
-          <Text style={styles.title}>TRANSACCIONES</Text>
+          <Text style={styles.title}>MOVIMIENTOS DE FONDO DE AHORRO</Text>
           <Image src={`${process.env.PUBLIC_URL}/setepid-logo.jpg`} style={{ width: '80px' }} />
         </View>
 
@@ -113,7 +138,7 @@ const SavingFundTransactionsReportPDF = ({ associateName, list }: SavingFundTran
           <View key={index} style={styles.tableRow}>
             <Text style={styles.tableCell}>{row.year}</Text>
             <Text style={styles.tableCell}>{row.transactionDate}</Text>
-            <Text style={styles.tableCell}>{row.transactionType === 'contribution' ? 'Aportación' : 'Retiro'}</Text>
+            <Text style={styles.tableCell}>{parseTransactionType(row.transactionType)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.amount)}</Text>
             <Text style={styles.tableCell}>{ToMoney(row.netBalance)}</Text>
           </View>

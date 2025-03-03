@@ -10,8 +10,8 @@ import SFSelectYear from '../../../../components/dynamic-elements/sf-select-year
 import useAuthStore from '../../../../core/stores/auth-store';
 import TransactionDeleteActionButton from '../actions/transaction-delete-action-button';
 import { pdf } from '@react-pdf/renderer';
-import saveAs from 'file-saver';
 import SavingFundTransactionsReportPDF from '../reports/savingfund-transaction-report-pdf';
+import saveAs from 'file-saver';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -35,14 +35,15 @@ export default function TransactionListModal({ savingFundId, associateName, show
   };
   const handlePrintTransaction = async () => {
     const blob = await pdf(<SavingFundTransactionsReportPDF associateName={associateName} list={transactions} />).toBlob();
-
-    saveAs(blob, `Cotización de descuento por crédito - ${associateName}.pdf`);
+    saveAs(blob, `Movimientos de fondo de ahorro - ${associateName}.pdf`);
   };
 
   const parseTransactionType = (transactionType: string) => {
     switch (transactionType) {
       case 'contribution':
         return 'Aportación';
+      case 'yields':
+        return 'Rendimientos';
       case 'withdrawal':
         return 'Retiro';
         case 'withdrawal-leave':

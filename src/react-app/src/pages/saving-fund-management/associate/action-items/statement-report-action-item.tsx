@@ -1,7 +1,6 @@
 import { DownloadSquare, GridPlus, Page } from "iconoir-react";
 import { useCallback, useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
-import { saveAs } from "file-saver";
 import { objectToCamel } from "ts-case-convert";
 import AppConstants from "../../../../core/constants/app-constants";
 import useNotificationStore from "../../../../core/stores/notification-store";
@@ -11,6 +10,7 @@ import StatementReportPDF from "../reports/statement-report-pdf";
 import StatementReportDataSpec from "../../../../core/interfaces/specs/base/statement-report-data-spec";
 import StatementReportListSpec from "../../../../core/interfaces/specs/list/statement-report-list-spec";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
+import saveAs from "file-saver";
 
 type StatementReportActionItemParams = {
   associateName: string;
