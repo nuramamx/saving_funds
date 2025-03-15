@@ -24,6 +24,7 @@ import AssociateListByIdOrNameSpec from '../../../core/interfaces/specs/list/ass
 import saveAs from 'file-saver';
 import { pdf } from '@react-pdf/renderer';
 import BorrowQuoteReportPDF from './reports/borrow-quote-report-pdf';
+import useIsMobile from '../../../core/hooks/use-is-mobile';
 
 export default function BorrowCreate() {
   const { 
@@ -45,6 +46,7 @@ export default function BorrowCreate() {
   const { annualRates, setAnnualRates } = useCacheStore();
   const { token, user } = useAuthStore();
   const searchAssociateRef = useRef<SearchAssociateForwardedMethods>(null);
+  const isMobile = useIsMobile();
 
   const fetchAnnualRates = async () => {
     const result = await fetch(`${AppConstants.apiBorrow}/rates`, {
@@ -195,8 +197,12 @@ export default function BorrowCreate() {
           <label style={{ color: '#C0392B' }}><WarningCircle style={{ color: '#C0392B' }} />&nbsp;&nbsp;Debe seleccionar el socio.</label>
         ) : '' }
     </div>
-    <div className="columns">&nbsp;</div>
-    <div className="columns">&nbsp;</div>
+    {!isMobile && (
+      <>
+        <div className="columns">&nbsp;</div>
+        <div className="columns">&nbsp;</div>
+      </>
+    )}
     <div className="columns">
       <div className="column">
         <h5 className="title is-5">Datos del pr&eacute;stamo</h5>
@@ -245,7 +251,7 @@ export default function BorrowCreate() {
           value={ToMoney(borrow.detail.totalDue)} />
       </div>
       <div className="column">
-        <h5 className="title is-5">&nbsp;</h5>
+        {!isMobile && (<h5 className="title is-5">&nbsp;</h5>)}
         <SFTextDisplayInput id="borrow-guaranteeFund" name="Fondo de Garantía (2%)"
           display="!"
           readonly={true}

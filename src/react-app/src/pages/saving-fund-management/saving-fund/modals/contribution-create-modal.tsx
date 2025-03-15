@@ -9,6 +9,7 @@ import CommandResponseInfo from "../../../../core/interfaces/info/command-respon
 import ContributionCreateCommand from "../../../../core/interfaces/commands/contribution-create-command";
 import SFDatePickerInput from "../../../../components/form/sf-datepicker-input";
 import useAuthStore from "../../../../core/stores/auth-store";
+import useIsMobile from "../../../../core/hooks/use-is-mobile";
 
 interface ContributionCreateModalParams extends SFModalInfo {
   savingFundId: number;
@@ -26,6 +27,7 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
   const [showModal, setShowModal] = useState(show);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const isMobile = useIsMobile();
 
   const handleClick = async () => {
     setError('');
@@ -71,48 +73,48 @@ export default function ContributionCreateModal({ savingFundId, show, onClose }:
   }, [show]);
   
   return (
-    <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
-    <div className="modal-background"></div>
-    <div className="modal-card" style={{width: '30%', height: '65%'}}>
-      <header className="modal-card-head">
-        <p className="modal-card-title">Registrar Aportaci&oacute;n</p>
-        <button className="delete" aria-label="close" onClick={handleClose}></button>
-      </header>
-      <section className="modal-card-body">
-        <div className="columns">
-          <div className="column is-1"></div>
-          <div className="column">
-            <SFDatePickerInput params={{
-              id: 'contribution_applied_date',
-              name: 'Fecha de Aplicación',
-              value: contribution.appliedAt,
-              minDate: new Date(2008, 0),
-              maxDate: addDays(new Date(), 0),
-              showYear: true,
-              onChange: (value) => setContribution({ ...contribution, appliedAt: value })
+    <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`} style={{ textAlign: 'left' }}>
+      <div className="modal-background"></div>
+      <div className="modal-card" style={{width: isMobile ? '80%' : '30%', height: isMobile ? '80%' : '65%'}}>
+        <header className="modal-card-head">
+          <p className="modal-card-title">{isMobile ? 'Aportación' : 'Registrar Aportación'}</p>
+          <button className="delete" aria-label="close" onClick={handleClose}></button>
+        </header>
+        <section className="modal-card-body">
+          <div className="columns">
+            <div className="column is-1"></div>
+            <div className="column">
+              <SFDatePickerInput params={{
+                id: 'contribution_applied_date',
+                name: 'Fecha de Aplicación',
+                value: contribution.appliedAt,
+                minDate: new Date(2008, 0),
+                maxDate: addDays(new Date(), 0),
+                showYear: true,
+                onChange: (value) => setContribution({ ...contribution, appliedAt: value })
 
-            }} />
-            <SFMoneyInput id={`${uuid()}_contribution_amount`} name="Monto de aportación"
-              value={contribution.amount}
-              onChange={(value) => setContribution({ ...contribution, amount: value })} />
+              }} />
+              <SFMoneyInput id={`${uuid()}_contribution_amount`} name="Monto de aportación"
+                value={contribution.amount}
+                onChange={(value) => setContribution({ ...contribution, amount: value })} />
+            </div>
+            <div className="column is-1"></div>
           </div>
-          <div className="column is-1"></div>
-        </div>
-        <div className="columns">
-          <div className="column is-1"></div>
-          <div className="column" style={{ color: '#C0392B', textAlign: 'center' }}><label>{error}</label></div>
-          <div className="column is-1"></div>
-        </div>
-      </section>
-      <footer className="modal-card-foot" style={{ justifyContent: 'flex-end' }}>
-        <div className="buttons">
-          <button className="button is-success"
-            onClick={handleClick}>
-            {!loading ? 'Aceptar' : (<div className="loader"></div>)}
-          </button> 
-        </div>
-      </footer>
+          <div className="columns">
+            <div className="column is-1"></div>
+            <div className="column" style={{ color: '#C0392B', textAlign: 'center' }}><label>{error}</label></div>
+            <div className="column is-1"></div>
+          </div>
+        </section>
+        <footer className="modal-card-foot" style={{ justifyContent: 'flex-end' }}>
+          <div className="buttons">
+            <button className="button is-success"
+              onClick={handleClick}>
+              {!loading ? 'Aceptar' : (<div className="loader"></div>)}
+            </button> 
+          </div>
+        </footer>
+      </div>
     </div>
-  </div>
   )
 }

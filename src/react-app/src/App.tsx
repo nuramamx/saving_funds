@@ -19,11 +19,13 @@ import "@sjmc11/tourguidejs/src/scss/tour.scss";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import useLayoutStore from "./core/stores/layout-store";
+import useIsMobile from "./core/hooks/use-is-mobile";
 
 function App() {
   const { notifications } = useNotificationStore();
   const { setSelectedMenu, setSelectedSidebarMenu } = useLayoutStore();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (location.pathname.includes('savingfund')) setSelectedMenu('savingfund-menu');
@@ -44,7 +46,7 @@ function App() {
             type={notification.type} />
         ))}
       </div>
-      <div className="columns" style={{marginTop: "30px"}}>
+      <div className="columns" style={{ marginTop: isMobile ? '10px' : '30px' }}>
         <GenericErrorBoundary>
         <LayoutAppContent />
         </GenericErrorBoundary>

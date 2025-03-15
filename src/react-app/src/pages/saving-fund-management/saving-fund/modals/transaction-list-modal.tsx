@@ -12,6 +12,7 @@ import TransactionDeleteActionButton from '../actions/transaction-delete-action-
 import { pdf } from '@react-pdf/renderer';
 import SavingFundTransactionsReportPDF from '../reports/savingfund-transaction-report-pdf';
 import saveAs from 'file-saver';
+import useIsMobile from '../../../../core/hooks/use-is-mobile';
 
 type TransactionListModalParams = {
   savingFundId: number;
@@ -25,6 +26,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
   const [showModal, setShowModal] = useState(show);
   const [year, setYear] = useState(0);
   const [transactions, setTransactions] = useState<SavingFundTransactionListSpec[]>([]);
+  const isMobile = useIsMobile();
 
   const handleClose = () => {
     if (onClose) {
@@ -81,15 +83,15 @@ export default function TransactionListModal({ savingFundId, associateName, show
   }, [show, year]);
 
   return (
-  <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`}>
+  <div className={`modal ${showModal ? 'is-active' : ''} animate__animated animate__pulse`} style={{ textAlign: 'left' }}>
     <div className="modal-background"></div>
-    <div className="modal-card" style={{width: '60%'}}>
+    <div className="modal-card" style={{width: isMobile ? '80%' : '60%'}}>
       <header className="modal-card-head">
         <p className="modal-card-title">
           Transacciones<br />
           <label style={{ fontSize: '12px'}}>{associateName}</label><br />
         </p>
-        <button className="delete" aria-label="close" onClick={handleClose}></button>
+        <button className="delete" aria-label="close" onClick={handleClose} style={{ marginTop: isMobile ? '-25px' : 'auto' }}></button>
       </header>
       <section className="modal-card-body" style={{fontSize: '12px'}}>
         <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
@@ -117,10 +119,12 @@ export default function TransactionListModal({ savingFundId, associateName, show
                 <td>{parseTransactionType(savingFund.transactionType)}</td>
                 <td>{ToMoney(savingFund.amount)}</td>
                 <td>{ToMoney(savingFund.netBalance)}</td>
-                {user.role === 'ADMIN' && (
+                {user.role === 'ADMIN' && savingFund.transactionType !== 'yields' ? (
                   <td>
                     <TransactionDeleteActionButton id={savingFund.id} type={savingFund.transactionType} onComplete={fetchPayments} />
                   </td>
+                ) : (
+                  <td style={{ height: '35px'}}></td>
                 )}
               </tr>
             ))) : (
@@ -131,56 +135,108 @@ export default function TransactionListModal({ savingFundId, associateName, show
           </tbody>
         </table>
       </section>
-      <footer className="modal-card-foot  is-flex is-justify-content-space-between">
-        <div>
-          <label style={{ fontSize: '1.2em' }}># Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {transactions.filter(x => x.transactionType === 'contribution').length}
-          </label><br />
-          <label style={{ fontSize: '1.2em' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
-          </label><br />
-          <label style={{ fontSize: '1.2em' }}># Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {transactions.filter(x => x.transactionType.includes('withdrawal')).length}
-          </label><br />
-          <label style={{ fontSize: '1.2em' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
-          <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-            {ToMoney(transactions.filter(x => x.transactionType.includes('withdrawal')).reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
-          </label><br />
-          {year !== 0 && (
-            <>
-            <label style={{ fontSize: '1.2em' }}>Rendimientos del año:</label>&nbsp;&nbsp;
-            <label style={{ fontWeight: 'bold', fontSize: '1.2em' }}>
-              {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
-            </label>
-            </>
-          )}
-        </div>
-        <div>
-          <label style={{ fontSize: '2em' }}>Total:</label>&nbsp;&nbsp;
-          <label style={{ fontSize: '2em', fontWeight: 'bold' }}>
-            {year !== 0 ? (
-              ToMoney(
-                !isNaN(
-                  Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
-                  Number(transactions.filter(x => x.year === year).at(0)?.partialYields)
-                ) ? Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
-                Number(transactions.filter(x => x.year === year).at(0)?.partialYields) : 0
-              )
-            ) : (
-              ToMoney(Number(transactions.at(-1)?.netBalance))
+      {isMobile ? (
+        <>
+          <footer className='modal-card-foot is-flex is-justify-content-space-betweens'>
+            <div>
+              <label style={{ fontSize: '12px' }}># Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+              <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                {transactions.filter(x => x.transactionType === 'contribution').length}
+              </label><br />
+              <label style={{ fontSize: '12px' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+              <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+              </label><br />
+              <label style={{ fontSize: '12px' }}># Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+              <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                {transactions.filter(x => x.transactionType.includes('withdrawal')).length}
+              </label><br />
+              <label style={{ fontSize: '12px' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+              <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                {ToMoney(transactions.filter(x => x.transactionType.includes('withdrawal')).reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+              </label><br />
+              {year !== 0 && (
+                <>
+                <label style={{ fontSize: '12px' }}>Rendimientos del año:</label>&nbsp;&nbsp;
+                <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
+                </label>
+                </>
+              )}
+              <label style={{ fontSize: '12px' }}>Total:</label>&nbsp;&nbsp;
+              <label style={{ fontSize: '12px', fontWeight: 'bold' }}>
+                {year !== 0 ? (
+                  ToMoney(
+                    !isNaN(
+                      Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                      Number(transactions.filter(x => x.year === year).at(0)?.partialYields)
+                    ) ? Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                    Number(transactions.filter(x => x.year === year).at(0)?.partialYields) : 0
+                  )
+                ) : (
+                  ToMoney(Number(transactions.at(-1)?.netBalance))
+                )}
+              </label>
+            </div>
+            <div>&nbsp;</div>
+            <div className='is-pulled-right'>
+              <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
+              <button className='button' style={{width:'100%'}} onClick={handlePrintTransaction}><Printer /></button>
+            </div>
+          </footer>
+        </>
+      ) : (
+        <footer className="modal-card-foot is-flex is-justify-content-space-between">
+          <div>
+            <label style={{ fontSize: '12px' }}># Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+            <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+              {transactions.filter(x => x.transactionType === 'contribution').length}
+            </label><br />
+            <label style={{ fontSize: '12px' }}>Aportaciones {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+            <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+              {ToMoney(transactions.filter(x => x.transactionType === 'contribution').reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+            </label><br />
+            <label style={{ fontSize: '12px' }}># Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+            <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+              {transactions.filter(x => x.transactionType.includes('withdrawal')).length}
+            </label><br />
+            <label style={{ fontSize: '12px' }}>Retiros {year === 0 ? 'totales' : 'del año'}:</label>&nbsp;&nbsp;
+            <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+              {ToMoney(transactions.filter(x => x.transactionType.includes('withdrawal')).reduce((sum, transaction) => (sum + Number(transaction.amount)), 0))}
+            </label><br />
+            {year !== 0 && (
+              <>
+              <label style={{ fontSize: '12px' }}>Rendimientos del año:</label>&nbsp;&nbsp;
+              <label style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                {ToMoney(transactions.reduce((sum, transaction) => (sum + Number(transaction.partialYields)), 0))}
+              </label>
+              </>
             )}
-          </label>
-        </div>
-        <div></div>
-        <div></div>
-        <div className='is-pulled-right'>
-          <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
-          <button className='button' style={{width:'100%'}} onClick={handlePrintTransaction}><Printer /></button>
-        </div>
-      </footer>
+          </div>
+          <div>
+            <label style={{ fontSize: '12px' }}>Total:</label>&nbsp;&nbsp;
+            <label style={{ fontSize: '12px', fontWeight: 'bold' }}>
+              {year !== 0 ? (
+                ToMoney(
+                  !isNaN(
+                    Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                    Number(transactions.filter(x => x.year === year).at(0)?.partialYields)
+                  ) ? Number(transactions.filter(x => x.year === year).at(-1)?.netBalance) +
+                  Number(transactions.filter(x => x.year === year).at(0)?.partialYields) : 0
+                )
+              ) : (
+                ToMoney(Number(transactions.at(-1)?.netBalance))
+              )}
+            </label>
+          </div>
+          <div></div>
+          <div></div>
+          <div className='is-pulled-right'>
+            <SFSelectYear id={'year-list'} name="" value={year} onChange={(value) => setYear(value)} />
+            <button className='button' style={{width:'100%'}} onClick={handlePrintTransaction}><Printer /></button>
+          </div>
+        </footer>
+      )}
     </div>
   </div>
   )

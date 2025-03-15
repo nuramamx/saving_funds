@@ -16,12 +16,14 @@ import useNotificationStore from '../../../core/stores/notification-store';
 import useAuthStore from '../../../core/stores/auth-store';
 import StatementReportActionItem from '../associate/action-items/statement-report-action-item';
 import RefreshActionButton from '../../../components/action-buttons/refresh-action-button';
+import useIsMobile from '../../../core/hooks/use-is-mobile';
 
 export default function SavingFundList() {
   const [savingFunds, setSavingFunds] = useState<SavingFundListSpec[]>([]);
   const [associate, setAssociate] = useState<number>(0);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
+  const isMobile = useIsMobile();
 
   const fectchSavingFunds = async () => {
     const result = await fetch(`${AppConstants.apiSavingFund}/list`, {
@@ -73,6 +75,7 @@ export default function SavingFundList() {
       <div className="columns">
         <div className="column" data-tg-tour="Listado de fondos de ahorro disponibles en el sistema previamente filtrados por el socio.">
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
+            {!isMobile && (
             <thead>
               <tr key={1}>
                 <th>Convenio</th>
@@ -85,31 +88,70 @@ export default function SavingFundList() {
                 <th data-tg-tour="Es el resultado entre: Aportaciones - Retiros + Rendimientos.">Total</th>
                 <th data-tg-tour="Acciones disponibles: Estado de cuenta, Registrar contribución, Registrar retiro, Listado de transaciones, Editar socio.">Acciones</th>
               </tr>
-            </thead>
+            </thead>)}
             <tbody>
               {savingFunds !== undefined && savingFunds?.length > 0 ? (
                 savingFunds.map((savingFund: SavingFundListSpec) => (
-                <tr key={`${uuid()}`}>
-                  <td>{savingFund.agreementName}</td>
-                  <td>{ToMoney(savingFund.salary)}</td>
-                  <td>{ToMoney(savingFund.openingBalance)}</td>
-                  <td>{ToMoney(savingFund.contributions)}</td>
-                  <td>{ToMoney(savingFund.withdrawals)}</td>
-                  <td>{ToMoney(savingFund.balance)}</td>
-                  <td>{ToMoney(savingFund.yields)}</td>
-                  <td>{ToMoney(savingFund.total)}</td>
-                  <td>
-                    <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />
-                    {savingFund.total > 0 && (
+                  !isMobile ? (
+                    <tr key={`${uuid()}`}>
+                        <>
+                          <td>{savingFund.agreementName}</td>
+                          <td>{ToMoney(savingFund.salary)}</td>
+                          <td>{ToMoney(savingFund.openingBalance)}</td>
+                          <td>{ToMoney(savingFund.contributions)}</td>
+                          <td>{ToMoney(savingFund.withdrawals)}</td>
+                          <td>{ToMoney(savingFund.balance)}</td>
+                          <td>{ToMoney(savingFund.yields)}</td>
+                          <td>{ToMoney(savingFund.total)}</td>
+                          <td>
+                            <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />
+                            {savingFund.total > 0 && (
+                              <>
+                              <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
+                              <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
+                              </>
+                            )}
+                            <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
+                            <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
+                          </td>
+                        </>
+                    </tr>) : (
                       <>
-                      <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
-                      <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
+                        <tr>
+                          <td>
+                            <strong>Convenio</strong>:<br />
+                            <strong>Salario</strong>:<br />
+                            <strong>Aportaciones</strong>:<br />
+                            <strong>Retiros</strong>:<br />
+                            <strong>Balance</strong>:<br />
+                            <strong>Rendimientos</strong>:<br />
+                            <strong>Total</strong>:<br />
+                          </td>
+                          <td>
+                            {savingFund.agreementName}<br />
+                            {ToMoney(savingFund.salary)}<br />
+                            {ToMoney(savingFund.contributions)}<br />
+                            {ToMoney(savingFund.withdrawals)}<br />
+                            {ToMoney(savingFund.balance)}<br />
+                            {ToMoney(savingFund.yields)}<br />
+                            {ToMoney(savingFund.total)}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style={{ textAlign: 'center', fontSize: '15px' }} colSpan={2}>
+                            <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />&nbsp;&nbsp;
+                              {savingFund.total > 0 && (
+                                <>
+                                <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;&nbsp;
+                                <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />&nbsp;&nbsp;
+                                </>
+                              )}
+                            <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />&nbsp;&nbsp;
+                            <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
+                          </td>
+                        </tr>
                       </>
-                    )}
-                    <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
-                    <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
-                  </td>
-                </tr>
+                    )
               ))) : (
                 <tr>
                   <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
