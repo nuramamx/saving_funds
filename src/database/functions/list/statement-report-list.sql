@@ -46,8 +46,6 @@ begin
     limit 1
   );
 
-  raise notice 'v_is_new_associate %', v_is_new_associate;
-
   -- Get the year of first contribution.
   select
     c.id

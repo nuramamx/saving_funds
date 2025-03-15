@@ -260,28 +260,13 @@ begin
     v_last_year := r.year;
   end loop;
 
-  -- Update partial yields
-  -- update temp_transactions_data
-  --   set
-  --     partial_yields = tyy.yields
-  -- from temp_yields_year as tyy
-  -- where temp_transactions_data.year = tyy.year
-  -- and temp_transactions_data.id = (
-  --   select
-  --     ttd.id
-  --   from temp_transactions_data as ttd
-  --   where ttd.year = tyy.year
-  --   order by ttd.applied_at
-  --   limit 1
-  -- );
-
   -- Create a row for yields
   insert into temp_transactions_data (id, year, transaction_date, applied_at, amount, transaction_type, running_balance, net_balance, partial_yields)
   select
     ttdx.id,
     tyy.year,
-    ttdx.transaction_date,
-    to_char(make_date(tyy.year,12,30), 'YYYY-MM-DD')::timestamp,
+    to_char(make_date(tyy.year,12,31), 'YYYY-MM-DD'),
+    to_char(make_date(tyy.year,12,31), 'YYYY-MM-DD')::timestamp,
     tyy.yields,
     'yields',
     ttdx.running_balance + tyy.yields,
@@ -294,8 +279,8 @@ begin
       ttd.id
     from temp_transactions_data as ttd
     where ttd.year = tyy.year
-    and ttd.transaction_type = 'contribution'
-    order by ttd.applied_at desc
+    and (ttd.transaction_type = 'contribution' or ttd.transaction_type like 'withdrawal%') 
+    order by ttd.applied_at desc, ttd.net_balance desc
     limit 1
   );
 
