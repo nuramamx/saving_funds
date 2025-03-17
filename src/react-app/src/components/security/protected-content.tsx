@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const location = useLocation();
 
   if (!isAuthenticated) {
-    window.location.href = '/setepidsf/login';
+    window.location.href = '/savingfund/login';
   }
 
   return (

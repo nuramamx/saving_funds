@@ -47,7 +47,7 @@ const Routes = createBrowserRouter([
       }
     ]
   }
-], { basename: '/setepidsf' });
+], { basename: '/savingfund' });
 
 const SidebarRoutes: SidebarParentMenu[] = [
   { key: 'associates', name: 'Socios', location: '/savingfund', children: [

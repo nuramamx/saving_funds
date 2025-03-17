@@ -70,7 +70,7 @@ type CommandHandlerTypeMap = {
   'AssociateDataByIdQuery': AssociateDataByIdQuery,
   'StatementReportDataQuery': StatementReportDataQuery,
   'StatementReportListQuery': StatementReportDataQuery,
-  'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQuery
+  'BorrowAuthorizationReportDataQuery': BorrowAuthorizationReportDataQuery,
   // Reports
   'StatementReport': StatementReportGenerateQuery,
   'BorrowAuthorizationReport': BorrowAuthorizationReportGenerateQuery

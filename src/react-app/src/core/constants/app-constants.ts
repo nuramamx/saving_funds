@@ -15,24 +15,23 @@ interface AppConstants {
   apiSecurity: string;
 }
 
-const currentHost = window.location.hostname;
-const port = '8081';
+const currentHost = process.env.REACT_APP_API_URL;
 
 const AppConstants: AppConstants = {
-  api: `http://${currentHost}:${port}`,
-  apiAssociate: `http://${currentHost}:${port}/associate`,
-  apiPayment: `http://${currentHost}:${port}/payment`,
-  apiBorrow: `http://${currentHost}:${port}/borrow`,
-  apiSavingFund: `http://${currentHost}:${port}/savingfund`,
-  apiContribution: `http://${currentHost}:${port}/contribution`,
-  apiWithdrawal: `http://${currentHost}:${port}/withdrawal`,
-  apiCity: `http://${currentHost}:${port}/city`,
-  apiState: `http://${currentHost}:${port}/state`,
-  apiAgreement: `http://${currentHost}:${port}/agreement`,
-  apiAnnualRate: `http://${currentHost}:${port}/annual_rate`,
-  apiBatch: `http://${currentHost}:${port}/batch`,
-  apiReport: `http://${currentHost}:${port}/report`,
-  apiSecurity: `http://${currentHost}:${port}/security`
+  api: `${currentHost}`,
+  apiAssociate: `${currentHost}/associate`,
+  apiPayment: `${currentHost}/payment`,
+  apiBorrow: `${currentHost}/borrow`,
+  apiSavingFund: `${currentHost}/savingfund`,
+  apiContribution: `${currentHost}/contribution`,
+  apiWithdrawal: `${currentHost}/withdrawal`,
+  apiCity: `${currentHost}/city`,
+  apiState: `${currentHost}/state`,
+  apiAgreement: `${currentHost}/agreement`,
+  apiAnnualRate: `${currentHost}/annual_rate`,
+  apiBatch: `${currentHost}/batch`,
+  apiReport: `${currentHost}/report`,
+  apiSecurity: `${currentHost}/security`
 }
 
 export default AppConstants;

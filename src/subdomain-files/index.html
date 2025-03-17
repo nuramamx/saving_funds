@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>SETEPID Apps</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <section class="section">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-centered">
+            <div class="column is-4-desktop">
+              <div class="has-text-centered mb-5">
+                <img src="logo.png" alt="SETEPID" width="350" height="350" />
+              </div>
+
+              <div class="box">
+                <div class="field">
+                  <div class="control">
+                    <button class="button login-button is-fullwidth" onclick="openApp('savingfund')">Fondo de Ahorro</button><br />
+                    <button class="button is-fullwidth" disabled>Inversiones</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+
+  <script>
+    function openApp(name) {
+      if (name === 'savingfund') {
+        window.open('https://setepid.nurama.dev/savingfund', '_blank');
+      }
+    }
+    </script>
+</html>

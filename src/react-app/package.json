@@ -2,7 +2,7 @@
   "name": "setepid-savingfunds",
   "version": "1.0",
   "private": true,
-  "homepage": "/setepidsf",
+  "homepage": "/savingfund",
   "dependencies": {
     "@react-pdf/renderer": "~4.0.0",
     "@sjmc11/tourguidejs": "~0.0.17",

@@ -36,7 +36,7 @@ export default function Login() {
       }
 
       login(user);
-      window.location.href = '/setepidsf/savingfund';
+      window.location.href = '/savingfund/savingfund';
     } catch (err: any) {
       setError('No se pudo iniciar sesión, verifique la conexión con el servidor.');
     } finally {
@@ -46,7 +46,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated)
-      window.location.href = '/setepidsf/savingfund';
+      window.location.href = '/savingfund/savingfund';
   }, []);
 
   return (
