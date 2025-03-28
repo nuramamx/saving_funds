@@ -4,7 +4,6 @@ import BatchReaderResult from "../../batch-reader-result";
 import EmptyString from "../../../../util/empty-string";
 
 type BorrowBatchReaderInfo = {
-  p_file_number: string;
   p_associate_name: string;
   p_requested_amount: number;
   p_period: number;
@@ -23,37 +22,32 @@ export default class BorrowBatchReader implements BatchReaderInfo<BatchReaderRes
     worksheet.forEach((row, index, d) => {
       if (index > 0) { // skiping headers
         if (EmptyString(row[0]) === '') {
-          return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna folio.`);
-        }
-
-        if (EmptyString(row[1]) === '') {
           return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna nombre.`);
         }
 
-        if (EmptyString(row[2]) === '') {
+        if (EmptyString(row[1]) === '') {
           return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna monto.`);
         }
 
-        if (EmptyString(row[3]) === '') {
+        if (EmptyString(row[2]) === '') {
           return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna periodo.`);
         }
 
-        if (EmptyString(row[4]) === '') {
+        if (EmptyString(row[3]) === '') {
           return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna interés anual.`);
         }
 
-        if (EmptyString(row[5]) === '') {
+        if (EmptyString(row[4]) === '') {
           return messages.push(`Fila ${index} omitida por no cumplir con valor aceptado en columna fecha.`);
         }
 
         data.push({
-          p_file_number: row[0],
-          p_associate_name: row[1],
-          p_requested_amount: Number(row[2]),
-          p_period: Number(row[3]),
-          p_annual_rate: Number(row[4]),
-          p_start_at: `${row[5]}T00:00:00.000Z`,
-          p_is_fortnightly: !(EmptyString(row[6]) === '')
+          p_associate_name: row[0],
+          p_requested_amount: Number(row[1]),
+          p_period: Number(row[2]),
+          p_annual_rate: Number(row[3]),
+          p_start_at: `${row[4]}T00:00:00.000Z`,
+          p_is_fortnightly: !(EmptyString(row[5]) === '')
         });
       }
     });

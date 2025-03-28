@@ -2,9 +2,24 @@
 create or replace function "catalog".associate_detail_validate()
 returns trigger as $$
 declare
+  v_agreement_id integer;
   v_agreement_name text;
 begin
   if not (tg_op = 'DELETE') then
+  	if (coalesce((new.detail->>'agreementId')::integer, 0) = 0) and (new.detail->>'agreement')::text != '' then
+      v_agreement_id := (
+        select
+          ag.id
+        from "system".agreement as ag
+        where ag.name = (trim(new.detail->>'agreement'))::text
+        limit 1
+      );
+
+      if v_agreement_id is not null then
+        new.detail := jsonb_set(new.detail, '{agreementId}', to_jsonb(v_agreement_id))::jsonb;
+      end if;
+    end if;
+	
     if (coalesce((new.detail->>'agreementId')::integer, 0) <> 0) then
       v_agreement_name := (
         select
@@ -18,6 +33,8 @@ begin
         new.detail := jsonb_set(new.detail, '{agreement}', to_jsonb(v_agreement_name))::jsonb;
       end if;
     end if;
+
+	
 
     if new.detail->>'agreementId' is null or coalesce((new.detail->>'agreementId')::integer, 0) <= 0 then
       raise exception 'Especifique el convenio.';

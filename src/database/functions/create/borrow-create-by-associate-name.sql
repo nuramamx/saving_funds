@@ -1,6 +1,5 @@
 --drop function process.borrow_create_by_associate_name;
 create or replace function process.borrow_create_by_associate_name(
-  in p_file_number text,
   in p_associate_name text,
   in p_requested_amount numeric,
   in p_period integer,
@@ -16,16 +15,15 @@ create or replace function process.borrow_create_by_associate_name(
 as $$
 declare
   v_associate_id integer;
+  v_current_year integer;
+  v_file_number text;
   v_annual_rate numeric(20,6);
   v_borrow process.borrow_type;
 begin
   success := false;
   message := 'Operación no iniciada.';
 
-  if length(p_file_number) <= 0 then
-    message := 'El folio no puede estar vacío.';
-    return;
-  elseif length(p_associate_name) <= 0 then
+  if length(p_associate_name) <= 0 then
     message := 'El nombre del socio no puede estar vacío.';
     return;
   elseif p_requested_amount <= 0 then
@@ -49,6 +47,10 @@ begin
     return;
   end if;
 
+  -- Create file number.
+  v_current_year := (select extract(year from current_date)::integer);
+  v_file_number := v_current_year || '/' || v_associate_id || '/' || floor(1000 + random() * 9000)::integer || '/' || p_period;
+
   if p_disable_rules = false then
     -- Check dates
     if p_start_at < current_date then
@@ -63,12 +65,7 @@ begin
     end if;
 
     -- Check if associate has a not settled borrow.
-    if exists (
-      select 1
-      from process.borrow as b
-      where b.name = p_associate_name
-      for update skip locked
-    ) then
+    if process.validate_associate_unpaid_borrows(v_associate_id) then
       message := 'El socio tiene un préstamo no liquidado.';
       return;
     end if;
@@ -79,7 +76,7 @@ begin
       insert into process.borrow(associate_id, file_number, requested_amount, "period", annual_rate, is_fortnightly, start_at)
       values (
         v_associate_id,
-        p_file_number,
+        v_file_number,
         p_requested_amount,
         p_period,
         p_annual_rate,
