@@ -112,7 +112,6 @@ export default function SavingFundList() {
                               </>
                             )}
                             <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
-                            <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
                           </td>
                         </>
                     </tr>) : (
@@ -147,7 +146,6 @@ export default function SavingFundList() {
                                 </>
                               )}
                             <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />&nbsp;&nbsp;
-                            <Link to={`/savingfund/associate/composer/${savingFund.id}`} style={{ color: 'inherit' }}><button><Edit style={{ color: 'currentcolor' }} /></button></Link>
                           </td>
                         </tr>
                       </>

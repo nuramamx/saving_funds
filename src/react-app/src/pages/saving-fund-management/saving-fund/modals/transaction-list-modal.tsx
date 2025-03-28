@@ -35,6 +35,7 @@ export default function TransactionListModal({ savingFundId, associateName, show
       onClose();
     }
   };
+  
   const handlePrintTransaction = async () => {
     const blob = await pdf(<SavingFundTransactionsReportPDF associateName={associateName} list={transactions} />).toBlob();
     saveAs(blob, `Movimientos de fondo de ahorro - ${associateName}.pdf`);

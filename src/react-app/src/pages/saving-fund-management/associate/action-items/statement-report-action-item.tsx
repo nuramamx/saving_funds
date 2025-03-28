@@ -1,4 +1,4 @@
-import { DownloadSquare, GridPlus, Page } from "iconoir-react";
+import { DownloadSquare, GridPlus, Internet, Page } from "iconoir-react";
 import { useCallback, useEffect, useState } from "react";
 import { pdf } from "@react-pdf/renderer";
 import { objectToCamel } from "ts-case-convert";
@@ -11,6 +11,7 @@ import StatementReportDataSpec from "../../../../core/interfaces/specs/base/stat
 import StatementReportListSpec from "../../../../core/interfaces/specs/list/statement-report-list-spec";
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 import saveAs from "file-saver";
+import StatementReportWebModal from "../../saving-fund/modals/statement-report-web-modal";
 
 type StatementReportActionItemParams = {
   associateName: string;
@@ -19,6 +20,7 @@ type StatementReportActionItemParams = {
 
 export default function StatementReportActionItem({ associateName, associateId }: StatementReportActionItemParams) {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [showStatementReportWebModal, setShowStatementReportWebModal] = useState(false);
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
   const [loading, setLoading] = useState<boolean>(false);
@@ -112,6 +114,10 @@ export default function StatementReportActionItem({ associateName, associateId }
       });
   };
 
+  const handleViewWeb = async (show: boolean) => {
+    setShowStatementReportWebModal(show);
+  }
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => { window.removeEventListener('keydown', handleKeyDown); };
@@ -136,6 +142,7 @@ export default function StatementReportActionItem({ associateName, associateId }
           <hr className="dropdown-divider" />
           <button className="dropdown-item" onClick={handleDownloadExcel}><GridPlus />&nbsp;&nbsp;Formato Excel</button>
           <button className="dropdown-item" onClick={handleDownloadPDF}><Page />&nbsp;&nbsp;Formato PDF</button>
+          <button className="dropdown-item" onClick={() => handleViewWeb(true)}><Internet />&nbsp;&nbsp;Formato Web</button>
           <span className="dropdown-item" style={{ fontSize: '11px'}}>
             {loading && (
               <>
@@ -147,6 +154,7 @@ export default function StatementReportActionItem({ associateName, associateId }
         </div>
       </div>
     </div>
+    <StatementReportWebModal associateId={associateId} associateName={`${associateId} - ${associateName}`} show={showStatementReportWebModal} onClose={() => setShowStatementReportWebModal(false)} />
     </>
   )
 }
