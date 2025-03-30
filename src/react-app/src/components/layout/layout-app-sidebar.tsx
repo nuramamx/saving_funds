@@ -108,7 +108,7 @@ const LayoutAppSidebar = memo((props: LayoutAppSidebarProps) => {
       <>
       <div className="aside-menu-mobile">
         {props.items.filter((x) => x.location === props.location).map((item: SidebarParentMenu) => [
-          <div id={item.key} className={`dropdown is-${isActive.Item.find(x => x.key === item.key)?.orientation} ${isActive.Item.find(x => x.key === item.key)?.value ? 'is-active': ''}`} style={{ paddingLeft: '5px' }}>
+          <div key={item.key} id={item.key} className={`dropdown is-${isActive.Item.find(x => x.key === item.key)?.orientation} ${isActive.Item.find(x => x.key === item.key)?.value ? 'is-active': ''}`} style={{ paddingLeft: '5px' }}>
             <div className="dropdown-trigger">
               <button className="button" onClick={() => toggleMenu(item.key)} aria-haspopup="true" aria-controls={`dropdown-menu-${item.key}`}>
                 {selectIcon(item.key)}

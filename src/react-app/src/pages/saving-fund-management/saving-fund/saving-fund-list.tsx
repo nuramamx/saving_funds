@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { objectToCamel } from 'ts-case-convert';
-import { Edit } from 'iconoir-react';
-import { Link } from 'react-router-dom';
 import { v4 as uuid } from "uuid";
 import AppConstants from '../../../core/constants/app-constants';
 import ToMoney from '../../../core/util/conversions/money-conversion';
@@ -74,10 +72,10 @@ export default function SavingFundList() {
       </div>
       <div className="columns">
         <div className="column" data-tg-tour="Listado de fondos de ahorro disponibles en el sistema previamente filtrados por el socio.">
+        {!isMobile && (
           <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
-            {!isMobile && (
-            <thead>
-              <tr key={1}>
+            <thead key={uuid()}>
+              <tr>
                 <th>Convenio</th>
                 <th>Salario</th>
                 <th>Aportaci&oacute;n inicial</th>
@@ -88,75 +86,87 @@ export default function SavingFundList() {
                 <th data-tg-tour="Es el resultado entre: Aportaciones - Retiros + Rendimientos.">Total</th>
                 <th data-tg-tour="Acciones disponibles: Estado de cuenta, Registrar contribución, Registrar retiro, Listado de transaciones, Editar socio.">Acciones</th>
               </tr>
-            </thead>)}
+            </thead>
             <tbody>
               {savingFunds !== undefined && savingFunds?.length > 0 ? (
                 savingFunds.map((savingFund: SavingFundListSpec) => (
-                  !isMobile ? (
-                    <tr key={`${uuid()}`}>
-                        <>
-                          <td>{savingFund.agreementName}</td>
-                          <td>{ToMoney(savingFund.salary)}</td>
-                          <td>{ToMoney(savingFund.openingBalance)}</td>
-                          <td>{ToMoney(savingFund.contributions)}</td>
-                          <td>{ToMoney(savingFund.withdrawals)}</td>
-                          <td>{ToMoney(savingFund.balance)}</td>
-                          <td>{ToMoney(savingFund.yields)}</td>
-                          <td>{ToMoney(savingFund.total)}</td>
-                          <td>
-                            <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />
-                            {savingFund.total > 0 && (
-                              <>
-                              <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
-                              <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
-                              </>
-                            )}
-                            <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
-                          </td>
-                        </>
-                    </tr>) : (
-                      <>
-                        <tr>
-                          <td>
-                            <strong>Convenio</strong>:<br />
-                            <strong>Salario</strong>:<br />
-                            <strong>Aportaciones</strong>:<br />
-                            <strong>Retiros</strong>:<br />
-                            <strong>Balance</strong>:<br />
-                            <strong>Rendimientos</strong>:<br />
-                            <strong>Total</strong>:<br />
-                          </td>
-                          <td>
-                            {savingFund.agreementName}<br />
-                            {ToMoney(savingFund.salary)}<br />
-                            {ToMoney(savingFund.contributions)}<br />
-                            {ToMoney(savingFund.withdrawals)}<br />
-                            {ToMoney(savingFund.balance)}<br />
-                            {ToMoney(savingFund.yields)}<br />
-                            {ToMoney(savingFund.total)}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ textAlign: 'center', fontSize: '15px' }} colSpan={2}>
-                            <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />&nbsp;&nbsp;
-                              {savingFund.total > 0 && (
-                                <>
-                                <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;&nbsp;
-                                <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />&nbsp;&nbsp;
-                                </>
-                              )}
-                            <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />&nbsp;&nbsp;
-                          </td>
-                        </tr>
-                      </>
-                    )
-              ))) : (
-                <tr>
+                <tr key={`rows-${savingFund.id}`}>
+                    <>
+                      <td>{savingFund.agreementName}</td>
+                      <td>{ToMoney(savingFund.salary)}</td>
+                      <td>{ToMoney(savingFund.openingBalance)}</td>
+                      <td>{ToMoney(savingFund.contributions)}</td>
+                      <td>{ToMoney(savingFund.withdrawals)}</td>
+                      <td>{ToMoney(savingFund.balance)}</td>
+                      <td>{ToMoney(savingFund.yields)}</td>
+                      <td>{ToMoney(savingFund.total)}</td>
+                      <td>
+                        <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />
+                        {savingFund.total > 0 && (
+                          <>
+                          <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />
+                          <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />
+                          </>
+                        )}
+                        <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />
+                      </td>
+                    </>
+                </tr>))) : (
+                <tr key={1}>
                   <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
                 </tr>
               )}
             </tbody>
           </table>
+          )}
+
+          {isMobile && (
+            <table className="table is-hoverable is-fullwidth" style={{fontSize: '12px'}}>
+              <tbody>
+              {savingFunds !== undefined && savingFunds?.length > 0 ? (
+                savingFunds.map((savingFund: SavingFundListSpec) => (
+                <React.Fragment key={`rows-${savingFund.id}`}>
+                  <tr>
+                    <td>
+                      <strong>Convenio</strong>:<br />
+                      <strong>Salario</strong>:<br />
+                      <strong>Aportaciones</strong>:<br />
+                      <strong>Retiros</strong>:<br />
+                      <strong>Balance</strong>:<br />
+                      <strong>Rendimientos</strong>:<br />
+                      <strong>Total</strong>:<br />
+                    </td>
+                    <td>
+                      {savingFund.agreementName}<br />
+                      {ToMoney(savingFund.salary)}<br />
+                      {ToMoney(savingFund.contributions)}<br />
+                      {ToMoney(savingFund.withdrawals)}<br />
+                      {ToMoney(savingFund.balance)}<br />
+                      {ToMoney(savingFund.yields)}<br />
+                      {ToMoney(savingFund.total)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ textAlign: 'center', fontSize: '15px' }} colSpan={2}>
+                      <StatementReportActionItem associateName={savingFund.associateName} associateId={associate} />&nbsp;&nbsp;
+                        {savingFund.total > 0 && (
+                          <>
+                          <ContributionCreateActionButton savingFundId={savingFund.id} onClose={handleReload} />&nbsp;&nbsp;
+                          <WithdrawalCreateActionButton savingFundId={savingFund.id} associateId={associate} hasActiveBorrow={savingFund.hasActiveBorrow} onClose={handleReload} />&nbsp;&nbsp;
+                          </>
+                        )}
+                      <SavingFundTransactionListActionButton savingFundId={savingFund.id} associateName={`${savingFund.id} - ${savingFund.associateName}`} onClose={handleReload} />&nbsp;&nbsp;
+                    </td>
+                  </tr>
+                </React.Fragment>
+                ))) : (
+                  <tr key={1}>
+                    <td colSpan={11} style={{textAlign: 'center'}}>No hay fondos de ahorro disponibles</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
       <div className="bottom-content-container">

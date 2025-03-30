@@ -5,7 +5,6 @@ import useNotificationStore from '../../../core/stores/notification-store';
 import ToMoney from '../../../core/util/conversions/money-conversion';
 import AppConstants from '../../../core/constants/app-constants';
 import CommandResponseInfo from '../../../core/interfaces/info/command-response-info';
-import PaymentListModal from './modals/payment-list-modal';
 import PaymentListActionButton from '../../../components/action-buttons/payment-list-action-button';
 import PaymentCreateActionButton from '../../../components/action-buttons/payment-create-action-button';
 import BorrowAuthorizationReportActionItem from './action-items/borrow-authorization-report-action-item';

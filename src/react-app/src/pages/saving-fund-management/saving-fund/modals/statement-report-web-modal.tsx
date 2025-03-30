@@ -149,22 +149,22 @@ const StatementReportWebModal: React.FC<StatementReportWebModalProps> = ({ assoc
                   <td>{ToMoney(item.amountAvailableToWithdrawal)}</td>
                   <td>{ToMoney(item.amountAvailableToWithdrawalRounded)}</td>
                   <td>{ToMoney(item.amountToWithhold)}</td>
-                  <td>{ToMoney(item.netBalanceForCurrentYear)}</td>
+                  <td>{ToMoney((parseFloat(item.netBalanceForCurrentYear.toString()) || 0) + (parseFloat(item.amountToWithhold.toString()) || 0))}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           ) : (
-            <>
-            <strong>CANTIDAD QUE PUEDE RETIRAR DEL {year - 1}:</strong>
-            <label>{ToMoney(statementData[0].amountAvailableToWithdrawal)}</label><br />
-            <strong>CANTIDAD QUE RECIBE REDONDEADA:</strong>
-            <label>{ToMoney(statementData[0].amountAvailableToWithdrawalRounded)}</label><br />
-            <strong>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO:</strong>
-            <label>{ToMoney(statementData[0].amountToWithhold)}</label><br />
-            <strong>NUEVO SALDO EN FONDO DE AHORRO PARA EL 2025:</strong>
-            <label>{ToMoney(statementData[0].netBalanceForCurrentYear)}</label><br />
-            </>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', overflowX: 'auto', width: '100%', gap: '10px' }}>
+              <strong>CANTIDAD QUE PUEDE RETIRAR DEL {year - 1}:</strong><br />
+              <label>{ToMoney(statementData[0]?.amountAvailableToWithdrawal || 0)}</label><br />
+              <strong>CANTIDAD QUE RECIBE REDONDEADA:</strong><br />
+              <label>{ToMoney(statementData[0]?.amountAvailableToWithdrawalRounded || 0)}</label><br />
+              <strong>CANTIDAD QUE SE QUEDA EN EL FONDO DE AHORRO:</strong><br />
+              <label>{ToMoney(statementData[0]?.amountToWithhold || 0)}</label><br />
+              <strong style={{width: '80px'}}>NUEVO SALDO EN FONDO DE AHORRO PARA EL 2025:</strong>
+              <label>{ToMoney((parseFloat(statementData[0]?.netBalanceForCurrentYear.toString()) || 0) + (parseFloat(statementData[0]?.amountToWithhold.toString()) || 0))}</label>
+            </div>
           )}
         </footer>
       </div>
