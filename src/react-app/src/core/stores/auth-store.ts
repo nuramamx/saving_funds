@@ -25,11 +25,13 @@ const useAuthStore = create(persist<AuthStore>(
     ),
     setUser: (user: UserDataByUserAndPasswordSpec) => set(
       produce((state: AuthStore) => {
+        debugger;
         state.user = user;
       })
     ),
     setIsAuthenticated: (isAuthenticated: boolean) => set(
       produce((state: AuthStore) => {
+        debugger;
         state.isAuthenticated = isAuthenticated;
       })
     ),

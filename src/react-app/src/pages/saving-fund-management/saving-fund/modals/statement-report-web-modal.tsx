@@ -88,7 +88,7 @@ const StatementReportWebModal: React.FC<StatementReportWebModalProps> = ({ assoc
   useEffect(() => {
     setShowModal(show);
 
-    if (associateId) fetchData();
+    if (associateId && show) fetchData();
   }, [show]);
 
   return (
