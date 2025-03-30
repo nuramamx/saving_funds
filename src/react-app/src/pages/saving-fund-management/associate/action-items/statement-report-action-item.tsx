@@ -12,6 +12,7 @@ import StatementReportListSpec from "../../../../core/interfaces/specs/list/stat
 import CommandResponseInfo from "../../../../core/interfaces/info/command-response-info";
 import saveAs from "file-saver";
 import StatementReportWebModal from "../../saving-fund/modals/statement-report-web-modal";
+import useIsMobile from "../../../../core/hooks/use-is-mobile";
 
 type StatementReportActionItemParams = {
   associateName: string;
@@ -24,6 +25,7 @@ export default function StatementReportActionItem({ associateName, associateId }
   const { pushNotification } = useNotificationStore();
   const { token } = useAuthStore();
   const [loading, setLoading] = useState<boolean>(false);
+  const isMobile = useIsMobile();
   
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') setIsActive(false);
@@ -125,7 +127,7 @@ export default function StatementReportActionItem({ associateName, associateId }
 
   return (
     <>
-    <div className={`dropdown is-right ${isActive ? 'is-active': ''}`}>
+    <div className={`dropdown ${isMobile ? 'is-left' : 'is-right'} ${isActive ? 'is-active': ''}`}>
       <div className="dropdown-trigger">
         <button onClick={(e) => setIsActive(!isActive)} aria-haspopup="true" aria-controls="dropdown-menu" data-tooltip-id="reports-tooltip">
           <DownloadSquare />
